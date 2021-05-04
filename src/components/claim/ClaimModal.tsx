@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react'
 import { Text } from 'rebass'
 import styled from 'styled-components'
 import Circle from '../../assets/images/blue-loader.svg'
-import tokenLogo from '../../assets/images/token-logo.png'
+import tokenLogo from '../../assets/big-dfyn.svg'
 import { useActiveWeb3React } from '../../hooks'
 import { ApplicationModal } from '../../state/application/actions'
 import { useModalOpen, useToggleSelfClaimModal } from '../../state/application/hooks'
@@ -184,7 +184,7 @@ export default function ClaimModal() {
                   <span role="img" aria-label="party-hat">
                     🎉{' '}
                   </span>
-                  Welcome to team Unicorn :){' '}
+                  Welcome to team DFYN :){' '}
                   <span role="img" aria-label="party-hat">
                     🎉
                   </span>

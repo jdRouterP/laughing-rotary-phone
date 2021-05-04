@@ -395,7 +395,7 @@ export default function Header() {
                     </TYPE.white>
                   </HideSmall>
                 )}
-                UNI
+                DFYN
               </UNIAmount>
               <CardNoise />
             </UNIWrapper>

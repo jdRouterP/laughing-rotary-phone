@@ -7,7 +7,7 @@ import { RowBetween } from '../Row'
 import { TYPE, ExternalLink, CloseIcon, CustomLightSpinner, UniTokenAnimated } from '../../theme'
 import { ButtonPrimary } from '../Button'
 import { useClaimCallback, useUserUnclaimedAmount, useUserHasAvailableClaim } from '../../state/claim/hooks'
-import tokenLogo from '../../assets/images/token-logo.png'
+import tokenLogo from '../../assets/big-dfyn.svg'
 import Circle from '../../assets/images/blue-loader.svg'
 import { Text } from 'rebass'
 import AddressInputPanel from '../AddressInputPanel'
@@ -170,7 +170,7 @@ export default function AddressClaimModal({ isOpen, onDismiss }: { isOpen: boole
                   <span role="img" aria-label="party-hat">
                     🎉{' '}
                   </span>
-                  Welcome to team Unicorn :){' '}
+                  Welcome to team DFYN :){' '}
                   <span role="img" aria-label="party-hat">
                     🎉
                   </span>

@@ -101,7 +101,7 @@ export function useClaimCallback(
     if (!claimData || !account || !library || !chainId || !distributorContract) return
 
     const args = [claimData.index, account, claimData.amount, claimData.proof]
-debugger
+
     return distributorContract.estimateGas['claim'](...args, {}).then(estimatedGasLimit => {
       return distributorContract
         .claim(...args, { value: null, gasLimit: calculateGasMargin(estimatedGasLimit) })
