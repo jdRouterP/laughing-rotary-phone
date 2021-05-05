@@ -42,10 +42,10 @@ export function getEtherscanLink(
       return `${prefix}/tx/${data}`
     }
     case 'token': {
-      return `${prefix}/token/${data}`
+      return `${prefix}/tokens/${data}`
     }
     case 'block': {
-      return `${prefix}/block/${data}`
+      return `${prefix}/blocks/${data}`
     }
     case 'address':
     default: {
