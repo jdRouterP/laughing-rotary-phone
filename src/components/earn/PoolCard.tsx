@@ -29,7 +29,7 @@ const StatContainer = styled.div`
 `};
 `
 
-const Wrapper = styled(AutoColumn)<{ showBackground: boolean; bgColor: any }>`
+const Wrapper = styled(AutoColumn) <{ showBackground: boolean; bgColor: any }>`
   border-radius: 12px;
   width: 100%;
   overflow: hidden;
@@ -139,9 +139,9 @@ export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) 
             {stakingInfo
               ? stakingInfo.active
                 ? `${stakingInfo.totalRewardRate
-                    ?.multiply(BIG_INT_SECONDS_IN_WEEK)
-                    ?.toFixed(0, { groupSeparator: ',' })} UNI / week`
-                : '0 UNI / week'
+                  ?.multiply(BIG_INT_SECONDS_IN_WEEK)
+                  ?.toFixed(0, { groupSeparator: ',' })} DFYN / week`
+                : '0 DFYN / week'
               : '-'}
           </TYPE.white>
         </RowBetween>
@@ -162,9 +162,9 @@ export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) 
               {stakingInfo
                 ? stakingInfo.active
                   ? `${stakingInfo.rewardRate
-                      ?.multiply(BIG_INT_SECONDS_IN_WEEK)
-                      ?.toSignificant(4, { groupSeparator: ',' })} UNI / week`
-                  : '0 UNI / week'
+                    ?.multiply(BIG_INT_SECONDS_IN_WEEK)
+                    ?.toSignificant(4, { groupSeparator: ',' })} DFYN / week`
+                  : '0 DFYN / week'
                 : '-'}
             </TYPE.black>
           </BottomSection>

@@ -130,10 +130,10 @@ export default function VotePage({
   const endDate: DateTime | undefined =
     proposalData && currentTimestamp && currentBlock
       ? DateTime.fromSeconds(
-          currentTimestamp
-            .add(BigNumber.from(AVERAGE_BLOCK_TIME_IN_SECS).mul(BigNumber.from(proposalData.endBlock - currentBlock)))
-            .toNumber()
-        )
+        currentTimestamp
+          .add(BigNumber.from(AVERAGE_BLOCK_TIME_IN_SECS).mul(BigNumber.from(proposalData.endBlock - currentBlock)))
+          .toNumber()
+      )
       : undefined
   const now: DateTime = DateTime.local()
 
@@ -190,14 +190,14 @@ export default function VotePage({
               {endDate && endDate < now
                 ? 'Voting ended ' + (endDate && endDate.toLocaleString(DateTime.DATETIME_FULL))
                 : proposalData
-                ? 'Voting ends approximately ' + (endDate && endDate.toLocaleString(DateTime.DATETIME_FULL))
-                : ''}
+                  ? 'Voting ends approximately ' + (endDate && endDate.toLocaleString(DateTime.DATETIME_FULL))
+                  : ''}
             </TYPE.main>
           </RowBetween>
           {proposalData && proposalData.status === 'active' && !showVotingButtons && (
             <GreyCard>
               <TYPE.black>
-                Only UNI votes that were self delegated or delegated to another address before block{' '}
+                Only DFYN votes that were self delegated or delegated to another address before block{' '}
                 {proposalData.startBlock} are eligible for voting.{' '}
                 {showLinkForUnlock && (
                   <span>

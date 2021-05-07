@@ -87,16 +87,14 @@ export default function VoteModal({ isOpen, onDismiss, proposalId, support }: Vo
         <ContentWrapper gap="lg">
           <AutoColumn gap="lg" justify="center">
             <RowBetween>
-              <TYPE.mediumHeader fontWeight={500}>{`Vote ${
-                support ? 'for ' : 'against'
-              } proposal ${proposalId}`}</TYPE.mediumHeader>
+              <TYPE.mediumHeader fontWeight={500}>{`Vote ${support ? 'for ' : 'against'
+                } proposal ${proposalId}`}</TYPE.mediumHeader>
               <StyledClosed stroke="black" onClick={wrappedOndismiss} />
             </RowBetween>
             <TYPE.largeHeader>{availableVotes?.toSignificant(4)} Votes</TYPE.largeHeader>
             <ButtonPrimary onClick={onVote}>
-              <TYPE.mediumHeader color="white">{`Vote ${
-                support ? 'for ' : 'against'
-              } proposal  ${proposalId}`}</TYPE.mediumHeader>
+              <TYPE.mediumHeader color="white">{`Vote ${support ? 'for ' : 'against'
+                } proposal  ${proposalId}`}</TYPE.mediumHeader>
             </ButtonPrimary>
           </AutoColumn>
         </ContentWrapper>
@@ -133,7 +131,7 @@ export default function VoteModal({ isOpen, onDismiss, proposalId, support }: Vo
             </AutoColumn>
             {chainId && (
               <ExternalLink href={getEtherscanLink(chainId, hash, 'transaction')} style={{ marginLeft: '4px' }}>
-                <TYPE.subHeader>View transaction on Etherscan</TYPE.subHeader>
+                <TYPE.subHeader>View transaction on Matic Explorer</TYPE.subHeader>
               </ExternalLink>
             )}
           </AutoColumn>

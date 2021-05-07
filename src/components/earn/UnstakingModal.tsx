@@ -87,11 +87,11 @@ export default function UnstakingModal({ isOpen, onDismiss, stakingInfo }: Staki
               <TYPE.body fontWeight={600} fontSize={36}>
                 {<FormattedCurrencyAmount currencyAmount={stakingInfo?.earnedAmount} />}
               </TYPE.body>
-              <TYPE.body>Unclaimed UNI</TYPE.body>
+              <TYPE.body>Unclaimed DFYN</TYPE.body>
             </AutoColumn>
           )}
           <TYPE.subHeader style={{ textAlign: 'center' }}>
-            When you withdraw, your UNI is claimed and your liquidity is removed from the mining pool.
+            When you withdraw, your DFYN is claimed and your liquidity is removed from the mining pool.
           </TYPE.subHeader>
           <ButtonError disabled={!!error} error={!!error && !!stakingInfo?.stakedAmount} onClick={onWithdraw}>
             {error ?? 'Withdraw & Claim'}
@@ -110,8 +110,8 @@ export default function UnstakingModal({ isOpen, onDismiss, stakingInfo }: Staki
         <SubmittedView onDismiss={wrappedOndismiss} hash={hash}>
           <AutoColumn gap="12px" justify={'center'}>
             <TYPE.largeHeader>Transaction Submitted</TYPE.largeHeader>
-            <TYPE.body fontSize={20}>Withdrew UNI-V2!</TYPE.body>
-            <TYPE.body fontSize={20}>Claimed UNI!</TYPE.body>
+            <TYPE.body fontSize={20}>Withdrew LP Tokens!</TYPE.body>
+            <TYPE.body fontSize={20}>Claimed DFYN!</TYPE.body>
           </AutoColumn>
         </SubmittedView>
       )}

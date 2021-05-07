@@ -1,8 +1,7 @@
 // import { ChainId, CurrencyAmount, JSBI, Token, TokenAmount, WETH, Pair } from '@uniswap/sdk'
 import { ChainId, CurrencyAmount, JSBI, Token, TokenAmount, Pair } from '@uniswap/sdk'
 import { useMemo } from 'react'
-import { UNI } from '../../constants'
-// import { DAI, UNI, USDC, USDT, mWETH } from '../../constants'
+import { ROUTE, ETHER, UNI, USDC, IGG } from '../../constants'
 import { STAKING_REWARDS_INTERFACE } from '../../constants/abis/staking-rewards'
 import { useActiveWeb3React } from '../../hooks'
 import { NEVER_RELOAD, useMultipleContractSingleData } from '../multicall/hooks'
@@ -21,10 +20,18 @@ export const STAKING_REWARDS_INFO: {
   }[]
 } = {
   [ChainId.MATIC]: [
-    // {
-    //   tokens: [WETH[ChainId.MATIC], DAI],
-    //   stakingRewardAddress: '0xa1484C3aa22a66C62b77E0AE78E15258bd0cB711'
-    // },
+    {
+      tokens: [ETHER, IGG],
+      stakingRewardAddress: '0x7b7d87d321189e6631176d8fad108f6a7290a294'
+    },
+    {
+      tokens: [ROUTE, USDC],
+      stakingRewardAddress: '0xf52d8e5ab32ad32ad3d77f8d2aa6fe700a1abeb4'
+    },
+    {
+      tokens: [ROUTE, ETHER],
+      stakingRewardAddress: '0x0EA39Ded9835Ccd30CB076796CcE00f02342E74C'
+    }
     // {
     //   tokens: [WETH[ChainId.MATIC], USDC],
     //   stakingRewardAddress: '0x7FBa4B8Dc5E7616e59622806932DBea72537A56b'
@@ -79,13 +86,13 @@ export function useStakingInfo(pairToFilterBy?: Pair | null): StakingInfo[] {
     () =>
       chainId
         ? STAKING_REWARDS_INFO[chainId]?.filter(stakingRewardInfo =>
-            pairToFilterBy === undefined
-              ? true
-              : pairToFilterBy === null
+          pairToFilterBy === undefined
+            ? true
+            : pairToFilterBy === null
               ? false
               : pairToFilterBy.involvesToken(stakingRewardInfo.tokens[0]) &&
-                pairToFilterBy.involvesToken(stakingRewardInfo.tokens[1])
-          ) ?? []
+              pairToFilterBy.involvesToken(stakingRewardInfo.tokens[1])
+        ) ?? []
         : [],
     [chainId, pairToFilterBy]
   )
