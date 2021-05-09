@@ -2,9 +2,11 @@ import { BigNumber } from '@ethersproject/bignumber'
 import { Contract } from '@ethersproject/contracts'
 import { JSBI, Percent, Router, SwapParameters, Trade, TradeType } from '@uniswap/sdk'
 import { useMemo } from 'react'
-import { BIPS_BASE, INITIAL_ALLOWED_SLIPPAGE } from '../constants'
+import { BIPS_BASE, INITIAL_ALLOWED_SLIPPAGE, biconomyAPIKey, META_TXN_DISABLED, ROUTER_ADDRESS } from '../constants'
 import { getTradeVersion, useV1TradeExchangeAddress } from '../data/V1'
+import { splitSignature } from '@ethersproject/bytes'
 import { useTransactionAdder } from '../state/transactions/hooks'
+import { abi } from '@uniswap/v2-periphery/build/IUniswapV2Router02.json'
 import { calculateGasMargin, getRouterContract, isAddress, shortenAddress } from '../utils'
 import isZero from '../utils/isZero'
 import v1SwapArguments from '../utils/v1SwapArguments'
@@ -13,6 +15,24 @@ import { useV1ExchangeContract } from './useContract'
 import useTransactionDeadline from './useTransactionDeadline'
 import useENS from './useENS'
 import { Version } from './useToggledVersion'
+const Biconomy = require("@biconomy/mexa")
+const Web3 = require("web3");
+
+const contractAddress = ROUTER_ADDRESS
+const maticProvider = process.env.REACT_APP_NETWORK_URL
+const biconomy = new Biconomy(
+  new Web3.providers.HttpProvider(maticProvider),
+  {
+    apiKey: biconomyAPIKey,
+    debug: true
+  }
+);
+const getWeb3 = new Web3(biconomy);
+biconomy
+  .onEvent(biconomy.READY, () => {
+    console.log("Mexa is Ready");
+  })
+
 
 export enum SwapCallbackState {
   INVALID,
@@ -197,46 +217,167 @@ export function useSwapCallback(
           },
           gasEstimate
         } = successfulEstimation
+        if (methodName === "swapExactETHForTokens" || methodName === "swapETHForExactTokens" || META_TXN_DISABLED ) {
+          return contract[methodName](...args, {
+            gasLimit: calculateGasMargin(gasEstimate),
+            ...(value && !isZero(value) ? { value, from: account } : { from: account })
+          })
+            .then((response: any) => {
+              const inputSymbol = trade.inputAmount.currency.symbol
+              const outputSymbol = trade.outputAmount.currency.symbol
+              const inputAmount = trade.inputAmount.toSignificant(3)
+              const outputAmount = trade.outputAmount.toSignificant(3)
 
-        return contract[methodName](...args, {
-          gasLimit: calculateGasMargin(gasEstimate),
-          ...(value && !isZero(value) ? { value, from: account } : { from: account })
-        })
-          .then((response: any) => {
-            const inputSymbol = trade.inputAmount.currency.symbol
-            const outputSymbol = trade.outputAmount.currency.symbol
-            const inputAmount = trade.inputAmount.toSignificant(3)
-            const outputAmount = trade.outputAmount.toSignificant(3)
-
-            const base = `Swap ${inputAmount} ${inputSymbol} for ${outputAmount} ${outputSymbol}`
-            const withRecipient =
-              recipient === account
-                ? base
-                : `${base} to ${
-                    recipientAddressOrName && isAddress(recipientAddressOrName)
-                      ? shortenAddress(recipientAddressOrName)
-                      : recipientAddressOrName
+              const base = `Swap ${inputAmount} ${inputSymbol} for ${outputAmount} ${outputSymbol}`
+              const withRecipient =
+                recipient === account
+                  ? base
+                  : `${base} to ${recipientAddressOrName && isAddress(recipientAddressOrName)
+                    ? shortenAddress(recipientAddressOrName)
+                    : recipientAddressOrName
                   }`
 
-            const withVersion =
-              tradeVersion === Version.v2 ? withRecipient : `${withRecipient} on ${(tradeVersion as any).toUpperCase()}`
+              const withVersion =
+                tradeVersion === Version.v2 ? withRecipient : `${withRecipient} on ${(tradeVersion as any).toUpperCase()}`
 
-            addTransaction(response, {
-              summary: withVersion
+              addTransaction(response, {
+                summary: withVersion
+              })
+
+              return response.hash
             })
+            .catch((error: any) => {
+              // if the user rejected the tx, pass this along
+              if (error?.code === 4001) {
+                throw new Error('Transaction rejected.')
+              } else {
+                // otherwise, the error was unexpected and we need to convey that
+                console.error(`Swap failed`, error, methodName, args, value)
+                throw new Error(`Swap failed: ${error.message}`)
+              }
+            })
+        }
+        else {
+          const bicomony_contract = new getWeb3.eth.Contract(abi, contractAddress);
+          let biconomy_nonce = await bicomony_contract.methods.getNonce(account).call();
+          let gasLimit = calculateGasMargin(gasEstimate)
+          console.log(gasLimit)
+          let res = bicomony_contract.methods[methodName](...args).encodeABI()
+          let message: any = {};
+          message.nonce = parseInt(biconomy_nonce);
+          message.from = account;
+          message.functionSignature = res;
 
-            return response.hash
-          })
-          .catch((error: any) => {
-            // if the user rejected the tx, pass this along
-            if (error?.code === 4001) {
-              throw new Error('Transaction rejected.')
-            } else {
-              // otherwise, the error was unexpected and we need to convey that
-              console.error(`Swap failed`, error, methodName, args, value)
-              throw new Error(`Swap failed: ${error.message}`)
-            }
-          })
+          const dataToSign = JSON.stringify({
+            types: {
+              EIP712Domain: [
+                { name: "name", type: "string" },
+                { name: "version", type: "string" },
+                { name: "verifyingContract", type: "address" },
+                { name: "chainId", type: "uint256" }
+              ],
+              MetaTransaction: [
+                { name: "nonce", type: "uint256" },
+                { name: "from", type: "address" },
+                { name: "functionSignature", type: "bytes" }
+              ]
+            },
+            domain: {
+              name: "UniswapV2Router02",
+              version: "1",
+              verifyingContract: contractAddress,
+              chainId
+            },
+            primaryType: "MetaTransaction",
+            message
+          });
+          let sig = await library
+            .send('eth_signTypedData_v4', [account, dataToSign])
+          let signature = await splitSignature(sig)
+          let { v, r, s } = signature
+          console.log('account: ', account, 'res: ', res, 'r: ', r, 's: ', s, 'v: ', v)
+          return bicomony_contract.methods
+            .executeMetaTransaction(account, res, r, s, v)
+            .send({
+              from: account
+            })
+            .then((response: any) => {
+
+              const inputSymbol = trade.inputAmount.currency.symbol
+              const outputSymbol = trade.outputAmount.currency.symbol
+              const inputAmount = trade.inputAmount.toSignificant(3)
+              const outputAmount = trade.outputAmount.toSignificant(3)
+
+              const base = `Swap ${inputAmount} ${inputSymbol} for ${outputAmount} ${outputSymbol}`
+              const withRecipient =
+                recipient === account
+                  ? base
+                  : `${base} to ${recipientAddressOrName && isAddress(recipientAddressOrName)
+                    ? shortenAddress(recipientAddressOrName)
+                    : recipientAddressOrName
+                  }`
+
+              const withVersion =
+                tradeVersion === Version.v2 ? withRecipient : `${withRecipient} on ${(tradeVersion as any).toUpperCase()}`
+
+              if (!response.hash)
+                response.hash = response.transactionHash;
+              addTransaction(response, {
+                summary: withVersion
+              })
+
+              return response.hash
+            })
+            .catch((error: any) => {
+              // if the user rejected the tx, pass this along
+              if (error?.code === 4001) {
+                throw new Error('Transaction rejected.')
+              } else {
+                // otherwise, the error was unexpected and we need to convey that
+                console.error(`Swap failed`, error, methodName, args, value)
+                throw new Error(`Swap failed: ${error.message}`)
+              }
+            })
+        }
+        // return contract[methodName](...args, {
+        //   gasLimit: calculateGasMargin(gasEstimate),
+        //   ...(value && !isZero(value) ? { value, from: account } : { from: account })
+        // })
+        //   .then((response: any) => {
+        //     const inputSymbol = trade.inputAmount.currency.symbol
+        //     const outputSymbol = trade.outputAmount.currency.symbol
+        //     const inputAmount = trade.inputAmount.toSignificant(3)
+        //     const outputAmount = trade.outputAmount.toSignificant(3)
+
+        //     const base = `Swap ${inputAmount} ${inputSymbol} for ${outputAmount} ${outputSymbol}`
+        //     const withRecipient =
+        //       recipient === account
+        //         ? base
+        //         : `${base} to ${
+        //             recipientAddressOrName && isAddress(recipientAddressOrName)
+        //               ? shortenAddress(recipientAddressOrName)
+        //               : recipientAddressOrName
+        //           }`
+
+        //     const withVersion =
+        //       tradeVersion === Version.v2 ? withRecipient : `${withRecipient} on ${(tradeVersion as any).toUpperCase()}`
+
+        //     addTransaction(response, {
+        //       summary: withVersion
+        //     })
+
+        //     return response.hash
+        //   })
+        //   .catch((error: any) => {
+        //     // if the user rejected the tx, pass this along
+        //     if (error?.code === 4001) {
+        //       throw new Error('Transaction rejected.')
+        //     } else {
+        //       // otherwise, the error was unexpected and we need to convey that
+        //       console.error(`Swap failed`, error, methodName, args, value)
+        //       throw new Error(`Swap failed: ${error.message}`)
+        //     }
+        //   })
       },
       error: null
     }
