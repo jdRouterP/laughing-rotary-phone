@@ -16,16 +16,25 @@ export { PRELOADED_PROPOSALS } from './proposals'
 type ChainTokenList = {
   readonly [chainId in ChainId]: Token[]
 }
-export const ROUTE = new Token(ChainId.MATIC, '0x16eccfdbb4ee1a85a33f3a9b21175cd7ae753db4', 18, 'ROUTE', 'Route POS')
-export const IGG = new Token(ChainId.MATIC, '0xe6fc6c7cb6d2c31b359a49a33ef08ab87f4de7ce', 18, 'IGG', 'IGG Token')
-export const ETHER = new Token(ChainId.MATIC, '0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619', 18, 'ETH', 'Ether')
-export const DAI = new Token(ChainId.MATIC, '0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063', 6, 'DAI', 'Dai Stablecoin')
+export const DAI = new Token(ChainId.MATIC, '0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063', 18, 'DAI', 'Dai Stablecoin')
 export const USDC = new Token(ChainId.MATIC, '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174', 6, 'USDC', 'USD//C')
 export const USDT = new Token(ChainId.MATIC, '0xc2132D05D31c914a87C6611C10748AEb04B58e8F', 6, 'USDT', 'Tether USD')
-export const COMP = new Token(ChainId.MATIC, '0xc00e94Cb662C3520282E6f5717214004A7f26888', 18, 'COMP', 'Compound')
-export const MKR = new Token(ChainId.MATIC, '0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2', 18, 'MKR', 'Maker')
-export const AMPL = new Token(ChainId.MATIC, '0xD46bA6D942050d489DBd938a2C909A5d5039A161', 9, 'AMPL', 'Ampleforth')
 export const mWETH = new Token(ChainId.MATIC, '0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619', 18, 'ETH', 'Ether')
+export const ROUTE = new Token(ChainId.MATIC, '0x16eccfdbb4ee1a85a33f3a9b21175cd7ae753db4', 18, 'ROUTE', 'Route')
+export const OM = new Token(ChainId.MATIC, '0xc3ec80343d2bae2f8e680fdadde7c17e71e114ea', 18, 'OM', 'Mantra Dao')
+export const EASY = new Token(ChainId.MATIC, '0xdb3b3b147a030f032633f6c4bebf9a2fb5a882b5', 18, 'EASY', 'Easy')
+export const RAZOR = new Token(ChainId.MATIC, '0xc91c06db0f7bffba61e2a5645cc15686f0a8c828', 18, 'RAZOR', 'Razor')
+export const IGG = new Token(ChainId.MATIC, '0xe6fc6c7cb6d2c31b359a49a33ef08ab87f4de7ce', 6, 'IGG', 'IGG')
+export const QUICK = new Token(ChainId.MATIC, '0x831753dd7087cac61ab5644b308642cc1c33dc13', 18, 'QUICK', 'Quick')
+export const COR = new Token(ChainId.MATIC, '0x4fdce518fe527439fe76883e6b51a1c522b61b7c', 18, 'COR', 'Coreto')
+export const FRONT = new Token(ChainId.MATIC, '0xa3ed22eee92a3872709823a6970069e12a4540eb', 18, 'FRONT', 'Frontier')
+export const GLCH = new Token(ChainId.MATIC, '0xbe5cf150e1ff59ca7f2499eaa13bfc40aae70e78', 18, 'GLCH', 'Glitch')
+export const STR = new Token(ChainId.MATIC, '0xa79e0bfc579c709819f4a0e95d4597f03093b011', 18, 'STR', 'Stater')
+export const UNN = new Token(ChainId.MATIC, '0x67480287cb3715d1d9429b38772c71d6e94c16da', 18, 'UNN', 'Union')
+export const NORD = new Token(ChainId.MATIC, '0xf6f85b3f9fd581c2ee717c404f7684486f057f95', 18, 'NORD', 'Nord')
+export const RAGE = new Token(ChainId.MATIC, '0x40ccd55b789fdee8d434915dc2aa6bd938506a92', 18, 'RAGE', 'Rage')
+export const WETH_V2 = new Token(ChainId.MATIC, '0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270', 18, 'WMATIC', 'WMATIC')
+export const ETHER = new Token(ChainId.MATIC, '0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619', 18, 'ETH', 'Ether')
 
 
 // Block time here is slightly higher (~1s) than average in order to avoid ongoing proposals past the displayed time
@@ -72,7 +81,8 @@ const WETH_ONLY: ChainTokenList = {
 // used to construct intermediary pairs for trading
 export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
   ...WETH_ONLY,
-  [ChainId.MATIC]: [...WETH_ONLY[ChainId.MATIC], DAI, USDC, USDT, COMP, MKR, mWETH]
+  [ChainId.MATIC]: [...WETH_ONLY[ChainId.MATIC], DAI, USDC, USDT, mWETH, ROUTE, OM, EASY, IGG, RAZOR, QUICK, COR, FRONT, GLCH, STR, UNN, NORD, RAGE]
+  // [ChainId.MATIC]: [...WETH_ONLY[ChainId.MATIC], DAI, USDC, USDT, mWETH]
 }
 
 /**
@@ -81,7 +91,6 @@ export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
  */
 export const CUSTOM_BASES: { [chainId in ChainId]?: { [tokenAddress: string]: Token[] } } = {
   [ChainId.MATIC]: {
-    [AMPL.address]: [DAI, WETH[ChainId.MATIC]]
   }
 }
 
@@ -94,7 +103,8 @@ export const SUGGESTED_BASES: ChainTokenList = {
 // used to construct the list of all pairs we consider by default in the frontend
 export const BASES_TO_TRACK_LIQUIDITY_FOR: ChainTokenList = {
   ...WETH_ONLY,
-  [ChainId.MATIC]: [...WETH_ONLY[ChainId.MATIC], DAI, USDC, USDT, mWETH]
+  [ChainId.MATIC]: [...WETH_ONLY[ChainId.MATIC], DAI, USDC, USDT, mWETH, ROUTE, OM, EASY, IGG, RAZOR, QUICK]
+  // [ChainId.MATIC]: [...WETH_ONLY[ChainId.MATIC], DAI, USDC, USDT, mWETH]
 }
 
 export const PINNED_PAIRS: { readonly [chainId in ChainId]?: [Token, Token][] } = {
