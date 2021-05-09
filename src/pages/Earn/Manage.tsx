@@ -29,6 +29,7 @@ import { usePair } from '../../data/Reserves'
 import usePrevious from '../../hooks/usePrevious'
 import useUSDCPrice from '../../utils/useUSDCPrice'
 import { BIG_INT_ZERO, BIG_INT_SECONDS_IN_WEEK } from '../../constants'
+import { Countdown } from './Countdown'
 
 const PageWrapper = styled(AutoColumn)`
   max-width: 640px;
@@ -80,7 +81,6 @@ const VoteCard = styled(DataCard)`
 const DataRow = styled(RowBetween)`
   justify-content: center;
   gap: 12px;
-
   ${({ theme }) => theme.mediaWidth.upToSmall`
     flex-direction: column;
     gap: 12px;
@@ -138,6 +138,9 @@ export default function Manage({
   const countUpAmount = stakingInfo?.earnedAmount?.toFixed(6) ?? '0'
   const countUpAmountPrevious = usePrevious(countUpAmount) ?? '0'
 
+  const totalVestedAmount = stakingInfo?.totalVestedAmount?.toFixed(2) ?? '0';
+  const vestedAmount = stakingInfo?.earnedAmount?.toFixed(2) ?? '0'
+
   // get the USD value of staked WETH
   const USDPrice = useUSDCPrice(WETH)
   const valueOfTotalStakedAmountInUSDC =
@@ -174,17 +177,25 @@ export default function Manage({
           </AutoColumn>
         </PoolData>
         <PoolData>
-          <AutoColumn gap="sm">
-            <TYPE.body style={{ margin: 0 }}>Pool Rate</TYPE.body>
-            <TYPE.body fontSize={24} fontWeight={500}>
-              {stakingInfo?.active
-                ? stakingInfo?.totalRewardRate
-                  ?.multiply(BIG_INT_SECONDS_IN_WEEK)
-                  ?.toFixed(0, { groupSeparator: ',' }) ?? '-'
-                : '0'}
-              {' DFYN / week'}
-            </TYPE.body>
-          </AutoColumn>
+          {
+            stakingInfo?.active ? <AutoColumn gap="sm">
+              <TYPE.body style={{ margin: 0 }}>Pool Rate</TYPE.body>
+              <TYPE.body fontSize={24} fontWeight={500}>
+                {stakingInfo?.active
+                  ? stakingInfo?.totalRewardRate
+                    ?.multiply(BIG_INT_SECONDS_IN_WEEK)
+                    ?.toFixed(0, { groupSeparator: ',' }) ?? '-'
+                  : '0'}
+                {' DFYN / week'}
+              </TYPE.body>
+            </AutoColumn> : <AutoColumn gap="sm">
+              <TYPE.body style={{ margin: 0 }}>Your claimed &#38; vested DFYN</TYPE.body>
+              <TYPE.body fontSize={22} fontWeight={500}>
+                {`${totalVestedAmount} / ${vestedAmount} DFYN`}
+              </TYPE.body>
+            </AutoColumn>
+          }
+
         </PoolData>
       </DataRow>
 
@@ -260,7 +271,7 @@ export default function Manage({
               </AutoColumn>
             </CardSection>
           </StyledDataCard>
-          <StyledBottomCard dim={stakingInfo?.stakedAmount?.equalTo(JSBI.BigInt(0))}>
+          <StyledBottomCard dim={stakingInfo?.earnedAmount?.equalTo(JSBI.BigInt(0))}>
             <CardBGImage desaturate />
             <CardNoise />
             <AutoColumn gap="sm">
@@ -268,19 +279,32 @@ export default function Manage({
                 <div>
                   <TYPE.black>Your unclaimed DFYN</TYPE.black>
                 </div>
-                {stakingInfo?.earnedAmount && JSBI.notEqual(BIG_INT_ZERO, stakingInfo?.earnedAmount?.raw) && (
-                  <ButtonEmpty
+                {stakingInfo?.earnedAmount && JSBI.notEqual(BIG_INT_ZERO, stakingInfo?.earnedAmount?.raw) && (<>
+                  <div hidden={stakingInfo?.ableToClaim}>
+                    <TYPE.black>{<Countdown showMessage={false} exactEnd={stakingInfo?.unlockAt} />}</TYPE.black>
+                  </div>
+                  {stakingInfo?.ableToClaim && <ButtonEmpty
                     padding="8px"
                     borderRadius="8px"
                     width="fit-content"
                     onClick={() => setShowClaimRewardModal(true)}
                   >
                     Claim
-                  </ButtonEmpty>
-                )}
+                  </ButtonEmpty>}
+                </>)}
               </RowBetween>
               <RowBetween style={{ alignItems: 'baseline' }}>
-                <TYPE.largeHeader fontSize={36} fontWeight={600}>
+                <TYPE.largeHeader fontSize={24} fontWeight={600}>
+                  {/* <CountUp
+                    key={2}
+                    isCounting
+                    decimalPlaces={2}
+                    start={parseFloat("0")}
+                    end={parseFloat("0")}
+                    thousandsSeparator={','}
+                    duration={1}
+                  />
+                  <span style={{ "padding": "5px" }}>/</span> */}
                   <CountUp
                     key={countUpAmount}
                     isCounting
@@ -291,6 +315,7 @@ export default function Manage({
                     duration={1}
                   />
                 </TYPE.largeHeader>
+
                 <TYPE.black fontSize={16} fontWeight={500}>
                   <span role="img" aria-label="wizard-icon" style={{ marginRight: '8px ' }}>
                     ⚡

@@ -63,11 +63,11 @@ export default function Earn() {
           <CardSection>
             <AutoColumn gap="md">
               <RowBetween>
-                <TYPE.white fontWeight={600}>DFYN liquidity mining</TYPE.white>
+                <TYPE.white fontWeight={600}>Pre-staking pools</TYPE.white>
               </RowBetween>
               <RowBetween>
                 <TYPE.white fontSize={14}>
-                  Deposit your Liquidity Provider tokens to receive DFYN, the Dfyn protocol governance token.
+                  Deposit your Liquidity Provider tokens to receive DFYN with insane APR. These rewards will be vested.
                 </TYPE.white>
               </RowBetween>{' '}
               {/* <ExternalLink

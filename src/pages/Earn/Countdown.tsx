@@ -7,7 +7,7 @@ const HOUR = MINUTE * 60
 const DAY = HOUR * 24
 const REWARDS_DURATION = DAY * REWARDS_DURATION_DAYS
 
-export function Countdown({ exactEnd }: { exactEnd?: Date }) {
+export function Countdown({ exactEnd, showMessage = true }: { exactEnd?: Date, showMessage?: boolean }) {
   // get end/beginning times
   const end = useMemo(() => (exactEnd ? Math.floor(exactEnd.getTime() / 1000) : STAKING_GENESIS + REWARDS_DURATION), [
     exactEnd
@@ -55,7 +55,7 @@ export function Countdown({ exactEnd }: { exactEnd?: Date }) {
 
   return (
     <TYPE.black fontWeight={400}>
-      {message}{' '}
+      {showMessage && message}{' '}
       {Number.isFinite(timeRemaining) && (
         <code>
           {`${days}:${hours.toString().padStart(2, '0')}:${minutes
