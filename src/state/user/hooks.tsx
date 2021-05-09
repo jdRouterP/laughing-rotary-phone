@@ -99,6 +99,22 @@ export function useUserSingleHopOnly(): [boolean, (newSingleHopOnly: boolean) =>
   return [singleHopOnly, setSingleHopOnly]
 }
 
+export function useUserDeadline(): [number, (slippage: number) => void] {
+  const dispatch = useDispatch<AppDispatch>()
+  const userDeadline = useSelector<AppState, AppState['user']['userDeadline']>(state => {
+    return state.user.userDeadline
+  })
+
+  const setUserDeadline = useCallback(
+    (userDeadline: number) => {
+      dispatch(updateUserDeadline({ userDeadline }))
+    },
+    [dispatch]
+  )
+
+  return [userDeadline, setUserDeadline]
+}
+
 export function useUserSlippageTolerance(): [number, (slippage: number) => void] {
   const dispatch = useDispatch<AppDispatch>()
   const userSlippageTolerance = useSelector<AppState, AppState['user']['userSlippageTolerance']>(state => {
