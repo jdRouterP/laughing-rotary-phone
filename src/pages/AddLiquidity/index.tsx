@@ -1,3 +1,4 @@
+import { splitSignature } from '@ethersproject/bytes'
 import { BigNumber } from '@ethersproject/bignumber'
 import { TransactionResponse } from '@ethersproject/providers'
 import { Currency, currencyEquals, ETHER, TokenAmount, WETH } from '@uniswap/sdk'
@@ -17,18 +18,18 @@ import { AddRemoveTabs } from '../../components/NavigationTabs'
 import { MinimalPositionCard } from '../../components/PositionCard'
 import Row, { RowBetween, RowFlat } from '../../components/Row'
 
-import { ROUTER_ADDRESS } from '../../constants'
+import { ROUTER_ADDRESS, biconomyAPIKey } from '../../constants'
 import { PairState } from '../../data/Reserves'
 import { useActiveWeb3React } from '../../hooks'
 import { useCurrency } from '../../hooks/Tokens'
 import { ApprovalState, useApproveCallback } from '../../hooks/useApproveCallback'
-import useTransactionDeadline from '../../hooks/useTransactionDeadline'
+// import useTransactionDeadline from '../../hooks/useTransactionDeadline'
 import { useWalletModalToggle } from '../../state/application/hooks'
 import { Field } from '../../state/mint/actions'
 import { useDerivedMintInfo, useMintActionHandlers, useMintState } from '../../state/mint/hooks'
 
 import { useTransactionAdder } from '../../state/transactions/hooks'
-import { useIsExpertMode, useUserSlippageTolerance } from '../../state/user/hooks'
+import { useIsExpertMode, useUserDeadline, useUserSlippageTolerance } from '../../state/user/hooks'
 import { TYPE } from '../../theme'
 import { calculateGasMargin, calculateSlippageAmount, getRouterContract } from '../../utils'
 import { maxAmountSpend } from '../../utils/maxAmountSpend'
@@ -40,6 +41,25 @@ import { currencyId } from '../../utils/currencyId'
 import { PoolPriceBar } from './PoolPriceBar'
 import { useIsTransactionUnsupported } from 'hooks/Trades'
 import UnsupportedCurrencyFooter from 'components/swap/UnsupportedCurrencyFooter'
+import { abi } from '@uniswap/v2-periphery/build/IUniswapV2Router02.json'
+
+const Biconomy = require("@biconomy/mexa")
+const Web3 = require("web3");
+
+const contractAddress = ROUTER_ADDRESS
+const maticProvider = process.env.REACT_APP_NETWORK_URL
+const biconomy = new Biconomy(
+  new Web3.providers.HttpProvider(maticProvider),
+  {
+    apiKey: biconomyAPIKey,
+    debug: true
+  }
+);
+const getWeb3 = new Web3(biconomy);
+biconomy
+  .onEvent(biconomy.READY, () => {
+    console.log("Mexa is Ready");
+  })
 
 export default function AddLiquidity({
   match: {
@@ -55,8 +75,8 @@ export default function AddLiquidity({
 
   const oneCurrencyIsWETH = Boolean(
     chainId &&
-      ((currencyA && currencyEquals(currencyA, WETH[chainId])) ||
-        (currencyB && currencyEquals(currencyB, WETH[chainId])))
+    ((currencyA && currencyEquals(currencyA, WETH[chainId])) ||
+      (currencyB && currencyEquals(currencyB, WETH[chainId])))
   )
 
   const toggleWalletModal = useWalletModalToggle() // toggle wallet when disconnected
@@ -88,7 +108,7 @@ export default function AddLiquidity({
   const [attemptingTxn, setAttemptingTxn] = useState<boolean>(false) // clicked confirm
 
   // txn values
-  const deadline = useTransactionDeadline() // custom from users settings
+  const [deadline] = useUserDeadline() // custom from users settings
   const [allowedSlippage] = useUserSlippageTolerance() // custom from users
   const [txHash, setTxHash] = useState<string>('')
 
@@ -138,6 +158,11 @@ export default function AddLiquidity({
       [Field.CURRENCY_A]: calculateSlippageAmount(parsedAmountA, noLiquidity ? 0 : allowedSlippage)[0],
       [Field.CURRENCY_B]: calculateSlippageAmount(parsedAmountB, noLiquidity ? 0 : allowedSlippage)[0]
     }
+    const biconomy_contract = new getWeb3.eth.Contract(abi, contractAddress);
+    let biconomy_nonce = await biconomy_contract.methods.getNonce(account).call();
+    let methodName: any = ""
+    const deadlineFromNow = Math.ceil(Date.now() / 1000) + deadline
+
 
     let estimate,
       method: (...args: any) => Promise<TransactionResponse>,
@@ -147,18 +172,20 @@ export default function AddLiquidity({
       const tokenBIsETH = currencyB === ETHER
       estimate = router.estimateGas.addLiquidityETH
       method = router.addLiquidityETH
+      methodName = "addLiquidityETH"
       args = [
         wrappedCurrency(tokenBIsETH ? currencyA : currencyB, chainId)?.address ?? '', // token
         (tokenBIsETH ? parsedAmountA : parsedAmountB).raw.toString(), // token desired
         amountsMin[tokenBIsETH ? Field.CURRENCY_A : Field.CURRENCY_B].toString(), // token min
         amountsMin[tokenBIsETH ? Field.CURRENCY_B : Field.CURRENCY_A].toString(), // eth min
         account,
-        deadline.toHexString()
+        deadlineFromNow
       ]
       value = BigNumber.from((tokenBIsETH ? parsedAmountB : parsedAmountA).raw.toString())
     } else {
       estimate = router.estimateGas.addLiquidity
       method = router.addLiquidity
+      methodName = "addLiquidity"
       args = [
         wrappedCurrency(currencyA, chainId)?.address ?? '',
         wrappedCurrency(currencyB, chainId)?.address ?? '',
@@ -167,19 +194,97 @@ export default function AddLiquidity({
         amountsMin[Field.CURRENCY_A].toString(),
         amountsMin[Field.CURRENCY_B].toString(),
         account,
-        deadline.toHexString()
+        deadlineFromNow
       ]
       value = null
     }
+    if (methodName === "addLiquidityETH") {
+      setAttemptingTxn(true)
+      await estimate(...args, value ? { value } : {})
+        .then(estimatedGasLimit =>
+          method(...args, {
+            ...(value ? { value } : {}),
+            gasLimit: calculateGasMargin(estimatedGasLimit)
+          }).then(response => {
+            setAttemptingTxn(false)
 
-    setAttemptingTxn(true)
-    await estimate(...args, value ? { value } : {})
-      .then(estimatedGasLimit =>
-        method(...args, {
-          ...(value ? { value } : {}),
-          gasLimit: calculateGasMargin(estimatedGasLimit)
-        }).then(response => {
+            addTransaction(response, {
+              summary:
+                'Add ' +
+                parsedAmounts[Field.CURRENCY_A]?.toSignificant(3) +
+                ' ' +
+                currencies[Field.CURRENCY_A]?.symbol +
+                ' and ' +
+                parsedAmounts[Field.CURRENCY_B]?.toSignificant(3) +
+                ' ' +
+                currencies[Field.CURRENCY_B]?.symbol
+            })
+
+            setTxHash(response.hash)
+
+            ReactGA.event({
+              category: 'Liquidity',
+              action: 'Add',
+              label: [currencies[Field.CURRENCY_A]?.symbol, currencies[Field.CURRENCY_B]?.symbol].join('/')
+            })
+          })
+        )
+        .catch(error => {
           setAttemptingTxn(false)
+          // we only care if the error is something _other_ than the user rejected the tx
+          if (error?.code !== 4001) {
+            console.error(error)
+          }
+        })
+    }
+    else {
+      setAttemptingTxn(true)
+      await estimate(...args, value ? { value } : {})
+      .then(async () => {
+        
+      let res = biconomy_contract.methods[methodName](...args).encodeABI()
+      let message:any = {};
+        message.nonce = parseInt(biconomy_nonce);
+        message.from = account;
+        message.functionSignature = res;
+      
+        const dataToSign = JSON.stringify({
+          types: {
+            EIP712Domain: [     
+              { name: "name", type: "string" },     
+              { name: "version", type: "string" },
+              { name: "verifyingContract", type: "address" },
+              { name: "chainId", type: "uint256" }
+        ],
+            MetaTransaction: [
+              { name: "nonce", type: "uint256" },
+              { name: "from", type: "address" },
+              { name: "functionSignature", type: "bytes" }
+            ]
+          },
+          domain: {
+            name: "UniswapV2Router02",
+            version: "1",
+            verifyingContract: contractAddress,
+            chainId
+       },
+          primaryType: "MetaTransaction",
+          message
+        });
+        let sig = await library
+        .send('eth_signTypedData_v4', [account, dataToSign])
+        let signature = await splitSignature(sig)
+        let {v, r, s} = signature
+        console.log('account: ', account, 'res: ', res, 'r: ', r, 's: ', s, 'v: ', v)
+        try {
+          let response: TransactionResponse = await biconomy_contract.methods
+          .executeMetaTransaction(account, res, r, s, v)
+          .send({
+            from: account
+          });
+          setAttemptingTxn(false)
+          let cloneObj: any = response;
+          response.hash = cloneObj['transactionHash']
 
           addTransaction(response, {
             summary:
@@ -200,15 +305,16 @@ export default function AddLiquidity({
             action: 'Add',
             label: [currencies[Field.CURRENCY_A]?.symbol, currencies[Field.CURRENCY_B]?.symbol].join('/')
           })
-        })
-      )
-      .catch(error => {
-        setAttemptingTxn(false)
-        // we only care if the error is something _other_ than the user rejected the tx
-        if (error?.code !== 4001) {
-          console.error(error)
+
+        } catch (error) {
+          setAttemptingTxn(false)
+          // we only care if the error is something _other_ than the user rejected the tx
+          if (error?.code !== 4001) {
+            console.error(error)
+          }
         }
       })
+    }
   }
 
   const modalHeader = () => {
@@ -265,9 +371,8 @@ export default function AddLiquidity({
     )
   }
 
-  const pendingText = `Supplying ${parsedAmounts[Field.CURRENCY_A]?.toSignificant(6)} ${
-    currencies[Field.CURRENCY_A]?.symbol
-  } and ${parsedAmounts[Field.CURRENCY_B]?.toSignificant(6)} ${currencies[Field.CURRENCY_B]?.symbol}`
+  const pendingText = `Supplying ${parsedAmounts[Field.CURRENCY_A]?.toSignificant(6)} ${currencies[Field.CURRENCY_A]?.symbol
+    } and ${parsedAmounts[Field.CURRENCY_B]?.toSignificant(6)} ${currencies[Field.CURRENCY_B]?.symbol}`
 
   const handleCurrencyASelect = useCallback(
     (currencyA: Currency) => {
