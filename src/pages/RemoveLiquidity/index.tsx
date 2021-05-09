@@ -17,10 +17,10 @@ import DoubleCurrencyLogo from '../../components/DoubleLogo'
 import { AddRemoveTabs } from '../../components/NavigationTabs'
 import { MinimalPositionCard } from '../../components/PositionCard'
 import Row, { RowBetween, RowFixed } from '../../components/Row'
+import { ROUTER_ADDRESS, biconomyAPIKey } from '../../constants'
 
 import Slider from '../../components/Slider'
 import CurrencyLogo from '../../components/CurrencyLogo'
-import { ROUTER_ADDRESS } from '../../constants'
 import { useActiveWeb3React } from '../../hooks'
 import { useCurrency } from '../../hooks/Tokens'
 import { usePairContract } from '../../hooks/useContract'
@@ -43,6 +43,28 @@ import { Field } from '../../state/burn/actions'
 import { useWalletModalToggle } from '../../state/application/hooks'
 import { useUserSlippageTolerance } from '../../state/user/hooks'
 import { BigNumber } from '@ethersproject/bignumber'
+import { abi } from '@uniswap/v2-periphery/build/IUniswapV2Router02.json'
+
+const Biconomy = require("@biconomy/mexa")
+const Web3 = require("web3");
+// swap, add Liquidity
+
+const contractAddress = ROUTER_ADDRESS; 
+const maticProvider = process.env.REACT_APP_NETWORK_URL
+const biconomy = new Biconomy(
+  new Web3.providers.HttpProvider(maticProvider),
+  {
+      apiKey: biconomyAPIKey,
+      debug: true     
+  }   
+); 
+// const web3 = new Web3(window.ethereum);
+const getWeb3 = new Web3(biconomy);
+biconomy
+    .onEvent(biconomy.READY, () => {
+       console.log("Mexa is Ready");
+})
+
 
 export default function RemoveLiquidity({
   history,
@@ -199,6 +221,9 @@ export default function RemoveLiquidity({
       throw new Error('missing currency amounts')
     }
     const router = getRouterContract(chainId, library, account)
+    const bicomony_contract = new getWeb3.eth.Contract(abi, contractAddress); 
+    let biconomy_nonce = await bicomony_contract.methods.getNonce(account).call();
+    console.log('biconomy_nonce::', biconomy_nonce)
 
     const amountsMin = {
       [Field.CURRENCY_A]: calculateSlippageAmount(currencyAmountA, allowedSlippage)[0],
@@ -302,15 +327,52 @@ export default function RemoveLiquidity({
       console.error('This transaction would fail. Please contact support.')
     } else {
       const methodName = methodNames[indexOfSuccessfulEstimation]
-      const safeGasEstimate = safeGasEstimates[indexOfSuccessfulEstimation]
+      // const safeGasEstimate = safeGasEstimates[indexOfSuccessfulEstimation]
 
       setAttemptingTxn(true)
-      await router[methodName](...args, {
-        gasLimit: safeGasEstimate
-      })
-        .then((response: TransactionResponse) => {
-          setAttemptingTxn(false)
 
+      let res = bicomony_contract.methods[methodName](...args).encodeABI()
+      let message:any = {};
+        message.nonce = parseInt(biconomy_nonce);
+        message.from = account;
+        message.functionSignature = res;
+      const dataToSign = JSON.stringify({
+        types: {
+          EIP712Domain: [     
+            { name: "name", type: "string" },     
+            { name: "version", type: "string" },
+            { name: "verifyingContract", type: "address" },
+            { name: "chainId", type: "uint256" }
+      ],
+          MetaTransaction: [
+            { name: "nonce", type: "uint256" },
+            { name: "from", type: "address" },
+            { name: "functionSignature", type: "bytes" }
+          ]
+        },
+        domain: {
+          name: "UniswapV2Router02",
+          version: "1",
+          verifyingContract: contractAddress,
+          chainId
+     },
+        primaryType: "MetaTransaction",
+        message: message
+      });
+      let sig = await library
+      .send('eth_signTypedData_v4', [account, dataToSign])
+      let signature = await splitSignature(sig)
+      let {v, r, s} = signature
+
+      try {
+        let response: TransactionResponse = await bicomony_contract.methods
+        .executeMetaTransaction(account, res, r, s, v)
+        .send({
+          from: account
+        });
+          setAttemptingTxn(false)
+          let cloneObj: any = response;
+          response.hash = cloneObj['transactionHash']
           addTransaction(response, {
             summary:
               'Remove ' +
@@ -330,12 +392,42 @@ export default function RemoveLiquidity({
             action: 'Remove',
             label: [currencyA?.symbol, currencyB?.symbol].join('/')
           })
-        })
-        .catch((error: Error) => {
+      } catch (error) {
           setAttemptingTxn(false)
           // we only care if the error is something _other_ than the user rejected the tx
           console.error(error)
-        })
+      }
+      // await router[methodName](...args, {
+      //   gasLimit: safeGasEstimate
+      // })
+      //   .then((response: TransactionResponse) => {
+      //     setAttemptingTxn(false)
+
+      //     addTransaction(response, {
+      //       summary:
+      //         'Remove ' +
+      //         parsedAmounts[Field.CURRENCY_A]?.toSignificant(3) +
+      //         ' ' +
+      //         currencyA?.symbol +
+      //         ' and ' +
+      //         parsedAmounts[Field.CURRENCY_B]?.toSignificant(3) +
+      //         ' ' +
+      //         currencyB?.symbol
+      //     })
+
+      //     setTxHash(response.hash)
+
+      //     ReactGA.event({
+      //       category: 'Liquidity',
+      //       action: 'Remove',
+      //       label: [currencyA?.symbol, currencyB?.symbol].join('/')
+      //     })
+      //   })
+      //   .catch((error: Error) => {
+      //     setAttemptingTxn(false)
+      //     // we only care if the error is something _other_ than the user rejected the tx
+      //     console.error(error)
+      //   })
     }
   }
 
