@@ -144,8 +144,6 @@ export default function Manage({
   const countUpAmount = stakingInfo?.earnedAmount?.toFixed(6) ?? '0'
   const countUpAmountPrevious = usePrevious(countUpAmount) ?? '0'
 
-
-  console.log(unClaimedAmount)
   // const vestedAmount = stakingInfo?.earnedAmount?.toFixed(2) ?? '0'
 
   // const claimedAmount = JSBI.subtract(stakingInfo?.totalVestedAmount?.raw, stakingInfo?.earnedAmount?.raw)

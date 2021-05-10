@@ -242,17 +242,6 @@ export function useStakingInfo(pairToFilterBy?: Pair | null): StakingInfo[] {
           splitsState.error ||
           vestingState.error
         ) {
-          console.log(balanceState?.error,
-            earnedAmountState?.error,
-            claimedSplitsState?.error,
-            hasClaimedPartialState,
-            totalVestedAmountState,
-            totalSupplyState,
-            rewardRateState,
-            periodFinishState.error,
-            splitWindowState.error,
-            splitsState.error,
-            vestingState.error)
           console.error('Failed to load staking rewards info')
           return memo
         }
@@ -318,7 +307,6 @@ export function useStakingInfo(pairToFilterBy?: Pair | null): StakingInfo[] {
         let unclaimedAmount = BigNumber.from(totalVestedAmountState?.result?.[0]).mul(unclaimedSplits).div(BigNumber.from(splits))
         unclaimedAmount = unclaimedAmount.div(BigNumber.from('1000000000000000000'))
 
-        console.log(unclaimedAmount);
         let ableToClaim = !vestingActive || (Math.floor(Date.now() / 1000) >= periodFinishSeconds &&
           (userClaimedSplit !== Math.floor(currentSplit) ? true : !hasClaimedPartial))
 
