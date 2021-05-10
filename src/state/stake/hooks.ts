@@ -1,16 +1,17 @@
 // import { ChainId, CurrencyAmount, JSBI, Token, TokenAmount, WETH, Pair } from '@uniswap/sdk'
 import { ChainId, CurrencyAmount, JSBI, Token, TokenAmount, Pair } from '@uniswap/sdk'
 import { useMemo } from 'react'
-import { ETHER, UNI, FRONT, ROUTE, USDC } from '../../constants'
+import { BigNumber } from 'ethers'
+import { ROUTE, UNI, USDT, WMATIC, ETHER, WBTC, USDC, DAI } from '../../constants'
 import { STAKING_REWARDS_INTERFACE } from '../../constants/abis/staking-rewards'
 import { useActiveWeb3React } from '../../hooks'
 import { NEVER_RELOAD, useMultipleContractSingleData } from '../multicall/hooks'
 import { tryParseAmount } from '../swap/hooks'
 import useCurrentBlockTimestamp from 'hooks/useCurrentBlockTimestamp'
 
-export const STAKING_GENESIS = 1620543648
+export const STAKING_GENESIS = 1620736200
 
-export const REWARDS_DURATION_DAYS = 60
+export const REWARDS_DURATION_DAYS = 14
 
 // TODO add staking rewards addresses here
 export const STAKING_REWARDS_INFO: {
@@ -21,16 +22,32 @@ export const STAKING_REWARDS_INFO: {
 } = {
   [ChainId.MATIC]: [
     {
-      tokens: [ETHER, FRONT],
-      stakingRewardAddress: '0x61b88fb5652006b63f74486160973db4bb07a7a9'
-    },
-    {
       tokens: [ROUTE, ETHER],
-      stakingRewardAddress: '0xb181b0bc8d60c3fb413e2935457432b480966c01'
+      stakingRewardAddress: '0x466753533273146caB7e691A26c0EceaB51E1aFF'
     },
     {
-      tokens: [ROUTE, USDC],
-      stakingRewardAddress: '0x11d5de1752cf927527c0e7d21a96587518568fa7'
+      tokens: [ETHER, USDT],
+      stakingRewardAddress: '0xc8302a2C99dA66C8A0051f3c2d3fbABAB9f88392'
+    },
+    {
+      tokens: [WBTC, ETHER],
+      stakingRewardAddress: '0x48Ae4B15E7c9252660c68196d6Fd4dA15D1bCBd7'
+    },
+    {
+      tokens: [WMATIC, ETHER],
+      stakingRewardAddress: '0xaF3cCc381F3f8bbffB8b9bfb32300536ef87328C'
+    },
+    {
+      tokens: [USDT, USDC],
+      stakingRewardAddress: '0x8EB2cBdA67c9e80B383C18C2FC7EfA90255F346f'
+    },
+    {
+      tokens: [DAI, USDT],
+      stakingRewardAddress: '0x78Df04Fcfca53E4d533987D8ff29165dbeb188de'
+    },
+    {
+      tokens: [ETHER, USDC],
+      stakingRewardAddress: '0x91CE029c7329aF9CCb5C09aB2fB8d8E9dd595644'
     }
   ]
 }
@@ -48,6 +65,8 @@ export interface StakingInfo {
   totalStakedAmount: TokenAmount
   // the amount of token distributed per second to all LPs, constant
   totalRewardRate: TokenAmount
+  // Total vested unclaimed amount
+  unclaimedAmount: BigNumber
   // the current amount of token distributed to the active account per second.
   // equivalent to percent of total supply * reward rate
   rewardRate: TokenAmount
@@ -57,6 +76,8 @@ export interface StakingInfo {
   periodFinish: Date | undefined
   // size of split window
   splitWindow: Date | undefined
+  //
+  totalEarnedReward: TokenAmount | undefined
   // number of days of vesting
   vestingPeriod: Date | undefined
   // next reward unlocked at for a user
@@ -113,6 +134,7 @@ export function useStakingInfo(pairToFilterBy?: Pair | null): StakingInfo[] {
   const claimedSplits = useMultipleContractSingleData(rewardsAddresses, STAKING_REWARDS_INTERFACE, 'claimedSplits', accountArg)
   const totalSupplies = useMultipleContractSingleData(rewardsAddresses, STAKING_REWARDS_INTERFACE, 'totalSupply')
   const hasClaimed = useMultipleContractSingleData(rewardsAddresses, STAKING_REWARDS_INTERFACE, 'hasClaimed', accountArg)
+  const totalEarnedReward = useMultipleContractSingleData(rewardsAddresses, STAKING_REWARDS_INTERFACE, 'totalEarnedReward', accountArg)
   const totalVestedAmount = useMultipleContractSingleData(rewardsAddresses, STAKING_REWARDS_INTERFACE, 'totalVestedRewardForUser', accountArg)
 
   // tokens per second, constants
@@ -162,6 +184,7 @@ export function useStakingInfo(pairToFilterBy?: Pair | null): StakingInfo[] {
       const totalVestedAmountState = totalVestedAmount[index]
       const claimedSplitsState = claimedSplits[index]
       const hasClaimedPartialState = hasClaimed[index]
+      const totalEarnedRewardState = totalEarnedReward[index]
 
       // these get fetched regardless of account
       const totalSupplyState = totalSupplies[index]
@@ -178,6 +201,7 @@ export function useStakingInfo(pairToFilterBy?: Pair | null): StakingInfo[] {
         !claimedSplitsState?.loading &&
         !hasClaimedPartialState?.loading &&
         !totalVestedAmountState?.loading &&
+        !totalEarnedRewardState?.loading &&
         // always need these
         totalSupplyState &&
         !totalSupplyState.loading &&
@@ -204,15 +228,17 @@ export function useStakingInfo(pairToFilterBy?: Pair | null): StakingInfo[] {
           periodFinishState.error ||
           splitWindowState.error ||
           splitsState.error ||
-          vestingState.error
+          vestingState.error ||
+          totalEarnedRewardState.error
 
         ) {
           console.log(balanceState?.error,
             earnedAmountState?.error,
             claimedSplitsState?.error,
-            hasClaimedPartialState?.error,
-            totalVestedAmountState?.error,
-            totalSupplyState.error, rewardRateState.error,
+            hasClaimedPartialState,
+            totalVestedAmountState,
+            totalSupplyState,
+            rewardRateState,
             periodFinishState.error,
             splitWindowState.error,
             splitsState.error,
@@ -228,13 +254,14 @@ export function useStakingInfo(pairToFilterBy?: Pair | null): StakingInfo[] {
         // check for account, if no account set to 0
 
         const stakedAmount = new TokenAmount(dummyPair.liquidityToken, JSBI.BigInt(balanceState?.result?.[0] ?? 0))
-        const totalStakedAmount = new TokenAmount(dummyPair.liquidityToken, JSBI.BigInt(totalSupplyState.result?.[0]))
-        const totalRewardRate = new TokenAmount(uni, JSBI.BigInt(rewardRateState.result?.[0]))
-        const totalVestedAmount = new TokenAmount(uni, JSBI.BigInt(totalVestedAmountState.result?.[0]))
+        const totalStakedAmount = new TokenAmount(dummyPair.liquidityToken, JSBI.BigInt(totalSupplyState?.result?.[0] ?? 0))
+        const totalRewardRate = new TokenAmount(uni, JSBI.BigInt(rewardRateState?.result?.[0] ?? 0))
+        const totalVestedAmount = new TokenAmount(uni, JSBI.BigInt(totalVestedAmountState?.result?.[0] ?? 0))
+        const totalEarnedReward = new TokenAmount(uni, JSBI.BigInt(totalEarnedRewardState?.result?.[0] ?? 0))
 
-        const userClaimedSplit = claimedSplitsState.result?.[0]?.toNumber();
-        // const splits = splitsState.result?.[0]?.toNumber();
-        const hasClaimedPartial = hasClaimedPartialState.result?.[0];
+        const userClaimedSplit = claimedSplitsState?.result?.[0]?.toNumber();
+        const splits = splitsState?.result?.[0]?.toNumber() ?? 0
+        const hasClaimedPartial = hasClaimedPartialState?.result?.[0];
         const getHypotheticalRewardRate = (
           stakedAmount: TokenAmount,
           totalStakedAmount: TokenAmount,
@@ -265,15 +292,27 @@ export function useStakingInfo(pairToFilterBy?: Pair | null): StakingInfo[] {
         const active = periodFinishSeconds && currentBlockTimestamp ? periodFinishSeconds > currentBlockTimestamp?.toNumber() : true
 
         // compare vesting end timestamp vs current block timestamp (in seconds)
-        const vestingActive = vestingPeriodSeconds + periodFinishSeconds && currentBlockTimestamp ? vestingPeriodSeconds + periodFinishSeconds > currentBlockTimestamp?.toNumber() : true
+        const vestingEndsSeconds = vestingPeriodSeconds + periodFinishSeconds;
+        const vestingActive = vestingEndsSeconds && currentBlockTimestamp ? vestingEndsSeconds > currentBlockTimestamp?.toNumber() : true
+        let currentSplit = Math.sign(Math.floor(Date.now() / 1000) - periodFinishSeconds) === -1 ? 0 : (Math.floor(Date.now() / 1000) - periodFinishSeconds) / splitWindowSeconds;
 
-        const currentSplit = Math.sign(Math.floor(Date.now() / 1000) - periodFinishSeconds) === -1 ? 0 : (Math.floor(Date.now() / 1000) - periodFinishSeconds) / splitWindowSeconds;
-        const unlockAt = active ? periodFinishSeconds : vestingActive ? (periodFinishSeconds + (Math.floor(currentSplit + 1) * splitWindowSeconds)) : vestingPeriodSeconds + periodFinishSeconds;
+        currentSplit = currentSplit > splits ? splits : currentSplit;
 
-        // const unclaimedAmount = totalVestedAmount * (Math.floor(currentSplit) - userClaimedSplit) / splits;
+        const unlockAt = active ? periodFinishSeconds : vestingActive ? (periodFinishSeconds + (Math.floor(currentSplit + 1) * splitWindowSeconds)) : vestingEndsSeconds;
 
+        //const unclaimedAmount = JSBI.divide(JSBI.multiply(JSBI.BigInt(totalVestedAmountState?.result?.[0] ?? 0), JSBI.BigInt((Math.floor(currentSplit + 1) - userClaimedSplit))), splits);
+        // totalvestedamount*(currentsplit-userclaimedlastsplit)/splits;
+
+
+        const unclaimedSplits = BigNumber.from((Math.floor(currentSplit) - userClaimedSplit))
+        let unclaimedAmount = BigNumber.from(totalVestedAmountState?.result?.[0]).mul(unclaimedSplits).div(BigNumber.from(splits))
+        unclaimedAmount = unclaimedAmount.div(BigNumber.from('1000000000000000000'))
+
+        console.log(unclaimedAmount);
         let ableToClaim = !vestingActive || (Math.floor(Date.now() / 1000) >= periodFinishSeconds &&
           (userClaimedSplit !== Math.floor(currentSplit) ? true : !hasClaimedPartial))
+
+
         memo.push({
           stakingRewardAddress: rewardsAddress,
           tokens: info[index].tokens,
@@ -281,11 +320,13 @@ export function useStakingInfo(pairToFilterBy?: Pair | null): StakingInfo[] {
           splitWindow: splitWindowStateMs > 0 ? new Date(splitWindowStateMs) : undefined,
           vestingPeriod: vestingPeriodMs > 0 ? new Date(periodFinishMs + vestingPeriodMs) : undefined, //vesting period after period ends
           earnedAmount: new TokenAmount(uni, JSBI.BigInt(earnedAmountState?.result?.[0] ?? 0)),
+          unclaimedAmount: unclaimedAmount,
           totalVestedAmount: totalVestedAmount,
           rewardRate: individualRewardRate,
           totalRewardRate: totalRewardRate,
           stakedAmount: stakedAmount,
           claimedSplits: userClaimedSplit,
+          totalEarnedReward,
           ableToClaim,
           hasClaimedPartial,
           totalStakedAmount: totalStakedAmount,
@@ -302,6 +343,7 @@ export function useStakingInfo(pairToFilterBy?: Pair | null): StakingInfo[] {
     chainId,
     currentBlockTimestamp,
     earnedAmounts,
+    totalEarnedReward,
     info,
     periodFinishes,
     rewardRates,

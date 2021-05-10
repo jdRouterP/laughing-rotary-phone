@@ -28,7 +28,7 @@ import { useTotalSupply } from '../../data/TotalSupply'
 import { usePair } from '../../data/Reserves'
 import usePrevious from '../../hooks/usePrevious'
 import useUSDCPrice from '../../utils/useUSDCPrice'
-import { BIG_INT_ZERO, BIG_INT_SECONDS_IN_WEEK } from '../../constants'
+import { BIG_INT_ZERO, BIG_INT_SECONDS_IN_DAY } from '../../constants'
 import { Countdown } from './Countdown'
 
 const PageWrapper = styled(AutoColumn)`
@@ -134,17 +134,25 @@ export default function Manage({
       )
     )
   }
+  // const totalVestedAmount = stakingInfo?.totalVestedAmount?.toFixed(2) ?? '0';
+  const totalEarnedReward = stakingInfo?.totalEarnedReward?.toFixed(2) ?? '0';
+  const unClaimedAmount = stakingInfo?.unclaimedAmount?.toNumber()?.toFixed(3);
 
+
+  // const countUpAmount = unClaimedAmount;
+  // const countUpAmountPrevious = usePrevious(countUpAmount) ?? '0'
   const countUpAmount = stakingInfo?.earnedAmount?.toFixed(6) ?? '0'
   const countUpAmountPrevious = usePrevious(countUpAmount) ?? '0'
 
-  const totalVestedAmount = stakingInfo?.totalVestedAmount?.toFixed(2) ?? '0';
-  const vestedAmount = stakingInfo?.earnedAmount?.toFixed(2) ?? '0'
 
+  console.log(unClaimedAmount)
+  // const vestedAmount = stakingInfo?.earnedAmount?.toFixed(2) ?? '0'
+
+  // const claimedAmount = JSBI.subtract(stakingInfo?.totalVestedAmount?.raw, stakingInfo?.earnedAmount?.raw)
+  // console.log(claimedAmount);
   // get the USD value of staked WETH
   const USDPrice = useUSDCPrice(WETH)
-  const valueOfTotalStakedAmountInUSDC =
-    valueOfTotalStakedAmountInWETH && USDPrice?.quote(valueOfTotalStakedAmountInWETH)
+  const valueOfTotalStakedAmountInUSDC = valueOfTotalStakedAmountInWETH && USDPrice?.quote(valueOfTotalStakedAmountInWETH)
 
   const toggleWalletModal = useWalletModalToggle()
 
@@ -178,22 +186,23 @@ export default function Manage({
         </PoolData>
         <PoolData>
           {
-            stakingInfo?.active ? <AutoColumn gap="sm">
+            !stakingInfo?.hasClaimedPartial || !stakingInfo?.vestingActive ? <AutoColumn gap="sm">
               <TYPE.body style={{ margin: 0 }}>Pool Rate</TYPE.body>
               <TYPE.body fontSize={24} fontWeight={500}>
                 {stakingInfo?.active
                   ? stakingInfo?.totalRewardRate
-                    ?.multiply(BIG_INT_SECONDS_IN_WEEK)
+                    ?.multiply(BIG_INT_SECONDS_IN_DAY)
                     ?.toFixed(0, { groupSeparator: ',' }) ?? '-'
                   : '0'}
-                {' DFYN / week'}
+                {' DFYN / day'}
               </TYPE.body>
-            </AutoColumn> : <AutoColumn gap="sm">
-              <TYPE.body style={{ margin: 0 }}>Your claimed &#38; vested DFYN</TYPE.body>
-              <TYPE.body fontSize={22} fontWeight={500}>
-                {`${totalVestedAmount} / ${vestedAmount} DFYN`}
-              </TYPE.body>
-            </AutoColumn>
+            </AutoColumn> :
+              <AutoColumn gap="sm">
+                <TYPE.body style={{ margin: 0 }}>{`Total DFYN earned (includes vesting)`}</TYPE.body>
+                <TYPE.body fontSize={22} fontWeight={500}>
+                  {` ${stakingInfo?.hasClaimedPartial ? totalEarnedReward : stakingInfo?.earnedAmount?.toFixed(2) ?? '0'} DFYN`}
+                </TYPE.body>
+              </AutoColumn>
           }
 
         </PoolData>
@@ -322,10 +331,10 @@ export default function Manage({
                   </span>
                   {stakingInfo?.active
                     ? stakingInfo?.rewardRate
-                      ?.multiply(BIG_INT_SECONDS_IN_WEEK)
+                      ?.multiply(BIG_INT_SECONDS_IN_DAY)
                       ?.toSignificant(4, { groupSeparator: ',' }) ?? '-'
                     : '0'}
-                  {' DFYN / week'}
+                  {' DFYN / day'}
                 </TYPE.black>
               </RowBetween>
             </AutoColumn>
@@ -335,7 +344,7 @@ export default function Manage({
           <span role="img" aria-label="wizard-icon" style={{ marginRight: '8px' }}>
             ⭐️
           </span>
-          When you withdraw, the contract will automagically claim DFYN on your behalf!
+          {`You can claim 20% of your reward after reward generation ends, and remaining will get linearly vested!`}
         </TYPE.main>
 
         {!showAddLiquidityButton && (

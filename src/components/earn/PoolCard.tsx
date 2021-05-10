@@ -14,7 +14,7 @@ import { unwrappedToken } from '../../utils/wrappedCurrency'
 import { useTotalSupply } from '../../data/TotalSupply'
 import { usePair } from '../../data/Reserves'
 import useUSDCPrice from '../../utils/useUSDCPrice'
-import { BIG_INT_SECONDS_IN_WEEK } from '../../constants'
+import { BIG_INT_SECONDS_IN_DAY } from '../../constants'
 
 const StatContainer = styled.div`
   display: flex;
@@ -139,9 +139,9 @@ export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) 
             {stakingInfo
               ? stakingInfo.active
                 ? `${stakingInfo.totalRewardRate
-                  ?.multiply(BIG_INT_SECONDS_IN_WEEK)
-                  ?.toFixed(0, { groupSeparator: ',' })} DFYN / week`
-                : '0 DFYN / week'
+                  ?.multiply(BIG_INT_SECONDS_IN_DAY)
+                  ?.toFixed(0, { groupSeparator: ',' })} DFYN / day`
+                : '0 DFYN / day'
               : '-'}
           </TYPE.white>
         </RowBetween>
@@ -162,9 +162,9 @@ export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) 
               {stakingInfo
                 ? stakingInfo.active
                   ? `${stakingInfo.rewardRate
-                    ?.multiply(BIG_INT_SECONDS_IN_WEEK)
-                    ?.toSignificant(4, { groupSeparator: ',' })} DFYN / week`
-                  : '0 DFYN / week'
+                    ?.multiply(BIG_INT_SECONDS_IN_DAY)
+                    ?.toSignificant(4, { groupSeparator: ',' })} DFYN / day`
+                  : '0 DFYN / day'
                 : '-'}
             </TYPE.black>
           </BottomSection>

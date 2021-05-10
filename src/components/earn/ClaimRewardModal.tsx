@@ -38,7 +38,7 @@ export default function ClaimRewardModal({ isOpen, onDismiss, stakingInfo }: Sta
   }
 
   const stakingContract = useStakingContract(stakingInfo.stakingRewardAddress)
-
+  const unClaimedAmount = stakingInfo?.unclaimedAmount?.toNumber()?.toFixed(3);
   async function onClaimReward() {
     if (stakingContract && stakingInfo?.stakedAmount) {
       setAttempting(true)
@@ -73,10 +73,10 @@ export default function ClaimRewardModal({ isOpen, onDismiss, stakingInfo }: Sta
             <TYPE.mediumHeader>Claim</TYPE.mediumHeader>
             <CloseIcon onClick={wrappedOnDismiss} />
           </RowBetween>
-          {stakingInfo?.earnedAmount && (
+          {unClaimedAmount && (
             <AutoColumn justify="center" gap="md">
               <TYPE.body fontWeight={600} fontSize={36}>
-                {stakingInfo?.earnedAmount?.toSignificant(6)}
+                {unClaimedAmount}
               </TYPE.body>
               <TYPE.body>Unclaimed DFYN</TYPE.body>
             </AutoColumn>

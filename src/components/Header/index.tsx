@@ -230,7 +230,7 @@ const StyledNavLink = styled(NavLink).attrs({
 
 const StyledExternalLink = styled(ExternalLink).attrs({
   activeClassName
-})<{ isActive?: boolean }>`
+}) <{ isActive?: boolean }>`
   ${({ theme }) => theme.flexRowNoWrap}
   align-items: left;
   border-radius: 3rem;
@@ -347,7 +347,7 @@ export default function Header() {
             {t('pool')}
           </StyledNavLink>
           <StyledNavLink id={`stake-nav-link`} to={'/dfyn'}>
-            DFYN
+            Farms
           </StyledNavLink>
           {/* <StyledNavLink id={`stake-nav-link`} to={'/vote'}>
             Vote

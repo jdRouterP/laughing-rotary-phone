@@ -18,7 +18,7 @@ export class CancelledError extends Error {
 /**
  * Throw this error if the function should retry
  */
-export class RetryableError extends Error {}
+export class RetryableError extends Error { }
 
 /**
  * Retries the function that returns the promise until the promise successfully resolves up to n retries

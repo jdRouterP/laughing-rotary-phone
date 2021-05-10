@@ -16,8 +16,9 @@ export { PRELOADED_PROPOSALS } from './proposals'
 type ChainTokenList = {
   readonly [chainId in ChainId]: Token[]
 }
+
 export const DAI = new Token(ChainId.MATIC, '0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063', 18, 'DAI', 'Dai Stablecoin')
-export const USDC = new Token(ChainId.MATIC, '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174', 6, 'USDC', 'USD//C')
+export const USDC = new Token(ChainId.MATIC, '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174', 6, 'USDC', 'USDC')
 export const USDT = new Token(ChainId.MATIC, '0xc2132D05D31c914a87C6611C10748AEb04B58e8F', 6, 'USDT', 'Tether USD')
 export const mWETH = new Token(ChainId.MATIC, '0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619', 18, 'ETH', 'Ether')
 export const ROUTE = new Token(ChainId.MATIC, '0x16eccfdbb4ee1a85a33f3a9b21175cd7ae753db4', 18, 'ROUTE', 'Route')
@@ -33,9 +34,9 @@ export const STR = new Token(ChainId.MATIC, '0xa79e0bfc579c709819f4a0e95d4597f03
 export const UNN = new Token(ChainId.MATIC, '0x67480287cb3715d1d9429b38772c71d6e94c16da', 18, 'UNN', 'Union')
 export const NORD = new Token(ChainId.MATIC, '0xf6f85b3f9fd581c2ee717c404f7684486f057f95', 18, 'NORD', 'Nord')
 export const RAGE = new Token(ChainId.MATIC, '0x40ccd55b789fdee8d434915dc2aa6bd938506a92', 18, 'RAGE', 'Rage')
-export const WETH_V2 = new Token(ChainId.MATIC, '0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270', 18, 'WMATIC', 'WMATIC')
+export const WMATIC = new Token(ChainId.MATIC, '0x4c28f48448720e9000907bc2611f73022fdce1fa', 18, 'WMATIC', 'WMATIC')
 export const ETHER = new Token(ChainId.MATIC, '0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619', 18, 'ETH', 'Ether')
-
+export const WBTC = new Token(ChainId.MATIC, '0x1bfd67037b42cf73acf2047067bd4f2c47d9bfd6', 18, 'WBTC', 'WBTC')
 
 // Block time here is slightly higher (~1s) than average in order to avoid ongoing proposals past the displayed time
 export const AVERAGE_BLOCK_TIME_IN_SECS = 13
@@ -240,6 +241,8 @@ export const DEFAULT_DEADLINE_FROM_NOW = 60 * 20
 
 // used for rewards deadlines
 export const BIG_INT_SECONDS_IN_WEEK = JSBI.BigInt(60 * 60 * 24 * 7)
+export const BIG_INT_SECONDS = JSBI.BigInt(60)
+export const BIG_INT_SECONDS_IN_DAY = JSBI.BigInt(60 * 60 * 24)
 
 export const BIG_INT_ZERO = JSBI.BigInt(0)
 
