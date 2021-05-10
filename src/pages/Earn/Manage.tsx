@@ -136,8 +136,8 @@ export default function Manage({
   }
   // const totalVestedAmount = stakingInfo?.totalVestedAmount?.toFixed(2) ?? '0';
   const totalEarnedReward = stakingInfo?.totalEarnedReward?.toFixed(2) ?? '0';
-  const unClaimedAmount = stakingInfo?.unclaimedAmount?.toNumber()?.toFixed(3);
-
+  // const unClaimedAmount = stakingInfo?.unclaimedAmount?.toNumber()?.toFixed(3);
+  // console.log
 
   // const countUpAmount = unClaimedAmount;
   // const countUpAmountPrevious = usePrevious(countUpAmount) ?? '0'
