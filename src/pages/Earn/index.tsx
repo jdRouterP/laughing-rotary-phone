@@ -67,8 +67,12 @@ export default function Earn() {
               </RowBetween>
               <RowBetween>
                 <TYPE.white fontSize={14}>
-                  Deposit your Liquidity Provider tokens to receive DFYN with insane APR. These rewards will be vested.
-                </TYPE.white>
+                  Deposit you Liquidity Provider tokens to receive DFYN with insane APR.
+                  <span style={{ marginBottom: "50px" }}><br /></span>
+                  20 % of the DFYN tokens in rewards will be available to claim after 2 weeks from the starting date of the farm, while the rest of them will be vested over 8 months.
+                  </TYPE.white>
+
+
               </RowBetween>{' '}
               {/* <ExternalLink
                 style={{ color: 'white', textDecoration: 'underline' }}
