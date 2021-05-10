@@ -221,6 +221,8 @@ export function useStakingInfo(pairToFilterBy?: Pair | null): StakingInfo[] {
           balanceState?.error ||
           earnedAmountState?.error ||
           claimedSplitsState?.error ||
+          !totalEarnedRewardState ||
+          totalEarnedRewardState?.error ||
           hasClaimedPartialState?.error ||
           totalVestedAmountState?.error ||
           totalSupplyState.error ||
@@ -228,9 +230,7 @@ export function useStakingInfo(pairToFilterBy?: Pair | null): StakingInfo[] {
           periodFinishState.error ||
           splitWindowState.error ||
           splitsState.error ||
-          vestingState.error ||
-          totalEarnedRewardState.error
-
+          vestingState.error
         ) {
           console.log(balanceState?.error,
             earnedAmountState?.error,
