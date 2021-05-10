@@ -23,31 +23,31 @@ export const STAKING_REWARDS_INFO: {
   [ChainId.MATIC]: [
     {
       tokens: [ROUTE, ETHER],
-      stakingRewardAddress: '0x466753533273146caB7e691A26c0EceaB51E1aFF'
+      stakingRewardAddress: '0x4d36f9dbE30cFc2536B1f29527D61AbA37fCB8A0'
     },
     {
       tokens: [ETHER, USDT],
-      stakingRewardAddress: '0xc8302a2C99dA66C8A0051f3c2d3fbABAB9f88392'
+      stakingRewardAddress: '0x3d769770468e7C6B2C64Eee4ffA5868210C95a93'
     },
     {
       tokens: [WBTC, ETHER],
-      stakingRewardAddress: '0x48Ae4B15E7c9252660c68196d6Fd4dA15D1bCBd7'
+      stakingRewardAddress: '0xdC28cE8Ccd1B9A3fDE0c136dd5992B6D06fd9fd1'
     },
     {
       tokens: [WMATIC, ETHER],
-      stakingRewardAddress: '0xaF3cCc381F3f8bbffB8b9bfb32300536ef87328C'
+      stakingRewardAddress: '0x5e0E8C763E9826d41C7ee631d6AC1203503024c3'
     },
     {
       tokens: [USDT, USDC],
-      stakingRewardAddress: '0x8EB2cBdA67c9e80B383C18C2FC7EfA90255F346f'
+      stakingRewardAddress: '0x4ea90e9c3479ba7190a9509010dF7cA14e95f967'
     },
     {
       tokens: [DAI, USDT],
-      stakingRewardAddress: '0x78Df04Fcfca53E4d533987D8ff29165dbeb188de'
+      stakingRewardAddress: '0x84D0640Cd8c366BcA7Abc3492fa3CA99C8e32615'
     },
     {
       tokens: [ETHER, USDC],
-      stakingRewardAddress: '0x91CE029c7329aF9CCb5C09aB2fB8d8E9dd595644'
+      stakingRewardAddress: '0x28Bf5111B86D41427c02DFB9E98E55E5BB57d692'
     }
   ]
 }
