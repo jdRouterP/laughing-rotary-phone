@@ -17,36 +17,44 @@ export const REWARDS_DURATION_DAYS = 14
 export const STAKING_REWARDS_INFO: {
   [chainId in ChainId]?: {
     tokens: [Token, Token]
+    baseToken?: Token
     stakingRewardAddress: string
   }[]
 } = {
   [ChainId.MATIC]: [
     {
       tokens: [ROUTE, ETHER],
+      baseToken: ETHER,
       stakingRewardAddress: '0x4d36f9dbE30cFc2536B1f29527D61AbA37fCB8A0'
     },
     {
       tokens: [ETHER, USDT],
+      baseToken: USDT,
       stakingRewardAddress: '0x3d769770468e7C6B2C64Eee4ffA5868210C95a93'
     },
     {
       tokens: [WBTC, ETHER],
+      baseToken: ETHER,
       stakingRewardAddress: '0xdC28cE8Ccd1B9A3fDE0c136dd5992B6D06fd9fd1'
     },
     {
       tokens: [WMATIC, ETHER],
+      baseToken: ETHER,
       stakingRewardAddress: '0x5e0E8C763E9826d41C7ee631d6AC1203503024c3'
     },
     {
       tokens: [USDT, USDC],
+      baseToken: USDC,
       stakingRewardAddress: '0x4ea90e9c3479ba7190a9509010dF7cA14e95f967'
     },
     {
       tokens: [DAI, USDT],
+      baseToken: DAI,
       stakingRewardAddress: '0x84D0640Cd8c366BcA7Abc3492fa3CA99C8e32615'
     },
     {
       tokens: [ETHER, USDC],
+      baseToken: USDC,
       stakingRewardAddress: '0x28Bf5111B86D41427c02DFB9E98E55E5BB57d692'
     }
   ]
@@ -56,6 +64,8 @@ export interface StakingInfo {
   // the address of the reward contract
   stakingRewardAddress: string
   // the tokens involved in this pair
+  baseToken: any
+
   tokens: [Token, Token]
   // the amount of token currently staked, or undefined if no account
   stakedAmount: TokenAmount
@@ -315,6 +325,7 @@ export function useStakingInfo(pairToFilterBy?: Pair | null): StakingInfo[] {
 
         memo.push({
           stakingRewardAddress: rewardsAddress,
+          baseToken: info[index].baseToken,
           tokens: info[index].tokens,
           periodFinish: periodFinishMs > 0 ? new Date(periodFinishMs) : undefined,
           splitWindow: splitWindowStateMs > 0 ? new Date(splitWindowStateMs) : undefined,
