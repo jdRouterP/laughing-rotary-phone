@@ -394,7 +394,7 @@ export default function Header() {
             <TYPE.black fontWeight={400} fontSize={14}>
               Gasless Mode
             </TYPE.black>
-            <QuestionHelper text="By this functionality user can switch on/off gasless feature." />
+            <QuestionHelper text="This button will toggle Dfyn’s gasless feature for your wallet. Users with hardware wallets should keep this setting turned off." />
 
             <Toggle
               id="toggle-gasless-mode-button"
