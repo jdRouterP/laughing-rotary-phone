@@ -342,7 +342,7 @@ export default function Manage({
           <span role="img" aria-label="wizard-icon" style={{ marginRight: '8px' }}>
             ⭐️
           </span>
-          {`You can claim 20% of your reward after reward generation ends, and remaining will get linearly vested!`}
+          {`You can claim 20% of your DFYN token rewards after the farming program ends, and the remaining will be released 20% every other month!`}
         </TYPE.main>
 
         {!showAddLiquidityButton && (
