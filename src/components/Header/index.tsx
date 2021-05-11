@@ -97,6 +97,35 @@ const HeaderElement = styled.div`
   `};
 `
 
+
+const GaslessModeElement = styled.div`
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+
+  /* addresses safari's lack of support for "gap" */
+  & > *:not(:first-child) {
+    margin-left: 8px;
+  }
+
+  ${({ theme }) => theme.mediaWidth.upToMedium`
+    display: flex;
+    width: 100%;
+    margin-bottom: 110px;
+    align-content: flex-start;
+    text-align: center;
+    left: 0;
+    position: absolute;
+    border-radius: 12px 12px 0 0;
+    background-color: #212429;
+    padding: 1rem 2rem;
+    button#toggle-gasless-mode-button {
+      right: 1rem;
+      position: absolute;
+    }
+  `};
+`
+
 const HeaderElementWrap = styled.div`
   display: flex;
   align-items: center;
@@ -361,20 +390,20 @@ export default function Header() {
       </HeaderRow>
       <HeaderControls>
         <HeaderElement>
-
-          <TYPE.black fontWeight={400} fontSize={14}>
-            Gasless Mode
+          <GaslessModeElement>
+            <TYPE.black fontWeight={400} fontSize={14}>
+              Gasless Mode
             </TYPE.black>
-          <QuestionHelper text="By this functionality user can switch on/off gasless feature." />
+            <QuestionHelper text="By this functionality user can switch on/off gasless feature." />
 
-          <Toggle
-            id="toggle-gasless-mode-button"
-            isActive={gaslessMode}
-            toggle={
-              () => toggleSetGaslessMode()
-            }
-          />
-
+            <Toggle
+              id="toggle-gasless-mode-button"
+              isActive={gaslessMode}
+              toggle={
+                () => toggleSetGaslessMode()
+              }
+            />
+          </GaslessModeElement>
           <HideSmall>
             {chainId && NETWORK_LABELS[chainId] && (
               <NetworkCard title={NETWORK_LABELS[chainId]}>{NETWORK_LABELS[chainId]}</NetworkCard>

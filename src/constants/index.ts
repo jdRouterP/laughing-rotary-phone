@@ -40,6 +40,7 @@ export const ETHER = new Token(ChainId.MATIC, '0x7ceB23fD6bC0adD59E62ac25578270c
 export const WBTC = new Token(ChainId.MATIC, '0x1bfd67037b42cf73acf2047067bd4f2c47d9bfd6', 18, 'WBTC', 'WBTC')
 export const UNI_TOKEN = new Token(ChainId.MATIC, '0xb33eaad8d922b1083446dc23f610c2567fb5180f', 18, 'UNI', 'Uniswap')
 export const AAVE = new Token(ChainId.MATIC, '0xd6df932a45c0f255f85145f286ea0b292b21c90b', 18, 'AAVE', 'AAVE')
+export const DFYN = new Token(ChainId.MATIC, '0xC168E40227E4ebD8C1caE80F7a55a4F0e6D66C97', 18, 'DFYN', 'DFYN Token')
 
 // Block time here is slightly higher (~1s) than average in order to avoid ongoing proposals past the displayed time
 export const AVERAGE_BLOCK_TIME_IN_SECS = 13
@@ -86,7 +87,7 @@ const WETH_ONLY: ChainTokenList = {
 // used to construct intermediary pairs for trading
 export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
   ...WETH_ONLY,
-  [ChainId.MATIC]: [...WETH_ONLY[ChainId.MATIC], DAI, USDC, USDT, mWETH, ROUTE, OM, EASY, IGG, RAZOR, QUICK, COR, FRONT, GLCH, STR, UNN, NORD, RAGE]
+  [ChainId.MATIC]: [...WETH_ONLY[ChainId.MATIC], DAI, USDC, USDT, mWETH, ROUTE, OM, EASY, IGG, RAZOR, QUICK, COR, FRONT, GLCH, STR, UNN, NORD, RAGE, AAVE, UNI_TOKEN, DFYN]
   // [ChainId.MATIC]: [...WETH_ONLY[ChainId.MATIC], DAI, USDC, USDT, mWETH]
 }
 

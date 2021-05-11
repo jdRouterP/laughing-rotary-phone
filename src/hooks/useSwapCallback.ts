@@ -31,7 +31,7 @@ const biconomy = new Biconomy(
 const getWeb3 = new Web3(biconomy);
 biconomy
   .onEvent(biconomy.READY, () => {
-    console.log("Mexa is Ready");
+    console.debug("Mexa is Ready");
   })
 
 
@@ -218,9 +218,9 @@ export function useSwapCallback(
           },
           gasEstimate
         } = successfulEstimation
-        debugger
+
         if (methodName === "swapExactETHForTokens" || methodName === "swapETHForExactTokens" || !gaslessMode) {
-          debugger
+
           return contract[methodName](...args, {
             gasLimit: calculateGasMargin(gasEstimate),
             ...(value && !isZero(value) ? { value, from: account } : { from: account })
@@ -261,7 +261,7 @@ export function useSwapCallback(
             })
         }
         else {
-          debugger
+
           const bicomony_contract = new getWeb3.eth.Contract(abi, contractAddress);
           let biconomy_nonce = await bicomony_contract.methods.getNonce(account).call();
           let gasLimit = calculateGasMargin(gasEstimate)

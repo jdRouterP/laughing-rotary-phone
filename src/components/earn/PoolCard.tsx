@@ -108,9 +108,12 @@ export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) 
 
   let USDPrice = useUSDCPrice(baseToken)
 
-  const valueOfTotalStakedAmountInUSDC =
-    valueOfTotalStakedAmountInBaseToken && USDPrice?.quote(valueOfTotalStakedAmountInBaseToken)
+  const valueOfTotalStakedAmountInUSDC = valueOfTotalStakedAmountInBaseToken && USDPrice?.quote(valueOfTotalStakedAmountInBaseToken)
 
+  const rate = stakingInfo?.totalRewardRate?.multiply(BIG_INT_SECONDS_IN_DAY).toFixed(5);
+  //@ts-ignore
+  const valueOfDfynGivenPerYear: any = parseFloat(rate) * stakingInfo?.dfynPrice * 365;
+  const apr = valueOfTotalStakedAmountInUSDC && valueOfDfynGivenPerYear / Number(valueOfTotalStakedAmountInUSDC?.toSignificant(6)) * 100;
   return (
     <Wrapper showBackground={isStaking} bgColor={backgroundColor}>
       <CardBGImage desaturate />
@@ -149,6 +152,10 @@ export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) 
                 : '0 DFYN / day'
               : '-'}
           </TYPE.white>
+        </RowBetween>
+        <RowBetween>
+          <TYPE.white> APR</TYPE.white>
+          <TYPE.white>{`${apr?.toFixed(2)}%`}</TYPE.white>
         </RowBetween>
       </StatContainer>
 
