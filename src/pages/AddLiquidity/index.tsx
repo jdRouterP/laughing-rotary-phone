@@ -29,7 +29,7 @@ import { Field } from '../../state/mint/actions'
 import { useDerivedMintInfo, useMintActionHandlers, useMintState } from '../../state/mint/hooks'
 
 import { useTransactionAdder } from '../../state/transactions/hooks'
-import { useIsExpertMode, useUserDeadline, useUserSlippageTolerance, useGasslessModeManager } from '../../state/user/hooks'
+import { useIsExpertMode, useUserDeadline, useUserSlippageTolerance, useGaslessModeManager } from '../../state/user/hooks'
 import { TYPE } from '../../theme'
 import { calculateGasMargin, calculateSlippageAmount, getRouterContract } from '../../utils'
 import { maxAmountSpend } from '../../utils/maxAmountSpend'
@@ -82,7 +82,7 @@ export default function AddLiquidity({
   const toggleWalletModal = useWalletModalToggle() // toggle wallet when disconnected
 
   const expertMode = useIsExpertMode()
-  const gasslessMode = useGasslessModeManager()
+  const [gaslessMode] = useGaslessModeManager()
 
 
   // mint state
@@ -200,7 +200,7 @@ export default function AddLiquidity({
       ]
       value = null
     }
-    if (methodName === "addLiquidityETH" || gasslessMode) {
+    if (methodName === "addLiquidityETH" || !gaslessMode) {
       setAttemptingTxn(true)
       await estimate(...args, value ? { value } : {})
         .then(estimatedGasLimit =>

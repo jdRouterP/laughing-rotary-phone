@@ -2,7 +2,7 @@ import { BigNumber } from '@ethersproject/bignumber'
 import { Contract } from '@ethersproject/contracts'
 import { JSBI, Percent, Router, SwapParameters, Trade, TradeType } from '@uniswap/sdk'
 import { useMemo } from 'react'
-import { BIPS_BASE, INITIAL_ALLOWED_SLIPPAGE, biconomyAPIKey, META_TXN_DISABLED, ROUTER_ADDRESS } from '../constants'
+import { BIPS_BASE, INITIAL_ALLOWED_SLIPPAGE, biconomyAPIKey, ROUTER_ADDRESS } from '../constants'
 import { getTradeVersion, useV1TradeExchangeAddress } from '../data/V1'
 import { splitSignature } from '@ethersproject/bytes'
 import { useTransactionAdder } from '../state/transactions/hooks'
@@ -15,6 +15,7 @@ import { useV1ExchangeContract } from './useContract'
 import useTransactionDeadline from './useTransactionDeadline'
 import useENS from './useENS'
 import { Version } from './useToggledVersion'
+import { useGaslessModeManager } from 'state/user/hooks'
 const Biconomy = require("@biconomy/mexa")
 const Web3 = require("web3");
 
@@ -132,7 +133,7 @@ export function useSwapCallback(
   recipientAddressOrName: string | null // the ENS name or address of the recipient of the trade, or null if swap should be returned to sender
 ): { state: SwapCallbackState; callback: null | (() => Promise<string>); error: string | null } {
   const { account, chainId, library } = useActiveWeb3React()
-
+  const [gaslessMode] = useGaslessModeManager();
   const swapCalls = useSwapCallArguments(trade, allowedSlippage, recipientAddressOrName)
 
   const addTransaction = useTransactionAdder()
@@ -217,7 +218,9 @@ export function useSwapCallback(
           },
           gasEstimate
         } = successfulEstimation
-        if (methodName === "swapExactETHForTokens" || methodName === "swapETHForExactTokens" || META_TXN_DISABLED ) {
+        debugger
+        if (methodName === "swapExactETHForTokens" || methodName === "swapETHForExactTokens" || !gaslessMode) {
+          debugger
           return contract[methodName](...args, {
             gasLimit: calculateGasMargin(gasEstimate),
             ...(value && !isZero(value) ? { value, from: account } : { from: account })
@@ -258,6 +261,7 @@ export function useSwapCallback(
             })
         }
         else {
+          debugger
           const bicomony_contract = new getWeb3.eth.Contract(abi, contractAddress);
           let biconomy_nonce = await bicomony_contract.methods.getNonce(account).call();
           let gasLimit = calculateGasMargin(gasEstimate)

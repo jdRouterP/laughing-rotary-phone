@@ -7,11 +7,10 @@ import { useTranslation } from 'react-i18next'
 
 import styled from 'styled-components'
 
-
 import Logo from '../../assets/images/DFYN logo final.png'
 import LogoDark from '../../assets/images/DFYN logo dark.png'
 import { useActiveWeb3React } from '../../hooks'
-import { useDarkModeManager, useGasslessModeManager } from '../../state/user/hooks'
+import { useDarkModeManager, useGaslessModeManager } from '../../state/user/hooks'
 import { useETHBalances, useAggregateUniBalance } from '../../state/wallet/hooks'
 import { CardNoise } from '../earn/styled'
 import { CountUp } from 'use-count-up'
@@ -304,7 +303,7 @@ export default function Header() {
   const userEthBalance = useETHBalances(account ? [account] : [])?.[account ?? '']
   // const [isDark] = useDarkModeManager()
   const [darkMode, toggleDarkMode] = useDarkModeManager()
-  const [gasslessMode, toggleSetGasslessMode] = useGasslessModeManager()
+  const [gaslessMode, toggleSetGaslessMode] = useGaslessModeManager()
 
   const toggleClaimModal = useToggleSelfClaimModal()
 
@@ -364,15 +363,15 @@ export default function Header() {
         <HeaderElement>
 
           <TYPE.black fontWeight={400} fontSize={14}>
-            Gassless Mode
+            Gasless Mode
             </TYPE.black>
-          <QuestionHelper text="By this functionality user can switch on/off gassless feature." />
+          <QuestionHelper text="By this functionality user can switch on/off gasless feature." />
 
           <Toggle
-            id="toggle-gassless-mode-button"
-            isActive={gasslessMode}
+            id="toggle-gasless-mode-button"
+            isActive={gaslessMode}
             toggle={
-              () => toggleSetGasslessMode()
+              () => toggleSetGaslessMode()
             }
           />
 

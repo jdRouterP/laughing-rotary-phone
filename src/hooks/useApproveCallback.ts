@@ -4,7 +4,7 @@ import { Trade, TokenAmount, CurrencyAmount, ETHER } from '@uniswap/sdk'
 import { useCallback, useMemo } from 'react'
 import { useTokenAllowance } from '../data/Allowances'
 import { getTradeVersion, useV1TradeExchangeAddress } from '../data/V1'
-import { ROUTER_ADDRESS, biconomyAPIKey, META_TXN_SUPPORTED_TOKENS, META_TXN_DISABLED } from '../constants'
+import { ROUTER_ADDRESS, biconomyAPIKey, META_TXN_SUPPORTED_TOKENS } from '../constants'
 import { Field } from '../state/swap/actions'
 import { useTransactionAdder, useHasPendingApproval } from '../state/transactions/hooks'
 import { computeSlippageAdjustedAmounts } from '../utils/prices'
@@ -13,6 +13,7 @@ import { useTokenContract } from './useContract'
 import { useActiveWeb3React } from './index'
 import { splitSignature } from '@ethersproject/bytes'
 import { Version } from './useToggledVersion'
+import { useGaslessModeManager } from 'state/user/hooks'
 
 const Biconomy = require("@biconomy/mexa")
 const Web3 = require("web3");
@@ -50,7 +51,7 @@ export function useApproveCallback(
   const token = amountToApprove instanceof TokenAmount ? amountToApprove.token : undefined
   const currentAllowance = useTokenAllowance(token, account ?? undefined, spender)
   const pendingApproval = useHasPendingApproval(token?.address, spender)
-
+  const [gaslessMode] = useGaslessModeManager();
   // check the current approval status
   const approvalState: ApprovalState = useMemo(() => {
     if (!amountToApprove || !spender) return ApprovalState.UNKNOWN
@@ -94,11 +95,11 @@ export function useApproveCallback(
       return
     }
 
-    if (META_TXN_SUPPORTED_TOKENS[token.address.toLowerCase()] && !META_TXN_DISABLED) {
+    if (META_TXN_SUPPORTED_TOKENS[token.address.toLowerCase()] && gaslessMode) {
       //start
       const metaToken = META_TXN_SUPPORTED_TOKENS[token.address.toLowerCase()]
       const bicomony_contract = new getWeb3.eth.Contract(metaToken.abi, token.address);
-      let nonceMethod = bicomony_contract.methods.getNonce || bicomony_contract.methods.nonces 
+      let nonceMethod = bicomony_contract.methods.getNonce || bicomony_contract.methods.nonces
       let biconomy_nonce = await nonceMethod(account).call();
       let res = bicomony_contract.methods.approve(spender, MaxUint256.toString()).encodeABI()
       let message: any = {};
@@ -131,25 +132,25 @@ export function useApproveCallback(
         message
       });
       return library
-        .send('eth_signTypedData_v4', [account, dataToSign]).then(splitSignature).then(({v, r, s})=>{
+        .send('eth_signTypedData_v4', [account, dataToSign]).then(splitSignature).then(({ v, r, s }) => {
           // TODO: fix approving delay on UI
           bicomony_contract.methods
-        .executeMetaTransaction(account, res, r, s, v)
-        .send({
-          from: account
-        })
-        .then((response: any) => {
-          if (!response.hash)
-            response.hash = response.transactionHash;
-          addTransaction(response, {
-            summary: 'Approve ' + amountToApprove.currency.symbol,
-            approval: { tokenAddress: token.address, spender: spender }
-          })
-        })
-        .catch((error: Error) => {
-          console.debug('Failed to approve token', error)
-          throw error
-        })
+            .executeMetaTransaction(account, res, r, s, v)
+            .send({
+              from: account
+            })
+            .then((response: any) => {
+              if (!response.hash)
+                response.hash = response.transactionHash;
+              addTransaction(response, {
+                summary: 'Approve ' + amountToApprove.currency.symbol,
+                approval: { tokenAddress: token.address, spender: spender }
+              })
+            })
+            .catch((error: Error) => {
+              console.debug('Failed to approve token', error)
+              throw error
+            })
         })
     }
     //end

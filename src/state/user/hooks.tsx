@@ -19,7 +19,7 @@ import {
   updateUserSlippageTolerance,
   toggleURLWarning,
   updateUserSingleHopOnly,
-  updateUserGasslessMode
+  updateUserGaslessMode
 } from './actions'
 
 function serializeToken(token: Token): SerializedToken {
@@ -72,21 +72,21 @@ export function useDarkModeManager(): [boolean, () => void] {
 export function useIsExpertMode(): boolean {
   return useSelector<AppState, AppState['user']['userExpertMode']>(state => state.user.userExpertMode)
 }
-export function useIsGasslessMode(): boolean {
-  return useSelector<AppState, AppState['user']['userGasslessMode']>(state => state.user.userGasslessMode)
+export function useIsGaslessMode(): boolean {
+  return useSelector<AppState, AppState['user']['userGaslessMode']>(state => state.user.userGaslessMode)
 }
 
 
 
-export function useGasslessModeManager(): [boolean, () => void] {
+export function useGaslessModeManager(): [boolean, () => void] {
   const dispatch = useDispatch<AppDispatch>()
-  const gasslessMode = useIsGasslessMode()
+  const gaslessMode = useIsGaslessMode()
 
-  const toggleSetGasslessMode = useCallback(() => {
-    dispatch(updateUserGasslessMode({ userGasslessMode: !gasslessMode }))
-  }, [gasslessMode, dispatch])
+  const toggleSetGaslessMode = useCallback(() => {
+    dispatch(updateUserGaslessMode({ userGaslessMode: !gaslessMode }))
+  }, [gaslessMode, dispatch])
 
-  return [gasslessMode, toggleSetGasslessMode]
+  return [gaslessMode, toggleSetGaslessMode]
 }
 export function useExpertModeManager(): [boolean, () => void] {
   const dispatch = useDispatch<AppDispatch>()
