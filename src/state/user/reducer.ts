@@ -11,6 +11,7 @@ import {
   updateMatchesDarkMode,
   updateUserDarkMode,
   updateUserExpertMode,
+  updateUserGasslessMode,
   updateUserSlippageTolerance,
   updateUserDeadline,
   toggleURLWarning,
@@ -27,6 +28,8 @@ export interface UserState {
   matchesDarkMode: boolean // whether the dark mode media query matches
 
   userExpertMode: boolean
+
+  userGasslessMode: boolean
 
   userSingleHopOnly: boolean // only allow swaps on direct pairs
 
@@ -61,6 +64,7 @@ export const initialState: UserState = {
   userDarkMode: null,
   matchesDarkMode: false,
   userExpertMode: false,
+  userGasslessMode: true,
   userSingleHopOnly: false,
   userSlippageTolerance: INITIAL_ALLOWED_SLIPPAGE,
   userDeadline: DEFAULT_DEADLINE_FROM_NOW,
@@ -97,6 +101,10 @@ export default createReducer(initialState, builder =>
     })
     .addCase(updateUserExpertMode, (state, action) => {
       state.userExpertMode = action.payload.userExpertMode
+      state.timestamp = currentTimestamp()
+    })
+    .addCase(updateUserGasslessMode, (state, action) => {
+      state.userGasslessMode = action.payload.userGasslessMode
       state.timestamp = currentTimestamp()
     })
     .addCase(updateUserSlippageTolerance, (state, action) => {

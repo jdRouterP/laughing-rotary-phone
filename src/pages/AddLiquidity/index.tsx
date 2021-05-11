@@ -29,7 +29,7 @@ import { Field } from '../../state/mint/actions'
 import { useDerivedMintInfo, useMintActionHandlers, useMintState } from '../../state/mint/hooks'
 
 import { useTransactionAdder } from '../../state/transactions/hooks'
-import { useIsExpertMode, useUserDeadline, useUserSlippageTolerance } from '../../state/user/hooks'
+import { useIsExpertMode, useUserDeadline, useUserSlippageTolerance, useGasslessModeManager } from '../../state/user/hooks'
 import { TYPE } from '../../theme'
 import { calculateGasMargin, calculateSlippageAmount, getRouterContract } from '../../utils'
 import { maxAmountSpend } from '../../utils/maxAmountSpend'
@@ -82,6 +82,8 @@ export default function AddLiquidity({
   const toggleWalletModal = useWalletModalToggle() // toggle wallet when disconnected
 
   const expertMode = useIsExpertMode()
+  const gasslessMode = useGasslessModeManager()
+
 
   // mint state
   const { independentField, typedValue, otherTypedValue } = useMintState()
@@ -198,7 +200,7 @@ export default function AddLiquidity({
       ]
       value = null
     }
-    if (methodName === "addLiquidityETH") {
+    if (methodName === "addLiquidityETH" || gasslessMode) {
       setAttemptingTxn(true)
       await estimate(...args, value ? { value } : {})
         .then(estimatedGasLimit =>
@@ -240,80 +242,80 @@ export default function AddLiquidity({
     else {
       setAttemptingTxn(true)
       await estimate(...args, value ? { value } : {})
-      .then(async () => {
-        
-      let res = biconomy_contract.methods[methodName](...args).encodeABI()
-      let message:any = {};
-        message.nonce = parseInt(biconomy_nonce);
-        message.from = account;
-        message.functionSignature = res;
-      
-        const dataToSign = JSON.stringify({
-          types: {
-            EIP712Domain: [     
-              { name: "name", type: "string" },     
-              { name: "version", type: "string" },
-              { name: "verifyingContract", type: "address" },
-              { name: "chainId", type: "uint256" }
-        ],
-            MetaTransaction: [
-              { name: "nonce", type: "uint256" },
-              { name: "from", type: "address" },
-              { name: "functionSignature", type: "bytes" }
-            ]
-          },
-          domain: {
-            name: "UniswapV2Router02",
-            version: "1",
-            verifyingContract: contractAddress,
-            chainId
-       },
-          primaryType: "MetaTransaction",
-          message
-        });
-        let sig = await library
-        .send('eth_signTypedData_v4', [account, dataToSign])
-        let signature = await splitSignature(sig)
-        let {v, r, s} = signature
-        console.log('account: ', account, 'res: ', res, 'r: ', r, 's: ', s, 'v: ', v)
-        try {
-          let response: TransactionResponse = await biconomy_contract.methods
-          .executeMetaTransaction(account, res, r, s, v)
-          .send({
-            from: account
+        .then(async () => {
+
+          let res = biconomy_contract.methods[methodName](...args).encodeABI()
+          let message: any = {};
+          message.nonce = parseInt(biconomy_nonce);
+          message.from = account;
+          message.functionSignature = res;
+
+          const dataToSign = JSON.stringify({
+            types: {
+              EIP712Domain: [
+                { name: "name", type: "string" },
+                { name: "version", type: "string" },
+                { name: "verifyingContract", type: "address" },
+                { name: "chainId", type: "uint256" }
+              ],
+              MetaTransaction: [
+                { name: "nonce", type: "uint256" },
+                { name: "from", type: "address" },
+                { name: "functionSignature", type: "bytes" }
+              ]
+            },
+            domain: {
+              name: "UniswapV2Router02",
+              version: "1",
+              verifyingContract: contractAddress,
+              chainId
+            },
+            primaryType: "MetaTransaction",
+            message
           });
-          setAttemptingTxn(false)
-          let cloneObj: any = response;
-          response.hash = cloneObj['transactionHash']
+          let sig = await library
+            .send('eth_signTypedData_v4', [account, dataToSign])
+          let signature = await splitSignature(sig)
+          let { v, r, s } = signature
+          console.log('account: ', account, 'res: ', res, 'r: ', r, 's: ', s, 'v: ', v)
+          try {
+            let response: TransactionResponse = await biconomy_contract.methods
+              .executeMetaTransaction(account, res, r, s, v)
+              .send({
+                from: account
+              });
+            setAttemptingTxn(false)
+            let cloneObj: any = response;
+            response.hash = cloneObj['transactionHash']
 
-          addTransaction(response, {
-            summary:
-              'Add ' +
-              parsedAmounts[Field.CURRENCY_A]?.toSignificant(3) +
-              ' ' +
-              currencies[Field.CURRENCY_A]?.symbol +
-              ' and ' +
-              parsedAmounts[Field.CURRENCY_B]?.toSignificant(3) +
-              ' ' +
-              currencies[Field.CURRENCY_B]?.symbol
-          })
+            addTransaction(response, {
+              summary:
+                'Add ' +
+                parsedAmounts[Field.CURRENCY_A]?.toSignificant(3) +
+                ' ' +
+                currencies[Field.CURRENCY_A]?.symbol +
+                ' and ' +
+                parsedAmounts[Field.CURRENCY_B]?.toSignificant(3) +
+                ' ' +
+                currencies[Field.CURRENCY_B]?.symbol
+            })
 
-          setTxHash(response.hash)
+            setTxHash(response.hash)
 
-          ReactGA.event({
-            category: 'Liquidity',
-            action: 'Add',
-            label: [currencies[Field.CURRENCY_A]?.symbol, currencies[Field.CURRENCY_B]?.symbol].join('/')
-          })
+            ReactGA.event({
+              category: 'Liquidity',
+              action: 'Add',
+              label: [currencies[Field.CURRENCY_A]?.symbol, currencies[Field.CURRENCY_B]?.symbol].join('/')
+            })
 
-        } catch (error) {
-          setAttemptingTxn(false)
-          // we only care if the error is something _other_ than the user rejected the tx
-          if (error?.code !== 4001) {
-            console.error(error)
+          } catch (error) {
+            setAttemptingTxn(false)
+            // we only care if the error is something _other_ than the user rejected the tx
+            if (error?.code !== 4001) {
+              console.error(error)
+            }
           }
-        }
-      })
+        })
     }
   }
 

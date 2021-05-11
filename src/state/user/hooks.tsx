@@ -18,7 +18,8 @@ import {
   updateUserExpertMode,
   updateUserSlippageTolerance,
   toggleURLWarning,
-  updateUserSingleHopOnly
+  updateUserSingleHopOnly,
+  updateUserGasslessMode
 } from './actions'
 
 function serializeToken(token: Token): SerializedToken {
@@ -67,10 +68,26 @@ export function useDarkModeManager(): [boolean, () => void] {
   return [darkMode, toggleSetDarkMode]
 }
 
+
 export function useIsExpertMode(): boolean {
   return useSelector<AppState, AppState['user']['userExpertMode']>(state => state.user.userExpertMode)
 }
+export function useIsGasslessMode(): boolean {
+  return useSelector<AppState, AppState['user']['userGasslessMode']>(state => state.user.userGasslessMode)
+}
 
+
+
+export function useGasslessModeManager(): [boolean, () => void] {
+  const dispatch = useDispatch<AppDispatch>()
+  const gasslessMode = useIsGasslessMode()
+
+  const toggleSetGasslessMode = useCallback(() => {
+    dispatch(updateUserGasslessMode({ userGasslessMode: !gasslessMode }))
+  }, [gasslessMode, dispatch])
+
+  return [gasslessMode, toggleSetGasslessMode]
+}
 export function useExpertModeManager(): [boolean, () => void] {
   const dispatch = useDispatch<AppDispatch>()
   const expertMode = useIsExpertMode()
@@ -210,7 +227,7 @@ export function useURLWarningToggle(): () => void {
  * @param tokenB the other token
  */
 export function toV2LiquidityToken([tokenA, tokenB]: [Token, Token]): Token {
-  return new Token(tokenA.chainId, Pair.getAddress(tokenA, tokenB), 18, 'UNI-V2', 'Uniswap V2')
+  return new Token(tokenA.chainId, Pair.getAddress(tokenA, tokenB), 18, 'DFYN LP', 'DFYN LP Token')
 }
 
 /**

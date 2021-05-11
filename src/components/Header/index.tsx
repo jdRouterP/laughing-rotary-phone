@@ -11,7 +11,7 @@ import styled from 'styled-components'
 import Logo from '../../assets/images/DFYN logo final.png'
 import LogoDark from '../../assets/images/DFYN logo dark.png'
 import { useActiveWeb3React } from '../../hooks'
-import { useDarkModeManager } from '../../state/user/hooks'
+import { useDarkModeManager, useGasslessModeManager } from '../../state/user/hooks'
 import { useETHBalances, useAggregateUniBalance } from '../../state/wallet/hooks'
 import { CardNoise } from '../earn/styled'
 import { CountUp } from 'use-count-up'
@@ -31,6 +31,8 @@ import { Dots } from '../swap/styleds'
 import Modal from '../Modal'
 import UniBalanceContent from './UniBalanceContent'
 import usePrevious from '../../hooks/usePrevious'
+import QuestionHelper from 'components/QuestionHelper'
+import Toggle from 'components/Toggle'
 
 const HeaderFrame = styled.div`
   display: grid;
@@ -302,6 +304,7 @@ export default function Header() {
   const userEthBalance = useETHBalances(account ? [account] : [])?.[account ?? '']
   // const [isDark] = useDarkModeManager()
   const [darkMode, toggleDarkMode] = useDarkModeManager()
+  const [gasslessMode, toggleSetGasslessMode] = useGasslessModeManager()
 
   const toggleClaimModal = useToggleSelfClaimModal()
 
@@ -359,6 +362,20 @@ export default function Header() {
       </HeaderRow>
       <HeaderControls>
         <HeaderElement>
+
+          <TYPE.black fontWeight={400} fontSize={14}>
+            Gassless Mode
+            </TYPE.black>
+          <QuestionHelper text="By this functionality user can switch on/off gassless feature." />
+
+          <Toggle
+            id="toggle-gassless-mode-button"
+            isActive={gasslessMode}
+            toggle={
+              () => toggleSetGasslessMode()
+            }
+          />
+
           <HideSmall>
             {chainId && NETWORK_LABELS[chainId] && (
               <NetworkCard title={NETWORK_LABELS[chainId]}>{NETWORK_LABELS[chainId]}</NetworkCard>
