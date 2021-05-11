@@ -66,10 +66,11 @@ export default function Earn() {
                 <TYPE.white fontWeight={600}>Pre-staking pools</TYPE.white>
               </RowBetween>
               <RowBetween>
+                <TYPE.white fontSize={14}> Deposit your Liquidity Provider tokens to receive DFYN with insane APR.</TYPE.white>
+              </RowBetween>
+              <RowBetween>
                 <TYPE.white fontSize={14}>
-                  Deposit you Liquidity Provider tokens to receive DFYN with insane APR.
-                  <span style={{ marginBottom: "50px" }}><br /></span>
-                  20 % of the DFYN tokens in rewards will be available to claim after 2 weeks from the starting date of the farm, while the rest of them will be vested over 8 months.
+                  A total of 5.6M DFYN tokens will be distributed as rewards for this program. 20% of the DFYN token rewards can be claimed after two weeks from the starting date of the program. Remaining rewards will be released 20% every other month.
                   </TYPE.white>
 
 

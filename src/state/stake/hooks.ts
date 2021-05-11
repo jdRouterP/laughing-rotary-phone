@@ -2,7 +2,7 @@
 import { ChainId, CurrencyAmount, JSBI, Token, TokenAmount, Pair } from '@uniswap/sdk'
 import { useMemo } from 'react'
 import { BigNumber } from 'ethers'
-import { ROUTE, UNI, USDT, WMATIC, ETHER, WBTC, USDC, DAI } from '../../constants'
+import { ROUTE, UNI, USDT, WMATIC, ETHER, WBTC, USDC, DAI, AAVE, UNI_TOKEN } from '../../constants'
 import { STAKING_REWARDS_INTERFACE } from '../../constants/abis/staking-rewards'
 import { useActiveWeb3React } from '../../hooks'
 import { NEVER_RELOAD, useMultipleContractSingleData } from '../multicall/hooks'
@@ -26,6 +26,16 @@ export const STAKING_REWARDS_INFO: {
       tokens: [ROUTE, ETHER],
       baseToken: ETHER,
       stakingRewardAddress: '0x4d36f9dbE30cFc2536B1f29527D61AbA37fCB8A0'
+    },
+    {
+      tokens: [AAVE, ETHER],
+      baseToken: ETHER,
+      stakingRewardAddress: '0xEfe569aa3d6598004f2ef1921f46E774398F7d0d'
+    },
+    {
+      tokens: [UNI_TOKEN, ETHER],
+      baseToken: ETHER,
+      stakingRewardAddress: '0x18aE962a022DB2F33507659BD6196561083dBdB7'
     },
     {
       tokens: [ETHER, USDT],
