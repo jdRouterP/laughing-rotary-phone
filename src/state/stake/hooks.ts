@@ -246,7 +246,6 @@ export function useStakingInfo(pairToFilterBy?: Pair | null): StakingInfo[] {
           balanceState?.error ||
           earnedAmountState?.error ||
           claimedSplitsState?.error ||
-          !totalEarnedRewardState ||
           totalEarnedRewardState?.error ||
           hasClaimedPartialState?.error ||
           totalVestedAmountState?.error ||
@@ -273,9 +272,9 @@ export function useStakingInfo(pairToFilterBy?: Pair | null): StakingInfo[] {
         const totalVestedAmount = new TokenAmount(uni, JSBI.BigInt(totalVestedAmountState?.result?.[0] ?? 0))
         const totalEarnedReward = new TokenAmount(uni, JSBI.BigInt(totalEarnedRewardState?.result?.[0] ?? 0))
 
-        const userClaimedSplit = claimedSplitsState?.result?.[0]?.toNumber();
+        const userClaimedSplit = claimedSplitsState?.result?.[0]?.toNumber() ?? 0;
         const splits = splitsState?.result?.[0]?.toNumber() ?? 0
-        const hasClaimedPartial = hasClaimedPartialState?.result?.[0];
+        const hasClaimedPartial = hasClaimedPartialState?.result?.[0] ?? false
         const getHypotheticalRewardRate = (
           stakedAmount: TokenAmount,
           totalStakedAmount: TokenAmount,
@@ -316,16 +315,13 @@ export function useStakingInfo(pairToFilterBy?: Pair | null): StakingInfo[] {
 
         //const unclaimedAmount = JSBI.divide(JSBI.multiply(JSBI.BigInt(totalVestedAmountState?.result?.[0] ?? 0), JSBI.BigInt((Math.floor(currentSplit + 1) - userClaimedSplit))), splits);
         // totalvestedamount*(currentsplit-userclaimedlastsplit)/splits;
-
-
         const unclaimedSplits = BigNumber.from((Math.floor(currentSplit) - userClaimedSplit))
-        let unclaimedAmount = BigNumber.from(totalVestedAmountState?.result?.[0]).mul(unclaimedSplits).div(BigNumber.from(splits))
+
+        let unclaimedAmount = BigNumber.from(totalVestedAmountState?.result?.[0] ?? 0).mul(unclaimedSplits).div(BigNumber.from(splits))
         unclaimedAmount = unclaimedAmount.div(BigNumber.from('1000000000000000000'))
 
         let ableToClaim = !vestingActive || (Math.floor(Date.now() / 1000) >= periodFinishSeconds &&
           (userClaimedSplit !== Math.floor(currentSplit) ? true : !hasClaimedPartial))
-
-
         memo.push({
           stakingRewardAddress: rewardsAddress,
           baseToken: info[index].baseToken,
