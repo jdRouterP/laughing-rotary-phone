@@ -220,8 +220,8 @@ export default function StakingModal({ isOpen, onDismiss, stakingInfo, userLiqui
             </div>
 
             <TYPE.black>
-              {hypotheticalRewardRate.multiply((60 * 60 * 24 * 7).toString()).toSignificant(4, { groupSeparator: ',' })}{' '}
-              DFYN / week
+              {hypotheticalRewardRate.multiply((60 * 60 * 24).toString()).toSignificant(4, { groupSeparator: ',' })}{' '}
+              DFYN / day
             </TYPE.black>
           </HypotheticalRewardRate>
 

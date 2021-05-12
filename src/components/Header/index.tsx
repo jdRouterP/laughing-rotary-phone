@@ -117,7 +117,7 @@ const GaslessModeElement = styled.div`
     left: 0;
     position: absolute;
     border-radius: 12px 12px 0 0;
-    background-color: #212429;
+    background-color:  ${({ theme }) => theme.bg3};
     padding: 1rem 2rem;
     button#toggle-gasless-mode-button {
       right: 1rem;
