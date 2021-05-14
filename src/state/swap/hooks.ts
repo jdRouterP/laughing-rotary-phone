@@ -1,7 +1,7 @@
 import useENS from '../../hooks/useENS'
 import { Version } from '../../hooks/useToggledVersion'
 import { parseUnits } from '@ethersproject/units'
-import { Currency, CurrencyAmount, ETHER, JSBI, Token, TokenAmount, Trade } from '@uniswap/sdk'
+import { ChainId, Currency, CurrencyAmount, ETHER, JSBI, Token, TokenAmount, Trade } from '@uniswap/sdk'
 import { ParsedQs } from 'qs'
 import { useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
@@ -18,6 +18,7 @@ import { SwapState } from './reducer'
 import useToggledVersion from '../../hooks/useToggledVersion'
 import { useUserSlippageTolerance } from '../user/hooks'
 import { computeSlippageAdjustedAmounts } from '../../utils/prices'
+import { UNI, ETHER as ETHER_TOKEN } from '../../constants'
 
 export function useSwapState(): AppState['swap'] {
   return useSelector<AppState, AppState['swap']>(state => state.swap)
@@ -222,9 +223,9 @@ function parseCurrencyFromURLParameter(urlParam: any): string {
     const valid = isAddress(urlParam)
     if (valid) return valid
     if (urlParam.toUpperCase() === 'ETH') return 'ETH'
-    if (valid === false) return 'ETH'
+    if (valid === false) return "ETH"
   }
-  return 'ETH' ?? ''
+  return ETHER_TOKEN.address ?? ''
 }
 
 function parseTokenAmountURLParameter(urlParam: any): string {
@@ -251,9 +252,9 @@ export function queryParametersToSwapState(parsedQs: ParsedQs): SwapState {
   let outputCurrency = parseCurrencyFromURLParameter(parsedQs.outputCurrency)
   if (inputCurrency === outputCurrency) {
     if (typeof parsedQs.outputCurrency === 'string') {
-      inputCurrency = ''
+      inputCurrency = UNI[ChainId.MATIC].address
     } else {
-      outputCurrency = ''
+      outputCurrency = UNI[ChainId.MATIC].address
     }
   }
 
