@@ -4,11 +4,13 @@ import { Text } from 'rebass'
 import { NavLink } from 'react-router-dom'
 import { darken } from 'polished'
 import { useTranslation } from 'react-i18next'
-
+import { isAndroid, isIOS, isMobile } from 'react-device-detect'
 import styled from 'styled-components'
 
 import Logo from '../../assets/images/DFYN logo final.png'
 import LogoDark from '../../assets/images/DFYN logo dark.png'
+import DarkLogoMobile from '../../assets/images/logo_white.png'
+import LogoMobile from '../../assets/images/dfyn_colour.png'
 import { useActiveWeb3React } from '../../hooks'
 import { useDarkModeManager, useGaslessModeManager } from '../../state/user/hooks'
 import { useETHBalances, useAggregateUniBalance } from '../../state/wallet/hooks'
@@ -141,7 +143,6 @@ const HeaderLinks = styled(Row)`
   justify-content: center;
   ${({ theme }) => theme.mediaWidth.upToMedium`
     padding: 1rem 0 1rem 1rem;
-    justify-content: flex-end;
 `};
 `
 
@@ -289,6 +290,12 @@ const StyledExternalLink = styled(ExternalLink).attrs({
 `}
 `
 
+const StyledDocsLink = styled(StyledExternalLink)`
+${({ theme }) => theme.mediaWidth.upToExtraSmall`
+display: inline-block;
+`}
+`
+
 export const StyledMenuButton = styled.button`
   position: relative;
   width: 100%;
@@ -329,6 +336,8 @@ export default function Header() {
   const { account, chainId } = useActiveWeb3React()
   const { t } = useTranslation()
 
+  const mobile = isMobile || isAndroid || isIOS;
+
   const userEthBalance = useETHBalances(account ? [account] : [])?.[account ?? '']
   // const [isDark] = useDarkModeManager()
   const [darkMode, toggleDarkMode] = useDarkModeManager()
@@ -357,7 +366,11 @@ export default function Header() {
       <HeaderRow>
         <Title href=".">
           <UniIcon>
-            <img height={'80px'} width={'177px'} src={darkMode ? LogoDark : Logo} alt="logo" />
+            {mobile ? (
+              <img width={'30px'} src={darkMode ? DarkLogoMobile : LogoMobile} alt="logo" />
+            ) : (
+              <img height={'80px'} width={'177px'} src={darkMode ? LogoDark : Logo} alt="logo" />
+            )}
           </UniIcon>
         </Title>
         <HeaderLinks>
@@ -386,6 +399,9 @@ export default function Header() {
           <StyledExternalLink id={`stake-nav-link`} href={'https://info.dfyn.network/home/'}>
             Charts <span style={{ fontSize: '11px' }}>↗</span>
           </StyledExternalLink>
+          <StyledDocsLink id={`stake-nav-link`} href={'https://docs.dfyn.network/'}>
+            Docs {!mobile && <span style={{ fontSize: '11px' }}>↗</span>}
+          </StyledDocsLink>
         </HeaderLinks>
       </HeaderRow>
       <HeaderControls>
