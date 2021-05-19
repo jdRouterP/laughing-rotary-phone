@@ -393,9 +393,9 @@ export default function Header() {
           <StyledNavLink id={`stake-nav-link`} to={'/dfyn'}>
             ⚡Farms
           </StyledNavLink>
-          {/* <StyledNavLink id={`stake-nav-link`} to={'/vote'}>
-            Vote
-          </StyledNavLink> */}
+          <StyledNavLink id={`stake-nav-link`} to={'/v-farms'}>
+            Vanilla Farms
+          </StyledNavLink>
           <StyledExternalLink id={`stake-nav-link`} href={'https://info.dfyn.network/home/'}>
             Charts <span style={{ fontSize: '11px' }}>↗</span>
           </StyledExternalLink>
