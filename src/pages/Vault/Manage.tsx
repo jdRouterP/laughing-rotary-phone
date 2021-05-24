@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 
 import { JSBI, TokenAmount, ETHER } from '@uniswap/sdk'
 import { RouteComponentProps } from 'react-router-dom'
-import DoubleCurrencyLogo from '../../components/DoubleLogo'
+// import DoubleCurrencyLogo from '../../components/DoubleLogo'
 import { useCurrency } from '../../hooks/Tokens'
 import { useWalletModalToggle } from '../../state/application/hooks'
 import { TYPE } from '../../theme'
@@ -21,7 +21,7 @@ import { useTokenBalance } from '../../state/wallet/hooks'
 import { useActiveWeb3React } from '../../hooks'
 import { useColor } from '../../hooks/useColor'
 import { CountUp } from 'use-count-up'
-
+import { Countdown } from './Countdown'
 import { wrappedCurrency } from '../../utils/wrappedCurrency'
 import { currencyId } from '../../utils/currencyId'
 import { useTotalSupply } from '../../data/TotalSupply'
@@ -155,12 +155,12 @@ export default function Manage({
 
   return (
     <PageWrapper gap="lg" justify="center">
-      <RowBetween style={{ gap: '24px' }}>
+      {/* <RowBetween style={{ gap: '24px' }}>
         <TYPE.mediumHeader style={{ margin: 0 }}>
           {currencyA?.symbol}-{currencyB?.symbol} Liquidity Mining
         </TYPE.mediumHeader>
         <DoubleCurrencyLogo currency0={currencyA ?? undefined} currency1={currencyB ?? undefined} size={24} />
-      </RowBetween>
+      </RowBetween> */}
 
       <DataRow style={{ gap: '24px' }}>
         <PoolData>
@@ -208,11 +208,11 @@ export default function Manage({
           <CardSection>
             <AutoColumn gap="md">
               <RowBetween>
-                <TYPE.white fontWeight={600}>Step 1. Get DFYN Liquidity tokens</TYPE.white>
+                <TYPE.white fontWeight={600}>Step 1. Get DFYN tokens</TYPE.white>
               </RowBetween>
               <RowBetween style={{ marginBottom: '1rem' }}>
                 <TYPE.white fontSize={14}>
-                  {`DFYN LP tokens are required. Once you've added liquidity to the ${currencyA?.symbol}-${currencyB?.symbol} pool you can stake your liquidity tokens on this page.`}
+                  {`DFYN tokens are required. You can swap it!`}
                 </TYPE.white>
               </RowBetween>
               <ButtonPrimary
@@ -220,9 +220,9 @@ export default function Manage({
                 borderRadius="8px"
                 width={'fit-content'}
                 as={Link}
-                to={`/add/${currencyA && currencyId(currencyA)}/${currencyB && currencyId(currencyB)}`}
+                to={`/swap/${currencyA && currencyId(currencyA)}/${currencyB && currencyId(currencyB)}`}
               >
-                {`Add ${currencyA?.symbol}-${currencyB?.symbol} liquidity`}
+                {`Get DFYN Tokens`}
               </ButtonPrimary>
             </AutoColumn>
           </CardSection>
@@ -230,6 +230,10 @@ export default function Manage({
           <CardNoise />
         </VoteCard>
       )}
+      <RowBetween style={{ gap: '24px', alignItems: 'baseline' }}>
+        {" "}
+        <Countdown />
+      </RowBetween>
 
       {stakingInfo && (
         <>
@@ -260,14 +264,14 @@ export default function Manage({
               <CardNoise />
               <AutoColumn gap="md">
                 <RowBetween>
-                  <TYPE.white fontWeight={600}>Your liquidity deposits</TYPE.white>
+                  <TYPE.white fontWeight={600}>Your deposits</TYPE.white>
                 </RowBetween>
                 <RowBetween style={{ alignItems: 'baseline' }}>
                   <TYPE.white fontSize={36} fontWeight={600}>
                     {stakingInfo?.stakedAmount?.toSignificant(6) ?? '-'}
                   </TYPE.white>
                   <TYPE.white>
-                    DFYN LP {currencyA?.symbol}-{currencyB?.symbol}
+                    DFYN
                   </TYPE.white>
                 </RowBetween>
               </AutoColumn>

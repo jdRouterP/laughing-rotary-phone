@@ -3,7 +3,7 @@ import { AutoColumn } from '../Column'
 import { RowBetween } from '../Row'
 import styled from 'styled-components'
 import { TYPE, StyledInternalLink } from '../../theme'
-import DoubleCurrencyLogo from '../DoubleLogo'
+import CurrencyLogo from '../CurrencyLogo'
 import { JSBI, TokenAmount } from '@uniswap/sdk'
 import { ButtonPrimary } from '../Button'
 import { StakingInfo } from '../../state/vanilla-stake/hooks'
@@ -120,9 +120,9 @@ export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) 
       <CardNoise />
 
       <TopSection>
-        <DoubleCurrencyLogo currency0={currency0} currency1={currency1} size={24} />
-        <TYPE.white fontWeight={600} fontSize={24} style={{ marginLeft: '8px' }}>
-          {currency0.symbol}-{currency1.symbol}
+        <CurrencyLogo currency={currency0} />
+        <TYPE.white fontWeight={600} fontSize={24} >
+          SILVER POOL
         </TYPE.white>
 
         <StyledInternalLink to={`/vault/${currencyId(currency0)}/${currencyId(currency1)}`} style={{ width: '100%' }}>
@@ -142,19 +142,23 @@ export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) 
           </TYPE.white>
         </RowBetween>
         <RowBetween>
-          <TYPE.white> Pool rate </TYPE.white>
+          <TYPE.white> Vault limit </TYPE.white>
           <TYPE.white>
             {stakingInfo
               ? stakingInfo.active
                 ? `${stakingInfo.totalRewardRate
                   ?.multiply(BIG_INT_SECONDS_IN_DAY)
-                  ?.toFixed(0, { groupSeparator: ',' })} DFYN / day`
-                : '0 DFYN / day'
+                  ?.toFixed(0, { groupSeparator: ',' })} DFYN`
+                : '0 DFYN'
               : '-'}
           </TYPE.white>
         </RowBetween>
         <RowBetween>
-          <TYPE.white> APR</TYPE.white>
+          <TYPE.white> Maturity Period </TYPE.white>
+          <TYPE.white>{`${apr ? apr?.toFixed(2) : 0} days`}</TYPE.white>
+        </RowBetween>
+        <RowBetween>
+          <TYPE.white> Interest Rate</TYPE.white>
           <TYPE.white>{`${apr ? apr?.toFixed(2) : 0}%`}</TYPE.white>
         </RowBetween>
       </StatContainer>

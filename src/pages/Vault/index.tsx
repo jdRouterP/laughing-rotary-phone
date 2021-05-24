@@ -6,7 +6,7 @@ import { TYPE, ExternalLink } from '../../theme'
 import PoolCard from '../../components/vault/PoolCard'
 import { RowBetween } from '../../components/Row'
 import { CardSection, DataCard, CardNoise, CardBGImage } from '../../components/vault/styled'
-import { Countdown } from './Countdown'
+// import { Countdown } from './Countdown'
 import Loader from '../../components/Loader'
 import { useActiveWeb3React } from '../../hooks'
 // import { JSBI } from '@uniswap/sdk'
@@ -38,7 +38,7 @@ flex-direction: column;
 `};
 `
 
-export default function VanillaFarms() {
+export default function Vault() {
   const { chainId } = useActiveWeb3React()
 
   // staking info for connected account
@@ -62,7 +62,7 @@ export default function VanillaFarms() {
           <CardSection>
             <AutoColumn gap="md">
               <RowBetween>
-                <TYPE.white fontWeight={600}>DFYN liquidity mining</TYPE.white>
+                <TYPE.white fontWeight={600}>DFYN Vaults</TYPE.white>
               </RowBetween>
               <RowBetween>
                 <TYPE.white fontSize={14}>
@@ -85,8 +85,8 @@ export default function VanillaFarms() {
 
       <AutoColumn gap="lg" style={{ width: '100%', maxWidth: '720px' }}>
         <DataRow style={{ alignItems: 'baseline' }}>
-          <TYPE.mediumHeader style={{ marginTop: '0.5rem' }}>Participating pools</TYPE.mediumHeader>
-          <Countdown exactEnd={stakingInfos?.[0]?.periodFinish} />
+          <TYPE.mediumHeader style={{ marginTop: '0.5rem' }}>Participating vaults</TYPE.mediumHeader>
+          {/* <Countdown exactEnd={stakingInfos?.[0]?.periodFinish} /> */}
         </DataRow>
 
         <PoolSection>
