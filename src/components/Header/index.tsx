@@ -34,6 +34,7 @@ import UniBalanceContent from './UniBalanceContent'
 import usePrevious from '../../hooks/usePrevious'
 import QuestionHelper from 'components/QuestionHelper'
 import Toggle from 'components/Toggle'
+import FarmsMenu from 'components/FarmsMenu'
 
 const HeaderFrame = styled.div`
   display: grid;
@@ -390,21 +391,16 @@ export default function Header() {
           >
             {t('pool')}
           </StyledNavLink>
-          <StyledNavLink id={`stake-nav-link`} to={'/dfyn'}>
-            ⚡Farms
-          </StyledNavLink>
-          <StyledNavLink id={`stake-nav-link`} to={'/v-farms'}>
-            Vanilla Farms
-          </StyledNavLink>
-          <StyledNavLink id={`stake-nav-link`} to={'/dual-farms'}>
-            Dual Farms
+          <StyledNavLink id={`vault-nav-link`} to={'/vault'}>
+            Vault
           </StyledNavLink>
           <StyledExternalLink id={`stake-nav-link`} href={'https://info.dfyn.network/home/'}>
             Charts <span style={{ fontSize: '11px' }}>↗</span>
           </StyledExternalLink>
-          <StyledDocsLink id={`stake-nav-link`} href={'https://docs.dfyn.network/'}>
+          <StyledDocsLink id={`docs-nav-link`} href={'https://docs.dfyn.network/'}>
             Docs {!mobile && <span style={{ fontSize: '11px' }}>↗</span>}
           </StyledDocsLink>
+          <FarmsMenu />
         </HeaderLinks>
       </HeaderRow>
       <HeaderControls>
