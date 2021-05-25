@@ -82,16 +82,16 @@ export default function UnstakingModal({ isOpen, onDismiss, stakingInfo }: Staki
               <TYPE.body>Deposited liquidity:</TYPE.body>
             </AutoColumn>
           )}
-          {stakingInfo?.earnedAmount && (
+          {/* {stakingInfo?.earnedAmount && (
             <AutoColumn justify="center" gap="md">
               <TYPE.body fontWeight={600} fontSize={36}>
                 {<FormattedCurrencyAmount currencyAmount={stakingInfo?.earnedAmount} />}
               </TYPE.body>
               <TYPE.body>Unclaimed DFYN</TYPE.body>
             </AutoColumn>
-          )}
+          )} */}
           <TYPE.subHeader style={{ textAlign: 'center' }}>
-            When you withdraw, your DFYN is claimed and your liquidity is removed from the mining pool.
+            When you withdraw, your 20% of DFYN is claimed and your liquidity is removed from the farming pool. You can stake into new farms!
           </TYPE.subHeader>
           <ButtonError disabled={!!error} error={!!error && !!stakingInfo?.stakedAmount} onClick={onWithdraw}>
             {error ?? 'Withdraw & Claim'}
