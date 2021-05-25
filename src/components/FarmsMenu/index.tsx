@@ -140,18 +140,18 @@ export default function FarmsMenu() {
           <StyledNavLink id={`stake-nav-link`} to={'/dfyn'}>
             Pre-Staking Farms
           </StyledNavLink>
+          <StyledNavLink id={`d-farms-nav-link`} to={'/dual-farms'}>
+            Dual Farms
+          </StyledNavLink>
           <StyledNavLink id={`stake-nav-link`} to={'/vault'}>
             Single-Asset Vault
+          </StyledNavLink>
+          <StyledNavLink id={`f-farms-nav-link`} to={'/flora-farms'}>
+            Popular Farms
           </StyledNavLink>
           {/* <StyledNavLink id={`v-farms-nav-link`} to={'/v-farms'}>
             Vanilla Farms
           </StyledNavLink> */}
-          {/* <StyledNavLink id={`d-farms-nav-link`} to={'/dual-farms'}>
-            Dual Farms
-          </StyledNavLink> */}
-          <StyledNavLink id={`f-farms-nav-link`} to={'/flora-farms'}>
-            Popular Farms
-          </StyledNavLink>
           {/* {account && (
             <ButtonPrimary onClick={openClaimModal} padding="8px 10px" width="100%" borderRadius="12px" mt="0.5rem">
               Claim DFYN

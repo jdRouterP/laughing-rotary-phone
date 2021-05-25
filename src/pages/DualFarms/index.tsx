@@ -62,19 +62,19 @@ export default function DualFarms() {
           <CardSection>
             <AutoColumn gap="md">
               <RowBetween>
-                <TYPE.white fontWeight={600}>DFYN liquidity mining</TYPE.white>
+                <TYPE.white fontWeight={600}>Dual Farms</TYPE.white>
               </RowBetween>
               <RowBetween>
                 <TYPE.white fontSize={14}>
-                  Deposit your Liquidity Provider tokens to receive DFYN
+                  Dual Farming pools allow users to stake LP tokens and earn rewards in 2 different tokens.
                 </TYPE.white>
               </RowBetween>{' '}
               <ExternalLink
                 style={{ color: 'white', textDecoration: 'underline' }}
-                href=""
+                href="https://dfyn-network.medium.com/introducing-dfyn-yield-farming-phase-2-7686281dd93"
                 target="_blank"
               >
-                <TYPE.white fontSize={14}>Read more about DFYN</TYPE.white>
+                <TYPE.white fontSize={14}>Read more about Dfyn Farms Phase 2</TYPE.white>
               </ExternalLink>
             </AutoColumn>
           </CardSection>

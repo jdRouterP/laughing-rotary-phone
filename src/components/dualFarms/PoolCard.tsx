@@ -116,7 +116,7 @@ export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) 
   const rate = stakingInfo?.totalRewardRate?.multiply(BIG_INT_SECONDS_IN_DAY).toFixed(5);
   //@ts-ignore
   const valueOfDfynGivenPerYear: any = parseFloat(rate) * stakingInfo?.dfynPrice * 365;
-  const apr = valueOfTotalStakedAmountInUSDC && valueOfDfynGivenPerYear / Number(valueOfTotalStakedAmountInUSDC?.toSignificant(6)) * 100;
+  // const apr = valueOfTotalStakedAmountInUSDC && valueOfDfynGivenPerYear / Number(valueOfTotalStakedAmountInUSDC?.toSignificant(6)) * 100;
   return (
     <Wrapper showBackground={isStaking} bgColor={backgroundColor}>
       <CardBGImage desaturate />
@@ -168,10 +168,10 @@ export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) 
               : '-'}
           </TYPE.white>
         </RowBetween>
-        <RowBetween>
+        {/* <RowBetween>
           <TYPE.white> APR</TYPE.white>
           <TYPE.white>{`${apr ? apr?.toFixed(2) : 0}%`}</TYPE.white>
-        </RowBetween>
+        </RowBetween> */}
       </StatContainer>
 
       {isStaking && (

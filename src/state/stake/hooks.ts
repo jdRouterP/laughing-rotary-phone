@@ -319,7 +319,6 @@ export function useStakingInfo(pairToFilterBy?: Pair | null): StakingInfo[] {
 
         let unclaimedAmount = BigNumber.from(totalVestedAmountState?.result?.[0] ?? 0).mul(unclaimedSplits).div(BigNumber.from(splits))
         unclaimedAmount = unclaimedAmount.div(BigNumber.from('1000000000000000000'))
-        debugger
         let ableToClaim = !vestingActive || (Math.floor(Date.now() / 1000) >= periodFinishSeconds &&
           (userClaimedSplit !== Math.floor(currentSplit) ? true : !hasClaimedPartial))
         memo.push({

@@ -71,10 +71,10 @@ export default function VanillaFarms() {
               </RowBetween>{' '}
               <ExternalLink
                 style={{ color: 'white', textDecoration: 'underline' }}
-                href=""
+                href="https://dfyn-network.medium.com/introducing-dfyn-yield-farming-phase-2-7686281dd93"
                 target="_blank"
               >
-                <TYPE.white fontSize={14}>Read more about DFYN</TYPE.white>
+                <TYPE.white fontSize={14}>Read more about Dfyn Farms Phase 2</TYPE.white>
               </ExternalLink>
             </AutoColumn>
           </CardSection>

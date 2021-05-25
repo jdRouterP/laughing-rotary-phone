@@ -11,6 +11,7 @@ import { SubmittedView, LoadingView } from '../ModalViews'
 import { TransactionResponse } from '@ethersproject/providers'
 import { useTransactionAdder } from '../../state/transactions/hooks'
 import { useActiveWeb3React } from '../../hooks'
+import FormattedCurrencyAmount from 'components/FormattedCurrencyAmount'
 
 const ContentWrapper = styled(AutoColumn)`
   width: 100%;
@@ -31,6 +32,9 @@ export default function ClaimRewardModal({ isOpen, onDismiss, stakingInfo }: Sta
   const [hash, setHash] = useState<string | undefined>()
   const [attempting, setAttempting] = useState(false)
 
+  const reward0 = stakingInfo?.rewardAddresses[0] || ''
+  const reward1 = stakingInfo?.rewardAddresses[1] || ''
+
   function wrappedOnDismiss() {
     setHash(undefined)
     setAttempting(false)
@@ -46,7 +50,7 @@ export default function ClaimRewardModal({ isOpen, onDismiss, stakingInfo }: Sta
         .getReward({ gasLimit: 350000 })
         .then((response: TransactionResponse) => {
           addTransaction(response, {
-            summary: `Claim accumulated DFYN rewards`
+            summary: `Claim accumulated rewards`
           })
           setHash(response.hash)
         })
@@ -73,12 +77,17 @@ export default function ClaimRewardModal({ isOpen, onDismiss, stakingInfo }: Sta
             <TYPE.mediumHeader>Claim</TYPE.mediumHeader>
             <CloseIcon onClick={wrappedOnDismiss} />
           </RowBetween>
-          {stakingInfo?.earnedAmount && (
+          {stakingInfo?.earnedAmount && stakingInfo?.earnedAmountTwo && (
             <AutoColumn justify="center" gap="md">
               <TYPE.body fontWeight={600} fontSize={36}>
-                {stakingInfo?.earnedAmount?.toSignificant(6)}
+                {<FormattedCurrencyAmount currencyAmount={stakingInfo?.earnedAmount} />}
+                {" "}{reward0?.symbol}
               </TYPE.body>
-              <TYPE.body>Unclaimed DFYN</TYPE.body>
+              <TYPE.body fontWeight={600} fontSize={36}>
+                {<FormattedCurrencyAmount currencyAmount={stakingInfo?.earnedAmountTwo} />}
+                {" "}{reward1?.symbol}
+              </TYPE.body>
+              <TYPE.body>Unclaimed Reward</TYPE.body>
             </AutoColumn>
           )}
           <TYPE.subHeader style={{ textAlign: 'center' }}>
@@ -92,7 +101,8 @@ export default function ClaimRewardModal({ isOpen, onDismiss, stakingInfo }: Sta
       {attempting && !hash && (
         <LoadingView onDismiss={wrappedOnDismiss}>
           <AutoColumn gap="12px" justify={'center'}>
-            <TYPE.body fontSize={20}>Claiming {stakingInfo?.earnedAmount?.toSignificant(6)} DFYN</TYPE.body>
+            <TYPE.body fontSize={20}>Claiming {stakingInfo?.earnedAmount?.toSignificant(6)}{" "}{reward0?.symbol}</TYPE.body>
+            <TYPE.body fontSize={20}>Claiming {stakingInfo?.earnedAmountTwo?.toSignificant(6)}{" "}{reward1?.symbol}</TYPE.body>
           </AutoColumn>
         </LoadingView>
       )}
@@ -100,7 +110,7 @@ export default function ClaimRewardModal({ isOpen, onDismiss, stakingInfo }: Sta
         <SubmittedView onDismiss={wrappedOnDismiss} hash={hash}>
           <AutoColumn gap="12px" justify={'center'}>
             <TYPE.largeHeader>Transaction Submitted</TYPE.largeHeader>
-            <TYPE.body fontSize={20}>Claimed DFYN!</TYPE.body>
+            <TYPE.body fontSize={20}>Claimed Rewards!</TYPE.body>
           </AutoColumn>
         </SubmittedView>
       )}

@@ -67,7 +67,7 @@ export const UNI: { [chainId in ChainId]: Token } = {
   [ChainId.MATIC]: new Token(ChainId.MATIC, UNI_ADDRESS, 18, 'DFYN', 'Dfyn')
 }
 
-export const REWARD_TOKENS: Token[] = [REWARDTEST, REWARDTEST2]
+export const REWARD_TOKENS: Token[] = [ROUTE, DFYN]
 
 export const COMMON_CONTRACT_NAMES: { [address: string]: string } = {
   [UNI_ADDRESS]: 'DFYN',

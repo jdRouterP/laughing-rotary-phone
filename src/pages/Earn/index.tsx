@@ -3,11 +3,11 @@ import { AutoColumn } from '../../components/Column'
 import styled from 'styled-components'
 import { STAKING_REWARDS_INFO, useStakingInfo } from '../../state/stake/hooks'
 // import { TYPE, ExternalLink } from '../../theme'
-import { TYPE } from '../../theme'
+import { ExternalLink, TYPE } from '../../theme'
 import PoolCard from '../../components/earn/PoolCard'
 import { RowBetween } from '../../components/Row'
 import { CardSection, DataCard, CardNoise, CardBGImage } from '../../components/earn/styled'
-import { Countdown } from './Countdown'
+// import { Countdown } from './Countdown'
 import Loader from '../../components/Loader'
 import { useActiveWeb3React } from '../../hooks'
 // import { JSBI } from '@uniswap/sdk'
@@ -75,13 +75,13 @@ export default function Earn() {
 
 
               </RowBetween>{' '}
-              {/* <ExternalLink
+              <ExternalLink
                 style={{ color: 'white', textDecoration: 'underline' }}
-                href=""
+                href="https://dfyn-network.medium.com/introducing-dfyn-yield-farming-phase-2-7686281dd93"
                 target="_blank"
               >
-                <TYPE.white fontSize={14}>Read more about DFYN</TYPE.white>
-              </ExternalLink> */}
+                <TYPE.white fontSize={14}>Read more about Dfyn Farms Phase 2</TYPE.white>
+              </ExternalLink>
             </AutoColumn>
           </CardSection>
           <CardBGImage />
@@ -90,9 +90,12 @@ export default function Earn() {
       </TopSection>
 
       <AutoColumn gap="lg" style={{ width: '100%', maxWidth: '720px' }}>
+        <RowBetween>
+          <TYPE.white fontSize={24} fontWeight={600}> These pools are now ended, check out our new Farms!</TYPE.white>
+        </RowBetween>
         <DataRow style={{ alignItems: 'baseline' }}>
-          <TYPE.mediumHeader style={{ marginTop: '0.5rem' }}>Pre-staking pools</TYPE.mediumHeader>
-          <Countdown exactEnd={stakingInfos?.[0]?.periodFinish} />
+          <TYPE.mediumHeader fontSize={16} style={{ marginTop: '0.5rem' }}>Pre-staking pools</TYPE.mediumHeader>
+          <TYPE.mediumHeader fontSize={16} style={{ marginTop: '0.5rem' }}>Rewards have ended!</TYPE.mediumHeader>
         </DataRow>
 
         <PoolSection>

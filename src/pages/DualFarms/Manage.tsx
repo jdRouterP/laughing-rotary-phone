@@ -28,7 +28,7 @@ import { useTotalSupply } from '../../data/TotalSupply'
 import { usePair } from '../../data/Reserves'
 import usePrevious from '../../hooks/usePrevious'
 import useUSDCPrice from '../../utils/useUSDCPrice'
-import { BIG_INT_ZERO, BIG_INT_SECONDS_IN_WEEK } from '../../constants'
+import { BIG_INT_ZERO, BIG_INT_SECONDS_IN_DAY } from '../../constants'
 
 const PageWrapper = styled(AutoColumn)`
   max-width: 640px;
@@ -174,18 +174,18 @@ export default function Manage({
         </PoolData>
         <PoolData>
           <AutoColumn gap="sm">
-            <TYPE.body style={{ margin: 0 }}>Pool Rate / Week</TYPE.body>
+            <TYPE.body style={{ margin: 0 }}>Pool Rate / Day</TYPE.body>
             <TYPE.body fontSize={24} fontWeight={500}>
               {stakingInfo?.active
                 ? stakingInfo?.totalRewardRate
-                  ?.multiply(BIG_INT_SECONDS_IN_WEEK)
+                  ?.multiply(BIG_INT_SECONDS_IN_DAY)
                   ?.toFixed(0, { groupSeparator: ',' }) ?? '-'
                 : '0'}
               {` ${stakingInfo ? stakingInfo?.rewardAddresses[0].symbol : ""}`}
               {" | "}
               {stakingInfo?.active
                 ? stakingInfo?.totalRewardRateTwo
-                  ?.multiply(BIG_INT_SECONDS_IN_WEEK)
+                  ?.multiply(BIG_INT_SECONDS_IN_DAY)
                   ?.toFixed(0, { groupSeparator: ',' }) ?? '-'
                 : '0'}
               {` ${stakingInfo ? stakingInfo?.rewardAddresses[1].symbol : ""}`}
@@ -322,20 +322,20 @@ export default function Manage({
                   </span>
                   {stakingInfo?.active
                     ? stakingInfo?.rewardRate
-                      ?.multiply(BIG_INT_SECONDS_IN_WEEK)
+                      ?.multiply(BIG_INT_SECONDS_IN_DAY)
                       ?.toSignificant(4, { groupSeparator: ',' }) ?? '-'
                     : '0'}
-                  {` ${stakingInfo ? stakingInfo?.rewardAddresses[0].symbol : ""} / week`}
+                  {` ${stakingInfo ? stakingInfo?.rewardAddresses[0].symbol : ""} / day`}
                   <br />
                   <span role="img" aria-label="wizard-icon" style={{ marginRight: '8px ' }}>
                     ⭐
                   </span>
                   {stakingInfo?.active
                     ? stakingInfo?.rewardRateTwo
-                      ?.multiply(BIG_INT_SECONDS_IN_WEEK)
+                      ?.multiply(BIG_INT_SECONDS_IN_DAY)
                       ?.toSignificant(4, { groupSeparator: ',' }) ?? '-'
                     : '0'}
-                  {` ${stakingInfo ? stakingInfo?.rewardAddresses[1].symbol : ""} / week`}
+                  {` ${stakingInfo ? stakingInfo?.rewardAddresses[1].symbol : ""} / day`}
                 </TYPE.black>
               </RowBetween>
             </AutoColumn>
@@ -345,7 +345,7 @@ export default function Manage({
           <span role="img" aria-label="wizard-icon" style={{ marginRight: '8px' }}>
             ⭐️
           </span>
-          When you withdraw, the contract will automagically claim DFYN on your behalf!
+          When you withdraw, the contract will automagically claim rewards on your behalf!
         </TYPE.main>
 
         {!showAddLiquidityButton && (

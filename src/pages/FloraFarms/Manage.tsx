@@ -385,7 +385,7 @@ export default function Manage({
               </ButtonPrimary>
             )}
 
-            {/* {stakingInfo?.stakedAmount?.greaterThan(JSBI.BigInt(0)) && (
+            {stakingInfo?.stakedAmount?.greaterThan(JSBI.BigInt(0)) && (
               <>
                 <ButtonPrimary
                   padding="8px"
@@ -396,7 +396,7 @@ export default function Manage({
                   Withdraw
                 </ButtonPrimary>
               </>
-            )} */}
+            )}
           </DataRow>
         )}
         {!userLiquidityUnstaked ? null : userLiquidityUnstaked.equalTo('0') ? null : !stakingInfo?.active ? null : (

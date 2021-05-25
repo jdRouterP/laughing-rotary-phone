@@ -1,13 +1,13 @@
 import { ChainId, CurrencyAmount, JSBI, Token, TokenAmount, Pair } from '@uniswap/sdk'
 import { useMemo } from 'react'
-import { UNI, ROUTE, ETHER, REWARDTEST, REWARDTEST2, REWARD_TOKENS, EMPTY } from '../../constants'
+import { UNI, ROUTE, REWARD_TOKENS, EMPTY, DFYN } from '../../constants'
 import { STAKING_REWARDS_DUAL_FARMS_INTERFACE } from '../../constants/abis/staking-rewards-dual-farms'
 import { useActiveWeb3React } from '../../hooks'
 import { NEVER_RELOAD, useMultipleContractSingleData } from '../multicall/hooks'
 import { tryParseAmount } from '../swap/hooks'
 import useCurrentBlockTimestamp from 'hooks/useCurrentBlockTimestamp'
 
-export const STAKING_GENESIS = 1621161818
+export const STAKING_GENESIS = 1621962000
 
 export const REWARDS_DURATION_DAYS = 60
 
@@ -22,10 +22,10 @@ export const STAKING_REWARDS_INFO: {
 } = {
   [ChainId.MATIC]: [
     {
-      tokens: [ROUTE, ETHER],
-      rewardTokens: [REWARDTEST, REWARDTEST2],
-      baseToken: ETHER,
-      stakingRewardAddress: '0x39e2f130f782876112bd724c4b808199116a0060'
+      tokens: [ROUTE, DFYN],
+      rewardTokens: [ROUTE, DFYN],
+      baseToken: DFYN,
+      stakingRewardAddress: '0xf997c8e2e7e7387C8fd9120280ad9B3db31A5381'
     }
   ]
 }
@@ -171,7 +171,6 @@ export function useStakingInfo(pairToFilterBy?: Pair | null): StakingInfo[] {
         const totalStakedAmount = new TokenAmount(dummyPair.liquidityToken, JSBI.BigInt(totalSupplyState.result?.[0]))
         const rewardRateTokenOne = new TokenAmount(rewardTokenOne, JSBI.BigInt(rewardRateState.result?.[1][0]))
         const rewardRateTokenTwo = new TokenAmount(rewardTokenTwo, JSBI.BigInt(rewardRateState.result?.[1][1]))
-        debugger
         const getHypotheticalRewardRate = (
           rewardToken: Token,
           stakedAmount: TokenAmount,
@@ -191,7 +190,6 @@ export function useStakingInfo(pairToFilterBy?: Pair | null): StakingInfo[] {
 
         const periodFinishSeconds = periodFinishState.result?.[0]?.toNumber()
         const periodFinishMs = periodFinishSeconds * 1000
-        debugger
         // compare period end timestamp vs current block timestamp (in seconds)
         const active =
           periodFinishSeconds && currentBlockTimestamp ? periodFinishSeconds > currentBlockTimestamp.toNumber() : true
