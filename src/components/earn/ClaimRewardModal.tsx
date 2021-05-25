@@ -76,7 +76,7 @@ export default function ClaimRewardModal({ isOpen, onDismiss, stakingInfo }: Sta
           {unClaimedAmount && (
             <AutoColumn justify="center" gap="md">
               <TYPE.body fontWeight={600} fontSize={36}>
-                {unClaimedAmount}
+                {"20 %"}
               </TYPE.body>
               <TYPE.body>Unclaimed DFYN</TYPE.body>
             </AutoColumn>
@@ -92,7 +92,8 @@ export default function ClaimRewardModal({ isOpen, onDismiss, stakingInfo }: Sta
       {attempting && !hash && (
         <LoadingView onDismiss={wrappedOnDismiss}>
           <AutoColumn gap="12px" justify={'center'}>
-            <TYPE.body fontSize={20}>Claiming {stakingInfo?.earnedAmount?.toSignificant(6)} DFYN</TYPE.body>
+            {/* <TYPE.body fontSize={20}>Claiming {stakingInfo?.earnedAmount?.toSignificant(6)} DFYN</TYPE.body> */}
+            <TYPE.body fontSize={20}>Claiming 20 % DFYN</TYPE.body>
           </AutoColumn>
         </LoadingView>
       )}
