@@ -4,6 +4,7 @@ import { abi as UNI_ABI } from '@uniswap/governance/build/Uni.json'
 import { abi as STAKING_REWARDS_ABI } from '@uniswap/liquidity-staker/build/StakingRewards.json'
 import { abi as STAKING_REWARDS_DUAL_FARMING_ABI } from '../constants/abis/staking-rewards-dual-farms.json'
 import { abi as STAKING_REWARDS_FLORA_FARMING_ABI } from '../constants/abis/staking-rewards-flora-farms.json'
+import { abi as VAULT_ABI } from '../constants/abis/vault.json'
 import { abi as MERKLE_DISTRIBUTOR_ABI } from '@uniswap/merkle-distributor/build/MerkleDistributor.json'
 import { ChainId, WETH } from '@uniswap/sdk'
 import { abi as IUniswapV2PairABI } from '@uniswap/v2-core/build/IUniswapV2Pair.json'
@@ -125,6 +126,9 @@ export function useStakingContract(stakingAddress?: string, withSignerIfPossible
 }
 export function useFloraFarmsContract(stakingAddress?: string, withSignerIfPossible?: boolean): Contract | null {
   return useContract(stakingAddress, STAKING_REWARDS_FLORA_FARMING_ABI, withSignerIfPossible)
+}
+export function useVaultContract(stakingAddress?: string, withSignerIfPossible?: boolean): Contract | null {
+  return useContract(stakingAddress, VAULT_ABI, withSignerIfPossible)
 }
 export function useDualFarmsContract(stakingAddress?: string, withSignerIfPossible?: boolean): Contract | null {
   return useContract(stakingAddress, STAKING_REWARDS_DUAL_FARMING_ABI, withSignerIfPossible)

@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react'
-import useIsArgentWallet from '../../hooks/useIsArgentWallet'
-import useTransactionDeadline from '../../hooks/useTransactionDeadline'
+// import useIsArgentWallet from '../../hooks/useIsArgentWallet'
+// import useTransactionDeadline from '../../hooks/useTransactionDeadline'
 import Modal from '../Modal'
 import { AutoColumn } from '../Column'
 import styled from 'styled-components'
@@ -9,26 +9,26 @@ import { TYPE, CloseIcon } from '../../theme'
 import { ButtonConfirmed, ButtonError } from '../Button'
 import ProgressCircles from '../ProgressSteps'
 import CurrencyInputPanel from '../CurrencyInputPanel'
-import { TokenAmount, Pair } from '@uniswap/sdk'
-import { useActiveWeb3React } from '../../hooks'
+import { TokenAmount } from '@uniswap/sdk'
+// import { useActiveWeb3React } from '../../hooks'
 import { maxAmountSpend } from '../../utils/maxAmountSpend'
-import { usePairContract, useStakingContract } from '../../hooks/useContract'
+import { useVaultContract } from '../../hooks/useContract'
 import { useApproveCallback, ApprovalState } from '../../hooks/useApproveCallback'
-import { splitSignature } from 'ethers/lib/utils'
-import { StakingInfo, useDerivedStakeInfo } from '../../state/vanilla-stake/hooks'
-import { wrappedCurrencyAmount } from '../../utils/wrappedCurrency'
+// import { splitSignature } from 'ethers/lib/utils'
+import { StakingInfo, useDerivedStakeInfo } from '../../state/vault/hooks'
+// import { wrappedCurrencyAmount } from '../../utils/wrappedCurrency'
 import { TransactionResponse } from '@ethersproject/providers'
 import { useTransactionAdder } from '../../state/transactions/hooks'
 import { LoadingView, SubmittedView } from '../ModalViews'
 
-const HypotheticalRewardRate = styled.div<{ dim: boolean }>`
-  display: flex;
-  justify-content: space-between;
-  padding-right: 20px;
-  padding-left: 20px;
+// const HypotheticalRewardRate = styled.div<{ dim: boolean }>`
+//   display: flex;
+//   justify-content: space-between;
+//   padding-right: 20px;
+//   padding-left: 20px;
 
-  opacity: ${({ dim }) => (dim ? 0.5 : 1)};
-`
+//   opacity: ${({ dim }) => (dim ? 0.5 : 1)};
+// `
 
 const ContentWrapper = styled(AutoColumn)`
   width: 100%;
@@ -43,21 +43,22 @@ interface StakingModalProps {
 }
 
 export default function StakingModal({ isOpen, onDismiss, stakingInfo, userLiquidityUnstaked }: StakingModalProps) {
-  const { account, chainId, library } = useActiveWeb3React()
+  // const { chainId } = useActiveWeb3React()
 
   // track and parse user input
   const [typedValue, setTypedValue] = useState('')
   const { parsedAmount, error } = useDerivedStakeInfo(typedValue, stakingInfo.stakedAmount.token, userLiquidityUnstaked)
-  const parsedAmountWrapped = wrappedCurrencyAmount(parsedAmount, chainId)
+  // const parsedAmountWrapped = wrappedCurrencyAmount(parsedAmount, chainId)
 
-  let hypotheticalRewardRate: TokenAmount = new TokenAmount(stakingInfo.rewardRate.token, '0')
-  if (parsedAmountWrapped?.greaterThan('0')) {
-    hypotheticalRewardRate = stakingInfo.getHypotheticalRewardRate(
-      stakingInfo.stakedAmount.add(parsedAmountWrapped),
-      stakingInfo.totalStakedAmount.add(parsedAmountWrapped),
-      stakingInfo.totalRewardRate
-    )
-  }
+  // let hypotheticalRewardRate: TokenAmount = new TokenAmount(stakingInfo.rewardRate.token, '0')
+  // if (parsedAmountWrapped?.greaterThan('0')) {
+  //   hypotheticalRewardRate = stakingInfo.getHypotheticalRewardRate(
+  //     stakingInfo.stakedAmount.add(parsedAmountWrapped),
+  //     stakingInfo.totalStakedAmount.add(parsedAmountWrapped),
+  //     stakingInfo.interestRate
+  //   )
+
+  // }
 
   // state for pending and submitted txn views
   const addTransaction = useTransactionAdder()
@@ -69,39 +70,26 @@ export default function StakingModal({ isOpen, onDismiss, stakingInfo, userLiqui
     onDismiss()
   }, [onDismiss])
 
-  // pair contract for this token to be staked
-  const dummyPair = new Pair(new TokenAmount(stakingInfo.tokens[0], '0'), new TokenAmount(stakingInfo.tokens[1], '0'))
-  const pairContract = usePairContract(dummyPair.liquidityToken.address)
 
   // approval data for stake
-  const deadline = useTransactionDeadline()
-  const [signatureData, setSignatureData] = useState<{ v: number; r: string; s: string; deadline: number } | null>(null)
-  const [approval, approveCallback] = useApproveCallback(parsedAmount, stakingInfo.stakingRewardAddress)
+  // const deadline = useTransactionDeadline()
+  // const [signatureData, setSignatureData] = useState<{ v: number; r: string; s: string; deadline: number } | null>(null)
+  const [approval, approveCallback] = useApproveCallback(parsedAmount, stakingInfo.vaultAddress)
 
-  const isArgentWallet = useIsArgentWallet()
-  const stakingContract = useStakingContract(stakingInfo.stakingRewardAddress)
+  // const isArgentWallet = useIsArgentWallet()
+  const vaultContract = useVaultContract(stakingInfo.vaultAddress)
+  // const tokenContract = useTokenContract(stakingInfo?.rewardToken.address)
   async function onStake() {
     setAttempting(true)
-    if (stakingContract && parsedAmount && deadline) {
+    if (vaultContract && parsedAmount) {
       if (approval === ApprovalState.APPROVED) {
         console.log("stake ", parsedAmount.raw.toString(16));
-        await stakingContract.stake(`0x${parsedAmount.raw.toString(16)}`, { gasLimit: 350000 })
-      } else if (signatureData) {
-        stakingContract
-          .stakeWithPermit(
-            `0x${parsedAmount.raw.toString(16)}`,
-            signatureData.deadline,
-            signatureData.v,
-            signatureData.r,
-            signatureData.s,
-            { gasLimit: 350000 }
-          )
-          .then((response: TransactionResponse) => {
-            addTransaction(response, {
-              summary: `Deposit liquidity`
-            })
-            setHash(response.hash)
+        await vaultContract.stake(`0x${parsedAmount.raw.toString(16)}`, { gasLimit: 350000 }).then((response: TransactionResponse) => {
+          addTransaction(response, {
+            summary: `Deposit liquidity`
           })
+          setHash(response.hash)
+        })
           .catch((error: any) => {
             setAttempting(false)
             console.log(error)
@@ -115,7 +103,6 @@ export default function StakingModal({ isOpen, onDismiss, stakingInfo, userLiqui
 
   // wrapped onUserInput to clear signatures
   const onUserInput = useCallback((typedValue: string) => {
-    setSignatureData(null)
     setTypedValue(typedValue)
   }, [])
 
@@ -126,72 +113,74 @@ export default function StakingModal({ isOpen, onDismiss, stakingInfo, userLiqui
     maxAmountInput && onUserInput(maxAmountInput.toExact())
   }, [maxAmountInput, onUserInput])
 
-  async function onAttemptToApprove() {
-    if (!pairContract || !library || !deadline) throw new Error('missing dependencies')
-    const liquidityAmount = parsedAmount
-    if (!liquidityAmount) throw new Error('missing liquidity amount')
+  // async function onAttemptToApprove() {
 
-    if (isArgentWallet) {
-      return approveCallback()
-    }
 
-    // try to gather a signature for permission
-    const nonce = await pairContract.nonces(account)
+  //   // if (!vaultContract || !library || !deadline) throw new Error('missing dependencies')
+  //   // const liquidityAmount = parsedAmount
+  //   // if (!liquidityAmount) throw new Error('missing liquidity amount')
 
-    const EIP712Domain = [
-      { name: 'name', type: 'string' },
-      { name: 'version', type: 'string' },
-      { name: 'chainId', type: 'uint256' },
-      { name: 'verifyingContract', type: 'address' }
-    ]
-    const domain = {
-      name: 'Dfyn LP Token',
-      version: '1',
-      chainId: chainId,
-      verifyingContract: pairContract.address
-    }
-    const Permit = [
-      { name: 'owner', type: 'address' },
-      { name: 'spender', type: 'address' },
-      { name: 'value', type: 'uint256' },
-      { name: 'nonce', type: 'uint256' },
-      { name: 'deadline', type: 'uint256' }
-    ]
-    const message = {
-      owner: account,
-      spender: stakingInfo.stakingRewardAddress,
-      value: liquidityAmount.raw.toString(),
-      nonce: nonce.toHexString(),
-      deadline: deadline.toNumber()
-    }
-    const data = JSON.stringify({
-      types: {
-        EIP712Domain,
-        Permit
-      },
-      domain,
-      primaryType: 'Permit',
-      message
-    })
+  //   // if (isArgentWallet) {
+  //   //   return approveCallback()
+  //   // }
 
-    library
-      .send('eth_signTypedData_v4', [account, data])
-      .then(splitSignature)
-      .then(signature => {
-        setSignatureData({
-          v: signature.v,
-          r: signature.r,
-          s: signature.s,
-          deadline: deadline.toNumber()
-        })
-      })
-      .catch(error => {
-        // for all errors other than 4001 (EIP-1193 user rejected request), fall back to manual approve
-        if (error?.code !== 4001) {
-          approveCallback()
-        }
-      })
-  }
+  //   // // try to gather a signature for permission
+  //   // const nonce = await vaultContract.nonces(account)
+
+  //   // const EIP712Domain = [
+  //   //   { name: 'name', type: 'string' },
+  //   //   { name: 'version', type: 'string' },
+  //   //   { name: 'chainId', type: 'uint256' },
+  //   //   { name: 'verifyingContract', type: 'address' }
+  //   // ]
+  //   // const domain = {
+  //   //   name: 'Dfyn LP Token',
+  //   //   version: '1',
+  //   //   chainId: chainId,
+  //   //   verifyingContract: pairContract.address
+  //   // }
+  //   // const Permit = [
+  //   //   { name: 'owner', type: 'address' },
+  //   //   { name: 'spender', type: 'address' },
+  //   //   { name: 'value', type: 'uint256' },
+  //   //   { name: 'nonce', type: 'uint256' },
+  //   //   { name: 'deadline', type: 'uint256' }
+  //   // ]
+  //   // const message = {
+  //   //   owner: account,
+  //   //   spender: stakingInfo.stakingRewardAddress,
+  //   //   value: liquidityAmount.raw.toString(),
+  //   //   nonce: nonce.toHexString(),
+  //   //   deadline: deadline.toNumber()
+  //   // }
+  //   // const data = JSON.stringify({
+  //   //   types: {
+  //   //     EIP712Domain,
+  //   //     Permit
+  //   //   },
+  //   //   domain,
+  //   //   primaryType: 'Permit',
+  //   //   message
+  //   // })
+
+  //   // library
+  //   //   .send('eth_signTypedData_v4', [account, data])
+  //   //   .then(splitSignature)
+  //   //   .then(signature => {
+  //   //     setSignatureData({
+  //   //       v: signature.v,
+  //   //       r: signature.r,
+  //   //       s: signature.s,
+  //   //       deadline: deadline.toNumber()
+  //   //     })
+  //   //   })
+  //   //   .catch(error => {
+  //   //     // for all errors other than 4001 (EIP-1193 user rejected request), fall back to manual approve
+  //   //     if (error?.code !== 4001) {
+  //   //       approveCallback()
+  //   //     }
+  //   //   })
+  // }
 
   return (
     <Modal isOpen={isOpen} onDismiss={wrappedOnDismiss} maxHeight={90}>
@@ -207,14 +196,13 @@ export default function StakingModal({ isOpen, onDismiss, stakingInfo, userLiqui
             onMax={handleMax}
             showMaxButton={!atMaxAmount}
             currency={stakingInfo.stakedAmount.token}
-            pair={dummyPair}
             label={''}
             disableCurrencySelect={true}
             customBalanceText={'Available to deposit: '}
             id="stake-liquidity-token"
           />
 
-          <HypotheticalRewardRate dim={!hypotheticalRewardRate.greaterThan('0')}>
+          {/* <HypotheticalRewardRate dim={!hypotheticalRewardRate.greaterThan('0')}>
             <div>
               <TYPE.black fontWeight={600}>Weekly Rewards</TYPE.black>
             </div>
@@ -223,26 +211,26 @@ export default function StakingModal({ isOpen, onDismiss, stakingInfo, userLiqui
               {hypotheticalRewardRate.multiply((60 * 60 * 24).toString()).toSignificant(4, { groupSeparator: ',' })}{' '}
               DFYN / day
             </TYPE.black>
-          </HypotheticalRewardRate>
+          </HypotheticalRewardRate> */}
 
           <RowBetween>
             <ButtonConfirmed
               mr="0.5rem"
-              onClick={onAttemptToApprove}
-              confirmed={approval === ApprovalState.APPROVED || signatureData !== null}
-              disabled={approval !== ApprovalState.NOT_APPROVED || signatureData !== null}
+              onClick={approveCallback}
+              confirmed={approval === ApprovalState.APPROVED}
+              disabled={approval !== ApprovalState.NOT_APPROVED}
             >
               Approve
             </ButtonConfirmed>
             <ButtonError
-              disabled={!!error || (signatureData === null && approval !== ApprovalState.APPROVED)}
+              disabled={!!error || (approval !== ApprovalState.APPROVED)}
               error={!!error && !!parsedAmount}
               onClick={onStake}
             >
               {error ?? 'Deposit'}
             </ButtonError>
           </RowBetween>
-          <ProgressCircles steps={[approval === ApprovalState.APPROVED || signatureData !== null]} disabled={true} />
+          <ProgressCircles steps={[approval === ApprovalState.APPROVED]} disabled={true} />
         </ContentWrapper>
       )}
       {attempting && !hash && (

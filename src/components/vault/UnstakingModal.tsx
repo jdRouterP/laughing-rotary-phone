@@ -5,8 +5,8 @@ import styled from 'styled-components'
 import { RowBetween } from '../Row'
 import { TYPE, CloseIcon } from '../../theme'
 import { ButtonError } from '../Button'
-import { StakingInfo } from '../../state/vanilla-stake/hooks'
-import { useStakingContract } from '../../hooks/useContract'
+import { StakingInfo } from '../../state/vault/hooks'
+import { useVaultContract } from '../../hooks/useContract'
 import { SubmittedView, LoadingView } from '../ModalViews'
 import { TransactionResponse } from '@ethersproject/providers'
 import { useTransactionAdder } from '../../state/transactions/hooks'
@@ -38,13 +38,13 @@ export default function UnstakingModal({ isOpen, onDismiss, stakingInfo }: Staki
     onDismiss()
   }
 
-  const stakingContract = useStakingContract(stakingInfo.stakingRewardAddress)
+  const vaultContract = useVaultContract(stakingInfo.vaultAddress)
 
   async function onWithdraw() {
-    if (stakingContract && stakingInfo?.stakedAmount) {
+    if (vaultContract && stakingInfo?.stakedAmount) {
       setAttempting(true)
-      await stakingContract
-        .exit({ gasLimit: 300000 })
+      await vaultContract
+        .claim({ gasLimit: 300000 })
         .then((response: TransactionResponse) => {
           addTransaction(response, {
             summary: `Withdraw deposited liquidity`

@@ -3,32 +3,26 @@ import { AutoColumn } from '../../components/Column'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 
-import { JSBI, TokenAmount, ETHER } from '@uniswap/sdk'
+import { JSBI } from '@uniswap/sdk'
 import { RouteComponentProps } from 'react-router-dom'
 // import DoubleCurrencyLogo from '../../components/DoubleLogo'
-import { useCurrency } from '../../hooks/Tokens'
 import { useWalletModalToggle } from '../../state/application/hooks'
 import { TYPE } from '../../theme'
 
 import { RowBetween } from '../../components/Row'
 import { CardSection, DataCard, CardNoise, CardBGImage } from '../../components/vanillaFarms/styled'
-import { ButtonPrimary, ButtonEmpty } from '../../components/Button'
-import StakingModal from '../../components/vanillaFarms/StakingModal'
-import { useStakingInfo } from '../../state/vanilla-stake/hooks'
-import UnstakingModal from '../../components/vanillaFarms/UnstakingModal'
-import ClaimRewardModal from '../../components/vanillaFarms/ClaimRewardModal'
+import { ButtonPrimary } from '../../components/Button'
+import StakingModal from '../../components/vault/StakingModal'
+import { useStakingInfo } from '../../state/vault/hooks'
+import UnstakingModal from '../../components/vault/UnstakingModal'
+import ClaimRewardModal from '../../components/vault/ClaimRewardModal'
 import { useTokenBalance } from '../../state/wallet/hooks'
 import { useActiveWeb3React } from '../../hooks'
-import { useColor } from '../../hooks/useColor'
 import { CountUp } from 'use-count-up'
 import { Countdown } from './Countdown'
-import { wrappedCurrency } from '../../utils/wrappedCurrency'
-import { currencyId } from '../../utils/currencyId'
-import { useTotalSupply } from '../../data/TotalSupply'
-import { usePair } from '../../data/Reserves'
 import usePrevious from '../../hooks/usePrevious'
-import useUSDCPrice from '../../utils/useUSDCPrice'
-import { BIG_INT_ZERO, BIG_INT_SECONDS_IN_WEEK } from '../../constants'
+import { BIG_INT_ZERO } from '../../constants'
+import { useVaultContract } from 'hooks/useContract'
 
 
 const PageWrapper = styled(AutoColumn)`
@@ -89,18 +83,15 @@ const DataRow = styled(RowBetween)`
 
 export default function Manage({
   match: {
-    params: { currencyIdA, currencyIdB }
+    params: { vaultID }
   }
-}: RouteComponentProps<{ currencyIdA: string; currencyIdB: string }>) {
-  const { account, chainId } = useActiveWeb3React()
+}: RouteComponentProps<{ vaultID: string }>) {
+  const { account } = useActiveWeb3React()
 
   // get currencies and pair
-  const [currencyA, currencyB] = [useCurrency(currencyIdA), useCurrency(currencyIdB)]
-  const tokenA = wrappedCurrency(currencyA ?? undefined, chainId)
-  const tokenB = wrappedCurrency(currencyB ?? undefined, chainId)
+  const vaultContract = useVaultContract(vaultID);
 
-  const [, stakingTokenPair] = usePair(tokenA, tokenB)
-  const stakingInfo = useStakingInfo(stakingTokenPair)?.[0]
+  const stakingInfo = useStakingInfo(vaultContract?.address)?.[0]
 
   // detect existing unstaked LP position to show add button if none found
   const userLiquidityUnstaked = useTokenBalance(account ?? undefined, stakingInfo?.stakedAmount?.token)
@@ -114,34 +105,8 @@ export default function Manage({
   // fade cards if nothing staked or nothing earned yet
   const disableTop = !stakingInfo?.stakedAmount || stakingInfo.stakedAmount.equalTo(JSBI.BigInt(0))
 
-  const token = currencyA === ETHER ? tokenB : tokenA
-  const WETH = currencyA === ETHER ? tokenA : tokenB
-  const backgroundColor = useColor(token)
-
-  // get WETH value of staked LP tokens
-  const totalSupplyOfStakingToken = useTotalSupply(stakingInfo?.stakedAmount?.token)
-  let valueOfTotalStakedAmountInWETH: TokenAmount | undefined
-  if (totalSupplyOfStakingToken && stakingTokenPair && stakingInfo && WETH) {
-    // take the total amount of LP tokens staked, multiply by ETH value of all LP tokens, divide by all LP tokens
-    valueOfTotalStakedAmountInWETH = new TokenAmount(
-      WETH,
-      JSBI.divide(
-        JSBI.multiply(
-          JSBI.multiply(stakingInfo.totalStakedAmount.raw, stakingTokenPair.reserveOf(WETH).raw),
-          JSBI.BigInt(2) // this is b/c the value of LP shares are ~double the value of the WETH they entitle owner to
-        ),
-        totalSupplyOfStakingToken.raw
-      )
-    )
-  }
-
   const countUpAmount = stakingInfo?.earnedAmount?.toFixed(6) ?? '0'
   const countUpAmountPrevious = usePrevious(countUpAmount) ?? '0'
-
-  // get the USD value of staked WETH
-  const USDPrice = useUSDCPrice(WETH)
-  const valueOfTotalStakedAmountInUSDC =
-    valueOfTotalStakedAmountInWETH && USDPrice?.quote(valueOfTotalStakedAmountInWETH)
 
   const toggleWalletModal = useWalletModalToggle()
 
@@ -165,37 +130,33 @@ export default function Manage({
       <DataRow style={{ gap: '24px' }}>
         <PoolData>
           <AutoColumn gap="sm">
-            <TYPE.body style={{ margin: 0 }} fontSize={14}>Total Deposits / Limits</TYPE.body>
+            <TYPE.body style={{ margin: 0 }} fontSize={14}>Total Deposits</TYPE.body>
             <TYPE.body fontSize={24} fontWeight={500}>
-              {valueOfTotalStakedAmountInUSDC
-                ? `$${valueOfTotalStakedAmountInUSDC.toFixed(0, { groupSeparator: ',' })}`
-                : `${valueOfTotalStakedAmountInWETH?.toSignificant(4, { groupSeparator: ',' }) ?? '-'} MATIC`}
+              {stakingInfo ? `${stakingInfo.totalStakedAmount.toFixed(0, { groupSeparator: ',' })} DFYN` : "0 DFYN"}
             </TYPE.body>
           </AutoColumn>
         </PoolData>
         <PoolData>
           <AutoColumn gap="sm">
             <TYPE.body style={{ margin: 0 }}>Interest Rate</TYPE.body>
-            <TYPE.body fontSize={24} fontWeight={500}>
-              {stakingInfo?.active
-                ? stakingInfo?.totalRewardRate
-                  ?.multiply(BIG_INT_SECONDS_IN_WEEK)
-                  ?.toFixed(0, { groupSeparator: ',' }) ?? '-'
-                : '0'}
-              {' '}
-            </TYPE.body>
+            <TYPE.body fontSize={24} fontWeight={500}>{`${stakingInfo
+              ? stakingInfo.active
+                ? `${stakingInfo.interestRate - 100}`
+                : '0'
+              : '0'
+              }%`}</TYPE.body>
           </AutoColumn>
         </PoolData>
         <PoolData>
           <AutoColumn gap="sm">
-            <TYPE.body style={{ margin: 0 }}>Vesting</TYPE.body>
+            <TYPE.body style={{ margin: 0 }}>Maturity Period</TYPE.body>
             <TYPE.body fontSize={24} fontWeight={500}>
-              {stakingInfo?.active
-                ? stakingInfo?.totalRewardRate
-                  ?.multiply(BIG_INT_SECONDS_IN_WEEK)
-                  ?.toFixed(0, { groupSeparator: ',' }) ?? '-'
-                : '0'}
-              {' '}
+              {`${stakingInfo
+                ? stakingInfo.active
+                  ? `${stakingInfo.vesting / (60 * 60 * 24)} Days`
+                  : '0 Day'
+                : '0 Day'
+                }`}
             </TYPE.body>
           </AutoColumn>
         </PoolData>
@@ -220,7 +181,7 @@ export default function Manage({
                 borderRadius="8px"
                 width={'fit-content'}
                 as={Link}
-                to={`/swap/${currencyA && currencyId(currencyA)}/${currencyB && currencyId(currencyB)}`}
+                to={`/swap`}
               >
                 {`Get DFYN Tokens`}
               </ButtonPrimary>
@@ -232,7 +193,7 @@ export default function Manage({
       )}
       <RowBetween style={{ gap: '24px', alignItems: 'baseline' }}>
         {" "}
-        <Countdown />
+        {stakingInfo?.periodFinish && !showAddLiquidityButton && <Countdown exactEnd={stakingInfo.periodFinish} start={stakingInfo.userVaultInfo.depositTime} />}
       </RowBetween>
 
       {stakingInfo && (
@@ -258,7 +219,7 @@ export default function Manage({
 
       <PositionInfo gap="lg" justify="center" dim={showAddLiquidityButton}>
         <BottomSection gap="lg" justify="center">
-          <StyledDataCard disabled={disableTop} bgColor={backgroundColor} showBackground={!showAddLiquidityButton}>
+          <StyledDataCard disabled={disableTop} showBackground={!showAddLiquidityButton}>
             <CardSection>
               <CardBGImage desaturate />
               <CardNoise />
@@ -285,7 +246,7 @@ export default function Manage({
                 <div>
                   <TYPE.black>Your unclaimed DFYN</TYPE.black>
                 </div>
-                {stakingInfo?.earnedAmount && JSBI.notEqual(BIG_INT_ZERO, stakingInfo?.earnedAmount?.raw) && (
+                {/* {stakingInfo?.earnedAmount && JSBI.notEqual(BIG_INT_ZERO, stakingInfo?.earnedAmount?.raw) && (
                   <ButtonEmpty
                     padding="8px"
                     borderRadius="8px"
@@ -294,7 +255,7 @@ export default function Manage({
                   >
                     Claim
                   </ButtonEmpty>
-                )}
+                )} */}
               </RowBetween>
               <RowBetween style={{ alignItems: 'baseline' }}>
                 <TYPE.largeHeader fontSize={36} fontWeight={600}>
@@ -308,7 +269,7 @@ export default function Manage({
                     duration={1}
                   />
                 </TYPE.largeHeader>
-                <TYPE.black fontSize={16} fontWeight={500}>
+                {/* <TYPE.black fontSize={16} fontWeight={500}>
                   <span role="img" aria-label="wizard-icon" style={{ marginRight: '8px ' }}>
                     ⚡
                   </span>
@@ -318,7 +279,7 @@ export default function Manage({
                       ?.toSignificant(4, { groupSeparator: ',' }) ?? '-'
                     : '0'}
                   {' DFYN / week'}
-                </TYPE.black>
+                </TYPE.black> */}
               </RowBetween>
             </AutoColumn>
           </StyledBottomCard>
@@ -338,22 +299,22 @@ export default function Manage({
               </ButtonPrimary>
             )}
 
-            {stakingInfo?.stakedAmount?.greaterThan(JSBI.BigInt(0)) && (
+            {stakingInfo?.earnedAmount && JSBI.notEqual(BIG_INT_ZERO, stakingInfo?.earnedAmount?.raw) && (
               <>
                 <ButtonPrimary
                   padding="8px"
                   borderRadius="8px"
                   width="160px"
-                  onClick={() => setShowUnstakingModal(true)}
+                  onClick={() => setShowClaimRewardModal(true)}
                 >
-                  Withdraw
+                  Claim
                 </ButtonPrimary>
               </>
             )}
           </DataRow>
         )}
-        {!userLiquidityUnstaked ? null : userLiquidityUnstaked.equalTo('0') ? null : !stakingInfo?.active ? null : (
-          <TYPE.main>{userLiquidityUnstaked.toSignificant(6)} DFYN LP tokens available</TYPE.main>
+        {stakingInfo && (
+          <TYPE.main>{stakingInfo?.vaultLimit?.toSignificant(6, { groupSeparator: ',' })} DFYN Vault Limit</TYPE.main>
         )}
       </PositionInfo>
     </PageWrapper>

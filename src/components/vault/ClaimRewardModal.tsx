@@ -5,8 +5,8 @@ import styled from 'styled-components'
 import { RowBetween } from '../Row'
 import { TYPE, CloseIcon } from '../../theme'
 import { ButtonError } from '../Button'
-import { StakingInfo } from '../../state/vanilla-stake/hooks'
-import { useStakingContract } from '../../hooks/useContract'
+import { StakingInfo } from '../../state/vault/hooks'
+import { useVaultContract } from '../../hooks/useContract'
 import { SubmittedView, LoadingView } from '../ModalViews'
 import { TransactionResponse } from '@ethersproject/providers'
 import { useTransactionAdder } from '../../state/transactions/hooks'
@@ -37,13 +37,13 @@ export default function ClaimRewardModal({ isOpen, onDismiss, stakingInfo }: Sta
     onDismiss()
   }
 
-  const stakingContract = useStakingContract(stakingInfo.stakingRewardAddress)
+  const vaultContract = useVaultContract(stakingInfo.vaultAddress)
 
   async function onClaimReward() {
-    if (stakingContract && stakingInfo?.stakedAmount) {
+    if (vaultContract && stakingInfo?.stakedAmount) {
       setAttempting(true)
-      await stakingContract
-        .getReward({ gasLimit: 350000 })
+      await vaultContract
+        .claim({ gasLimit: 350000 })
         .then((response: TransactionResponse) => {
           addTransaction(response, {
             summary: `Claim accumulated DFYN rewards`

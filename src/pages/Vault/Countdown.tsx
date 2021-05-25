@@ -1,25 +1,23 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import { STAKING_GENESIS, REWARDS_DURATION_DAYS } from '../../state/vanilla-stake/hooks'
 import { TYPE } from '../../theme'
 
 const MINUTE = 60
 const HOUR = MINUTE * 60
 const DAY = HOUR * 24
-const REWARDS_DURATION = DAY * REWARDS_DURATION_DAYS
 
-export function Countdown({ exactEnd }: { exactEnd?: Date }) {
+export function Countdown({ exactEnd, start }: { exactEnd: number, start: number }) {
   // get end/beginning times
-  const end = useMemo(() => (exactEnd ? Math.floor(exactEnd.getTime() / 1000) : STAKING_GENESIS + REWARDS_DURATION), [
+  const end = useMemo(() => (exactEnd ? exactEnd : 0), [
     exactEnd
   ])
-  const begin = useMemo(() => end - REWARDS_DURATION, [end])
-
+  const begin = useMemo(() => (start ? start : 0), [start])
   // get current time
   const [time, setTime] = useState(() => Math.floor(Date.now() / 1000))
   useEffect((): (() => void) | void => {
     // we only need to tick if rewards haven't ended yet
     if (time <= end) {
       const timeout = setTimeout(() => setTime(Math.floor(Date.now() / 1000)), 1000)
+      console.log("timeout", timeout)
       return () => {
         clearTimeout(timeout)
       }

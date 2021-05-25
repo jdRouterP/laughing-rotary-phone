@@ -125,7 +125,7 @@ export default function App() {
               <Route exact strict path="/v-farms/:currencyIdA/:currencyIdB" component={ManageVanillaFarms} />
               <Route exact strict path="/dual-farms/:currencyIdA/:currencyIdB" component={ManageDualFarms} />
               <Route exact strict path="/flora-farms/:currencyIdA/:currencyIdB" component={ManageFloraFarms} />
-              <Route exact strict path="/vault/:currencyIdA/:currencyIdB" component={ManageVault} />
+              <Route exact strict path="/vault/:vaultID" component={ManageVault} />
               <Route exact strict path="/vote/:id" component={VotePage} />
               <Route component={RedirectPathToSwapOnly} />
             </Switch>

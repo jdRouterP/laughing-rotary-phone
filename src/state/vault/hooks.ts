@@ -1,7 +1,7 @@
-import { ChainId, CurrencyAmount, JSBI, Token, TokenAmount, Pair } from '@uniswap/sdk'
+import { ChainId, CurrencyAmount, JSBI, Token, TokenAmount } from '@uniswap/sdk'
 import { useMemo } from 'react'
-import { UNI, ROUTE, ETHER, USDC, USDT } from '../../constants'
-import { STAKING_REWARDS_BASIC_FARMS_INTERFACE } from '../../constants/abis/staking-rewards-basic-farms'
+import { UNI } from '../../constants'
+import { VAULT_INTERFACE } from '../../constants/abis/vault'
 import { useActiveWeb3React } from '../../hooks'
 import { NEVER_RELOAD, useMultipleContractSingleData } from '../multicall/hooks'
 import { tryParseAmount } from '../swap/hooks'
@@ -14,56 +14,50 @@ export const REWARDS_DURATION_DAYS = 60
 // TODO add staking rewards addresses here
 export const STAKING_REWARDS_INFO: {
   [chainId in ChainId]?: {
-    tokens: [Token, Token]
-    baseToken?: Token
-    stakingRewardAddress: string
+    vaultName: string
+    vaultAddress: string
   }[]
 } = {
   [ChainId.MATIC]: [
     {
-      tokens: [ROUTE, ETHER],
-      baseToken: ETHER,
-      stakingRewardAddress: '0xd757b1e6a5da25f4d3a7c5c2741b1b976646db04'
-    },
-    {
-      tokens: [USDC, USDT],
-      baseToken: USDC,
-      stakingRewardAddress: '0xde487dc9e48690d41da58c8203191b3a9ea76116'
+      vaultName: 'Silver Pool',
+      vaultAddress: '0xF600c61e8cA2b29B4e7E780019d08504ADba1379'
     },
   ]
 }
 
 export interface StakingInfo {
   // the address of the reward contract
-  stakingRewardAddress: string
-  // the tokens involved in this pair
-  baseToken: any
-  tokens: [Token, Token]
+  vaultAddress: string
+  vaultName: string
+  rewardToken: Token
   // the amount of token currently staked, or undefined if no account
   stakedAmount: TokenAmount
   // the amount of reward token earned by the active account, or undefined if no account
   earnedAmount: TokenAmount
   // the total amount of token staked in the contract
   totalStakedAmount: TokenAmount
-  // the amount of token distributed per second to all LPs, constant
-  totalRewardRate: TokenAmount
   // the current amount of token distributed to the active account per second.
   // equivalent to percent of total supply * reward rate
-  rewardRate: TokenAmount
+  // rewardRate: TokenAmount
+  interestRate: number
+  vesting: number
+  vaultLimit: TokenAmount
+  userVaultInfo: any
   // when the period ends
-  periodFinish: Date | undefined
+  periodFinish: number | undefined
   // if pool is active
   active: boolean
   // calculates a hypothetical amount of token distributed to the active account per second.
-  getHypotheticalRewardRate: (
-    stakedAmount: TokenAmount,
-    totalStakedAmount: TokenAmount,
-    totalRewardRate: TokenAmount
-  ) => TokenAmount
+  //   getHypotheticalRewardRate: (
+  //     stakedAmount: TokenAmount,
+  //     totalStakedAmount: TokenAmount,
+  //     interestRate: any
+  //   ) => TokenAmount
 }
 
 // gets the staking info from the network for the active chain id
-export function useStakingInfo(pairToFilterBy?: Pair | null): StakingInfo[] {
+export function useStakingInfo(vaultToFilterBy?: string | null): StakingInfo[] {
   const { chainId, account } = useActiveWeb3React()
 
   // detect if staking is ended
@@ -73,40 +67,47 @@ export function useStakingInfo(pairToFilterBy?: Pair | null): StakingInfo[] {
     () =>
       chainId
         ? STAKING_REWARDS_INFO[chainId]?.filter(stakingRewardInfo =>
-          pairToFilterBy === undefined
+          vaultToFilterBy === undefined
             ? true
-            : pairToFilterBy === null
+            : vaultToFilterBy === null
               ? false
-              : pairToFilterBy.involvesToken(stakingRewardInfo.tokens[0]) &&
-              pairToFilterBy.involvesToken(stakingRewardInfo.tokens[1])
+              : vaultToFilterBy === stakingRewardInfo.vaultAddress
         ) ?? []
         : [],
-    [chainId, pairToFilterBy]
+    [chainId, vaultToFilterBy]
   )
 
   const uni = chainId ? UNI[chainId] : undefined
 
-  const rewardsAddresses = useMemo(() => info.map(({ stakingRewardAddress }) => stakingRewardAddress), [info])
+  const rewardsAddresses = useMemo(() => info.map(({ vaultAddress }) => vaultAddress), [info])
 
   const accountArg = useMemo(() => [account ?? undefined], [account])
 
   // get all the info from the staking rewards contracts
-  const balances = useMultipleContractSingleData(rewardsAddresses, STAKING_REWARDS_BASIC_FARMS_INTERFACE, 'balanceOf', accountArg)
-  const earnedAmounts = useMultipleContractSingleData(rewardsAddresses, STAKING_REWARDS_BASIC_FARMS_INTERFACE, 'earned', accountArg)
-  const totalSupplies = useMultipleContractSingleData(rewardsAddresses, STAKING_REWARDS_BASIC_FARMS_INTERFACE, 'totalSupply')
+  const balances = useMultipleContractSingleData(rewardsAddresses, VAULT_INTERFACE, 'balanceOf', accountArg)
+  const earnedAmounts = useMultipleContractSingleData(rewardsAddresses, VAULT_INTERFACE, 'earned', accountArg)
+  const userVaultInfo = useMultipleContractSingleData(rewardsAddresses, VAULT_INTERFACE, 'getUserVaultInfo', accountArg)
+  const totalSupplies = useMultipleContractSingleData(rewardsAddresses, VAULT_INTERFACE, 'totalSupply')
 
-  // tokens per second, constants
-  const rewardRates = useMultipleContractSingleData(
+
+  const vesting = useMultipleContractSingleData(
     rewardsAddresses,
-    STAKING_REWARDS_BASIC_FARMS_INTERFACE,
-    'rewardRate',
+    VAULT_INTERFACE,
+    'vestingPeriod',
     undefined,
     NEVER_RELOAD
   )
-  const periodFinishes = useMultipleContractSingleData(
+  const vaultLimit = useMultipleContractSingleData(
     rewardsAddresses,
-    STAKING_REWARDS_BASIC_FARMS_INTERFACE,
-    'periodFinish',
+    VAULT_INTERFACE,
+    'vaultLimit',
+    undefined,
+    NEVER_RELOAD
+  )
+  const interestRate = useMultipleContractSingleData(
+    rewardsAddresses,
+    VAULT_INTERFACE,
+    'interestRate',
     undefined,
     NEVER_RELOAD
   )
@@ -118,78 +119,93 @@ export function useStakingInfo(pairToFilterBy?: Pair | null): StakingInfo[] {
       // these two are dependent on account
       const balanceState = balances[index]
       const earnedAmountState = earnedAmounts[index]
+      const userVaultInfoState = userVaultInfo[index]
 
       // these get fetched regardless of account
       const totalSupplyState = totalSupplies[index]
-      const rewardRateState = rewardRates[index]
-      const periodFinishState = periodFinishes[index]
+      const vestingState = vesting[index]
+      const vaultLimitState = vaultLimit[index]
+      const interestRateState = interestRate[index]
 
       if (
         // these may be undefined if not logged in
         !balanceState?.loading &&
         !earnedAmountState?.loading &&
+        !userVaultInfoState?.loading &&
         // always need these
         totalSupplyState &&
         !totalSupplyState.loading &&
-        rewardRateState &&
-        !rewardRateState.loading &&
-        periodFinishState &&
-        !periodFinishState.loading
+        vestingState &&
+        !vestingState.loading &&
+        vaultLimitState &&
+        !vaultLimitState.loading &&
+        interestRateState &&
+        !interestRateState.loading
       ) {
         if (
           balanceState?.error ||
           earnedAmountState?.error ||
+          userVaultInfoState?.error ||
           totalSupplyState.error ||
-          rewardRateState.error ||
-          periodFinishState.error
+          vestingState.error ||
+          vaultLimitState.error ||
+          interestRateState.error
         ) {
           console.error('Failed to load staking rewards info')
           return memo
         }
 
-        // get the LP token
-        const tokens = info[index].tokens
-        const dummyPair = new Pair(new TokenAmount(tokens[0], '0'), new TokenAmount(tokens[1], '0'))
 
         // check for account, if no account set to 0
-
-        const stakedAmount = new TokenAmount(dummyPair.liquidityToken, JSBI.BigInt(balanceState?.result?.[0] ?? 0))
-        const totalStakedAmount = new TokenAmount(dummyPair.liquidityToken, JSBI.BigInt(totalSupplyState.result?.[0]))
-        const totalRewardRate = new TokenAmount(uni, JSBI.BigInt(rewardRateState.result?.[0]))
-
-        const getHypotheticalRewardRate = (
-          stakedAmount: TokenAmount,
-          totalStakedAmount: TokenAmount,
-          totalRewardRate: TokenAmount
-        ): TokenAmount => {
-          return new TokenAmount(
-            uni,
-            JSBI.greaterThan(totalStakedAmount.raw, JSBI.BigInt(0))
-              ? JSBI.divide(JSBI.multiply(totalRewardRate.raw, stakedAmount.raw), totalStakedAmount.raw)
-              : JSBI.BigInt(0)
-          )
+        const userVaultInfo = {
+          amount: userVaultInfoState?.result?.[0].amount ?? 0,
+          depositTime: userVaultInfoState?.result?.[0][userVaultInfoState?.result?.[0].length - 1].depositTime ?? 0,
+          vestingPeriodEnds: userVaultInfoState?.result?.[0][userVaultInfoState?.result?.[0].length - 1].vestingPeriodEnds ?? 0,
+          lastUpdated: userVaultInfoState?.result?.[0].lastUpdated ?? 0,
+          claimedAmount: userVaultInfoState?.result?.[0].claimedAmount ?? 0,
+          totalEarned: userVaultInfoState?.result?.[0].totalEarned ?? 0
         }
+        const stakedAmount = new TokenAmount(uni, JSBI.BigInt(balanceState?.result?.[0] ?? 0))
+        const totalStakedAmount = new TokenAmount(uni, JSBI.BigInt(totalSupplyState.result?.[0]))
+        const interestRate = interestRateState.result?.[0].toNumber()
+        const vaultLimit = new TokenAmount(uni, JSBI.BigInt(vaultLimitState.result?.[0]))
+        const vesting = vestingState.result?.[0].toNumber()
 
-        const individualRewardRate = getHypotheticalRewardRate(stakedAmount, totalStakedAmount, totalRewardRate)
+        // const getHypotheticalRewardRate = (
+        //   stakedAmount: TokenAmount,
+        //   totalStakedAmount: TokenAmount,
+        //   interestRate: any
+        // ): TokenAmount => {
+        //   return new TokenAmount(
+        //     uni,
+        //     JSBI.greaterThan(totalStakedAmount.raw, JSBI.BigInt(0))
+        //       ? JSBI.divide(JSBI.multiply(interestRate, stakedAmount.raw), totalStakedAmount.raw)
+        //       : JSBI.BigInt(0)
+        //   )
+        // }
 
-        const periodFinishSeconds = periodFinishState.result?.[0]?.toNumber()
-        const periodFinishMs = periodFinishSeconds * 1000
+        // const individualInterestRate = getHypotheticalRewardRate(stakedAmount, totalStakedAmount, interestRate)
+        // console.log(individualInterestRate);
+        const periodFinishSeconds = parseInt(userVaultInfo?.vestingPeriodEnds)
+        //const periodFinishMs = periodFinishSeconds * 1000
 
         // compare period end timestamp vs current block timestamp (in seconds)
         const active =
           periodFinishSeconds && currentBlockTimestamp ? periodFinishSeconds > currentBlockTimestamp.toNumber() : true
-
         memo.push({
-          stakingRewardAddress: rewardsAddress,
-          baseToken: info[index].baseToken,
-          tokens: info[index].tokens,
-          periodFinish: periodFinishMs > 0 ? new Date(periodFinishMs) : undefined,
+          vaultAddress: rewardsAddress,
+          vaultName: info[index].vaultName,
+          rewardToken: uni,
+          periodFinish: periodFinishSeconds > 0 ? periodFinishSeconds : undefined,
           earnedAmount: new TokenAmount(uni, JSBI.BigInt(earnedAmountState?.result?.[0] ?? 0)),
-          rewardRate: individualRewardRate,
-          totalRewardRate: totalRewardRate,
+          // rewardRate: individualInterestRate,
+          interestRate,
+          vesting,
+          vaultLimit,
+          userVaultInfo,
           stakedAmount: stakedAmount,
           totalStakedAmount: totalStakedAmount,
-          getHypotheticalRewardRate,
+          // getHypotheticalRewardRate,
           active
         })
       }
@@ -201,8 +217,6 @@ export function useStakingInfo(pairToFilterBy?: Pair | null): StakingInfo[] {
     currentBlockTimestamp,
     earnedAmounts,
     info,
-    periodFinishes,
-    rewardRates,
     rewardsAddresses,
     totalSupplies,
     uni

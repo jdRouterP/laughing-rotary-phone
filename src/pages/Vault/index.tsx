@@ -1,7 +1,7 @@
 import React from 'react'
 import { AutoColumn } from '../../components/Column'
 import styled from 'styled-components'
-import { STAKING_REWARDS_INFO, useStakingInfo } from '../../state/vanilla-stake/hooks'
+import { STAKING_REWARDS_INFO, useStakingInfo } from '../../state/vault/hooks'
 import { TYPE, ExternalLink } from '../../theme'
 import PoolCard from '../../components/vault/PoolCard'
 import { RowBetween } from '../../components/Row'
@@ -99,7 +99,7 @@ export default function Vault() {
           ) : (
             stakingInfosWithBalance?.map(stakingInfo => {
               // need to sort by added liquidity here
-              return <PoolCard key={stakingInfo.stakingRewardAddress} stakingInfo={stakingInfo} />
+              return <PoolCard key={stakingInfo.vaultAddress} stakingInfo={stakingInfo} />
             })
           )}
         </PoolSection>

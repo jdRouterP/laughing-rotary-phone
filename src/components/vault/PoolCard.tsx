@@ -3,18 +3,17 @@ import { AutoColumn } from '../Column'
 import { RowBetween } from '../Row'
 import styled from 'styled-components'
 import { TYPE, StyledInternalLink } from '../../theme'
-import CurrencyLogo from '../CurrencyLogo'
-import { JSBI, TokenAmount } from '@uniswap/sdk'
+// import CurrencyLogo from '../CurrencyLogo'
+// import { JSBI, TokenAmount } from '@uniswap/sdk'
 import { ButtonPrimary } from '../Button'
-import { StakingInfo } from '../../state/vanilla-stake/hooks'
+import { StakingInfo } from '../../state/vault/hooks'
 import { useColor } from '../../hooks/useColor'
-import { currencyId } from '../../utils/currencyId'
-import { Break, CardNoise, CardBGImage } from './styled'
-import { unwrappedToken } from '../../utils/wrappedCurrency'
-import { useTotalSupply } from '../../data/TotalSupply'
-import { usePair } from '../../data/Reserves'
-import useUSDCPrice from '../../utils/useUSDCPrice'
-import { BIG_INT_SECONDS_IN_DAY, EMPTY } from '../../constants'
+// import { currencyId } from '../../utils/currencyId'
+import { CardNoise, CardBGImage } from './styled'
+// import { useTotalSupply } from '../../data/TotalSupply'
+// import { usePair } from '../../data/Reserves'
+// import useUSDCPrice from '../../utils/useUSDCPrice'
+// import { BIG_INT_SECONDS_IN_DAY } from '../../constants'
 
 const StatContainer = styled.div`
   display: flex;
@@ -47,85 +46,42 @@ const Wrapper = styled(AutoColumn) <{ showBackground: boolean; bgColor: any }>`
 
 const TopSection = styled.div`
   display: grid;
-  grid-template-columns: 48px 1fr 120px;
+  grid-template-columns:1fr 120px;
   grid-gap: 0px;
   align-items: center;
   padding: 1rem;
   z-index: 1;
   ${({ theme }) => theme.mediaWidth.upToSmall`
-    grid-template-columns: 48px 1fr 96px;
+    grid-template-columns:1fr 96px;
   `};
 `
 
-const BottomSection = styled.div<{ showBackground: boolean }>`
-  padding: 12px 16px;
-  opacity: ${({ showBackground }) => (showBackground ? '1' : '0.4')};
-  border-radius: 0 0 12px 12px;
-  display: flex;
-  flex-direction: row;
-  align-items: baseline;
-  justify-content: space-between;
-  z-index: 1;
-`
+// const BottomSection = styled.div<{ showBackground: boolean }>`
+//   padding: 12px 16px;
+//   opacity: ${({ showBackground }) => (showBackground ? '1' : '0.4')};
+//   border-radius: 0 0 12px 12px;
+//   display: flex;
+//   flex-direction: row;
+//   align-items: baseline;
+//   justify-content: space-between;
+//   z-index: 1;
+// `
 
 export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) {
-  const token0 = stakingInfo.tokens[0]
-  const token1 = stakingInfo.tokens[1]
-
-  const currency0 = unwrappedToken(token0)
-  const currency1 = unwrappedToken(token1)
-  const baseTokenCurrency = unwrappedToken(stakingInfo.baseToken);
-  const empty = unwrappedToken(EMPTY);
 
   const isStaking = Boolean(stakingInfo.stakedAmount.greaterThan('0'))
-
-  // get the color of the token
-  const baseToken = baseTokenCurrency === empty ? token0 : stakingInfo.baseToken;
-  const token = baseTokenCurrency === empty ? token1 : baseTokenCurrency === currency0 ? token1 : token0;
-
-  const backgroundColor = useColor(token)
-
-  const totalSupplyOfStakingToken = useTotalSupply(stakingInfo.stakedAmount.token)
-  const [, stakingTokenPair] = usePair(...stakingInfo.tokens)
-
-  // let returnOverMonth: Percent = new Percent('0')
-  let valueOfTotalStakedAmountInBaseToken: TokenAmount | undefined
-  if (totalSupplyOfStakingToken && stakingTokenPair) {
-    // take the total amount of LP tokens staked, multiply by ETH value of all LP tokens, divide by all LP tokens
-    valueOfTotalStakedAmountInBaseToken = new TokenAmount(
-      baseToken,
-      JSBI.divide(
-        JSBI.multiply(
-          JSBI.multiply(stakingInfo.totalStakedAmount.raw, stakingTokenPair.reserveOf(baseToken).raw),
-          JSBI.BigInt(2) // this is b/c the value of LP shares are ~double the value of the WETH they entitle owner to
-        ),
-        totalSupplyOfStakingToken.raw
-      )
-    )
-  }
-
-
-
-  let USDPrice = useUSDCPrice(baseToken)
-
-  const valueOfTotalStakedAmountInUSDC = valueOfTotalStakedAmountInBaseToken && USDPrice?.quote(valueOfTotalStakedAmountInBaseToken)
-
-  const rate = stakingInfo?.totalRewardRate?.multiply(BIG_INT_SECONDS_IN_DAY).toFixed(5);
-  //@ts-ignore
-  const valueOfDfynGivenPerYear: any = parseFloat(rate) * stakingInfo?.dfynPrice * 365;
-  const apr = valueOfTotalStakedAmountInUSDC && valueOfDfynGivenPerYear / Number(valueOfTotalStakedAmountInUSDC?.toSignificant(6)) * 100;
+  const backgroundColor = useColor();
   return (
     <Wrapper showBackground={isStaking} bgColor={backgroundColor}>
       <CardBGImage desaturate />
       <CardNoise />
 
       <TopSection>
-        <CurrencyLogo currency={currency0} />
         <TYPE.white fontWeight={600} fontSize={24} >
-          SILVER POOL
+          {stakingInfo?.vaultName}
         </TYPE.white>
 
-        <StyledInternalLink to={`/vault/${currencyId(currency0)}/${currencyId(currency1)}`} style={{ width: '100%' }}>
+        <StyledInternalLink to={`/vault/${stakingInfo?.vaultAddress}`} style={{ width: '100%' }}>
           <ButtonPrimary padding="8px" borderRadius="8px">
             {isStaking ? 'Manage' : 'Deposit'}
           </ButtonPrimary>
@@ -136,9 +92,7 @@ export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) 
         <RowBetween>
           <TYPE.white> Total deposited</TYPE.white>
           <TYPE.white>
-            {valueOfTotalStakedAmountInUSDC
-              ? `$${valueOfTotalStakedAmountInUSDC.toFixed(0, { groupSeparator: ',' })}`
-              : `${valueOfTotalStakedAmountInBaseToken?.toSignificant(4, { groupSeparator: ',' }) ?? '-'} ETH`}
+            {stakingInfo && `${stakingInfo.totalStakedAmount.toFixed(0, { groupSeparator: ',' })} DFYN`}
           </TYPE.white>
         </RowBetween>
         <RowBetween>
@@ -146,24 +100,32 @@ export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) 
           <TYPE.white>
             {stakingInfo
               ? stakingInfo.active
-                ? `${stakingInfo.totalRewardRate
-                  ?.multiply(BIG_INT_SECONDS_IN_DAY)
-                  ?.toFixed(0, { groupSeparator: ',' })} DFYN`
+                ? `${stakingInfo.vaultLimit?.toFixed(0, { groupSeparator: ',' })} DFYN`
                 : '0 DFYN'
               : '-'}
           </TYPE.white>
         </RowBetween>
         <RowBetween>
           <TYPE.white> Maturity Period </TYPE.white>
-          <TYPE.white>{`${apr ? apr?.toFixed(2) : 0} days`}</TYPE.white>
+          <TYPE.white>{`${stakingInfo
+            ? stakingInfo.active
+              ? `${stakingInfo.vesting / (60 * 60 * 24)} Days`
+              : '0 Day'
+            : '-'
+            }`}</TYPE.white>
         </RowBetween>
         <RowBetween>
           <TYPE.white> Interest Rate</TYPE.white>
-          <TYPE.white>{`${apr ? apr?.toFixed(2) : 0}%`}</TYPE.white>
+          <TYPE.white>{`${stakingInfo
+            ? stakingInfo.active
+              ? `${stakingInfo.interestRate - 100}`
+              : '0'
+            : '0'
+            }%`}</TYPE.white>
         </RowBetween>
       </StatContainer>
 
-      {isStaking && (
+      {/* {isStaking && (
         <>
           <Break />
           <BottomSection showBackground={true}>
@@ -175,17 +137,10 @@ export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) 
               <span role="img" aria-label="wizard-icon" style={{ marginRight: '0.5rem' }}>
                 ⚡
               </span>
-              {stakingInfo
-                ? stakingInfo.active
-                  ? `${stakingInfo.rewardRate
-                    ?.multiply(BIG_INT_SECONDS_IN_DAY)
-                    ?.toSignificant(4, { groupSeparator: ',' })} DFYN / day`
-                  : '0 DFYN / day'
-                : '-'}
             </TYPE.black>
           </BottomSection>
         </>
-      )}
+      )} */}
     </Wrapper>
   )
 }
