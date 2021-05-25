@@ -120,11 +120,6 @@ export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) 
   //@ts-ignore
   const valueOfToken2GivenPerYear: any = parseFloat(rateTwo) * stakingInfo?.dfynPrice * 365
   const apr = valueOfTotalStakedAmountInUSDC && (valueOfToken1GivenPerYear + valueOfToken2GivenPerYear) / Number(valueOfTotalStakedAmountInUSDC?.toSignificant(6)) * 100;
-  console.log("APRR", valueOfTotalStakedAmountInUSDC)
-  console.log("Token1", valueOfToken1GivenPerYear, stakingInfo?.dfynPrice)
-  console.log("Token2", valueOfToken2GivenPerYear, stakingInfo?.routePrice)
-  console.log("RATE1", rateOne)
-  console.log("RATE2", rateTwo)
   return (
     <Wrapper showBackground={isStaking} bgColor={backgroundColor}>
       <CardBGImage desaturate />
@@ -208,7 +203,7 @@ export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) 
               </span>
               {stakingInfo
                 ? stakingInfo.active
-                  ? `${stakingInfo.rewardRate
+                  ? `${stakingInfo.rewardRateTwo
                     ?.multiply(BIG_INT_SECONDS_IN_DAY)
                     ?.toSignificant(4, { groupSeparator: ',' })} ${reward1?.symbol} / day`
                   : `0 ${reward1?.symbol} / day`
