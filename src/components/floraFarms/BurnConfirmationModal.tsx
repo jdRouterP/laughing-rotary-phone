@@ -84,7 +84,6 @@ const BurnConfirmationModal = ({ isOpen, setShowConfirmation, stakingInfo, setVe
                     console.log(error)
                 })
         }
-        console.log("I am here!");
     }
 
     return (
@@ -102,8 +101,7 @@ const BurnConfirmationModal = ({ isOpen, setShowConfirmation, stakingInfo, setVe
                         <Break />
                         <AutoColumn gap="lg" style={{ padding: '0 2rem' }}>
                             <Text fontWeight={500} fontSize={20}>
-                                Expert mode turns off the confirm transaction prompt and allows high slippage trades that often result
-                                in bad rates and lost funds.
+                                Keep this button on for rewards to be vested in 6 months in 4 tranches. If this button is off you can claim 50% of your rewards when the staking period ends and the rest will be burnt immediately
               </Text>
                             <Text fontWeight={600} fontSize={20}>
                                 ONLY USE THIS MODE IF YOU KNOW WHAT YOU ARE DOING.
@@ -115,9 +113,9 @@ const BurnConfirmationModal = ({ isOpen, setShowConfirmation, stakingInfo, setVe
                                     onSetConfig()
                                 }}
                             >
-                                <Text fontSize={20} fontWeight={500} id="confirm-expert-mode">
-                                    Turn On Burn Mode
-                </Text>
+                                <Text fontSize={20} fontWeight={500} id="confirm-vesting-mode">
+                                    {`Turn ${!vesting ? "On" : "Off"} Vesting Mode`}
+                                </Text>
                             </ButtonError>
                         </AutoColumn>
                     </AutoColumn>
@@ -125,7 +123,7 @@ const BurnConfirmationModal = ({ isOpen, setShowConfirmation, stakingInfo, setVe
                 {attempting && !hash && (
                     <LoadingView onDismiss={wrappedOnDismiss}>
                         <AutoColumn gap="12px" justify={'center'}>
-                            <TYPE.body fontSize={20}>Setting Burnable to {"True"}</TYPE.body>
+                            <TYPE.body fontSize={20}>Setting Vesting to {!vesting ? "True" : "False"}</TYPE.body>
                         </AutoColumn>
                     </LoadingView>
                 )}

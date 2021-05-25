@@ -16,12 +16,19 @@ export const STAKING_REWARDS_INFO: {
   [chainId in ChainId]?: {
     vaultName: string
     vaultAddress: string
+    multiplier: number
   }[]
 } = {
   [ChainId.MATIC]: [
     {
-      vaultName: 'Silver Pool',
-      vaultAddress: '0xF600c61e8cA2b29B4e7E780019d08504ADba1379'
+      vaultName: 'DFYN 6-month vault',
+      vaultAddress: '0x21D5815d9654074192A2F6A6230406A6bB4201BE',
+      multiplier: 2
+    },
+    {
+      vaultName: 'DFYN 4-month vault',
+      vaultAddress: '0x5179E3460Bb13A9CEc85419d477A487C4780c92c',
+      multiplier: 3
     },
   ]
 }
@@ -42,6 +49,7 @@ export interface StakingInfo {
   // rewardRate: TokenAmount
   interestRate: number
   vesting: number
+  multiplier: number
   vaultLimit: TokenAmount
   userVaultInfo: any
   // when the period ends
@@ -87,7 +95,7 @@ export function useStakingInfo(vaultToFilterBy?: string | null): StakingInfo[] {
   const balances = useMultipleContractSingleData(rewardsAddresses, VAULT_INTERFACE, 'balanceOf', accountArg)
   const earnedAmounts = useMultipleContractSingleData(rewardsAddresses, VAULT_INTERFACE, 'earned', accountArg)
   const userVaultInfo = useMultipleContractSingleData(rewardsAddresses, VAULT_INTERFACE, 'getUserVaultInfo', accountArg)
-  const totalSupplies = useMultipleContractSingleData(rewardsAddresses, VAULT_INTERFACE, 'totalSupply')
+  const totalSupplies = useMultipleContractSingleData(rewardsAddresses, VAULT_INTERFACE, 'totalDeposits')
 
 
   const vesting = useMultipleContractSingleData(
@@ -159,8 +167,8 @@ export function useStakingInfo(vaultToFilterBy?: string | null): StakingInfo[] {
         // check for account, if no account set to 0
         const userVaultInfo = {
           amount: userVaultInfoState?.result?.[0].amount ?? 0,
-          depositTime: userVaultInfoState?.result?.[0][userVaultInfoState?.result?.[0].length - 1].depositTime ?? 0,
-          vestingPeriodEnds: userVaultInfoState?.result?.[0][userVaultInfoState?.result?.[0].length - 1].vestingPeriodEnds ?? 0,
+          depositTime: userVaultInfoState?.result?.[0][userVaultInfoState?.result?.[0].length - 1]?.depositTime ?? 0,
+          vestingPeriodEnds: userVaultInfoState?.result?.[0][userVaultInfoState?.result?.[0].length - 1]?.vestingPeriodEnds ?? 0,
           lastUpdated: userVaultInfoState?.result?.[0].lastUpdated ?? 0,
           claimedAmount: userVaultInfoState?.result?.[0].claimedAmount ?? 0,
           totalEarned: userVaultInfoState?.result?.[0].totalEarned ?? 0
@@ -195,10 +203,10 @@ export function useStakingInfo(vaultToFilterBy?: string | null): StakingInfo[] {
         memo.push({
           vaultAddress: rewardsAddress,
           vaultName: info[index].vaultName,
+          multiplier: info[index].multiplier,
           rewardToken: uni,
           periodFinish: periodFinishSeconds > 0 ? periodFinishSeconds : undefined,
           earnedAmount: new TokenAmount(uni, JSBI.BigInt(earnedAmountState?.result?.[0] ?? 0)),
-          // rewardRate: individualInterestRate,
           interestRate,
           vesting,
           vaultLimit,

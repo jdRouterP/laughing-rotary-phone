@@ -34,7 +34,9 @@ const StyledMenuButton = styled.button`
     outline: none;
     background-color: ${({ theme }) => theme.bg4};
   }
-
+  ${({ theme }) => theme.mediaWidth.upToMedium`
+    font-size: 0.7rem
+  `};
   svg {
     margin-top: 2px;
   }
@@ -97,7 +99,7 @@ const MenuFlyout = styled.span`
   z-index: 100;
 
   ${({ theme }) => theme.mediaWidth.upToMedium`
-    top: -17.25rem;
+    left: -8.25rem;
   `};
 `
 
@@ -130,7 +132,7 @@ export default function FarmsMenu() {
     <StyledMenu ref={node as any}>
 
       <StyledMenuButton onClick={toggle}>
-        ⚡ FARMS
+        ⚡FARMS
       </StyledMenuButton>
 
       {open && (
@@ -138,14 +140,17 @@ export default function FarmsMenu() {
           <StyledNavLink id={`stake-nav-link`} to={'/dfyn'}>
             Pre-Staking Farms
           </StyledNavLink>
-          <StyledNavLink id={`v-farms-nav-link`} to={'/v-farms'}>
+          <StyledNavLink id={`stake-nav-link`} to={'/vault'}>
+            Single-Asset Vault
+          </StyledNavLink>
+          {/* <StyledNavLink id={`v-farms-nav-link`} to={'/v-farms'}>
             Vanilla Farms
-          </StyledNavLink>
-          <StyledNavLink id={`d-farms-nav-link`} to={'/dual-farms'}>
+          </StyledNavLink> */}
+          {/* <StyledNavLink id={`d-farms-nav-link`} to={'/dual-farms'}>
             Dual Farms
-          </StyledNavLink>
+          </StyledNavLink> */}
           <StyledNavLink id={`f-farms-nav-link`} to={'/flora-farms'}>
-            Flora Farms
+            Popular Farms
           </StyledNavLink>
           {/* {account && (
             <ButtonPrimary onClick={openClaimModal} padding="8px 10px" width="100%" borderRadius="12px" mt="0.5rem">

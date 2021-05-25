@@ -106,6 +106,16 @@ export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) 
           </TYPE.white>
         </RowBetween>
         <RowBetween>
+          <TYPE.white> Available limit </TYPE.white>
+          <TYPE.white>
+            {stakingInfo
+              ? stakingInfo.active
+                ? `${stakingInfo?.vaultLimit?.subtract(stakingInfo?.totalStakedAmount).toSignificant(6, { groupSeparator: ',' })} DFYN`
+                : '0 DFYN'
+              : '-'}
+          </TYPE.white>
+        </RowBetween>
+        <RowBetween>
           <TYPE.white> Maturity Period </TYPE.white>
           <TYPE.white>{`${stakingInfo
             ? stakingInfo.active
@@ -115,10 +125,10 @@ export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) 
             }`}</TYPE.white>
         </RowBetween>
         <RowBetween>
-          <TYPE.white> Interest Rate</TYPE.white>
+          <TYPE.white> APR</TYPE.white>
           <TYPE.white>{`${stakingInfo
             ? stakingInfo.active
-              ? `${stakingInfo.interestRate - 100}`
+              ? `${(stakingInfo.interestRate - 100) * stakingInfo.multiplier}`
               : '0'
             : '0'
             }%`}</TYPE.white>

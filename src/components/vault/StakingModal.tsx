@@ -86,7 +86,7 @@ export default function StakingModal({ isOpen, onDismiss, stakingInfo, userLiqui
         console.log("stake ", parsedAmount.raw.toString(16));
         await vaultContract.stake(`0x${parsedAmount.raw.toString(16)}`, { gasLimit: 350000 }).then((response: TransactionResponse) => {
           addTransaction(response, {
-            summary: `Deposit liquidity`
+            summary: `Deposit Tokens`
           })
           setHash(response.hash)
         })
@@ -236,8 +236,8 @@ export default function StakingModal({ isOpen, onDismiss, stakingInfo, userLiqui
       {attempting && !hash && (
         <LoadingView onDismiss={wrappedOnDismiss}>
           <AutoColumn gap="12px" justify={'center'}>
-            <TYPE.largeHeader>Depositing Liquidity</TYPE.largeHeader>
-            <TYPE.body fontSize={20}>{parsedAmount?.toSignificant(4)} DFYN LP</TYPE.body>
+            <TYPE.largeHeader>Depositing DFYN Tokens</TYPE.largeHeader>
+            <TYPE.body fontSize={20}>{parsedAmount?.toSignificant(4)} DFYN</TYPE.body>
           </AutoColumn>
         </LoadingView>
       )}
@@ -245,7 +245,7 @@ export default function StakingModal({ isOpen, onDismiss, stakingInfo, userLiqui
         <SubmittedView onDismiss={wrappedOnDismiss} hash={hash}>
           <AutoColumn gap="12px" justify={'center'}>
             <TYPE.largeHeader>Transaction Submitted</TYPE.largeHeader>
-            <TYPE.body fontSize={20}>Deposited {parsedAmount?.toSignificant(4)} DFYN LP</TYPE.body>
+            <TYPE.body fontSize={20}>Deposited {parsedAmount?.toSignificant(4)} DFYN</TYPE.body>
           </AutoColumn>
         </SubmittedView>
       )}

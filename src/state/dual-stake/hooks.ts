@@ -1,6 +1,6 @@
 import { ChainId, CurrencyAmount, JSBI, Token, TokenAmount, Pair } from '@uniswap/sdk'
 import { useMemo } from 'react'
-import { UNI, ROUTE, ETHER, REWARDTEST, REWARDTEST2 } from '../../constants'
+import { UNI, ROUTE, ETHER, REWARDTEST, REWARDTEST2, REWARD_TOKENS, EMPTY } from '../../constants'
 import { STAKING_REWARDS_DUAL_FARMS_INTERFACE } from '../../constants/abis/staking-rewards-dual-farms'
 import { useActiveWeb3React } from '../../hooks'
 import { NEVER_RELOAD, useMultipleContractSingleData } from '../multicall/hooks'
@@ -57,6 +57,7 @@ export interface StakingInfo {
   active: boolean
   // calculates a hypothetical amount of token distributed to the active account per second.
   getHypotheticalRewardRate: (
+    rewardToken: Token,
     stakedAmount: TokenAmount,
     totalStakedAmount: TokenAmount,
     totalRewardRate: TokenAmount
@@ -88,7 +89,7 @@ export function useStakingInfo(pairToFilterBy?: Pair | null): StakingInfo[] {
   const uni = chainId ? UNI[chainId] : undefined
 
   const stakingRewardAddress = useMemo(() => info.map(({ stakingRewardAddress }) => stakingRewardAddress), [info])
-  const allRewardAddresses = useMemo(() => info.map(({ rewardTokens }) => rewardTokens), [info])
+  const bothRewardToken = useMemo(() => info.map(({ rewardTokens }) => rewardTokens), [info])
 
   const accountArg = useMemo(() => [account ?? undefined], [account])
 
@@ -120,7 +121,7 @@ export function useStakingInfo(pairToFilterBy?: Pair | null): StakingInfo[] {
       // these two are dependent on account
       const balanceState = balances[index]
       const earnedAmountState = earnedAmounts[index]
-      const rewardAddresses = allRewardAddresses[index]
+      const rewardAddresses = bothRewardToken[index]
       // these get fetched regardless of account
       const totalSupplyState = totalSupplies[index]
       const rewardRateState = rewardRates[index]
@@ -150,36 +151,47 @@ export function useStakingInfo(pairToFilterBy?: Pair | null): StakingInfo[] {
           return memo
         }
 
+        const getTokenByAddress = (address: string) => {
+          const token = REWARD_TOKENS.filter(token => token.address?.toLowerCase() === address?.toLowerCase())
+          if (token.length) {
+            return token[0]
+          } else {
+            return EMPTY;
+          }
+        }
+
         // get the LP token
         const tokens = info[index].tokens
         const dummyPair = new Pair(new TokenAmount(tokens[0], '0'), new TokenAmount(tokens[1], '0'))
 
         // check for account, if no account set to 0
-
+        const rewardTokenOne = getTokenByAddress(rewardRateState.result?.[0][0])
+        const rewardTokenTwo = getTokenByAddress(rewardRateState.result?.[0][1])
         const stakedAmount = new TokenAmount(dummyPair.liquidityToken, JSBI.BigInt(balanceState?.result?.[0] ?? 0))
         const totalStakedAmount = new TokenAmount(dummyPair.liquidityToken, JSBI.BigInt(totalSupplyState.result?.[0]))
-        const rewardRateTokenOne = new TokenAmount(uni, JSBI.BigInt(rewardRateState.result?.[1][0]))
-        const rewardRateTokenTwo = new TokenAmount(uni, JSBI.BigInt(rewardRateState.result?.[1][1]))
-
+        const rewardRateTokenOne = new TokenAmount(rewardTokenOne, JSBI.BigInt(rewardRateState.result?.[1][0]))
+        const rewardRateTokenTwo = new TokenAmount(rewardTokenTwo, JSBI.BigInt(rewardRateState.result?.[1][1]))
+        debugger
         const getHypotheticalRewardRate = (
+          rewardToken: Token,
           stakedAmount: TokenAmount,
           totalStakedAmount: TokenAmount,
           totalRewardRate: TokenAmount
         ): TokenAmount => {
           return new TokenAmount(
-            uni,
+            rewardToken,
             JSBI.greaterThan(totalStakedAmount.raw, JSBI.BigInt(0))
               ? JSBI.divide(JSBI.multiply(totalRewardRate.raw, stakedAmount.raw), totalStakedAmount.raw)
               : JSBI.BigInt(0)
           )
         }
 
-        const individualRewardRate = getHypotheticalRewardRate(stakedAmount, totalStakedAmount, rewardRateTokenOne)
-        const individualRewardRateTwo = getHypotheticalRewardRate(stakedAmount, totalStakedAmount, rewardRateTokenTwo)
+        const individualRewardRate = getHypotheticalRewardRate(rewardTokenOne, stakedAmount, totalStakedAmount, rewardRateTokenOne)
+        const individualRewardRateTwo = getHypotheticalRewardRate(rewardTokenTwo, stakedAmount, totalStakedAmount, rewardRateTokenTwo)
 
         const periodFinishSeconds = periodFinishState.result?.[0]?.toNumber()
         const periodFinishMs = periodFinishSeconds * 1000
-
+        debugger
         // compare period end timestamp vs current block timestamp (in seconds)
         const active =
           periodFinishSeconds && currentBlockTimestamp ? periodFinishSeconds > currentBlockTimestamp.toNumber() : true
@@ -190,8 +202,8 @@ export function useStakingInfo(pairToFilterBy?: Pair | null): StakingInfo[] {
           baseToken: info[index].baseToken,
           tokens: info[index].tokens,
           periodFinish: periodFinishMs > 0 ? new Date(periodFinishMs) : undefined,
-          earnedAmount: new TokenAmount(uni, JSBI.BigInt(earnedAmountState?.result?.[1][0] ?? 0)),
-          earnedAmountTwo: new TokenAmount(uni, JSBI.BigInt(earnedAmountState?.result?.[1][1] ?? 0)),
+          earnedAmount: new TokenAmount(rewardTokenOne, JSBI.BigInt(earnedAmountState?.result?.[1][0] ?? 0)),
+          earnedAmountTwo: new TokenAmount(rewardTokenTwo, JSBI.BigInt(earnedAmountState?.result?.[1][1] ?? 0)),
           rewardRate: individualRewardRate,
           rewardRateTwo: individualRewardRateTwo,
           totalRewardRate: rewardRateTokenOne,

@@ -50,9 +50,22 @@ export default function StakingModal({ isOpen, onDismiss, stakingInfo, userLiqui
   const { parsedAmount, error } = useDerivedStakeInfo(typedValue, stakingInfo.stakedAmount.token, userLiquidityUnstaked)
   const parsedAmountWrapped = wrappedCurrencyAmount(parsedAmount, chainId)
 
-  let hypotheticalRewardRate: TokenAmount = new TokenAmount(stakingInfo.rewardRate.token, '0')
+  const reward0 = stakingInfo?.rewardAddresses[0] || ''
+  const reward1 = stakingInfo?.rewardAddresses[1] || ''
+
+  let hypotheticalRewardRateOne: TokenAmount = new TokenAmount(stakingInfo.rewardRate.token, '0')
+  let hypotheticalRewardRateTwo: TokenAmount = new TokenAmount(stakingInfo.rewardRate.token, '0')
   if (parsedAmountWrapped?.greaterThan('0')) {
-    hypotheticalRewardRate = stakingInfo.getHypotheticalRewardRate(
+    hypotheticalRewardRateOne = stakingInfo.getHypotheticalRewardRate(
+      reward0,
+      stakingInfo.stakedAmount.add(parsedAmountWrapped),
+      stakingInfo.totalStakedAmount.add(parsedAmountWrapped),
+      stakingInfo.totalRewardRate
+    )
+  }
+  if (parsedAmountWrapped?.greaterThan('0')) {
+    hypotheticalRewardRateTwo = stakingInfo.getHypotheticalRewardRate(
+      reward1,
       stakingInfo.stakedAmount.add(parsedAmountWrapped),
       stakingInfo.totalStakedAmount.add(parsedAmountWrapped),
       stakingInfo.totalRewardRate
@@ -214,14 +227,15 @@ export default function StakingModal({ isOpen, onDismiss, stakingInfo, userLiqui
             id="stake-liquidity-token"
           />
 
-          <HypotheticalRewardRate dim={!hypotheticalRewardRate.greaterThan('0')}>
+          <HypotheticalRewardRate dim={!hypotheticalRewardRateOne.greaterThan('0')}>
             <div>
               <TYPE.black fontWeight={600}>Weekly Rewards</TYPE.black>
             </div>
 
             <TYPE.black>
-              {hypotheticalRewardRate.multiply((60 * 60 * 24).toString()).toSignificant(4, { groupSeparator: ',' })}{' '}
-              DFYN / day
+              {hypotheticalRewardRateOne.multiply((60 * 60 * 24).toString()).toSignificant(4, { groupSeparator: ',' })}{' '}
+              {reward0?.symbol}{' | '}{hypotheticalRewardRateTwo.multiply((60 * 60 * 24).toString()).toSignificant(4, { groupSeparator: ',' })}{' '}
+              {reward1?.symbol}
             </TYPE.black>
           </HypotheticalRewardRate>
 

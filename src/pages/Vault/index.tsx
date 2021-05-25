@@ -62,19 +62,19 @@ export default function Vault() {
           <CardSection>
             <AutoColumn gap="md">
               <RowBetween>
-                <TYPE.white fontWeight={600}>DFYN Vaults</TYPE.white>
+                <TYPE.white fontWeight={600}>Single Asset Vaults</TYPE.white>
               </RowBetween>
               <RowBetween>
                 <TYPE.white fontSize={14}>
-                  Deposit your Liquidity Provider tokens to receive DFYN, the Dfyn protocol governance token.
+                  Lock DFYN for a period of time and earn a fixed number of Dfyn tokens.
                 </TYPE.white>
               </RowBetween>{' '}
               <ExternalLink
                 style={{ color: 'white', textDecoration: 'underline' }}
-                href=""
+                href="https://dfyn-network.medium.com/introducing-dfyn-yield-farming-phase-2-7686281dd93"
                 target="_blank"
               >
-                <TYPE.white fontSize={14}>Read more about DFYN</TYPE.white>
+                <TYPE.white fontSize={14}>Read more about Dfyn Farms Phase 2</TYPE.white>
               </ExternalLink>
             </AutoColumn>
           </CardSection>

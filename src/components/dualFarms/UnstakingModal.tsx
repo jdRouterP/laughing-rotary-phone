@@ -40,6 +40,9 @@ export default function UnstakingModal({ isOpen, onDismiss, stakingInfo }: Staki
 
   const stakingContract = useStakingContract(stakingInfo.stakingRewardAddress)
 
+  const reward0 = stakingInfo?.rewardAddresses[0] || ''
+  const reward1 = stakingInfo?.rewardAddresses[1] || ''
+
   async function onWithdraw() {
     if (stakingContract && stakingInfo?.stakedAmount) {
       setAttempting(true)
@@ -79,15 +82,20 @@ export default function UnstakingModal({ isOpen, onDismiss, stakingInfo }: Staki
               <TYPE.body fontWeight={600} fontSize={36}>
                 {<FormattedCurrencyAmount currencyAmount={stakingInfo.stakedAmount} />}
               </TYPE.body>
-              <TYPE.body>Deposited liquidity:</TYPE.body>
+              <TYPE.body>Deposited liquidity</TYPE.body>
             </AutoColumn>
           )}
           {stakingInfo?.earnedAmount && (
             <AutoColumn justify="center" gap="md">
               <TYPE.body fontWeight={600} fontSize={36}>
                 {<FormattedCurrencyAmount currencyAmount={stakingInfo?.earnedAmount} />}
+                {" "}{reward0?.symbol}
               </TYPE.body>
-              <TYPE.body>Unclaimed DFYN</TYPE.body>
+              <TYPE.body fontWeight={600} fontSize={36}>
+                {<FormattedCurrencyAmount currencyAmount={stakingInfo?.earnedAmount} />}
+                {" "}{reward1?.symbol}
+              </TYPE.body>
+              <TYPE.body>Unclaimed Reward</TYPE.body>
             </AutoColumn>
           )}
           <TYPE.subHeader style={{ textAlign: 'center' }}>

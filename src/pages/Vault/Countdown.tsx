@@ -17,7 +17,6 @@ export function Countdown({ exactEnd, start }: { exactEnd: number, start: number
     // we only need to tick if rewards haven't ended yet
     if (time <= end) {
       const timeout = setTimeout(() => setTime(Math.floor(Date.now() / 1000)), 1000)
-      console.log("timeout", timeout)
       return () => {
         clearTimeout(timeout)
       }

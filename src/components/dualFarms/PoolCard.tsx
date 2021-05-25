@@ -161,7 +161,7 @@ export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) 
           <TYPE.white>
             {stakingInfo
               ? stakingInfo.active
-                ? `${stakingInfo.totalRewardRate
+                ? `${stakingInfo.totalRewardRateTwo
                   ?.multiply(BIG_INT_SECONDS_IN_DAY)
                   ?.toFixed(0, { groupSeparator: ',' })} ${reward1?.symbol} / day`
                 : `{0 ${reward1?.symbol} / day}`
@@ -190,8 +190,20 @@ export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) 
                 ? stakingInfo.active
                   ? `${stakingInfo.rewardRate
                     ?.multiply(BIG_INT_SECONDS_IN_DAY)
-                    ?.toSignificant(4, { groupSeparator: ',' })} DFYN / day`
-                  : '0 DFYN / day'
+                    ?.toSignificant(4, { groupSeparator: ',' })} ${reward0?.symbol} / day`
+                  : `0 ${reward0?.symbol} / day`
+                : '-'}
+            </TYPE.black>
+            <TYPE.black style={{ textAlign: 'right' }} color={'white'} fontWeight={500}>
+              <span role="img" aria-label="wizard-icon" style={{ marginRight: '0.5rem' }}>
+                ⚡
+              </span>
+              {stakingInfo
+                ? stakingInfo.active
+                  ? `${stakingInfo.rewardRate
+                    ?.multiply(BIG_INT_SECONDS_IN_DAY)
+                    ?.toSignificant(4, { groupSeparator: ',' })} ${reward1?.symbol} / day`
+                  : `0 ${reward1?.symbol} / day`
                 : '-'}
             </TYPE.black>
           </BottomSection>

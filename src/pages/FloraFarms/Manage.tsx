@@ -32,6 +32,7 @@ import useUSDCPrice from '../../utils/useUSDCPrice'
 import { BIG_INT_ZERO, BIG_INT_SECONDS_IN_DAY } from '../../constants'
 import { Countdown } from './Countdown'
 import Toggle from 'components/Toggle'
+import QuestionHelper from 'components/QuestionHelper'
 
 const PageWrapper = styled(AutoColumn)`
   max-width: 640px;
@@ -113,7 +114,7 @@ export default function Manage({
   const [showUnstakingModal, setShowUnstakingModal] = useState(false)
   const [showClaimRewardModal, setShowClaimRewardModal] = useState(false)
   const [showConfirmation, setShowConfirmation] = useState(false)
-  const [vestingMode, setVestingMode] = useState(stakingInfo?.userVestingInfo?.hasOptForVesting ?? false)
+  const [vestingMode, setVestingMode] = useState(true)
 
   // fade cards if nothing staked or nothing earned yet
   const disableTop = !stakingInfo?.stakedAmount || stakingInfo.stakedAmount.equalTo(JSBI.BigInt(0))
@@ -245,15 +246,18 @@ export default function Manage({
           <TYPE.mediumHeader style={{ margin: 0 }}>
             {stakingInfo.userVestingInfo.hasSetConfig ?
               stakingInfo.userVestingInfo.hasOptForVesting ? "Your reward will get vested" : "You can claim 50% of reward, rest will be burned!"
-              : "⚠️ You have not set your Vesting config yet!"}
+              : "Your reward will get vested!"}
           </TYPE.mediumHeader>
-          <Toggle
-            id="toggle-vesting-mode-button"
-            isActive={vestingMode}
-            toggle={
-              () => { setShowConfirmation(!showConfirmation) }
-            }
-          />
+          <>
+            <QuestionHelper text="This button will toggle the vesting nature of the rewards. The final value of the toggled selection will determine whether the rewards will be linearly vested or immediately claimed (after 50% burn)." />
+            <Toggle
+              id="toggle-vesting-mode-button"
+              isActive={vestingMode}
+              toggle={
+                () => { setShowConfirmation(!showConfirmation) }
+              }
+            />
+          </>
         </RowBetween>
       }
 
@@ -370,7 +374,7 @@ export default function Manage({
           <span role="img" aria-label="wizard-icon" style={{ marginRight: '8px' }}>
             ⭐️
           </span>
-          {`You can claim 20% of your DFYN token rewards after the farming program ends, and the remaining will be released 20% every other month!`}
+          {`You can claim 25% of your DFYN token rewards after the farming program ends, and the remaining will be released 25% every other two months!`}
         </TYPE.main>
 
         {!showAddLiquidityButton && (

@@ -277,21 +277,23 @@ export default function Manage({
             <AutoColumn gap="sm">
               <RowBetween>
                 <div>
-                  <TYPE.black>Your unclaimed DFYN</TYPE.black>
+                  <TYPE.black>Your unclaimed Rewards</TYPE.black>
                 </div>
-                {stakingInfo?.earnedAmount && JSBI.notEqual(BIG_INT_ZERO, stakingInfo?.earnedAmount?.raw) && (
-                  <ButtonEmpty
-                    padding="8px"
-                    borderRadius="8px"
-                    width="fit-content"
-                    onClick={() => setShowClaimRewardModal(true)}
-                  >
-                    Claim
-                  </ButtonEmpty>
-                )}
+                {
+                  stakingInfo?.earnedAmount && JSBI.notEqual(BIG_INT_ZERO, stakingInfo?.earnedAmount?.raw) && (
+                    <ButtonEmpty
+                      padding="8px"
+                      borderRadius="8px"
+                      width="fit-content"
+                      onClick={() => setShowClaimRewardModal(true)}
+                    >
+                      Claim
+                    </ButtonEmpty>
+                  )
+                }
               </RowBetween>
               <RowBetween style={{ alignItems: 'baseline' }}>
-                <TYPE.largeHeader fontSize={36} fontWeight={600}>
+                <TYPE.largeHeader fontSize={24} fontWeight={600}>
                   <CountUp
                     key={countUpAmount}
                     isCounting
@@ -301,6 +303,18 @@ export default function Manage({
                     thousandsSeparator={','}
                     duration={1}
                   />
+                  {" "}{stakingInfo?.rewardAddresses[0].symbol}
+                  <br />
+                  <CountUp
+                    key={234}
+                    isCounting
+                    decimalPlaces={4}
+                    start={parseFloat(countUpAmountPrevious)}
+                    end={parseFloat(countUpAmount)}
+                    thousandsSeparator={','}
+                    duration={1}
+                  />
+                  {" "}{stakingInfo?.rewardAddresses[1].symbol}
                 </TYPE.largeHeader>
                 <TYPE.black fontSize={16} fontWeight={500}>
                   <span role="img" aria-label="wizard-icon" style={{ marginRight: '8px ' }}>

@@ -63,14 +63,14 @@ export default function Earn() {
           <CardSection>
             <AutoColumn gap="md">
               <RowBetween>
-                <TYPE.white fontWeight={600}>Pre-staking pools</TYPE.white>
+                <TYPE.white fontWeight={600}>Popular Farms</TYPE.white>
               </RowBetween>
               <RowBetween>
                 <TYPE.white fontSize={14}> Deposit your Liquidity Provider tokens to receive DFYN with insane APR.</TYPE.white>
               </RowBetween>
               <RowBetween>
                 <TYPE.white fontSize={14}>
-                  A total of 5.6M DFYN tokens will be distributed as rewards for this program. 20% of the DFYN token rewards can be claimed after two weeks from the starting date of the program. Remaining rewards will be released 20% every other month.
+                  A total of 4.875 M DFYN tokens will be distributed as rewards for this program. 25% of the DFYN token rewards can be claimed after farming ends. The remaining rewards will be released 25% every 2 months unless the user decides to claim all tokens instantly by agreeing to burn 50% tokens.
                   </TYPE.white>
 
 
@@ -91,7 +91,7 @@ export default function Earn() {
 
       <AutoColumn gap="lg" style={{ width: '100%', maxWidth: '720px' }}>
         <DataRow style={{ alignItems: 'baseline' }}>
-          <TYPE.mediumHeader style={{ marginTop: '0.5rem' }}>Pre-staking pools</TYPE.mediumHeader>
+          <TYPE.mediumHeader style={{ marginTop: '0.5rem' }}>Popular Farms</TYPE.mediumHeader>
           <Countdown exactEnd={stakingInfos?.[0]?.periodFinish} />
         </DataRow>
 

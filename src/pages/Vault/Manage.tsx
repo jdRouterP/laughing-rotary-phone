@@ -138,10 +138,10 @@ export default function Manage({
         </PoolData>
         <PoolData>
           <AutoColumn gap="sm">
-            <TYPE.body style={{ margin: 0 }}>Interest Rate</TYPE.body>
+            <TYPE.body style={{ margin: 0 }}>APR</TYPE.body>
             <TYPE.body fontSize={24} fontWeight={500}>{`${stakingInfo
               ? stakingInfo.active
-                ? `${stakingInfo.interestRate - 100}`
+                ? `${(stakingInfo.interestRate - 100) * stakingInfo.multiplier}`
                 : '0'
               : '0'
               }%`}</TYPE.body>
@@ -288,14 +288,14 @@ export default function Manage({
           <span role="img" aria-label="wizard-icon" style={{ marginRight: '8px' }}>
             ⭐️
           </span>
-          When you withdraw, the contract will automagically claim DFYN on your behalf!
+          {`Tokens staked and rewards can be linearly claimed over a period of ${stakingInfo ? stakingInfo.vesting / (60 * 60 * 24) : 0}  days.`}
         </TYPE.main>
 
         {!showAddLiquidityButton && (
           <DataRow style={{ marginBottom: '1rem' }}>
             {stakingInfo && stakingInfo.active && (
               <ButtonPrimary padding="8px" borderRadius="8px" width="160px" onClick={handleDepositClick}>
-                {stakingInfo?.stakedAmount?.greaterThan(JSBI.BigInt(0)) ? 'Deposit' : 'Deposit DFYN LP Tokens'}
+                {stakingInfo?.stakedAmount?.greaterThan(JSBI.BigInt(0)) ? 'Deposit' : 'Deposit DFYN'}
               </ButtonPrimary>
             )}
 
@@ -314,7 +314,7 @@ export default function Manage({
           </DataRow>
         )}
         {stakingInfo && (
-          <TYPE.main>{stakingInfo?.vaultLimit?.toSignificant(6, { groupSeparator: ',' })} DFYN Vault Limit</TYPE.main>
+          <TYPE.main>{stakingInfo?.vaultLimit?.subtract(stakingInfo?.totalStakedAmount).toSignificant(6, { groupSeparator: ',' })} DFYN Available Limit</TYPE.main>
         )}
       </PositionInfo>
     </PageWrapper>

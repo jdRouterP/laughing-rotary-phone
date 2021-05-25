@@ -47,7 +47,7 @@ export default function UnstakingModal({ isOpen, onDismiss, stakingInfo }: Staki
         .claim({ gasLimit: 300000 })
         .then((response: TransactionResponse) => {
           addTransaction(response, {
-            summary: `Withdraw deposited liquidity`
+            summary: `Withdraw deposited tokens`
           })
           setHash(response.hash)
         })
@@ -91,7 +91,7 @@ export default function UnstakingModal({ isOpen, onDismiss, stakingInfo }: Staki
             </AutoColumn>
           )}
           <TYPE.subHeader style={{ textAlign: 'center' }}>
-            When you withdraw, your DFYN is claimed and your liquidity is removed from the mining pool.
+            Both the amounts,
           </TYPE.subHeader>
           <ButtonError disabled={!!error} error={!!error && !!stakingInfo?.stakedAmount} onClick={onWithdraw}>
             {error ?? 'Withdraw & Claim'}

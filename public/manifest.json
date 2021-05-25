@@ -10,7 +10,7 @@
       "purpose": "any maskable"
     },
     {
-      "src": "./images/512x512_App_Icon.png",
+      "src": "./images/192x192_App_Icon.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"

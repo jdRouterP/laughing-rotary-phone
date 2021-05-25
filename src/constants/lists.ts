@@ -13,11 +13,11 @@
 // const CMC_STABLECOIN = 'stablecoin.cmc.eth'
 // const KLEROS_LIST = 't2crtokens.eth'
 // const GEMINI_LIST = 'https://www.gemini.com/uniswap/manifest.json'
-const BA_LIST = 'https://raw.githubusercontent.com/The-Blockchain-Association/sec-notice-list/master/ba-sec-list.json'
+//const BA_LIST = 'https://raw.githubusercontent.com/The-Blockchain-Association/sec-notice-list/master/ba-sec-list.json'
 
 const CUSTOM_LIST = 'https://raw.githubusercontent.com/dfyn/new-host/main/list-token.tokenlist.json';
 
-export const UNSUPPORTED_LIST_URLS: string[] = [BA_LIST]
+export const UNSUPPORTED_LIST_URLS: string[] = []
 
 // default lists to be 'active' aka searched across
 export const DEFAULT_ACTIVE_LIST_URLS: string[] = [CUSTOM_LIST]

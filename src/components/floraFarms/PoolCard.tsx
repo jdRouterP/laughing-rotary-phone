@@ -155,7 +155,7 @@ export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) 
         </RowBetween>
         <RowBetween>
           <TYPE.white> APR</TYPE.white>
-          <TYPE.white>{`${apr?.toFixed(2)}%`}</TYPE.white>
+          <TYPE.white>{`${apr ? apr?.toFixed(2) : 0}%`}</TYPE.white>
         </RowBetween>
       </StatContainer>
 
