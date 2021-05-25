@@ -1,11 +1,12 @@
 import { ChainId, CurrencyAmount, JSBI, Token, TokenAmount, Pair } from '@uniswap/sdk'
 import { useMemo } from 'react'
-import { UNI, ROUTE, REWARD_TOKENS, EMPTY, DFYN } from '../../constants'
+import { UNI, ROUTE, REWARD_TOKENS, EMPTY, DFYN, USDC } from '../../constants'
 import { STAKING_REWARDS_DUAL_FARMS_INTERFACE } from '../../constants/abis/staking-rewards-dual-farms'
 import { useActiveWeb3React } from '../../hooks'
 import { NEVER_RELOAD, useMultipleContractSingleData } from '../multicall/hooks'
 import { tryParseAmount } from '../swap/hooks'
 import useCurrentBlockTimestamp from 'hooks/useCurrentBlockTimestamp'
+import { usePair } from 'data/Reserves'
 
 export const STAKING_GENESIS = 1621962000
 
@@ -51,6 +52,8 @@ export interface StakingInfo {
   // equivalent to percent of total supply * reward rate
   rewardRate: TokenAmount
   rewardRateTwo: TokenAmount
+  dfynPrice: Number
+  routePrice: Number
   // when the period ends
   periodFinish: Date | undefined
   // if pool is active
@@ -67,7 +70,10 @@ export interface StakingInfo {
 // gets the staking info from the network for the active chain id
 export function useStakingInfo(pairToFilterBy?: Pair | null): StakingInfo[] {
   const { chainId, account } = useActiveWeb3React()
-
+  const [, dfynUsdcPair] = usePair(USDC, DFYN);
+  const [, routeUsdcPair] = usePair(USDC, ROUTE);
+  const dfynPrice = Number(dfynUsdcPair?.priceOf(DFYN)?.toSignificant(6))
+  const routePrice = Number(routeUsdcPair?.priceOf(ROUTE)?.toSignificant(6))
   // detect if staking is ended
   const currentBlockTimestamp = useCurrentBlockTimestamp()
 
@@ -207,6 +213,8 @@ export function useStakingInfo(pairToFilterBy?: Pair | null): StakingInfo[] {
           totalRewardRate: rewardRateTokenOne,
           totalRewardRateTwo: rewardRateTokenTwo,
           stakedAmount: stakedAmount,
+          dfynPrice,
+          routePrice,
           totalStakedAmount: totalStakedAmount,
           getHypotheticalRewardRate,
           active

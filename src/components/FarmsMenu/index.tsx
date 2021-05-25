@@ -137,8 +137,8 @@ export default function FarmsMenu() {
 
       {open && (
         <MenuFlyout>
-          <StyledNavLink id={`stake-nav-link`} to={'/dfyn'}>
-            Pre-Staking Farms
+          <StyledNavLink id={`f-farms-nav-link`} to={'/flora-farms'}>
+            Popular Farms
           </StyledNavLink>
           <StyledNavLink id={`d-farms-nav-link`} to={'/dual-farms'}>
             Dual Farms
@@ -146,8 +146,8 @@ export default function FarmsMenu() {
           <StyledNavLink id={`stake-nav-link`} to={'/vault'}>
             Single-Asset Vault
           </StyledNavLink>
-          <StyledNavLink id={`f-farms-nav-link`} to={'/flora-farms'}>
-            Popular Farms
+          <StyledNavLink id={`stake-nav-link`} to={'/dfyn'}>
+            Pre-Staking Farms
           </StyledNavLink>
           {/* <StyledNavLink id={`v-farms-nav-link`} to={'/v-farms'}>
             Vanilla Farms

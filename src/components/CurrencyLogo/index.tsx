@@ -32,6 +32,9 @@ export const getTokenLogoURL = (address: string) => {
   if (address?.toLowerCase() === '0x16eccfdbb4ee1a85a33f3a9b21175cd7ae753db4') {
     uri = 'https://router-protocol.s3-ap-southeast-1.amazonaws.com/route+token+200x200-19.png'
   }
+  if (address?.toLowerCase() === '0xC168E40227E4ebD8C1caE80F7a55a4F0e6D66C97') {
+    uri = 'https://raw.githubusercontent.com/dfyn/assets/main/DFYN_logo.png'
+  }
 
   if (address?.toLowerCase() === '0x831753dd7087cac61ab5644b308642cc1c33dc13') {
     uri = 'https://raw.githubusercontent.com/sameepsi/quickswap-interface/master/public/favicon.jpeg'

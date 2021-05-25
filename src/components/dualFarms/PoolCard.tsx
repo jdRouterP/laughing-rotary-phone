@@ -74,7 +74,6 @@ export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) 
 
   const reward0 = stakingInfo?.rewardAddresses[0] || ''
   const reward1 = stakingInfo?.rewardAddresses[1] || ''
-  console.log(reward0, reward1)
   const currency0 = unwrappedToken(token0)
   const currency1 = unwrappedToken(token1)
   const baseTokenCurrency = unwrappedToken(stakingInfo.baseToken);
@@ -109,14 +108,23 @@ export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) 
 
 
 
+
   let USDPrice = useUSDCPrice(baseToken)
 
   const valueOfTotalStakedAmountInUSDC = valueOfTotalStakedAmountInBaseToken && USDPrice?.quote(valueOfTotalStakedAmountInBaseToken)
 
-  const rate = stakingInfo?.totalRewardRate?.multiply(BIG_INT_SECONDS_IN_DAY).toFixed(5);
+  const rateOne = stakingInfo?.totalRewardRate?.multiply(BIG_INT_SECONDS_IN_DAY).toFixed(5);
+  const rateTwo = stakingInfo?.totalRewardRateTwo?.multiply(BIG_INT_SECONDS_IN_DAY).toFixed(5);
   //@ts-ignore
-  const valueOfDfynGivenPerYear: any = parseFloat(rate) * stakingInfo?.dfynPrice * 365;
-  // const apr = valueOfTotalStakedAmountInUSDC && valueOfDfynGivenPerYear / Number(valueOfTotalStakedAmountInUSDC?.toSignificant(6)) * 100;
+  const valueOfToken1GivenPerYear: any = parseFloat(rateOne) * stakingInfo?.routePrice * 365
+  //@ts-ignore
+  const valueOfToken2GivenPerYear: any = parseFloat(rateTwo) * stakingInfo?.dfynPrice * 365
+  const apr = valueOfTotalStakedAmountInUSDC && (valueOfToken1GivenPerYear + valueOfToken2GivenPerYear) / Number(valueOfTotalStakedAmountInUSDC?.toSignificant(6)) * 100;
+  console.log("APRR", valueOfTotalStakedAmountInUSDC)
+  console.log("Token1", valueOfToken1GivenPerYear, stakingInfo?.dfynPrice)
+  console.log("Token2", valueOfToken2GivenPerYear, stakingInfo?.routePrice)
+  console.log("RATE1", rateOne)
+  console.log("RATE2", rateTwo)
   return (
     <Wrapper showBackground={isStaking} bgColor={backgroundColor}>
       <CardBGImage desaturate />
@@ -168,10 +176,10 @@ export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) 
               : '-'}
           </TYPE.white>
         </RowBetween>
-        {/* <RowBetween>
+        <RowBetween>
           <TYPE.white> APR</TYPE.white>
           <TYPE.white>{`${apr ? apr?.toFixed(2) : 0}%`}</TYPE.white>
-        </RowBetween> */}
+        </RowBetween>
       </StatContainer>
 
       {isStaking && (

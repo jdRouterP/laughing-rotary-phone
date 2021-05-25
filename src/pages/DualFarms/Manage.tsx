@@ -135,7 +135,9 @@ export default function Manage({
   }
 
   const countUpAmount = stakingInfo?.earnedAmount?.toFixed(6) ?? '0'
+  const countUpAmountTwo = stakingInfo?.earnedAmountTwo?.toFixed(6) ?? '0'
   const countUpAmountPrevious = usePrevious(countUpAmount) ?? '0'
+  const countUpAmountTwoPrevious = usePrevious(countUpAmountTwo) ?? '0'
 
   // get the USD value of staked WETH
   const USDPrice = useUSDCPrice(WETH)
@@ -309,8 +311,8 @@ export default function Manage({
                     key={234}
                     isCounting
                     decimalPlaces={4}
-                    start={parseFloat(countUpAmountPrevious)}
-                    end={parseFloat(countUpAmount)}
+                    start={parseFloat(countUpAmountTwoPrevious)}
+                    end={parseFloat(countUpAmountTwo)}
                     thousandsSeparator={','}
                     duration={1}
                   />
