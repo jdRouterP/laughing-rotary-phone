@@ -12,7 +12,7 @@ import { TYPE } from '../../theme'
 
 import { RowBetween } from '../../components/Row'
 import { CardSection, DataCard, CardNoise, CardBGImage } from '../../components/dualFarms/styled'
-import { ButtonPrimary, ButtonEmpty } from '../../components/Button'
+import { ButtonPrimary } from '../../components/Button'
 import StakingModal from '../../components/dualFarms/StakingModal'
 import { useStakingInfo } from '../../state/dual-stake/hooks'
 import UnstakingModal from '../../components/dualFarms/UnstakingModal'
@@ -283,14 +283,14 @@ export default function Manage({
                 </div>
                 {
                   stakingInfo?.earnedAmount && JSBI.notEqual(BIG_INT_ZERO, stakingInfo?.earnedAmount?.raw) && (
-                    <ButtonEmpty
+                    <ButtonPrimary
                       padding="8px"
                       borderRadius="8px"
                       width="fit-content"
                       onClick={() => setShowClaimRewardModal(true)}
                     >
                       Claim
-                    </ButtonEmpty>
+                    </ButtonPrimary>
                   )
                 }
               </RowBetween>

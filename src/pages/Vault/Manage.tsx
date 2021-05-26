@@ -1,13 +1,13 @@
 import React, { useCallback, useState } from 'react'
 import { AutoColumn } from '../../components/Column'
 import styled from 'styled-components'
-import { Link } from 'react-router-dom'
+// import { Link } from 'react-router-dom'
 
 import { JSBI } from '@uniswap/sdk'
 import { RouteComponentProps } from 'react-router-dom'
 // import DoubleCurrencyLogo from '../../components/DoubleLogo'
 import { useWalletModalToggle } from '../../state/application/hooks'
-import { TYPE } from '../../theme'
+import { ExternalLink, TYPE } from '../../theme'
 
 import { RowBetween } from '../../components/Row'
 import { CardSection, DataCard, CardNoise, CardBGImage } from '../../components/vanillaFarms/styled'
@@ -110,6 +110,7 @@ export default function Manage({
 
   const toggleWalletModal = useWalletModalToggle()
 
+  //@ts-ignore
   const handleDepositClick = useCallback(() => {
     if (account) {
       setShowStakingModal(true)
@@ -131,7 +132,7 @@ export default function Manage({
         <PoolData>
           <AutoColumn gap="sm">
             <TYPE.body style={{ margin: 0 }} fontSize={14}>Total Deposits</TYPE.body>
-            <TYPE.body fontSize={24} fontWeight={500}>
+            <TYPE.body fontSize={22} fontWeight={500}>
               {stakingInfo ? `${stakingInfo.totalStakedAmount.toFixed(0, { groupSeparator: ',' })} DFYN` : "0 DFYN"}
             </TYPE.body>
           </AutoColumn>
@@ -162,7 +163,7 @@ export default function Manage({
         </PoolData>
       </DataRow>
 
-      {showAddLiquidityButton && (
+      {/* {showAddLiquidityButton && (
         <VoteCard>
           <CardBGImage />
           <CardNoise />
@@ -185,6 +186,33 @@ export default function Manage({
               >
                 {`Get DFYN Tokens`}
               </ButtonPrimary>
+            </AutoColumn>
+          </CardSection>
+          <CardBGImage />
+          <CardNoise />
+        </VoteCard>
+      )} */}
+      {showAddLiquidityButton && (
+        <VoteCard>
+          <CardBGImage />
+          <CardNoise />
+          <CardSection>
+            <AutoColumn gap="md">
+              <RowBetween>
+                <TYPE.white fontWeight={600}>Vault limit reached!</TYPE.white>
+              </RowBetween>
+              <RowBetween style={{ marginBottom: '1rem' }}>
+                <TYPE.white fontSize={14}>
+                  {`Checkout our new farms!`}
+                </TYPE.white>
+              </RowBetween>
+              <ExternalLink
+                style={{ color: 'white', textDecoration: 'underline' }}
+                href="https://dfyn-network.medium.com/introducing-dfyn-yield-farming-phase-2-7686281dd93"
+                target="_blank"
+              >
+                <TYPE.white fontSize={14}>Read more about Dfyn Farms Phase 2</TYPE.white>
+              </ExternalLink>
             </AutoColumn>
           </CardSection>
           <CardBGImage />
@@ -293,11 +321,11 @@ export default function Manage({
 
         {!showAddLiquidityButton && (
           <DataRow style={{ marginBottom: '1rem' }}>
-            {stakingInfo && stakingInfo.active && (
+            {/* {stakingInfo && stakingInfo.active && (
               <ButtonPrimary padding="8px" borderRadius="8px" width="160px" onClick={handleDepositClick}>
                 {stakingInfo?.stakedAmount?.greaterThan(JSBI.BigInt(0)) ? 'Deposit' : 'Deposit DFYN'}
               </ButtonPrimary>
-            )}
+            )} */}
 
             {stakingInfo?.earnedAmount && JSBI.notEqual(BIG_INT_ZERO, stakingInfo?.earnedAmount?.raw) && (
               <>

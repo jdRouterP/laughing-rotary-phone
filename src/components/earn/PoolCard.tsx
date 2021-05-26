@@ -127,7 +127,7 @@ export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) 
 
         <StyledInternalLink to={`/dfyn/${currencyId(currency0)}/${currencyId(currency1)}`} style={{ width: '100%' }}>
           <ButtonPrimary padding="8px" borderRadius="8px">
-            {isStaking ? 'Manage' : 'Deposit'}
+            {'Manage'}
           </ButtonPrimary>
         </StyledInternalLink>
       </TopSection>

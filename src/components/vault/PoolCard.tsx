@@ -83,7 +83,7 @@ export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) 
 
         <StyledInternalLink to={`/vault/${stakingInfo?.vaultAddress}`} style={{ width: '100%' }}>
           <ButtonPrimary padding="8px" borderRadius="8px">
-            {isStaking ? 'Manage' : 'Deposit'}
+            {'Manage'}
           </ButtonPrimary>
         </StyledInternalLink>
       </TopSection>

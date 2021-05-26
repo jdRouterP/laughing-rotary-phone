@@ -1,18 +1,17 @@
 import React, { useCallback, useState } from 'react'
 import { AutoColumn } from '../../components/Column'
 import styled from 'styled-components'
-import { Link } from 'react-router-dom'
 
 import { JSBI, TokenAmount, ETHER } from '@uniswap/sdk'
 import { RouteComponentProps } from 'react-router-dom'
 import DoubleCurrencyLogo from '../../components/DoubleLogo'
 import { useCurrency } from '../../hooks/Tokens'
 import { useWalletModalToggle } from '../../state/application/hooks'
-import { TYPE } from '../../theme'
+import { ExternalLink, TYPE } from '../../theme'
 
 import { RowBetween } from '../../components/Row'
 import { CardSection, DataCard, CardNoise, CardBGImage } from '../../components/earn/styled'
-import { ButtonPrimary, ButtonEmpty } from '../../components/Button'
+import { ButtonPrimary } from '../../components/Button'
 import StakingModal from '../../components/earn/StakingModal'
 import { useStakingInfo } from '../../state/stake/hooks'
 import UnstakingModal from '../../components/earn/UnstakingModal'
@@ -23,7 +22,6 @@ import { useColor } from '../../hooks/useColor'
 import { CountUp } from 'use-count-up'
 
 import { wrappedCurrency } from '../../utils/wrappedCurrency'
-import { currencyId } from '../../utils/currencyId'
 import { useTotalSupply } from '../../data/TotalSupply'
 import { usePair } from '../../data/Reserves'
 import usePrevious from '../../hooks/usePrevious'
@@ -213,22 +211,20 @@ export default function Manage({
           <CardSection>
             <AutoColumn gap="md">
               <RowBetween>
-                <TYPE.white fontWeight={600}>Step 1. Get DFYN Liquidity tokens</TYPE.white>
+                <TYPE.white fontWeight={600}>Pre-staking pools are ended!</TYPE.white>
               </RowBetween>
               <RowBetween style={{ marginBottom: '1rem' }}>
                 <TYPE.white fontSize={14}>
-                  {`DFYN LP tokens are required. Once you've added liquidity to the ${currencyA?.symbol}-${currencyB?.symbol} pool you can stake your liquidity tokens on this page.`}
+                  {`Checkout our new farms!`}
                 </TYPE.white>
               </RowBetween>
-              <ButtonPrimary
-                padding="8px"
-                borderRadius="8px"
-                width={'fit-content'}
-                as={Link}
-                to={`/add/${currencyA && currencyId(currencyA)}/${currencyB && currencyId(currencyB)}`}
+              <ExternalLink
+                style={{ color: 'white', textDecoration: 'underline' }}
+                href="https://dfyn-network.medium.com/introducing-dfyn-yield-farming-phase-2-7686281dd93"
+                target="_blank"
               >
-                {`Add ${currencyA?.symbol}-${currencyB?.symbol} liquidity`}
-              </ButtonPrimary>
+                <TYPE.white fontSize={14}>Read more about Dfyn Farms Phase 2</TYPE.white>
+              </ExternalLink>
             </AutoColumn>
           </CardSection>
           <CardBGImage />
@@ -257,7 +253,7 @@ export default function Manage({
         </>
       )}
 
-      <PositionInfo gap="lg" justify="center" dim={showAddLiquidityButton}>
+      <PositionInfo gap="lg" justify="center" dim={!stakingInfo?.ableToClaim}>
         <BottomSection gap="lg" justify="center">
           <StyledDataCard disabled={disableTop} bgColor={backgroundColor} showBackground={!showAddLiquidityButton}>
             <CardSection>
@@ -290,14 +286,14 @@ export default function Manage({
                   <div hidden={stakingInfo?.ableToClaim}>
                     <TYPE.black>{<Countdown showMessage={false} exactEnd={stakingInfo?.unlockAt} />}</TYPE.black>
                   </div>
-                  {stakingInfo?.ableToClaim && <ButtonEmpty
-                    padding="8px"
+                  {stakingInfo?.ableToClaim && <ButtonPrimary
+                    padding="5px"
                     borderRadius="8px"
                     width="fit-content"
                     onClick={() => setShowClaimRewardModal(true)}
                   >
                     Claim
-                  </ButtonEmpty>}
+                  </ButtonPrimary>}
                 </>)}
               </RowBetween>
               <RowBetween style={{ alignItems: 'baseline' }}>

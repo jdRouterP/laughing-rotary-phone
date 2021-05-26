@@ -84,8 +84,11 @@ export default function Vault() {
       </TopSection>
 
       <AutoColumn gap="lg" style={{ width: '100%', maxWidth: '720px' }}>
+        <RowBetween>
+          <TYPE.white fontSize={24} fontWeight={600}> Vaults are full now, check out our new Farms!</TYPE.white>
+        </RowBetween>
         <DataRow style={{ alignItems: 'baseline' }}>
-          <TYPE.mediumHeader style={{ marginTop: '0.5rem' }}>Participating vaults</TYPE.mediumHeader>
+          <TYPE.mediumHeader fontSize={16} style={{ marginTop: '0.5rem' }}>Participating vaults</TYPE.mediumHeader>
           {/* <Countdown exactEnd={stakingInfos?.[0]?.periodFinish} /> */}
         </DataRow>
 

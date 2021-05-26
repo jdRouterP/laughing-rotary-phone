@@ -12,7 +12,7 @@ import { TYPE } from '../../theme'
 
 import { RowBetween } from '../../components/Row'
 import { CardSection, DataCard, CardNoise, CardBGImage } from '../../components/vanillaFarms/styled'
-import { ButtonPrimary, ButtonEmpty } from '../../components/Button'
+import { ButtonPrimary } from '../../components/Button'
 import StakingModal from '../../components/vanillaFarms/StakingModal'
 import { useStakingInfo } from '../../state/vanilla-stake/hooks'
 import UnstakingModal from '../../components/vanillaFarms/UnstakingModal'
@@ -268,14 +268,14 @@ export default function Manage({
                   <TYPE.black>Your unclaimed DFYN</TYPE.black>
                 </div>
                 {stakingInfo?.earnedAmount && JSBI.notEqual(BIG_INT_ZERO, stakingInfo?.earnedAmount?.raw) && (
-                  <ButtonEmpty
+                  <ButtonPrimary
                     padding="8px"
                     borderRadius="8px"
                     width="fit-content"
                     onClick={() => setShowClaimRewardModal(true)}
                   >
                     Claim
-                  </ButtonEmpty>
+                  </ButtonPrimary>
                 )}
               </RowBetween>
               <RowBetween style={{ alignItems: 'baseline' }}>

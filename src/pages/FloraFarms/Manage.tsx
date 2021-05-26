@@ -12,7 +12,7 @@ import { TYPE } from '../../theme'
 
 import { RowBetween } from '../../components/Row'
 import { CardSection, DataCard, CardNoise, CardBGImage } from '../../components/floraFarms/styled'
-import { ButtonPrimary, ButtonEmpty } from '../../components/Button'
+import { ButtonPrimary } from '../../components/Button'
 import StakingModal from '../../components/floraFarms/StakingModal'
 import { useStakingInfo } from '../../state/flora-farms/hooks'
 import UnstakingModal from '../../components/floraFarms/UnstakingModal'
@@ -80,7 +80,16 @@ const VoteCard = styled(DataCard)`
   background: radial-gradient(76.02% 75.41% at 1.84% 0%, #27ae60 0%, #000000 100%);
   overflow: hidden;
 `
+const GaslessModeElement = styled.div`
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
 
+  /* addresses safari's lack of support for "gap" */
+  & > *:not(:first-child) {
+    margin-left: 8px;
+  }
+  `
 const DataRow = styled(RowBetween)`
   justify-content: center;
   gap: 12px;
@@ -243,12 +252,15 @@ export default function Manage({
       {
         stakingInfo &&
         <RowBetween style={{ gap: '12px' }}>
-          <TYPE.mediumHeader style={{ margin: 0 }}>
+          <TYPE.black style={{ margin: 0 }}>
             {stakingInfo.userVestingInfo.hasSetConfig ?
               stakingInfo.userVestingInfo.hasOptForVesting ? "Your reward will get vested" : "You can claim 50% of reward, rest will be burned!"
               : "Your reward will get vested!"}
-          </TYPE.mediumHeader>
-          <>
+          </TYPE.black>
+          <GaslessModeElement>
+            <TYPE.black fontWeight={400} fontSize={14}>
+              Vesting Mode
+            </TYPE.black>
             <QuestionHelper text="This button will toggle the vesting nature of the rewards. The final value of the toggled selection will determine whether the rewards will be linearly vested or immediately claimed (after 50% burn)." />
             <Toggle
               id="toggle-vesting-mode-button"
@@ -257,7 +269,7 @@ export default function Manage({
                 () => { setShowConfirmation(!showConfirmation) }
               }
             />
-          </>
+          </GaslessModeElement>
         </RowBetween>
       }
 
@@ -322,14 +334,14 @@ export default function Manage({
                   <div hidden={stakingInfo?.ableToClaim}>
                     <TYPE.black>{<Countdown showMessage={false} exactEnd={stakingInfo?.unlockAt} />}</TYPE.black>
                   </div>
-                  {stakingInfo?.ableToClaim && <ButtonEmpty
+                  {stakingInfo?.ableToClaim && <ButtonPrimary
                     padding="8px"
                     borderRadius="8px"
                     width="fit-content"
                     onClick={() => setShowClaimRewardModal(true)}
                   >
                     Claim
-                  </ButtonEmpty>}
+                  </ButtonPrimary>}
                 </>)}
               </RowBetween>
               <RowBetween style={{ alignItems: 'baseline' }}>
