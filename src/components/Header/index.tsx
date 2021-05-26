@@ -291,11 +291,11 @@ const StyledExternalLink = styled(ExternalLink).attrs({
 `}
 `
 
-const StyledDocsLink = styled(StyledExternalLink)`
-${({ theme }) => theme.mediaWidth.upToExtraSmall`
-display: inline-block;
-`}
-`
+// const StyledDocsLink = styled(StyledExternalLink)`
+// ${({ theme }) => theme.mediaWidth.upToExtraSmall`
+// display: inline-block;
+// `}
+// `
 
 export const StyledMenuButton = styled.button`
   position: relative;
@@ -397,9 +397,9 @@ export default function Header() {
           <StyledExternalLink id={`stake-nav-link`} href={'https://info.dfyn.network/home/'}>
             Charts <span style={{ fontSize: '11px' }}>↗</span>
           </StyledExternalLink>
-          <StyledDocsLink id={`docs-nav-link`} href={'https://docs.dfyn.network/'}>
+          {/* <StyledDocsLink id={`docs-nav-link`} href={'https://docs.dfyn.network/'}>
             Docs {!mobile && <span style={{ fontSize: '11px' }}>↗</span>}
-          </StyledDocsLink>
+          </StyledDocsLink> */}
           <FarmsMenu />
         </HeaderLinks>
       </HeaderRow>

@@ -1,5 +1,5 @@
 import React, { useRef } from 'react'
-import { Info, PieChart, Send } from 'react-feather'
+import { Info, PieChart, Send, Book } from 'react-feather'
 import styled from 'styled-components'
 import { ReactComponent as MenuIcon } from '../../assets/images/menu.svg'
 // import { useActiveWeb3React } from '../../hooks'
@@ -107,6 +107,10 @@ export default function Menu() {
           <MenuItem id="link" href="https://www.dfyn.network/">
             <Info size={14} />
             About
+          </MenuItem>
+          <MenuItem id="link" href="https://docs.dfyn.network/">
+            <Book size={14} />
+            Docs
           </MenuItem>
           <MenuItem id="link" href="https://t.me/routerprotocol">
             <Send size={14} />
