@@ -4,14 +4,13 @@ import Vibrant from 'node-vibrant'
 import { hex } from 'wcag-contrast'
 import { Token, ChainId } from '@uniswap/sdk'
 import uriToHttp from 'utils/uriToHttp'
+import { getTokenLogoURL } from 'components/CurrencyLogo'
 
 async function getColorFromToken(token: Token): Promise<string | null> {
   if (token.chainId === ChainId.RINKEBY && token.address === '0xc7AD46e0b8a400Bb3C915120d284AafbA8fc4735') {
     return Promise.resolve('#FAAB14')
   }
-
-  const path = `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${token.address}/logo.png`
-
+  const path = getTokenLogoURL(token.address)
   return Vibrant.from(path)
     .getPalette()
     .then(palette => {
@@ -26,7 +25,7 @@ async function getColorFromToken(token: Token): Promise<string | null> {
       }
       return null
     })
-    .catch(() => null)
+    .catch((error)=> null)
 }
 
 async function getColorFromUriPath(uri: string): Promise<string | null> {
