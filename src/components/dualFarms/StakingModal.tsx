@@ -20,6 +20,7 @@ import { wrappedCurrencyAmount } from '../../utils/wrappedCurrency'
 import { TransactionResponse } from '@ethersproject/providers'
 import { useTransactionAdder } from '../../state/transactions/hooks'
 import { LoadingView, SubmittedView } from '../ModalViews'
+import { BIG_INT_SECONDS_IN_DAY } from '../../constants'
 
 const HypotheticalRewardRate = styled.div<{ dim: boolean }>`
   display: flex;
@@ -54,7 +55,7 @@ export default function StakingModal({ isOpen, onDismiss, stakingInfo, userLiqui
   const reward1 = stakingInfo?.rewardAddresses[1] || ''
 
   let hypotheticalRewardRateOne: TokenAmount = new TokenAmount(stakingInfo.rewardRate.token, '0')
-  let hypotheticalRewardRateTwo: TokenAmount = new TokenAmount(stakingInfo.rewardRate.token, '0')
+  let hypotheticalRewardRateTwo: TokenAmount = new TokenAmount(stakingInfo.rewardRateTwo.token, '0')
   if (parsedAmountWrapped?.greaterThan('0')) {
     hypotheticalRewardRateOne = stakingInfo.getHypotheticalRewardRate(
       reward0,
@@ -68,7 +69,7 @@ export default function StakingModal({ isOpen, onDismiss, stakingInfo, userLiqui
       reward1,
       stakingInfo.stakedAmount.add(parsedAmountWrapped),
       stakingInfo.totalStakedAmount.add(parsedAmountWrapped),
-      stakingInfo.totalRewardRate
+      stakingInfo.totalRewardRateTwo
     )
   }
 
@@ -229,12 +230,12 @@ export default function StakingModal({ isOpen, onDismiss, stakingInfo, userLiqui
 
           <HypotheticalRewardRate dim={!hypotheticalRewardRateOne.greaterThan('0')}>
             <div>
-              <TYPE.black fontWeight={600}>Weekly Rewards</TYPE.black>
+              <TYPE.black fontWeight={600}>Daily Rewards</TYPE.black>
             </div>
 
             <TYPE.black>
-              {hypotheticalRewardRateOne.multiply((60 * 60 * 24).toString()).toSignificant(4, { groupSeparator: ',' })}{' '}
-              {reward0?.symbol}{' | '}{hypotheticalRewardRateTwo.multiply((60 * 60 * 24).toString()).toSignificant(4, { groupSeparator: ',' })}{' '}
+              {hypotheticalRewardRateOne.multiply((BIG_INT_SECONDS_IN_DAY).toString()).toSignificant(4, { groupSeparator: ',' })}{' '}
+              {reward0?.symbol}{' | '}{hypotheticalRewardRateTwo.multiply((BIG_INT_SECONDS_IN_DAY).toString()).toSignificant(4, { groupSeparator: ',' })}{' '}
               {reward1?.symbol}
             </TYPE.black>
           </HypotheticalRewardRate>

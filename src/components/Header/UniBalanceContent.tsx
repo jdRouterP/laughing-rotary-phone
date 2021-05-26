@@ -18,6 +18,7 @@ import { RowBetween } from '../Row'
 import { Break, CardBGImage, CardNoise, CardSection, DataCard } from '../earn/styled'
 import { useTotalVaultUniEarned } from 'state/vault/hooks'
 import { useTotalFloraUniEarned } from 'state/flora-farms/hooks'
+import { useTotalDualFarmUniEarned } from 'state/dual-stake/hooks'
 
 const ContentWrapper = styled(AutoColumn)`
   width: 100%;
@@ -48,6 +49,7 @@ export default function UniBalanceContent({ setShowUniBalanceModal }: { setShowU
   const total = useAggregateUniBalance()
   const uniBalance: TokenAmount | undefined = useTokenBalance(account ?? undefined, uni)
   const uniToClaimPreStake: TokenAmount | undefined = useTotalUniEarned()
+  const uniToClaimDualFarms: TokenAmount | undefined = useTotalDualFarmUniEarned()
   const uniToClaimVault: TokenAmount | undefined = useTotalVaultUniEarned()
   const uniToClaimFlora: TokenAmount | undefined = useTotalFloraUniEarned()
 
@@ -93,6 +95,17 @@ export default function UniBalanceContent({ setShowUniBalanceModal }: { setShowU
                   <TYPE.white color="white">Unclaimed Pre-Stake:</TYPE.white>
                   <TYPE.white color="white">
                     {uniToClaimPreStake?.toFixed(4, { groupSeparator: ',' })}{' '}
+                    {/* {uniToClaim && uniToClaim.greaterThan('0') && (
+                      <StyledInternalLink onClick={() => setShowUniBalanceModal(false)} to="/dfyn">
+                        (claim)
+                      </StyledInternalLink>
+                    )} */}
+                  </TYPE.white>
+                </RowBetween>
+                <RowBetween>
+                  <TYPE.white color="white">Unclaimed Dual Farms:</TYPE.white>
+                  <TYPE.white color="white">
+                    {uniToClaimDualFarms?.toFixed(4, { groupSeparator: ',' })}{' '}
                     {/* {uniToClaim && uniToClaim.greaterThan('0') && (
                       <StyledInternalLink onClick={() => setShowUniBalanceModal(false)} to="/dfyn">
                         (claim)
