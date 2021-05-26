@@ -50,7 +50,7 @@ export default function UniBalanceContent({ setShowUniBalanceModal }: { setShowU
   const uniToClaimPreStake: TokenAmount | undefined = useTotalUniEarned()
   const uniToClaimVault: TokenAmount | undefined = useTotalVaultUniEarned()
   const uniToClaimFlora: TokenAmount | undefined = useTotalFloraUniEarned()
-  const uniToClaim: TokenAmount | undefined = uniToClaimPreStake && uniToClaimFlora && uniToClaimVault && uniToClaimPreStake.add(uniToClaimVault).add(uniToClaimFlora).add(uniToClaimPreStake);
+  const uniToClaim: TokenAmount | undefined = uniToClaimPreStake && uniToClaimFlora && uniToClaimVault && uniToClaimPreStake.add(uniToClaimVault).add(uniToClaimFlora)
 
   const uniPrice = useUSDCPrice(uni)
   // const totalSupply: TokenAmount | undefined = useTotalSupply(uni)

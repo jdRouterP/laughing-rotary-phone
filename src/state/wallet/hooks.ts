@@ -9,6 +9,8 @@ import { isAddress } from '../../utils'
 import { useSingleContractMultipleData, useMultipleContractSingleData } from '../multicall/hooks'
 import { useUserUnclaimedAmount } from '../claim/hooks'
 import { useTotalUniEarned } from '../stake/hooks'
+import { useTotalVaultUniEarned } from 'state/vault/hooks'
+import { useTotalFloraUniEarned } from 'state/flora-farms/hooks'
 
 /**
  * Returns a map of the given addresses to their eventually consistent ETH balances.
@@ -22,9 +24,9 @@ export function useETHBalances(
     () =>
       uncheckedAddresses
         ? uncheckedAddresses
-            .map(isAddress)
-            .filter((a): a is string => a !== false)
-            .sort()
+          .map(isAddress)
+          .filter((a): a is string => a !== false)
+          .sort()
         : [],
     [uncheckedAddresses]
   )
@@ -69,13 +71,13 @@ export function useTokenBalancesWithLoadingIndicator(
       () =>
         address && validatedTokens.length > 0
           ? validatedTokens.reduce<{ [tokenAddress: string]: TokenAmount | undefined }>((memo, token, i) => {
-              const value = balances?.[i]?.result?.[0]
-              const amount = value ? JSBI.BigInt(value.toString()) : undefined
-              if (amount) {
-                memo[token.address] = new TokenAmount(token, amount)
-              }
-              return memo
-            }, {})
+            const value = balances?.[i]?.result?.[0]
+            const amount = value ? JSBI.BigInt(value.toString()) : undefined
+            if (amount) {
+              memo[token.address] = new TokenAmount(token, amount)
+            }
+            return memo
+          }, {})
           : {},
       [address, validatedTokens, balances]
     ),
@@ -142,7 +144,10 @@ export function useAggregateUniBalance(): TokenAmount | undefined {
 
   const uniBalance: TokenAmount | undefined = useTokenBalance(account ?? undefined, uni)
   const uniUnclaimed: TokenAmount | undefined = useUserUnclaimedAmount(account)
-  const uniUnHarvested: TokenAmount | undefined = useTotalUniEarned()
+  const uniToClaimPreStake: TokenAmount | undefined = useTotalUniEarned()
+  const uniToClaimVault: TokenAmount | undefined = useTotalVaultUniEarned()
+  const uniToClaimFlora: TokenAmount | undefined = useTotalFloraUniEarned()
+  const uniUnHarvested: TokenAmount | undefined = uniToClaimPreStake && uniToClaimFlora && uniToClaimVault && uniToClaimPreStake.add(uniToClaimVault).add(uniToClaimFlora)
 
   if (!uni) return undefined
 
