@@ -231,7 +231,7 @@ export function useStakingInfo(vaultToFilterBy?: string | null): StakingInfo[] {
   ])
 }
 
-export function useTotalUniEarned(): TokenAmount | undefined {
+export function useTotalVaultUniEarned(): TokenAmount | undefined {
   const { chainId } = useActiveWeb3React()
   const uni = chainId ? UNI[chainId] : undefined
   const stakingInfos = useStakingInfo()

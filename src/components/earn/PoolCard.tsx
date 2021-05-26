@@ -141,7 +141,7 @@ export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) 
               : `${valueOfTotalStakedAmountInBaseToken?.toSignificant(4, { groupSeparator: ',' }) ?? '-'} ETH`}
           </TYPE.white>
         </RowBetween>
-        <RowBetween>
+        {/* <RowBetween>
           <TYPE.white> Pool rate </TYPE.white>
           <TYPE.white>
             {stakingInfo
@@ -152,7 +152,7 @@ export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) 
                 : '0 DFYN / day'
               : '-'}
           </TYPE.white>
-        </RowBetween>
+        </RowBetween> */}
         {/* <RowBetween>
           <TYPE.white> APR</TYPE.white>
           <TYPE.white>{`${apr?.toFixed(2)}%`}</TYPE.white>

@@ -16,6 +16,8 @@ import useUSDCPrice from '../../utils/useUSDCPrice'
 import { AutoColumn } from '../Column'
 import { RowBetween } from '../Row'
 import { Break, CardBGImage, CardNoise, CardSection, DataCard } from '../earn/styled'
+import { useTotalVaultUniEarned } from 'state/vault/hooks'
+import { useTotalFloraUniEarned } from 'state/flora-farms/hooks'
 
 const ContentWrapper = styled(AutoColumn)`
   width: 100%;
@@ -45,7 +47,10 @@ export default function UniBalanceContent({ setShowUniBalanceModal }: { setShowU
 
   const total = useAggregateUniBalance()
   const uniBalance: TokenAmount | undefined = useTokenBalance(account ?? undefined, uni)
-  const uniToClaim: TokenAmount | undefined = useTotalUniEarned()
+  const uniToClaimPreStake: TokenAmount | undefined = useTotalUniEarned()
+  const uniToClaimVault: TokenAmount | undefined = useTotalVaultUniEarned()
+  const uniToClaimFlora: TokenAmount | undefined = useTotalFloraUniEarned()
+  const uniToClaim: TokenAmount | undefined = uniToClaimPreStake && uniToClaimFlora && uniToClaimVault && uniToClaimPreStake.add(uniToClaimVault).add(uniToClaimFlora).add(uniToClaimPreStake);
 
   const uniPrice = useUSDCPrice(uni)
   // const totalSupply: TokenAmount | undefined = useTotalSupply(uni)
