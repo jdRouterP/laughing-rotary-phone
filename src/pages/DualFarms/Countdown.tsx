@@ -1,19 +1,17 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import { STAKING_GENESIS, REWARDS_DURATION_DAYS } from '../../state/dual-stake/hooks'
 import { TYPE } from '../../theme'
 
 const MINUTE = 60
 const HOUR = MINUTE * 60
 const DAY = HOUR * 24
-const REWARDS_DURATION = DAY * REWARDS_DURATION_DAYS
 
-export function Countdown({ exactEnd }: { exactEnd?: Date }) {
+export function Countdown({ exactEnd, start }: { exactEnd: Date | undefined, start: Date | undefined }) {
   // get end/beginning times
-  const end = useMemo(() => (exactEnd ? Math.floor(exactEnd.getTime() / 1000) : STAKING_GENESIS + REWARDS_DURATION), [
+  const end = useMemo(() => (exactEnd ? exactEnd.getTime() / 1000 : 0), [
     exactEnd
   ])
-  const begin = useMemo(() => end - REWARDS_DURATION, [end])
-
+  const begin = useMemo(() => (start ? start.getTime() / 1000 : 0), [start])
+  console.log(end, begin)
   // get current time
   const [time, setTime] = useState(() => Math.floor(Date.now() / 1000))
   useEffect((): (() => void) | void => {
@@ -25,7 +23,7 @@ export function Countdown({ exactEnd }: { exactEnd?: Date }) {
       }
     }
   }, [time, end])
-
+  console.log(end)
   const timeUntilGenesis = begin - time
   const timeUntilEnd = end - time
 
@@ -37,7 +35,7 @@ export function Countdown({ exactEnd }: { exactEnd?: Date }) {
   } else {
     const ongoing = timeUntilEnd >= 0
     if (ongoing) {
-      message = 'Rewards end in'
+      message = 'Vesting end in'
       timeRemaining = timeUntilEnd
     } else {
       message = 'Rewards have ended!'

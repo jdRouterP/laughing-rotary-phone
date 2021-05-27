@@ -7,6 +7,7 @@ import { NEVER_RELOAD, useMultipleContractSingleData } from '../multicall/hooks'
 import { tryParseAmount } from '../swap/hooks'
 import useCurrentBlockTimestamp from 'hooks/useCurrentBlockTimestamp'
 import { usePair } from 'data/Reserves'
+// import { TokenInfoChangeKey } from '@uniswap/token-lists'
 
 export const STAKING_GENESIS = 1622124960
 
@@ -18,6 +19,8 @@ export const STAKING_REWARDS_INFO: {
     tokens: [Token, Token]
     rewardTokens: [Token, Token]
     baseToken?: Token
+    asset?: Token
+    start: number
     stakingRewardAddress: string
   }[]
 } = {
@@ -26,12 +29,16 @@ export const STAKING_REWARDS_INFO: {
       tokens: [ROUTE, DFYN],
       rewardTokens: [ROUTE, DFYN],
       baseToken: DFYN,
+      asset: ROUTE,
+      start: 1622033000,
       stakingRewardAddress: '0xf997c8e2e7e7387C8fd9120280ad9B3db31A5381'
     },
     {
       tokens: [DFYN, ZEE],
       rewardTokens: [DFYN, ZEE],
       baseToken: DFYN,
+      asset: ZEE,
+      start: 1622133000000,
       stakingRewardAddress: '0xfB75d80e141b91535dA513370D4Dd33D0E19d308'
     }
   ]
@@ -49,6 +56,7 @@ export interface StakingInfo {
   baseToken: any
   tokens: [Token, Token]
   rewardAddresses: [Token, Token]
+  assetToken: any
   // the amount of token currently staked, or undefined if no account
   stakedAmount: TokenAmount
   // the amount of reward token earned by the active account, or undefined if no account
@@ -65,6 +73,8 @@ export interface StakingInfo {
   rewardRateTwo: TokenAmount
   dfynPrice: Number
   routePrice: Number
+  zeePrice: Number
+  start: number
   // when the period ends
   periodFinish: Date | undefined
   // if pool is active
@@ -83,8 +93,10 @@ export function useStakingInfo(pairToFilterBy?: Pair | null): StakingInfo[] {
   const { chainId, account } = useActiveWeb3React()
   const [, dfynUsdcPair] = usePair(USDC, DFYN);
   const [, routeUsdcPair] = usePair(USDC, ROUTE);
+  const [, zeeUsdcPair] = usePair(USDC, ZEE);
   const dfynPrice = Number(dfynUsdcPair?.priceOf(DFYN)?.toSignificant(6))
   const routePrice = Number(routeUsdcPair?.priceOf(ROUTE)?.toSignificant(6))
+  const zeePrice = Number(zeeUsdcPair?.priceOf(ZEE)?.toSignificant(6))
   // detect if staking is ended
   const currentBlockTimestamp = useCurrentBlockTimestamp()
 
@@ -107,7 +119,8 @@ export function useStakingInfo(pairToFilterBy?: Pair | null): StakingInfo[] {
 
   const stakingRewardAddress = useMemo(() => info.map(({ stakingRewardAddress }) => stakingRewardAddress), [info])
   const bothRewardToken = useMemo(() => info.map(({ rewardTokens }) => rewardTokens), [info])
-
+  const assetToken = useMemo(() => info.map(({ asset }) => asset), [info])
+  const start = useMemo(() => info.map(({ start }) => start), [info])
   const accountArg = useMemo(() => [account ?? undefined], [account])
 
   // get all the info from the staking rewards contracts
@@ -139,6 +152,7 @@ export function useStakingInfo(pairToFilterBy?: Pair | null): StakingInfo[] {
       const balanceState = balances[index]
       const earnedAmountState = earnedAmounts[index]
       const rewardAddresses = bothRewardToken[index]
+      const startTime = start[index]
       // these get fetched regardless of account
       const totalSupplyState = totalSupplies[index]
       const rewardRateState = rewardRates[index]
@@ -168,14 +182,6 @@ export function useStakingInfo(pairToFilterBy?: Pair | null): StakingInfo[] {
           return memo
         }
 
-        const getTokenByAddress = (address: string) => {
-          const token = REWARD_TOKENS.filter(token => token.address?.toLowerCase() === address?.toLowerCase())
-          if (token.length) {
-            return token[0]
-          } else {
-            return EMPTY;
-          }
-        }
 
         // get the LP token
         const tokens = info[index].tokens
@@ -226,7 +232,10 @@ export function useStakingInfo(pairToFilterBy?: Pair | null): StakingInfo[] {
           totalRewardRateTwo: rewardRateTokenTwo,
           stakedAmount: stakedAmount,
           dfynPrice,
+          start: startTime,
           routePrice,
+          zeePrice,
+          assetToken,
           totalStakedAmount: totalStakedAmount,
           getHypotheticalRewardRate,
           active
@@ -248,20 +257,32 @@ export function useStakingInfo(pairToFilterBy?: Pair | null): StakingInfo[] {
   ])
 }
 
+const getTokenByAddress = (address: string) => {
+  const token = REWARD_TOKENS.filter(token => token.address?.toLowerCase() === address?.toLowerCase())
+  if (token.length) {
+    return token[0]
+  } else {
+    return EMPTY;
+  }
+}
+
 export function useTotalDualFarmUniEarned(): TokenAmount | undefined {
-  const { chainId } = useActiveWeb3React()
-  const uni = chainId ? UNI[chainId] : undefined
+
   const stakingInfos = useStakingInfo()
 
   return useMemo(() => {
-    if (!uni) return undefined
+    if (!DFYN) return undefined
     return (
       stakingInfos?.reduce(
-        (accumulator, stakingInfo) => accumulator.add(stakingInfo.earnedAmountTwo),
-        new TokenAmount(uni, '0')
-      ) ?? new TokenAmount(uni, '0')
+        (accumulator, stakingInfo) => {
+          const index = stakingInfo?.rewardAddresses.indexOf(DFYN)
+          const amount = index === 0 ? stakingInfo?.earnedAmount : stakingInfo.earnedAmountTwo
+          return accumulator.add(amount)
+        },
+        new TokenAmount(DFYN, '0')
+      ) ?? new TokenAmount(DFYN, '0')
     )
-  }, [stakingInfos, uni])
+  }, [stakingInfos, DFYN])
 }
 
 // based on typed value

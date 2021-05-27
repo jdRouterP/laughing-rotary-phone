@@ -14,7 +14,8 @@ import { unwrappedToken } from '../../utils/wrappedCurrency'
 import { useTotalSupply } from '../../data/TotalSupply'
 import { usePair } from '../../data/Reserves'
 import useUSDCPrice from '../../utils/useUSDCPrice'
-import { BIG_INT_SECONDS_IN_DAY, EMPTY } from '../../constants'
+import { BIG_INT_SECONDS_IN_DAY, EMPTY, ROUTE } from '../../constants'
+import { Countdown } from 'pages/DualFarms/Countdown'
 
 const StatContainer = styled.div`
   display: flex;
@@ -116,7 +117,7 @@ export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) 
   const rateOne = stakingInfo?.totalRewardRate?.multiply(BIG_INT_SECONDS_IN_DAY).toFixed(5);
   const rateTwo = stakingInfo?.totalRewardRateTwo?.multiply(BIG_INT_SECONDS_IN_DAY).toFixed(5);
   //@ts-ignore
-  const valueOfToken1GivenPerYear: any = parseFloat(rateOne) * stakingInfo?.routePrice * 365
+  const valueOfToken1GivenPerYear: any = stakingInfo?.assetToken[0] === ROUTE ? parseFloat(rateOne) * stakingInfo?.routePrice * 365 : parseFloat(rateOne) * stakingInfo?.zeePrice * 365
   //@ts-ignore
   const valueOfToken2GivenPerYear: any = parseFloat(rateTwo) * stakingInfo?.dfynPrice * 365
   const apr = valueOfTotalStakedAmountInUSDC && (valueOfToken1GivenPerYear + valueOfToken2GivenPerYear) / Number(valueOfTotalStakedAmountInUSDC?.toSignificant(6)) * 100;
@@ -139,6 +140,9 @@ export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) 
       </TopSection>
 
       <StatContainer>
+        <RowBetween >
+          <Countdown exactEnd={stakingInfo?.periodFinish} start={new Date(stakingInfo?.start)} />
+        </RowBetween>
         <RowBetween>
           <TYPE.white> Total deposited</TYPE.white>
           <TYPE.white>
