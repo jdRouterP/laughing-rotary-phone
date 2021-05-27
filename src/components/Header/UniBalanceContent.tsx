@@ -88,11 +88,15 @@ export default function UniBalanceContent({ setShowUniBalanceModal }: { setShowU
               </AutoColumn>
               <AutoColumn gap="md">
                 <RowBetween>
-                  <TYPE.white color="white">Balance:</TYPE.white>
+                  <TYPE.white fontWeight={600} color="white">Balance:</TYPE.white>
                   <TYPE.white color="white">{uniBalance?.toFixed(2, { groupSeparator: ',' })}</TYPE.white>
                 </RowBetween>
                 <RowBetween>
-                  <TYPE.white color="white">Unclaimed Pre-Stake:</TYPE.white>
+                  <TYPE.white fontWeight={600} color="white">Unclaimed DFYN</TYPE.white>
+                </RowBetween>
+
+                <RowBetween>
+                  <TYPE.white color="white">• Pre-Stake:</TYPE.white>
                   <TYPE.white color="white">
                     {uniToClaimPreStake?.toFixed(4, { groupSeparator: ',' })}{' '}
                     {/* {uniToClaim && uniToClaim.greaterThan('0') && (
@@ -103,18 +107,7 @@ export default function UniBalanceContent({ setShowUniBalanceModal }: { setShowU
                   </TYPE.white>
                 </RowBetween>
                 <RowBetween>
-                  <TYPE.white color="white">Unclaimed Dual Farms:</TYPE.white>
-                  <TYPE.white color="white">
-                    {uniToClaimDualFarms?.toFixed(4, { groupSeparator: ',' })}{' '}
-                    {/* {uniToClaim && uniToClaim.greaterThan('0') && (
-                      <StyledInternalLink onClick={() => setShowUniBalanceModal(false)} to="/dfyn">
-                        (claim)
-                      </StyledInternalLink>
-                    )} */}
-                  </TYPE.white>
-                </RowBetween>
-                <RowBetween>
-                  <TYPE.white color="white">Unclaimed Vault:</TYPE.white>
+                  <TYPE.white color="white">• Vault:</TYPE.white>
                   <TYPE.white color="white">
                     {uniToClaimVault?.toFixed(4, { groupSeparator: ',' })}{' '}
                     {/* {uniToClaim && uniToClaim.greaterThan('0') && (
@@ -125,9 +118,20 @@ export default function UniBalanceContent({ setShowUniBalanceModal }: { setShowU
                   </TYPE.white>
                 </RowBetween>
                 <RowBetween>
-                  <TYPE.white color="white">Unclaimed Popular:</TYPE.white>
+                  <TYPE.white color="white">• Popular Farms:</TYPE.white>
                   <TYPE.white color="white">
                     {uniToClaimFlora?.toFixed(4, { groupSeparator: ',' })}{' '}
+                    {/* {uniToClaim && uniToClaim.greaterThan('0') && (
+                      <StyledInternalLink onClick={() => setShowUniBalanceModal(false)} to="/dfyn">
+                        (claim)
+                      </StyledInternalLink>
+                    )} */}
+                  </TYPE.white>
+                </RowBetween>
+                <RowBetween>
+                  <TYPE.white color="white">• Dual Farms:</TYPE.white>
+                  <TYPE.white color="white">
+                    {uniToClaimDualFarms?.toFixed(4, { groupSeparator: ',' })}{' '}
                     {/* {uniToClaim && uniToClaim.greaterThan('0') && (
                       <StyledInternalLink onClick={() => setShowUniBalanceModal(false)} to="/dfyn">
                         (claim)

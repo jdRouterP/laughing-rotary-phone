@@ -19,7 +19,9 @@ import { usePairs } from '../../data/Reserves'
 import { toV2LiquidityToken, useTrackedTokenPairs } from '../../state/user/hooks'
 import { Dots } from '../../components/swap/styleds'
 import { CardSection, DataCard, CardNoise, CardBGImage } from '../../components/earn/styled'
-import { useStakingInfo } from '../../state/stake/hooks'
+import { useStakingInfo as useFloraStakingInfo } from '../../state/flora-farms/hooks'
+import { useStakingInfo as useDualStakingInfo } from '../../state/dual-stake/hooks'
+import { useStakingInfo as usePreStakingInfo } from '../../state/stake/hooks'
 import { BIG_INT_ZERO } from '../../constants'
 
 const PageWrapper = styled(AutoColumn)`
@@ -110,10 +112,21 @@ export default function Pool() {
   const hasV1Liquidity = useUserHasLiquidityInAllTokens()
 
   // show liquidity even if its deposited in rewards contract
-  const stakingInfo = useStakingInfo()
-  const stakingInfosWithBalance = stakingInfo?.filter(pool => JSBI.greaterThan(pool.stakedAmount.raw, BIG_INT_ZERO))
-  const stakingPairs = usePairs(stakingInfosWithBalance?.map(stakingInfo => stakingInfo.tokens))
-
+  const preStakingInfo = usePreStakingInfo()
+  const preStakingsWithBalance = preStakingInfo?.filter(pool => JSBI.greaterThan(pool.stakedAmount.raw, BIG_INT_ZERO))
+  const dualStakingInfo = useDualStakingInfo()
+  const dualStakingInfosWithBalance = dualStakingInfo?.filter(pool => JSBI.greaterThan(pool.stakedAmount.raw, BIG_INT_ZERO))
+  const floraStakingInfo = useFloraStakingInfo()
+  const floraStakingInfosWithBalance = floraStakingInfo?.filter(pool => JSBI.greaterThan(pool.stakedAmount.raw, BIG_INT_ZERO))
+  //ORDER MATTERS
+  let stakingPairs = [...usePairs(preStakingsWithBalance?.map(stakingInfo => stakingInfo.tokens)), ...usePairs(dualStakingInfosWithBalance?.map(stakingInfo => stakingInfo.tokens)), ...usePairs(floraStakingInfosWithBalance?.map(stakingInfo => stakingInfo.tokens))]
+  let balances = [...preStakingsWithBalance, ...dualStakingInfosWithBalance, ...floraStakingInfosWithBalance];
+  // [[A,b],[c,d]]
+  //[StakingInfo,StakingInfo]
+  // let totalBalance = preStakingInfo?.reduce(
+  //   (accumulator, stakingInfo) => accumulator.add(stakingInfo.stakedAmount),
+  //   new TokenAmount(EMPTY, '0')
+  // )
   // remove any pairs that also are included in pairs with stake in mining pool
   const v2PairsWithoutStakedAmount = allV2PairsWithLiquidity.filter(v2Pair => {
     return (
@@ -205,14 +218,17 @@ export default function Pool() {
                   <FullPositionCard key={v2Pair.liquidityToken.address} pair={v2Pair} />
                 ))}
                 {stakingPairs.map(
-                  (stakingPair, i) =>
-                    stakingPair[1] && ( // skip pairs that arent loaded
+                  (stakingPair, i) => {
+                    return stakingPair[1] && ( // skip pairs that arent loaded
                       <FullPositionCard
-                        key={stakingInfosWithBalance[i].stakingRewardAddress}
+                        key={i}
                         pair={stakingPair[1]}
-                        stakedBalance={stakingInfosWithBalance[i].stakedAmount}
+                        stakingInfo={balances[i]}
+                        stakedBalance={balances[i]?.stakedAmount}
                       />
                     )
+                  }
+
                 )}
               </>
             ) : (

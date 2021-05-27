@@ -85,11 +85,17 @@ interface UserVestingInfo {
   hasSetConfig: boolean
 }
 
+interface TypeOfpools {
+  typeOf: string
+  url: string
+}
+
 export interface StakingInfo {
   // the address of the reward contract
   stakingRewardAddress: string
   // the tokens involved in this pair
   baseToken: any
+  type: TypeOfpools
   userVestingInfo: UserVestingInfo
   tokens: [Token, Token]
   // the amount of token currently staked, or undefined if no account
@@ -340,6 +346,7 @@ export function useStakingInfo(pairToFilterBy?: Pair | null): StakingInfo[] {
           (userClaimedSplit !== Math.floor(currentSplit) ? true : !hasClaimedPartial))
 
         memo.push({
+          type: { typeOf: 'Popular Farms', url: 'popular-farms' },
           stakingRewardAddress: rewardsAddress,
           baseToken: info[index].baseToken,
           tokens: info[index].tokens,

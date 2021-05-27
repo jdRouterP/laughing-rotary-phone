@@ -31,10 +31,15 @@ export const STAKING_REWARDS_INFO: {
   ]
 }
 
+interface TypeOfpools {
+  typeOf: string
+  url: string
+}
 export interface StakingInfo {
   // the address of the reward contract
   stakingRewardAddress: string
   // the tokens involved in this pair
+  type: TypeOfpools
   baseToken: any
   tokens: [Token, Token]
   rewardAddresses: [Token, Token]
@@ -201,6 +206,7 @@ export function useStakingInfo(pairToFilterBy?: Pair | null): StakingInfo[] {
           periodFinishSeconds && currentBlockTimestamp ? periodFinishSeconds > currentBlockTimestamp.toNumber() : true
 
         memo.push({
+          type: { typeOf: 'Dual Farms', url: 'dual-farms' },
           rewardAddresses,
           stakingRewardAddress: rewardsAddress,
           baseToken: info[index].baseToken,

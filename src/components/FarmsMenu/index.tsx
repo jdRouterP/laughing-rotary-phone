@@ -137,7 +137,7 @@ export default function FarmsMenu() {
 
       {open && (
         <MenuFlyout>
-          <StyledNavLink id={`f-farms-nav-link`} to={'/flora-farms'}>
+          <StyledNavLink id={`f-farms-nav-link`} to={'/popular-farms'}>
             Popular Farms
           </StyledNavLink>
           <StyledNavLink id={`d-farms-nav-link`} to={'/dual-farms'}>

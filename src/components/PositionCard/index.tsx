@@ -48,6 +48,7 @@ interface PositionCardProps {
   pair: Pair
   showUnwrapped?: boolean
   border?: string
+  stakingInfo?: any
   stakedBalance?: TokenAmount // optional balance to indicate that liquidity is deposited in mining pool
 }
 
@@ -159,7 +160,7 @@ export function MinimalPositionCard({ pair, showUnwrapped = false, border }: Pos
   )
 }
 
-export default function FullPositionCard({ pair, border, stakedBalance }: PositionCardProps) {
+export default function FullPositionCard({ pair, border, stakedBalance, stakingInfo }: PositionCardProps) {
   const { account } = useActiveWeb3React()
 
   const currency0 = unwrappedToken(pair.token0)
@@ -169,9 +170,11 @@ export default function FullPositionCard({ pair, border, stakedBalance }: Positi
 
   const userDefaultPoolBalance = useTokenBalance(account ?? undefined, pair.liquidityToken)
   const totalPoolTokens = useTotalSupply(pair.liquidityToken)
-
   // if staked balance balance provided, add to standard liquidity amount
+
   const userPoolBalance = stakedBalance ? userDefaultPoolBalance?.add(stakedBalance) : userDefaultPoolBalance
+
+
 
   const poolTokenPercentage =
     !!userPoolBalance && !!totalPoolTokens && JSBI.greaterThanOrEqual(totalPoolTokens.raw, userPoolBalance.raw)
@@ -238,7 +241,7 @@ export default function FullPositionCard({ pair, border, stakedBalance }: Positi
             {stakedBalance && (
               <FixedHeightRow>
                 <Text fontSize={16} fontWeight={500}>
-                  Pool tokens in rewards pool:
+                  Pool tokens in Farms:
                 </Text>
                 <Text fontSize={16} fontWeight={500}>
                   {stakedBalance.toSignificant(4)}
@@ -340,10 +343,10 @@ export default function FullPositionCard({ pair, border, stakedBalance }: Positi
                 padding="8px"
                 borderRadius="8px"
                 as={Link}
-                to={`/dfyn/${currencyId(currency0)}/${currencyId(currency1)}`}
+                to={`/${stakingInfo ? stakingInfo.type.url : "flora-farms"}/${currencyId(currency0)}/${currencyId(currency1)}`}
                 width="100%"
               >
-                Manage Liquidity in Rewards Pool
+                {`Manage Liquidity in ${stakingInfo ? stakingInfo.type.typeOf : "flora-farms"}`}
               </ButtonPrimary>
             </>)}
           </AutoColumn>
