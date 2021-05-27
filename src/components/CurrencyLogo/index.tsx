@@ -35,6 +35,9 @@ export const getTokenLogoURL = (address: string) => {
   if (address?.toLowerCase() === '0xC168E40227E4ebD8C1caE80F7a55a4F0e6D66C97'.toLowerCase()) {
     uri = 'https://raw.githubusercontent.com/dfyn/assets/main/DFYN_logo.png'
   }
+  if (address?.toLowerCase() === '0xfd4959c06FbCc02250952DAEbf8e0Fb38cF9FD8C'.toLowerCase()) {
+    uri = 'https://bscscan.com/token/images/zeroswapprotocol_32.png'
+  }
 
   if (address?.toLowerCase() === '0x831753dd7087cac61ab5644b308642cc1c33dc13') {
     uri = 'https://raw.githubusercontent.com/sameepsi/quickswap-interface/master/public/favicon.jpeg'

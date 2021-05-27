@@ -1,6 +1,6 @@
 import { ChainId, CurrencyAmount, JSBI, Token, TokenAmount, Pair } from '@uniswap/sdk'
 import { useMemo } from 'react'
-import { UNI, ROUTE, REWARD_TOKENS, EMPTY, DFYN, USDC } from '../../constants'
+import { UNI, ROUTE, REWARD_TOKENS, EMPTY, DFYN, USDC, ZEE } from '../../constants'
 import { STAKING_REWARDS_DUAL_FARMS_INTERFACE } from '../../constants/abis/staking-rewards-dual-farms'
 import { useActiveWeb3React } from '../../hooks'
 import { NEVER_RELOAD, useMultipleContractSingleData } from '../multicall/hooks'
@@ -8,7 +8,7 @@ import { tryParseAmount } from '../swap/hooks'
 import useCurrentBlockTimestamp from 'hooks/useCurrentBlockTimestamp'
 import { usePair } from 'data/Reserves'
 
-export const STAKING_GENESIS = 1621962000
+export const STAKING_GENESIS = 1622124960
 
 export const REWARDS_DURATION_DAYS = 60
 
@@ -27,6 +27,12 @@ export const STAKING_REWARDS_INFO: {
       rewardTokens: [ROUTE, DFYN],
       baseToken: DFYN,
       stakingRewardAddress: '0xf997c8e2e7e7387C8fd9120280ad9B3db31A5381'
+    },
+    {
+      tokens: [DFYN, ZEE],
+      rewardTokens: [DFYN, ZEE],
+      baseToken: DFYN,
+      stakingRewardAddress: '0xfB75d80e141b91535dA513370D4Dd33D0E19d308'
     }
   ]
 }
