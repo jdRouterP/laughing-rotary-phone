@@ -120,8 +120,8 @@ export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) 
   const valueOfToken1GivenPerYear: any = stakingInfo?.assetToken === ROUTE ? parseFloat(rateOne) * stakingInfo?.routePrice * 365 : parseFloat(rateTwo) * stakingInfo?.zeePrice * 365
   // 9.20226 1.12175 "1953.13333" "7316.00000" 799688.4692185374
   //@ts-ignore
-  console.log(stakingInfo?.dfynPrice, stakingInfo?.zeePrice, 365, rateOne, rateTwo, parseFloat(rateTwo) * stakingInfo?.zeePrice * 365)
-  console.log(stakingInfo?.assetToken === ROUTE, stakingInfo?.assetToken, stakingInfo?.routePrice, stakingInfo?.zeePrice, rateOne, rateTwo, valueOfToken1GivenPerYear)
+  // console.log(stakingInfo?.dfynPrice, stakingInfo?.zeePrice, 365, rateOne, rateTwo, parseFloat(rateTwo) * stakingInfo?.zeePrice * 365)
+  // console.log(stakingInfo?.assetToken === ROUTE, stakingInfo?.assetToken, stakingInfo?.routePrice, stakingInfo?.zeePrice, rateOne, rateTwo, valueOfToken1GivenPerYear)
   //@ts-ignore
   const valueOfToken2GivenPerYear: any = parseFloat(stakingInfo?.assetToken === ROUTE ? rateTwo : rateOne) * stakingInfo?.dfynPrice * 365
   const apr = valueOfTotalStakedAmountInUSDC && (valueOfToken1GivenPerYear + valueOfToken2GivenPerYear) / Number(valueOfTotalStakedAmountInUSDC?.toSignificant(6)) * 100;
