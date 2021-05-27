@@ -11,7 +11,6 @@ export function Countdown({ exactEnd, start }: { exactEnd: Date | undefined, sta
     exactEnd
   ])
   const begin = useMemo(() => (start ? start.getTime() / 1000 : 0), [start])
-  console.log(end, begin)
   // get current time
   const [time, setTime] = useState(() => Math.floor(Date.now() / 1000))
   useEffect((): (() => void) | void => {
@@ -23,7 +22,6 @@ export function Countdown({ exactEnd, start }: { exactEnd: Date | undefined, sta
       }
     }
   }, [time, end])
-  console.log(end)
   const timeUntilGenesis = begin - time
   const timeUntilEnd = end - time
 

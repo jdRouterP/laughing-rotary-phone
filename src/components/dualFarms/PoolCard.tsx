@@ -117,9 +117,13 @@ export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) 
   const rateOne = stakingInfo?.totalRewardRate?.multiply(BIG_INT_SECONDS_IN_DAY).toFixed(5);
   const rateTwo = stakingInfo?.totalRewardRateTwo?.multiply(BIG_INT_SECONDS_IN_DAY).toFixed(5);
   //@ts-ignore
-  const valueOfToken1GivenPerYear: any = stakingInfo?.assetToken[0] === ROUTE ? parseFloat(rateOne) * stakingInfo?.routePrice * 365 : parseFloat(rateOne) * stakingInfo?.zeePrice * 365
+  const valueOfToken1GivenPerYear: any = stakingInfo?.assetToken === ROUTE ? parseFloat(rateOne) * stakingInfo?.routePrice * 365 : parseFloat(rateTwo) * stakingInfo?.zeePrice * 365
+  // 9.20226 1.12175 "1953.13333" "7316.00000" 799688.4692185374
   //@ts-ignore
-  const valueOfToken2GivenPerYear: any = parseFloat(rateTwo) * stakingInfo?.dfynPrice * 365
+  console.log(stakingInfo?.dfynPrice, stakingInfo?.zeePrice, 365, rateOne, rateTwo, parseFloat(rateTwo) * stakingInfo?.zeePrice * 365)
+  console.log(stakingInfo?.assetToken === ROUTE, stakingInfo?.assetToken, stakingInfo?.routePrice, stakingInfo?.zeePrice, rateOne, rateTwo, valueOfToken1GivenPerYear)
+  //@ts-ignore
+  const valueOfToken2GivenPerYear: any = parseFloat(stakingInfo?.assetToken === ROUTE ? rateTwo : rateOne) * stakingInfo?.dfynPrice * 365
   const apr = valueOfTotalStakedAmountInUSDC && (valueOfToken1GivenPerYear + valueOfToken2GivenPerYear) / Number(valueOfTotalStakedAmountInUSDC?.toSignificant(6)) * 100;
   return (
     <Wrapper showBackground={isStaking} bgColor={backgroundColor}>

@@ -119,7 +119,6 @@ export function useStakingInfo(pairToFilterBy?: Pair | null): StakingInfo[] {
 
   const stakingRewardAddress = useMemo(() => info.map(({ stakingRewardAddress }) => stakingRewardAddress), [info])
   const bothRewardToken = useMemo(() => info.map(({ rewardTokens }) => rewardTokens), [info])
-  const assetToken = useMemo(() => info.map(({ asset }) => asset), [info])
   const start = useMemo(() => info.map(({ start }) => start), [info])
   const accountArg = useMemo(() => [account ?? undefined], [account])
 
@@ -235,7 +234,7 @@ export function useStakingInfo(pairToFilterBy?: Pair | null): StakingInfo[] {
           start: startTime,
           routePrice,
           zeePrice,
-          assetToken,
+          assetToken: info[index].asset,
           totalStakedAmount: totalStakedAmount,
           getHypotheticalRewardRate,
           active
