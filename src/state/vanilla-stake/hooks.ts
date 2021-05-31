@@ -1,6 +1,6 @@
 import { ChainId, CurrencyAmount, JSBI, Token, TokenAmount, Pair } from '@uniswap/sdk'
 import { useMemo } from 'react'
-import { UNI, ROUTE, ETHER, USDC, USDT, DFYN } from '../../constants'
+import { UNI, USDC, DFYN, FISH } from '../../constants'
 import { STAKING_REWARDS_BASIC_FARMS_INTERFACE } from '../../constants/abis/staking-rewards-basic-farms'
 import { useActiveWeb3React } from '../../hooks'
 import { NEVER_RELOAD, useMultipleContractSingleData } from '../multicall/hooks'
@@ -8,7 +8,7 @@ import { tryParseAmount } from '../swap/hooks'
 import useCurrentBlockTimestamp from 'hooks/useCurrentBlockTimestamp'
 import { usePair } from 'data/Reserves'
 
-export const STAKING_GENESIS = 1621161818
+export const STAKING_GENESIS = 1622485799
 
 export const REWARDS_DURATION_DAYS = 60
 
@@ -22,15 +22,10 @@ export const STAKING_REWARDS_INFO: {
 } = {
   [ChainId.MATIC]: [
     {
-      tokens: [ROUTE, ETHER],
-      baseToken: ETHER,
-      stakingRewardAddress: '0xd757b1e6a5da25f4d3a7c5c2741b1b976646db04'
-    },
-    {
-      tokens: [USDC, USDT],
-      baseToken: USDC,
-      stakingRewardAddress: '0xde487dc9e48690d41da58c8203191b3a9ea76116'
-    },
+      tokens: [FISH, DFYN],
+      baseToken: DFYN,
+      stakingRewardAddress: '0xfBCE866aF59bEa3b3880330F7DE3b08d7bc26676'
+    }
   ]
 }
 interface TypeOfpools {
@@ -189,7 +184,7 @@ export function useStakingInfo(pairToFilterBy?: Pair | null): StakingInfo[] {
           periodFinishSeconds && currentBlockTimestamp ? periodFinishSeconds > currentBlockTimestamp.toNumber() : true
 
         memo.push({
-          type: { typeOf: 'Vanilla Farms', url: 'v-farms' },
+          type: { typeOf: 'Ecosystem Farms', url: 'eco-farms' },
           stakingRewardAddress: rewardsAddress,
           baseToken: info[index].baseToken,
           tokens: info[index].tokens,

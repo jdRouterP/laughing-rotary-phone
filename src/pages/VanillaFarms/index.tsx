@@ -62,7 +62,7 @@ export default function VanillaFarms() {
           <CardSection>
             <AutoColumn gap="md">
               <RowBetween>
-                <TYPE.white fontWeight={600}>DFYN liquidity mining</TYPE.white>
+                <TYPE.white fontWeight={600}>DFYN Ecosystem Farms</TYPE.white>
               </RowBetween>
               <RowBetween>
                 <TYPE.white fontSize={14}>

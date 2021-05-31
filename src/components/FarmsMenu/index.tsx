@@ -137,9 +137,9 @@ export default function FarmsMenu() {
 
       {open && (
         <MenuFlyout>
-          {/* <StyledNavLink id={`v-farms-nav-link`} to={'/v-farms'}>
-            Vanilla Farms
-          </StyledNavLink> */}
+          <StyledNavLink id={`v-farms-nav-link`} to={'/eco-farms'}>
+            Ecosystem Farms
+          </StyledNavLink>
           <StyledNavLink id={`f-farms-nav-link`} to={'/popular-farms'}>
             Popular Farms
           </StyledNavLink>

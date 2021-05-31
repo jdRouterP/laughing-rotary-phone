@@ -41,6 +41,7 @@ export const ETHER = new Token(ChainId.MATIC, '0x7ceB23fD6bC0adD59E62ac25578270c
 export const WBTC = new Token(ChainId.MATIC, '0x1bfd67037b42cf73acf2047067bd4f2c47d9bfd6', 18, 'WBTC', 'WBTC')
 export const UNI_TOKEN = new Token(ChainId.MATIC, '0xb33eaad8d922b1083446dc23f610c2567fb5180f', 18, 'UNI', 'Uniswap')
 export const AAVE = new Token(ChainId.MATIC, '0xd6df932a45c0f255f85145f286ea0b292b21c90b', 18, 'AAVE', 'AAVE')
+export const FISH = new Token(ChainId.MATIC, '0x3a3df212b7aa91aa0402b9035b098891d276572b', 18, 'FISH', 'Fish Token')
 export const DFYN = new Token(ChainId.MATIC, '0xC168E40227E4ebD8C1caE80F7a55a4F0e6D66C97', 18, 'DFYN', 'DFYN Token')
 export const ZEE = new Token(ChainId.MATIC, '0xfd4959c06FbCc02250952DAEbf8e0Fb38cF9FD8C', 18, 'ZEE', 'ZeroSwapToken')
 export const AURORA = new Token(ChainId.MATIC, '0x0c8c8ae8bc3a69dc8482c01ceacfb588bb516b01', 18, 'AURORA', 'Aurora Token')

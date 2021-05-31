@@ -81,6 +81,9 @@ export const getTokenLogoURL = (address: string) => {
   if (address?.toLowerCase() === '0x20D3922b4a1A8560E1aC99FBA4faDe0c849e2142'.toLowerCase()) {
     uri = 'https://aavegotchi.com/images/matokens/maWETH.svg'
   }
+  if (address?.toLowerCase() === '0x3a3df212b7aa91aa0402b9035b098891d276572b'.toLowerCase()) {
+    uri = 'https://i.imgur.com/h3tIwIg.png'
+  }
 
   if (address?.toLowerCase() === '0x823CD4264C1b951C9209aD0DeAea9988fE8429bF'.toLowerCase()) {
     uri = 'https://aavegotchi.com/images/matokens/maAAVE.svg'
