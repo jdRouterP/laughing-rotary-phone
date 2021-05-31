@@ -19,6 +19,7 @@ import { Break, CardBGImage, CardNoise, CardSection, DataCard } from '../earn/st
 import { useTotalVaultUniEarned } from 'state/vault/hooks'
 import { useTotalFloraUniEarned } from 'state/flora-farms/hooks'
 import { useTotalDualFarmUniEarned } from 'state/dual-stake/hooks'
+import { useTotalEcosystemUniEarned } from 'state/vanilla-stake/hooks'
 
 const ContentWrapper = styled(AutoColumn)`
   width: 100%;
@@ -52,6 +53,7 @@ export default function UniBalanceContent({ setShowUniBalanceModal }: { setShowU
   const uniToClaimDualFarms: TokenAmount | undefined = useTotalDualFarmUniEarned()
   const uniToClaimVault: TokenAmount | undefined = useTotalVaultUniEarned()
   const uniToClaimFlora: TokenAmount | undefined = useTotalFloraUniEarned()
+  const uniToClaimEcosystem: TokenAmount | undefined = useTotalEcosystemUniEarned()
 
   const uniPrice = useUSDCPrice(uni)
   // const totalSupply: TokenAmount | undefined = useTotalSupply(uni)
@@ -121,6 +123,17 @@ export default function UniBalanceContent({ setShowUniBalanceModal }: { setShowU
                   <TYPE.white color="white">• Popular Farms:</TYPE.white>
                   <TYPE.white color="white">
                     {uniToClaimFlora?.toFixed(4, { groupSeparator: ',' })}{' '}
+                    {/* {uniToClaim && uniToClaim.greaterThan('0') && (
+                      <StyledInternalLink onClick={() => setShowUniBalanceModal(false)} to="/dfyn">
+                        (claim)
+                      </StyledInternalLink>
+                    )} */}
+                  </TYPE.white>
+                </RowBetween>
+                <RowBetween>
+                  <TYPE.white color="white">• Ecosystem Farms:</TYPE.white>
+                  <TYPE.white color="white">
+                    {uniToClaimEcosystem?.toFixed(4, { groupSeparator: ',' })}{' '}
                     {/* {uniToClaim && uniToClaim.greaterThan('0') && (
                       <StyledInternalLink onClick={() => setShowUniBalanceModal(false)} to="/dfyn">
                         (claim)
