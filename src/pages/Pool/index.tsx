@@ -22,6 +22,7 @@ import { CardSection, DataCard, CardNoise, CardBGImage } from '../../components/
 import { useStakingInfo as useFloraStakingInfo } from '../../state/flora-farms/hooks'
 import { useStakingInfo as useDualStakingInfo } from '../../state/dual-stake/hooks'
 import { useStakingInfo as usePreStakingInfo } from '../../state/stake/hooks'
+import { useStakingInfo as useVanillaStakingInfo } from '../../state/vanilla-stake/hooks'
 import { BIG_INT_ZERO } from '../../constants'
 
 const PageWrapper = styled(AutoColumn)`
@@ -112,6 +113,8 @@ export default function Pool() {
   const hasV1Liquidity = useUserHasLiquidityInAllTokens()
 
   // show liquidity even if its deposited in rewards contract
+  const vanillaStakingInfo = useVanillaStakingInfo()
+  const vanillaStakingInfosWithBalance = vanillaStakingInfo?.filter(pool => JSBI.greaterThan(pool.stakedAmount.raw, BIG_INT_ZERO))
   const preStakingInfo = usePreStakingInfo()
   const preStakingsWithBalance = preStakingInfo?.filter(pool => JSBI.greaterThan(pool.stakedAmount.raw, BIG_INT_ZERO))
   const dualStakingInfo = useDualStakingInfo()
@@ -119,14 +122,14 @@ export default function Pool() {
   const floraStakingInfo = useFloraStakingInfo()
   const floraStakingInfosWithBalance = floraStakingInfo?.filter(pool => JSBI.greaterThan(pool.stakedAmount.raw, BIG_INT_ZERO))
   //ORDER MATTERS
-  let stakingPairs = [...usePairs(preStakingsWithBalance?.map(stakingInfo => stakingInfo.tokens)), ...usePairs(dualStakingInfosWithBalance?.map(stakingInfo => stakingInfo.tokens)), ...usePairs(floraStakingInfosWithBalance?.map(stakingInfo => stakingInfo.tokens))]
-  let balances = [...preStakingsWithBalance, ...dualStakingInfosWithBalance, ...floraStakingInfosWithBalance];
-  // [[A,b],[c,d]]
-  //[StakingInfo,StakingInfo]
-  // let totalBalance = preStakingInfo?.reduce(
-  //   (accumulator, stakingInfo) => accumulator.add(stakingInfo.stakedAmount),
-  //   new TokenAmount(EMPTY, '0')
-  // )
+  let stakingPairs = [...usePairs(vanillaStakingInfosWithBalance?.map(stakingInfo => stakingInfo.tokens)),
+  ...usePairs(preStakingsWithBalance?.map(stakingInfo => stakingInfo.tokens)),
+  ...usePairs(dualStakingInfosWithBalance?.map(stakingInfo => stakingInfo.tokens)),
+  ...usePairs(floraStakingInfosWithBalance?.map(stakingInfo => stakingInfo.tokens))]
+  let balances = [...vanillaStakingInfosWithBalance,
+  ...preStakingsWithBalance,
+  ...dualStakingInfosWithBalance,
+  ...floraStakingInfosWithBalance];
   // remove any pairs that also are included in pairs with stake in mining pool
   const v2PairsWithoutStakedAmount = allV2PairsWithLiquidity.filter(v2Pair => {
     return (

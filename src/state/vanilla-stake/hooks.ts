@@ -32,12 +32,16 @@ export const STAKING_REWARDS_INFO: {
     },
   ]
 }
-
+interface TypeOfpools {
+  typeOf: string
+  url: string
+}
 export interface StakingInfo {
   // the address of the reward contract
   stakingRewardAddress: string
   // the tokens involved in this pair
   baseToken: any
+  type: TypeOfpools
   tokens: [Token, Token]
   // the amount of token currently staked, or undefined if no account
   stakedAmount: TokenAmount
@@ -180,6 +184,7 @@ export function useStakingInfo(pairToFilterBy?: Pair | null): StakingInfo[] {
           periodFinishSeconds && currentBlockTimestamp ? periodFinishSeconds > currentBlockTimestamp.toNumber() : true
 
         memo.push({
+          type: { typeOf: 'Vanilla Farms', url: 'v-farms' },
           stakingRewardAddress: rewardsAddress,
           baseToken: info[index].baseToken,
           tokens: info[index].tokens,

@@ -137,6 +137,9 @@ export default function FarmsMenu() {
 
       {open && (
         <MenuFlyout>
+          <StyledNavLink id={`v-farms-nav-link`} to={'/v-farms'}>
+            Vanilla Farms
+          </StyledNavLink>
           <StyledNavLink id={`f-farms-nav-link`} to={'/popular-farms'}>
             Popular Farms
           </StyledNavLink>
@@ -149,14 +152,6 @@ export default function FarmsMenu() {
           <StyledNavLink id={`stake-nav-link`} to={'/dfyn'}>
             Pre-Staking Farms
           </StyledNavLink>
-          <StyledNavLink id={`v-farms-nav-link`} to={'/v-farms'}>
-            Vanilla Farms
-          </StyledNavLink>
-          {/* {account && (
-            <ButtonPrimary onClick={openClaimModal} padding="8px 10px" width="100%" borderRadius="12px" mt="0.5rem">
-              Claim DFYN
-            </ButtonPrimary>
-          )} */}
         </MenuFlyout>
       )}
     </StyledMenu>
