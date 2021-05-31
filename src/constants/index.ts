@@ -43,6 +43,7 @@ export const UNI_TOKEN = new Token(ChainId.MATIC, '0xb33eaad8d922b1083446dc23f61
 export const AAVE = new Token(ChainId.MATIC, '0xd6df932a45c0f255f85145f286ea0b292b21c90b', 18, 'AAVE', 'AAVE')
 export const DFYN = new Token(ChainId.MATIC, '0xC168E40227E4ebD8C1caE80F7a55a4F0e6D66C97', 18, 'DFYN', 'DFYN Token')
 export const ZEE = new Token(ChainId.MATIC, '0xfd4959c06FbCc02250952DAEbf8e0Fb38cF9FD8C', 18, 'ZEE', 'ZeroSwapToken')
+export const AURORA = new Token(ChainId.MATIC, '0x0c8c8ae8bc3a69dc8482c01ceacfb588bb516b01', 18, 'AURORA', 'Aurora Token')
 export const REWARDTEST = new Token(ChainId.MATIC, '0xD33dcD9673e1fA99F064CB4682c6299351AD771C', 18, 'TEST', 'Test Token')
 export const REWARDTEST2 = new Token(ChainId.MATIC, '0x246b774CfB1087620620dAbC1f8D46938403C487', 18, 'TEST2', 'Test2 Token')
 
@@ -71,7 +72,7 @@ export const UNI: { [chainId in ChainId]: Token } = {
   [ChainId.MATIC]: new Token(ChainId.MATIC, UNI_ADDRESS, 18, 'DFYN', 'Dfyn')
 }
 
-export const REWARD_TOKENS: Token[] = [ROUTE, DFYN, ZEE]
+export const REWARD_TOKENS: Token[] = [ROUTE, DFYN, ZEE, AURORA]
 
 export const COMMON_CONTRACT_NAMES: { [address: string]: string } = {
   [UNI_ADDRESS]: 'DFYN',

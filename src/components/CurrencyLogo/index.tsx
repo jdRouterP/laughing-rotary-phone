@@ -74,6 +74,9 @@ export const getTokenLogoURL = (address: string) => {
   if (address?.toLowerCase() === '0xE0b22E0037B130A9F56bBb537684E6fA18192341'.toLowerCase()) {
     uri = 'https://aavegotchi.com/images/matokens/maDAI.svg'
   }
+  if (address?.toLowerCase() === '0x0c8c8ae8bc3a69dc8482c01ceacfb588bb516b01'.toLowerCase()) {
+    uri = 'https://raw.githubusercontent.com/Palette-Finance/images/main/aurora_token_logo.png'
+  }
 
   if (address?.toLowerCase() === '0x20D3922b4a1A8560E1aC99FBA4faDe0c849e2142'.toLowerCase()) {
     uri = 'https://aavegotchi.com/images/matokens/maWETH.svg'
