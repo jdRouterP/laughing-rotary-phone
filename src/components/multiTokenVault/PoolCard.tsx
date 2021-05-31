@@ -125,7 +125,7 @@ export default function PoolCard({ multiStakingInfo }: { multiStakingInfo: Multi
             }`}</TYPE.white>
         </RowBetween>
         <RowBetween>
-          <TYPE.white> APR</TYPE.white>
+          <TYPE.white> Reward per Token</TYPE.white>
           <TYPE.white>{`${multiStakingInfo
             ? multiStakingInfo.active
               ? `${(multiStakingInfo.interestRate) * multiStakingInfo.multiplier}`

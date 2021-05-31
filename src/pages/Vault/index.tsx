@@ -2,17 +2,14 @@ import React from 'react'
 import { AutoColumn } from '../../components/Column'
 import styled from 'styled-components'
 import { STAKING_REWARDS_INFO, useStakingInfo } from '../../state/vault/hooks'
-import { useMultiStakingInfo } from '../../state/multiTokenVault/hooks'
+// import { useMultiStakingInfo } from '../../state/multiTokenVault/hooks'
 import { TYPE, ExternalLink } from '../../theme'
 import PoolCard from '../../components/vault/PoolCard'
-import MultiTokenPoolCard from '../../components/multiTokenVault/PoolCard'
+// import MultiTokenPoolCard from '../../components/multiTokenVault/PoolCard'
 import { RowBetween } from '../../components/Row'
 import { CardSection, DataCard, CardNoise, CardBGImage } from '../../components/vault/styled'
-// import { Countdown } from './Countdown'
 import Loader from '../../components/Loader'
 import { useActiveWeb3React } from '../../hooks'
-// import { JSBI } from '@uniswap/sdk'
-// import { BIG_INT_ZERO } from '../../constants'
 import { OutlineCard } from '../../components/Card'
 
 const PageWrapper = styled(AutoColumn)`
@@ -45,8 +42,7 @@ export default function Vault() {
 
   // staking info for connected account
   const stakingInfos = useStakingInfo()
-  const multiStakingInfos = useMultiStakingInfo()
-  debugger
+  // const multiStakingInfos = useMultiStakingInfo()
   /**
    * only show staking cards with balance
    * @todo only account for this if rewards are inactive
@@ -94,9 +90,9 @@ export default function Vault() {
           {/* <Countdown exactEnd={stakingInfos?.[0]?.periodFinish} /> */}
         </DataRow>
 
-        <PoolSection>
+        {/* <PoolSection>
           {multiStakingInfos?.map((multiStakingInfo) => <MultiTokenPoolCard key={multiStakingInfo.vaultAddress} multiStakingInfo={multiStakingInfo} />)}
-        </PoolSection>
+        </PoolSection> */}
 
         <PoolSection>
           {stakingRewardsExist && stakingInfos?.length === 0 ? (

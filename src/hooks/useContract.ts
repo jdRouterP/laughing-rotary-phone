@@ -26,6 +26,7 @@ import { V1_EXCHANGE_ABI, V1_FACTORY_ABI, V1_FACTORY_ADDRESSES } from '../consta
 import { getContract } from '../utils'
 import { useActiveWeb3React } from './index'
 import { MULTI_TOKEN_VAULT_INTERFACE } from 'constants/abis/multiTokenVault'
+import { WETH_V2 } from '../constants'
 
 // returns null on errors
 function useContract(address: string | undefined, ABI: any, withSignerIfPossible = true): Contract | null {
@@ -63,6 +64,11 @@ export function useWETHContract(withSignerIfPossible?: boolean): Contract | null
   const { chainId } = useActiveWeb3React()
 
   return useContract(chainId ? WETH[chainId].address : undefined, WETH_ABI, withSignerIfPossible)
+}
+
+export function useWETHV2Contract(withSignerIfPossible?: boolean): Contract | null {
+  const { chainId } = useActiveWeb3React()
+  return useContract(chainId ? WETH_V2.address : undefined, WETH_ABI, withSignerIfPossible)
 }
 
 export function useArgentWalletDetectorContract(): Contract | null {

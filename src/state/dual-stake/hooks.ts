@@ -6,8 +6,8 @@ import { useActiveWeb3React } from '../../hooks'
 import { NEVER_RELOAD, useMultipleContractSingleData } from '../multicall/hooks'
 import { tryParseAmount } from '../swap/hooks'
 import useCurrentBlockTimestamp from 'hooks/useCurrentBlockTimestamp'
-import { usePair, usePairs } from 'data/Reserves'
-// import { TokenInfoChangeKey } from '@uniswap/token-lists'
+import { usePairsWithBaseToken } from 'data/Reserves'
+
 
 export const STAKING_GENESIS = 1622124960
 
@@ -19,7 +19,6 @@ export const STAKING_REWARDS_INFO: {
     tokens: [Token, Token]
     rewardTokens: [Token, Token]
     baseToken?: Token
-    asset?: Token
     start: number
     stakingRewardAddress: string
   }[]
@@ -29,7 +28,6 @@ export const STAKING_REWARDS_INFO: {
       tokens: [ROUTE, DFYN],
       rewardTokens: [ROUTE, DFYN],
       baseToken: DFYN,
-      asset: ROUTE,
       start: 1622033000000,
       stakingRewardAddress: '0xf997c8e2e7e7387C8fd9120280ad9B3db31A5381'
     },
@@ -37,7 +35,6 @@ export const STAKING_REWARDS_INFO: {
       tokens: [DFYN, ZEE],
       rewardTokens: [DFYN, ZEE],
       baseToken: DFYN,
-      asset: ZEE,
       start: 1622133000000,
       stakingRewardAddress: '0xfB75d80e141b91535dA513370D4Dd33D0E19d308'
     }
@@ -56,7 +53,6 @@ export interface StakingInfo {
   baseToken: any
   tokens: [Token, Token]
   rewardAddresses: [Token, Token]
-  assetToken: any
   // the amount of token currently staked, or undefined if no account
   stakedAmount: TokenAmount
   // the amount of reward token earned by the active account, or undefined if no account
@@ -71,9 +67,8 @@ export interface StakingInfo {
   // equivalent to percent of total supply * reward rate
   rewardRate: TokenAmount
   rewardRateTwo: TokenAmount
-  dfynPrice: Number
-  routePrice: Number
-  zeePrice: Number
+  tokenOnePrice: Number
+  tokenTwoPrice: Number
   start: number
   // when the period ends
   periodFinish: Date | undefined
@@ -91,12 +86,6 @@ export interface StakingInfo {
 // gets the staking info from the network for the active chain id
 export function useStakingInfo(pairToFilterBy?: Pair | null): StakingInfo[] {
   const { chainId, account } = useActiveWeb3React()
-  const [, dfynUsdcPair] = usePair(USDC, DFYN);
-  const [, routeUsdcPair] = usePair(USDC, ROUTE);
-  const [, zeeUsdcPair] = usePair(USDC, ZEE);
-  const dfynPrice = Number(dfynUsdcPair?.priceOf(DFYN)?.toSignificant(6))
-  const routePrice = Number(routeUsdcPair?.priceOf(ROUTE)?.toSignificant(6))
-  const zeePrice = Number(zeeUsdcPair?.priceOf(ZEE)?.toSignificant(6))
   // detect if staking is ended
   const currentBlockTimestamp = useCurrentBlockTimestamp()
 
@@ -121,11 +110,25 @@ export function useStakingInfo(pairToFilterBy?: Pair | null): StakingInfo[] {
   const bothRewardToken = useMemo(() => info.map(({ rewardTokens }) => rewardTokens), [info])
   const start = useMemo(() => info.map(({ start }) => start), [info])
   const accountArg = useMemo(() => [account ?? undefined], [account])
+  const values = usePairsWithBaseToken(USDC, bothRewardToken);
 
-  //get $ Price of Tokens
-  const tokenPrices = usePairs(bothRewardToken);
-  console.log(tokenPrices);
 
+  //get price of tokens 
+  let tokenPrices: any = [];
+  const getCorrectToken = (value: Pair | null) => {
+    if (value)
+      return value.token0.symbol === "USDC" ? value.priceOf(value.token1) : value.priceOf(value.token0);
+    else
+      return null;
+  }
+  for (let i = 0; i < values.length; i += 2) {
+    let [, usdPair] = values[i];
+    let price = getCorrectToken(usdPair);
+    let [, usdPair2] = values[i + 1]
+    let price2 = getCorrectToken(usdPair2);
+
+    tokenPrices.push([Number(price?.toSignificant(6)), Number(price2?.toSignificant(6))])
+  }
   // get all the info from the staking rewards contracts
   const balances = useMultipleContractSingleData(stakingRewardAddress, STAKING_REWARDS_DUAL_FARMS_INTERFACE, 'balanceOf', accountArg)
   const earnedAmounts = useMultipleContractSingleData(stakingRewardAddress, STAKING_REWARDS_DUAL_FARMS_INTERFACE, 'bothTokensEarned', accountArg)
@@ -219,7 +222,6 @@ export function useStakingInfo(pairToFilterBy?: Pair | null): StakingInfo[] {
         // compare period end timestamp vs current block timestamp (in seconds)
         const active =
           periodFinishSeconds && currentBlockTimestamp ? periodFinishSeconds > currentBlockTimestamp.toNumber() : true
-
         memo.push({
           type: { typeOf: 'Dual Farms', url: 'dual-farms' },
           rewardAddresses,
@@ -234,11 +236,9 @@ export function useStakingInfo(pairToFilterBy?: Pair | null): StakingInfo[] {
           totalRewardRate: rewardRateTokenOne,
           totalRewardRateTwo: rewardRateTokenTwo,
           stakedAmount: stakedAmount,
-          dfynPrice,
           start: startTime,
-          routePrice,
-          zeePrice,
-          assetToken: info[index].asset,
+          tokenOnePrice: tokenPrices[index][0] ?? 0,
+          tokenTwoPrice: tokenPrices[index][1] ?? 0,
           totalStakedAmount: totalStakedAmount,
           getHypotheticalRewardRate,
           active
