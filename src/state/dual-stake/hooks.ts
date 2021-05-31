@@ -6,7 +6,7 @@ import { useActiveWeb3React } from '../../hooks'
 import { NEVER_RELOAD, useMultipleContractSingleData } from '../multicall/hooks'
 import { tryParseAmount } from '../swap/hooks'
 import useCurrentBlockTimestamp from 'hooks/useCurrentBlockTimestamp'
-import { usePair } from 'data/Reserves'
+import { usePair, usePairs } from 'data/Reserves'
 // import { TokenInfoChangeKey } from '@uniswap/token-lists'
 
 export const STAKING_GENESIS = 1622124960
@@ -30,7 +30,7 @@ export const STAKING_REWARDS_INFO: {
       rewardTokens: [ROUTE, DFYN],
       baseToken: DFYN,
       asset: ROUTE,
-      start: 1622033000,
+      start: 1622033000000,
       stakingRewardAddress: '0xf997c8e2e7e7387C8fd9120280ad9B3db31A5381'
     },
     {
@@ -121,6 +121,10 @@ export function useStakingInfo(pairToFilterBy?: Pair | null): StakingInfo[] {
   const bothRewardToken = useMemo(() => info.map(({ rewardTokens }) => rewardTokens), [info])
   const start = useMemo(() => info.map(({ start }) => start), [info])
   const accountArg = useMemo(() => [account ?? undefined], [account])
+
+  //get $ Price of Tokens
+  const tokenPrices = usePairs(bothRewardToken);
+  console.log(tokenPrices);
 
   // get all the info from the staking rewards contracts
   const balances = useMultipleContractSingleData(stakingRewardAddress, STAKING_REWARDS_DUAL_FARMS_INTERFACE, 'balanceOf', accountArg)

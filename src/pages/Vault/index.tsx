@@ -2,8 +2,10 @@ import React from 'react'
 import { AutoColumn } from '../../components/Column'
 import styled from 'styled-components'
 import { STAKING_REWARDS_INFO, useStakingInfo } from '../../state/vault/hooks'
+import { useMultiStakingInfo } from '../../state/multiTokenVault/hooks'
 import { TYPE, ExternalLink } from '../../theme'
 import PoolCard from '../../components/vault/PoolCard'
+import MultiTokenPoolCard from '../../components/multiTokenVault/PoolCard'
 import { RowBetween } from '../../components/Row'
 import { CardSection, DataCard, CardNoise, CardBGImage } from '../../components/vault/styled'
 // import { Countdown } from './Countdown'
@@ -43,13 +45,13 @@ export default function Vault() {
 
   // staking info for connected account
   const stakingInfos = useStakingInfo()
-
+  const multiStakingInfos = useMultiStakingInfo()
+  debugger
   /**
    * only show staking cards with balance
    * @todo only account for this if rewards are inactive
    */
   const stakingInfosWithBalance = stakingInfos
-
   // toggle copy if rewards are inactive
   const stakingRewardsExist = Boolean(typeof chainId === 'number' && (STAKING_REWARDS_INFO[chainId]?.length ?? 0) > 0)
 
@@ -91,6 +93,10 @@ export default function Vault() {
           <TYPE.mediumHeader fontSize={16} style={{ marginTop: '0.5rem' }}>Participating vaults</TYPE.mediumHeader>
           {/* <Countdown exactEnd={stakingInfos?.[0]?.periodFinish} /> */}
         </DataRow>
+
+        <PoolSection>
+          {multiStakingInfos?.map((multiStakingInfo) => <MultiTokenPoolCard key={multiStakingInfo.vaultAddress} multiStakingInfo={multiStakingInfo} />)}
+        </PoolSection>
 
         <PoolSection>
           {stakingRewardsExist && stakingInfos?.length === 0 ? (

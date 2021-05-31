@@ -25,6 +25,7 @@ import { MULTICALL_ABI, MULTICALL_NETWORKS } from '../constants/multicall'
 import { V1_EXCHANGE_ABI, V1_FACTORY_ABI, V1_FACTORY_ADDRESSES } from '../constants/v1'
 import { getContract } from '../utils'
 import { useActiveWeb3React } from './index'
+import { MULTI_TOKEN_VAULT_INTERFACE } from 'constants/abis/multiTokenVault'
 
 // returns null on errors
 function useContract(address: string | undefined, ABI: any, withSignerIfPossible = true): Contract | null {
@@ -129,6 +130,9 @@ export function useFloraFarmsContract(stakingAddress?: string, withSignerIfPossi
 }
 export function useVaultContract(stakingAddress?: string, withSignerIfPossible?: boolean): Contract | null {
   return useContract(stakingAddress, VAULT_ABI, withSignerIfPossible)
+}
+export function useMultiTokenVaultContract(stakingAddress?: string, withSignerIfPossible?: boolean): Contract | null {
+  return useContract(stakingAddress, MULTI_TOKEN_VAULT_INTERFACE, withSignerIfPossible)
 }
 export function useDualFarmsContract(stakingAddress?: string, withSignerIfPossible?: boolean): Contract | null {
   return useContract(stakingAddress, STAKING_REWARDS_DUAL_FARMING_ABI, withSignerIfPossible)

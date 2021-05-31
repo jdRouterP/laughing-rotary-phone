@@ -1,3 +1,4 @@
+import { RowBetween } from 'components/Row'
 import React, { useEffect, useMemo, useState } from 'react'
 import { TYPE } from '../../theme'
 
@@ -50,15 +51,20 @@ export function Countdown({ exactEnd, start }: { exactEnd: Date | undefined, sta
   const seconds = timeRemaining
 
   return (
-    <TYPE.black fontWeight={400}>
-      {message}{' '}
-      {Number.isFinite(timeRemaining) && (
-        <code>
-          {`${days}:${hours.toString().padStart(2, '0')}:${minutes
-            .toString()
-            .padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`}
-        </code>
-      )}
-    </TYPE.black>
+    <RowBetween>
+      <TYPE.white fontWeight={400}>
+        {message}{' '}
+      </TYPE.white>
+      <TYPE.white fontWeight={400}>
+        {Number.isFinite(timeRemaining) && (
+          <code>
+            {`${days}:${hours.toString().padStart(2, '0')}:${minutes
+              .toString()
+              .padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`}
+          </code>
+        )}
+      </TYPE.white>
+    </RowBetween>
+
   )
 }

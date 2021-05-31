@@ -27,6 +27,7 @@ import ManageVanillaFarms from './VanillaFarms/Manage'
 import ManageDualFarms from './DualFarms/Manage'
 import ManageFloraFarms from './FloraFarms/Manage'
 import ManageVault from './Vault/Manage'
+import MultiTokenManage from './Vault/MultiTokenManage'
 import MigrateV1 from './MigrateV1'
 import MigrateV1Exchange from './MigrateV1/MigrateV1Exchange'
 import RemoveV1Exchange from './MigrateV1/RemoveV1Exchange'
@@ -126,6 +127,7 @@ export default function App() {
               <Route exact strict path="/dual-farms/:currencyIdA/:currencyIdB" component={ManageDualFarms} />
               <Route exact strict path="/popular-farms/:currencyIdA/:currencyIdB" component={ManageFloraFarms} />
               <Route exact strict path="/vault/:vaultID" component={ManageVault} />
+              <Route exact strict path="/multi-vault/:vaultID" component={MultiTokenManage} />
               <Route exact strict path="/vote/:id" component={VotePage} />
               <Route component={RedirectPathToSwapOnly} />
             </Switch>

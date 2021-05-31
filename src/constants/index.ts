@@ -23,6 +23,7 @@ export const USDC = new Token(ChainId.MATIC, '0x2791Bca1f2de4661ED88A30C99A7a944
 export const USDT = new Token(ChainId.MATIC, '0xc2132D05D31c914a87C6611C10748AEb04B58e8F', 6, 'USDT', 'Tether USD')
 export const mWETH = new Token(ChainId.MATIC, '0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619', 18, 'ETH', 'Ether')
 export const ROUTE = new Token(ChainId.MATIC, '0x16eccfdbb4ee1a85a33f3a9b21175cd7ae753db4', 18, 'ROUTE', 'Route')
+// export const ROUTE = new Token(ChainId.MATIC, '0x246b774CfB1087620620dAbC1f8D46938403C487', 18, 'ROUTE', 'Route')
 export const OM = new Token(ChainId.MATIC, '0xc3ec80343d2bae2f8e680fdadde7c17e71e114ea', 18, 'OM', 'Mantra Dao')
 export const EASY = new Token(ChainId.MATIC, '0xdb3b3b147a030f032633f6c4bebf9a2fb5a882b5', 18, 'EASY', 'Easy')
 export const RAZOR = new Token(ChainId.MATIC, '0xc91c06db0f7bffba61e2a5645cc15686f0a8c828', 18, 'RAZOR', 'Razor')
