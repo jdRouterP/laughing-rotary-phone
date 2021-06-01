@@ -4,17 +4,16 @@ import styled from 'styled-components'
 // import { Link } from 'react-router-dom'
 
 import { JSBI } from '@uniswap/sdk'
-import { RouteComponentProps } from 'react-router-dom'
+import { Link, RouteComponentProps } from 'react-router-dom'
 // import DoubleCurrencyLogo from '../../components/DoubleLogo'
 import { useWalletModalToggle } from '../../state/application/hooks'
-import { ExternalLink, TYPE } from '../../theme'
+import { TYPE } from '../../theme'
 
 import { RowBetween } from '../../components/Row'
 import { CardSection, DataCard, CardNoise, CardBGImage } from '../../components/multiTokenVault/styled'
 import { ButtonPrimary } from '../../components/Button'
 import StakingModal from '../../components/multiTokenVault/StakingModal'
 import { useMultiStakingInfo } from '../../state/multiTokenVault/hooks'
-import UnstakingModal from '../../components/multiTokenVault/UnstakingModal'
 import ClaimRewardModal from '../../components/multiTokenVault/ClaimRewardModal'
 import { useTokenBalance } from '../../state/wallet/hooks'
 import { useActiveWeb3React } from '../../hooks'
@@ -99,7 +98,6 @@ export default function Manage({
 
   // toggle for staking modal and unstaking modal
   const [showStakingModal, setShowStakingModal] = useState(false)
-  const [showUnstakingModal, setShowUnstakingModal] = useState(false)
   const [showClaimRewardModal, setShowClaimRewardModal] = useState(false)
 
   // fade cards if nothing staked or nothing earned yet
@@ -144,7 +142,7 @@ export default function Manage({
             <TYPE.body style={{ margin: 0 }}>APR</TYPE.body>
             <TYPE.body fontSize={24} fontWeight={500}>{`${stakingInfo
               ? stakingInfo.active
-                ? `${(stakingInfo.interestRate) * stakingInfo.multiplier}`
+                ? `${"2"}`
                 : '0'
               : '0'
               }%`}</TYPE.body>
@@ -165,18 +163,18 @@ export default function Manage({
         </PoolData>
       </DataRow>
 
-      {/* {showAddLiquidityButton && (
+      {showAddLiquidityButton && (
         <VoteCard>
           <CardBGImage />
           <CardNoise />
           <CardSection>
             <AutoColumn gap="md">
               <RowBetween>
-                <TYPE.white fontWeight={600}>Step 1. Get DFYN tokens</TYPE.white>
+                <TYPE.white fontWeight={600}>Step 1. Get ROUTE tokens</TYPE.white>
               </RowBetween>
               <RowBetween style={{ marginBottom: '1rem' }}>
                 <TYPE.white fontSize={14}>
-                  {`DFYN tokens are required. You can swap it!`}
+                  {`ROUTE tokens are required. You can swap it!`}
                 </TYPE.white>
               </RowBetween>
               <ButtonPrimary
@@ -184,17 +182,17 @@ export default function Manage({
                 borderRadius="8px"
                 width={'fit-content'}
                 as={Link}
-                to={`/swap`}
+                to={`/swap?outputCurrency=0x16eccfdbb4ee1a85a33f3a9b21175cd7ae753db4`}
               >
-                {`Get DFYN Tokens`}
+                {`Get ROUTE Tokens`}
               </ButtonPrimary>
             </AutoColumn>
           </CardSection>
           <CardBGImage />
           <CardNoise />
         </VoteCard>
-      )} */}
-      {showAddLiquidityButton && (
+      )}
+      {/* {showAddLiquidityButton && (
         <VoteCard>
           <CardBGImage />
           <CardNoise />
@@ -205,7 +203,7 @@ export default function Manage({
               </RowBetween>
               <RowBetween style={{ marginBottom: '1rem' }}>
                 <TYPE.white fontSize={14}>
-                  {`Checkout our new farms!`}
+                  {`Lock ROUTE for a period of time and earn a fixed number of Dfyn tokens.`}
                 </TYPE.white>
               </RowBetween>
               <ExternalLink
@@ -220,7 +218,7 @@ export default function Manage({
           <CardBGImage />
           <CardNoise />
         </VoteCard>
-      )}
+      )} */}
       <RowBetween style={{ gap: '24px', alignItems: 'baseline' }}>
         {" "}
         {stakingInfo?.periodFinish && !showAddLiquidityButton && <Countdown exactEnd={stakingInfo.periodFinish} start={stakingInfo.userVaultInfo.depositTime} />}
@@ -233,11 +231,6 @@ export default function Manage({
             onDismiss={() => setShowStakingModal(false)}
             stakingInfo={stakingInfo}
             userLiquidityUnstaked={userLiquidityUnstaked}
-          />
-          <UnstakingModal
-            isOpen={showUnstakingModal}
-            onDismiss={() => setShowUnstakingModal(false)}
-            stakingInfo={stakingInfo}
           />
           <ClaimRewardModal
             isOpen={showClaimRewardModal}

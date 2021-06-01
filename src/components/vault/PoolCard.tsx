@@ -70,6 +70,7 @@ const TopSection = styled.div`
 export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) {
 
   const isStaking = Boolean(stakingInfo.stakedAmount.greaterThan('0'))
+  const limitReached = Boolean(stakingInfo?.vaultLimit?.subtract(stakingInfo?.totalStakedAmount).equalTo('0'));
   const backgroundColor = useColor();
   return (
     <Wrapper showBackground={isStaking} bgColor={backgroundColor}>
@@ -83,7 +84,7 @@ export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) 
 
         <StyledInternalLink to={`/vault/${stakingInfo?.vaultAddress}`} style={{ width: '100%' }}>
           <ButtonPrimary padding="8px" borderRadius="8px">
-            {'Manage'}
+            {isStaking ? 'Manage' : limitReached ? 'Filled' : 'Deposit'}
           </ButtonPrimary>
         </StyledInternalLink>
       </TopSection>

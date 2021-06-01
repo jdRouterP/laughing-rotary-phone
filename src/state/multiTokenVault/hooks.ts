@@ -43,7 +43,6 @@ export interface MultiStakingInfo {
   // the current amount of token distributed to the active account per second.
   // equivalent to percent of total supply * reward rate
   // rewardRate: TokenAmount
-  interestRate: number
   vesting: number
   multiplier: number
   vaultLimit: TokenAmount
@@ -108,13 +107,6 @@ export function useMultiStakingInfo(vaultToFilterBy?: string | null): MultiStaki
     undefined,
     NEVER_RELOAD
   )
-  const interestRate = useMultipleContractSingleData(
-    rewardsAddresses,
-    MULTI_TOKEN_VAULT_INTERFACE,
-    'interestRate',
-    undefined,
-    NEVER_RELOAD
-  )
 
   return useMemo(() => {
     if (!chainId || !uni) return []
@@ -129,7 +121,6 @@ export function useMultiStakingInfo(vaultToFilterBy?: string | null): MultiStaki
       const totalSupplyState = totalSupplies[index]
       const vestingState = vesting[index]
       const vaultLimitState = vaultLimit[index]
-      const interestRateState = interestRate[index]
 
       if (
         // these may be undefined if not logged in
@@ -142,9 +133,7 @@ export function useMultiStakingInfo(vaultToFilterBy?: string | null): MultiStaki
         vestingState &&
         !vestingState.loading &&
         vaultLimitState &&
-        !vaultLimitState.loading &&
-        interestRateState &&
-        !interestRateState.loading
+        !vaultLimitState.loading
       ) {
         if (
           balanceState?.error ||
@@ -152,8 +141,7 @@ export function useMultiStakingInfo(vaultToFilterBy?: string | null): MultiStaki
           userVaultInfoState?.error ||
           totalSupplyState.error ||
           vestingState.error ||
-          vaultLimitState.error ||
-          interestRateState.error
+          vaultLimitState.error
         ) {
 
           console.error('Failed to load staking rewards info')
@@ -170,7 +158,6 @@ export function useMultiStakingInfo(vaultToFilterBy?: string | null): MultiStaki
         }
         const stakedAmount = new TokenAmount(ROUTE, JSBI.BigInt(balanceState?.result?.[0] ?? 0))
         const totalStakedAmount = new TokenAmount(ROUTE, JSBI.BigInt(totalSupplyState.result?.[0]))
-        const interestRate = interestRateState.result?.[0].toNumber()
         const vaultLimit = new TokenAmount(ROUTE, JSBI.BigInt(vaultLimitState.result?.[0]))
         const vesting = vestingState.result?.[0].toNumber()
 
@@ -202,7 +189,7 @@ export function useMultiStakingInfo(vaultToFilterBy?: string | null): MultiStaki
           periodFinish: periodFinishSeconds > 0 ? periodFinishSeconds : undefined,
           unlockedTokenAmount: new TokenAmount(ROUTE, JSBI.BigInt(earnedAmountState?.result?.unlockedVestedTokenAmount ?? 0)),
           earnedAmount: new TokenAmount(uni, JSBI.BigInt(earnedAmountState?.result?.claimableRewardAmount ?? 0)),
-          interestRate,
+
           vesting,
           vaultLimit,
           userVaultInfo,
@@ -226,7 +213,7 @@ export function useMultiStakingInfo(vaultToFilterBy?: string | null): MultiStaki
   ])
 }
 
-export function useTotalVaultUniEarned(): TokenAmount | undefined {
+export function useTotalMultiVaultUniEarned(): TokenAmount | undefined {
   const { chainId } = useActiveWeb3React()
   const uni = chainId ? UNI[chainId] : undefined
   const stakingInfos = useMultiStakingInfo()

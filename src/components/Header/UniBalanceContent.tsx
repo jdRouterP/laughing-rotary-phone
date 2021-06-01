@@ -17,6 +17,7 @@ import { AutoColumn } from '../Column'
 import { RowBetween } from '../Row'
 import { Break, CardBGImage, CardNoise, CardSection, DataCard } from '../earn/styled'
 import { useTotalVaultUniEarned } from 'state/vault/hooks'
+import { useTotalMultiVaultUniEarned } from 'state/multiTokenVault/hooks'
 import { useTotalFloraUniEarned } from 'state/flora-farms/hooks'
 import { useTotalDualFarmUniEarned } from 'state/dual-stake/hooks'
 import { useTotalEcosystemUniEarned } from 'state/vanilla-stake/hooks'
@@ -51,7 +52,10 @@ export default function UniBalanceContent({ setShowUniBalanceModal }: { setShowU
   const uniBalance: TokenAmount | undefined = useTokenBalance(account ?? undefined, uni)
   const uniToClaimPreStake: TokenAmount | undefined = useTotalUniEarned()
   const uniToClaimDualFarms: TokenAmount | undefined = useTotalDualFarmUniEarned()
+  //Adding vault rewards
+  const uniToClaimMultiVault: TokenAmount | undefined = useTotalMultiVaultUniEarned()
   const uniToClaimVault: TokenAmount | undefined = useTotalVaultUniEarned()
+  const totalUniToClaimVault: TokenAmount | undefined = uniToClaimMultiVault ? uniToClaimVault?.add(uniToClaimMultiVault) : uniToClaimVault
   const uniToClaimFlora: TokenAmount | undefined = useTotalFloraUniEarned()
   const uniToClaimEcosystem: TokenAmount | undefined = useTotalEcosystemUniEarned()
 
@@ -111,7 +115,7 @@ export default function UniBalanceContent({ setShowUniBalanceModal }: { setShowU
                 <RowBetween>
                   <TYPE.white color="white">• Vault:</TYPE.white>
                   <TYPE.white color="white">
-                    {uniToClaimVault?.toFixed(4, { groupSeparator: ',' })}{' '}
+                    {(totalUniToClaimVault)?.toFixed(4, { groupSeparator: ',' })}{' '}
                     {/* {uniToClaim && uniToClaim.greaterThan('0') && (
                       <StyledInternalLink onClick={() => setShowUniBalanceModal(false)} to="/dfyn">
                         (claim)

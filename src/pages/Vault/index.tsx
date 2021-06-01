@@ -2,10 +2,10 @@ import React from 'react'
 import { AutoColumn } from '../../components/Column'
 import styled from 'styled-components'
 import { STAKING_REWARDS_INFO, useStakingInfo } from '../../state/vault/hooks'
-// import { useMultiStakingInfo } from '../../state/multiTokenVault/hooks'
+import { useMultiStakingInfo } from '../../state/multiTokenVault/hooks'
 import { TYPE, ExternalLink } from '../../theme'
 import PoolCard from '../../components/vault/PoolCard'
-// import MultiTokenPoolCard from '../../components/multiTokenVault/PoolCard'
+import MultiTokenPoolCard from '../../components/multiTokenVault/PoolCard'
 import { RowBetween } from '../../components/Row'
 import { CardSection, DataCard, CardNoise, CardBGImage } from '../../components/vault/styled'
 import Loader from '../../components/Loader'
@@ -42,7 +42,7 @@ export default function Vault() {
 
   // staking info for connected account
   const stakingInfos = useStakingInfo()
-  // const multiStakingInfos = useMultiStakingInfo()
+  const multiStakingInfos = useMultiStakingInfo()
   /**
    * only show staking cards with balance
    * @todo only account for this if rewards are inactive
@@ -64,7 +64,7 @@ export default function Vault() {
               </RowBetween>
               <RowBetween>
                 <TYPE.white fontSize={14}>
-                  Lock DFYN for a period of time and earn a fixed number of Dfyn tokens.
+                  Lock ROUTE/DFYN for a period of time and earn a fixed number of Dfyn tokens.
                 </TYPE.white>
               </RowBetween>{' '}
               <ExternalLink
@@ -82,17 +82,17 @@ export default function Vault() {
       </TopSection>
 
       <AutoColumn gap="lg" style={{ width: '100%', maxWidth: '720px' }}>
-        <RowBetween>
+        {/* <RowBetween>
           <TYPE.white fontSize={24} fontWeight={600}> Vaults are full now, check out our new Farms!</TYPE.white>
-        </RowBetween>
+        </RowBetween> */}
         <DataRow style={{ alignItems: 'baseline' }}>
           <TYPE.mediumHeader fontSize={16} style={{ marginTop: '0.5rem' }}>Participating vaults</TYPE.mediumHeader>
           {/* <Countdown exactEnd={stakingInfos?.[0]?.periodFinish} /> */}
         </DataRow>
 
-        {/* <PoolSection>
+        <PoolSection>
           {multiStakingInfos?.map((multiStakingInfo) => <MultiTokenPoolCard key={multiStakingInfo.vaultAddress} multiStakingInfo={multiStakingInfo} />)}
-        </PoolSection> */}
+        </PoolSection>
 
         <PoolSection>
           {stakingRewardsExist && stakingInfos?.length === 0 ? (

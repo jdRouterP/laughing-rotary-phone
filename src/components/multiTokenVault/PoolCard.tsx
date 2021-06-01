@@ -70,6 +70,7 @@ const TopSection = styled.div`
 
 export default function PoolCard({ multiStakingInfo }: { multiStakingInfo: MultiStakingInfo }) {
   const isStaking = Boolean(multiStakingInfo.stakedAmount.greaterThan('0'))
+  const limitReached = Boolean(multiStakingInfo?.vaultLimit?.subtract(multiStakingInfo?.totalStakedAmount).equalTo('0'));
   const backgroundColor = useColor(UNI_TOKEN);
   return (
     <Wrapper showBackground={isStaking} bgColor={backgroundColor}>
@@ -83,7 +84,7 @@ export default function PoolCard({ multiStakingInfo }: { multiStakingInfo: Multi
 
         <StyledInternalLink to={`/multi-vault/${multiStakingInfo?.vaultAddress}`} style={{ width: '100%' }}>
           <ButtonPrimary padding="8px" borderRadius="8px">
-            {'Manage'}
+            {isStaking ? 'Manage' : limitReached ? 'Limit Reached!' : 'Deposit'}
           </ButtonPrimary>
         </StyledInternalLink>
       </TopSection>
@@ -125,10 +126,10 @@ export default function PoolCard({ multiStakingInfo }: { multiStakingInfo: Multi
             }`}</TYPE.white>
         </RowBetween>
         <RowBetween>
-          <TYPE.white> Reward per Token</TYPE.white>
+          <TYPE.white>APR </TYPE.white>
           <TYPE.white>{`${multiStakingInfo
             ? multiStakingInfo.active
-              ? `${(multiStakingInfo.interestRate) * multiStakingInfo.multiplier}`
+              ? `${"3"}`
               : '0'
             : '0'
             }%`}</TYPE.white>
