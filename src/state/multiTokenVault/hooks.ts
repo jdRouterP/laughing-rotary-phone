@@ -1,11 +1,12 @@
 import { ChainId, CurrencyAmount, JSBI, Token, TokenAmount } from '@uniswap/sdk'
 import { useMemo } from 'react'
-import { ROUTE, UNI } from '../../constants'
+import { DFYN, ROUTE, UNI, USDC } from '../../constants'
 import { MULTI_TOKEN_VAULT_INTERFACE } from '../../constants/abis/multiTokenVault'
 import { useActiveWeb3React } from '../../hooks'
 import { NEVER_RELOAD, useMultipleContractSingleData } from '../multicall/hooks'
 import { tryParseAmount } from '../swap/hooks'
 import useCurrentBlockTimestamp from 'hooks/useCurrentBlockTimestamp'
+import { usePair } from 'data/Reserves'
 
 export const STAKING_GENESIS = 1621161818
 
@@ -22,7 +23,7 @@ export const MULTI_STAKING_REWARDS_INFO: {
   [ChainId.MATIC]: [
     {
       vaultName: 'New Route vault',
-      vaultAddress: '0xCf575a274e91680C6d846EBAF248f661fe519d45',
+      vaultAddress: '0x49bDD84209612b4Cb76806aA4EE458e94A12A0A7',
       multiplier: 2
     },
   ]
@@ -32,6 +33,7 @@ export interface MultiStakingInfo {
   // the address of the reward contract
   vaultAddress: string
   vaultName: string
+  genesis: number
   rewardToken: Token
   // the amount of token currently staked, or undefined if no account
   stakedAmount: TokenAmount
@@ -47,6 +49,8 @@ export interface MultiStakingInfo {
   multiplier: number
   vaultLimit: TokenAmount
   userVaultInfo: any
+  dfynPrice: number
+  routePrice: number
   // when the period ends
   periodFinish: number | undefined
   // if pool is active
@@ -62,6 +66,11 @@ export interface MultiStakingInfo {
 // gets the staking info from the network for the active chain id
 export function useMultiStakingInfo(vaultToFilterBy?: string | null): MultiStakingInfo[] {
   const { chainId, account } = useActiveWeb3React()
+
+  const [, dfynUsdcPair] = usePair(USDC, DFYN);
+  const dfynPrice = Number(dfynUsdcPair?.priceOf(DFYN)?.toSignificant(6))
+  const [, routeUsdcPair] = usePair(USDC, ROUTE);
+  const routePrice = Number(routeUsdcPair?.priceOf(ROUTE)?.toSignificant(6))
 
   // detect if staking is ended
   const currentBlockTimestamp = useCurrentBlockTimestamp()
@@ -91,6 +100,7 @@ export function useMultiStakingInfo(vaultToFilterBy?: string | null): MultiStaki
   const earnedAmounts = useMultipleContractSingleData(rewardsAddresses, MULTI_TOKEN_VAULT_INTERFACE, 'earned', accountArg)
   const userVaultInfo = useMultipleContractSingleData(rewardsAddresses, MULTI_TOKEN_VAULT_INTERFACE, 'getUserVaultInfo', accountArg)
   const totalSupplies = useMultipleContractSingleData(rewardsAddresses, MULTI_TOKEN_VAULT_INTERFACE, 'totalDeposits')
+  const genesis = useMultipleContractSingleData(rewardsAddresses, MULTI_TOKEN_VAULT_INTERFACE, 'vaultGenesis')
 
 
   const vesting = useMultipleContractSingleData(
@@ -119,6 +129,7 @@ export function useMultiStakingInfo(vaultToFilterBy?: string | null): MultiStaki
 
       // these get fetched regardless of account
       const totalSupplyState = totalSupplies[index]
+      const genesisState = genesis[index]
       const vestingState = vesting[index]
       const vaultLimitState = vaultLimit[index]
 
@@ -130,6 +141,8 @@ export function useMultiStakingInfo(vaultToFilterBy?: string | null): MultiStaki
         // always need these
         totalSupplyState &&
         !totalSupplyState.loading &&
+        genesisState &&
+        !genesisState.loading &&
         vestingState &&
         !vestingState.loading &&
         vaultLimitState &&
@@ -140,6 +153,7 @@ export function useMultiStakingInfo(vaultToFilterBy?: string | null): MultiStaki
           earnedAmountState?.error ||
           userVaultInfoState?.error ||
           totalSupplyState.error ||
+          genesisState.error ||
           vestingState.error ||
           vaultLimitState.error
         ) {
@@ -189,8 +203,10 @@ export function useMultiStakingInfo(vaultToFilterBy?: string | null): MultiStaki
           periodFinish: periodFinishSeconds > 0 ? periodFinishSeconds : undefined,
           unlockedTokenAmount: new TokenAmount(ROUTE, JSBI.BigInt(earnedAmountState?.result?.unlockedVestedTokenAmount ?? 0)),
           earnedAmount: new TokenAmount(uni, JSBI.BigInt(earnedAmountState?.result?.claimableRewardAmount ?? 0)),
-
+          genesis: parseInt(genesisState?.result?.[0]),
           vesting,
+          routePrice,
+          dfynPrice,
           vaultLimit,
           userVaultInfo,
           stakedAmount: stakedAmount,

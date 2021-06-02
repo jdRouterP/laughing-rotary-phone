@@ -95,7 +95,8 @@ export default function Manage({
   // detect existing unstaked LP position to show add button if none found
   const userLiquidityUnstaked = useTokenBalance(account ?? undefined, stakingInfo?.stakedAmount?.token)
   const showAddLiquidityButton = Boolean(stakingInfo?.stakedAmount?.equalTo('0') && userLiquidityUnstaked?.equalTo('0'))
-
+  const showDepositButton = Boolean(Math.floor(Date.now() / 1000) > stakingInfo?.genesis)
+  const apr = (stakingInfo?.dfynPrice * 100 * 2) / stakingInfo?.routePrice
   // toggle for staking modal and unstaking modal
   const [showStakingModal, setShowStakingModal] = useState(false)
   const [showClaimRewardModal, setShowClaimRewardModal] = useState(false)
@@ -142,7 +143,7 @@ export default function Manage({
             <TYPE.body style={{ margin: 0 }}>APR</TYPE.body>
             <TYPE.body fontSize={24} fontWeight={500}>{`${stakingInfo
               ? stakingInfo.active
-                ? `${"2"}`
+                ? `${apr ? apr?.toFixed(2) : 0}`
                 : '0'
               : '0'
               }%`}</TYPE.body>
@@ -330,7 +331,7 @@ export default function Manage({
 
         {!showAddLiquidityButton && (
           <DataRow style={{ marginBottom: '1rem' }}>
-            {stakingInfo && stakingInfo.active && (
+            {stakingInfo && stakingInfo.active && showDepositButton && (
               <ButtonPrimary padding="8px" borderRadius="8px" width="160px" onClick={handleDepositClick}>
                 {stakingInfo?.stakedAmount?.greaterThan(JSBI.BigInt(0)) ? 'Deposit' : 'Deposit ROUTE'}
               </ButtonPrimary>

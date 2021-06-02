@@ -11,6 +11,7 @@ import { useColor } from '../../hooks/useColor'
 // import { currencyId } from '../../utils/currencyId'
 import { CardNoise, CardBGImage } from './styled'
 import { UNI_TOKEN } from '../../constants'
+import { Countdown } from 'components/Countdown'
 // import { useTotalSupply } from '../../data/TotalSupply'
 // import { usePair } from '../../data/Reserves'
 // import useUSDCPrice from '../../utils/useUSDCPrice'
@@ -71,6 +72,8 @@ const TopSection = styled.div`
 export default function PoolCard({ multiStakingInfo }: { multiStakingInfo: MultiStakingInfo }) {
   const isStaking = Boolean(multiStakingInfo.stakedAmount.greaterThan('0'))
   const limitReached = Boolean(multiStakingInfo?.vaultLimit?.subtract(multiStakingInfo?.totalStakedAmount).equalTo('0'));
+  const showDepositButton = Boolean(Math.floor(Date.now() / 1000) > multiStakingInfo?.genesis)
+  const apr = (multiStakingInfo?.dfynPrice * 100 * 2) / multiStakingInfo?.routePrice
   const backgroundColor = useColor(UNI_TOKEN);
   return (
     <Wrapper showBackground={isStaking} bgColor={backgroundColor}>
@@ -82,18 +85,19 @@ export default function PoolCard({ multiStakingInfo }: { multiStakingInfo: Multi
           {multiStakingInfo?.vaultName}
         </TYPE.white>
 
-        <StyledInternalLink to={`/multi-vault/${multiStakingInfo?.vaultAddress}`} style={{ width: '100%' }}>
+        {showDepositButton && <StyledInternalLink to={`/multi-vault/${multiStakingInfo?.vaultAddress}`} style={{ width: '100%' }}>
           <ButtonPrimary padding="8px" borderRadius="8px">
-            {isStaking ? 'Manage' : limitReached ? 'Limit Reached!' : 'Deposit'}
+            {isStaking ? 'Manage' : limitReached ? 'Filled!' : 'Deposit'}
           </ButtonPrimary>
-        </StyledInternalLink>
+        </StyledInternalLink>}
       </TopSection>
 
       <StatContainer>
+        {!showDepositButton && <Countdown startTime={multiStakingInfo?.genesis} exactEnd={1622695014} message={"Staking starts in "}></Countdown>}
         <RowBetween>
           <TYPE.white> Total deposited</TYPE.white>
           <TYPE.white>
-            {multiStakingInfo && `${multiStakingInfo.totalStakedAmount.toFixed(0, { groupSeparator: ',' })} DFYN`}
+            {multiStakingInfo && `${multiStakingInfo.totalStakedAmount.toFixed(0, { groupSeparator: ',' })} ROUTE`}
           </TYPE.white>
         </RowBetween>
         <RowBetween>
@@ -101,8 +105,8 @@ export default function PoolCard({ multiStakingInfo }: { multiStakingInfo: Multi
           <TYPE.white>
             {multiStakingInfo
               ? multiStakingInfo.active
-                ? `${multiStakingInfo.vaultLimit?.toFixed(0, { groupSeparator: ',' })} DFYN`
-                : '0 DFYN'
+                ? `${multiStakingInfo.vaultLimit?.toFixed(0, { groupSeparator: ',' })} ROUTE`
+                : '0 ROUTE'
               : '-'}
           </TYPE.white>
         </RowBetween>
@@ -111,8 +115,8 @@ export default function PoolCard({ multiStakingInfo }: { multiStakingInfo: Multi
           <TYPE.white>
             {multiStakingInfo
               ? multiStakingInfo.active
-                ? `${multiStakingInfo?.vaultLimit?.subtract(multiStakingInfo?.totalStakedAmount).toSignificant(6, { groupSeparator: ',' })} DFYN`
-                : '0 DFYN'
+                ? `${multiStakingInfo?.vaultLimit?.subtract(multiStakingInfo?.totalStakedAmount).toSignificant(6, { groupSeparator: ',' })} ROUTE`
+                : '0 ROUTE'
               : '-'}
           </TYPE.white>
         </RowBetween>
@@ -129,7 +133,7 @@ export default function PoolCard({ multiStakingInfo }: { multiStakingInfo: Multi
           <TYPE.white>APR </TYPE.white>
           <TYPE.white>{`${multiStakingInfo
             ? multiStakingInfo.active
-              ? `${"3"}`
+              ? `${apr ? apr?.toFixed(2) : 0}`
               : '0'
             : '0'
             }%`}</TYPE.white>
