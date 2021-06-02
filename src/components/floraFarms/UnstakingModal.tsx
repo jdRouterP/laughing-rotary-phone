@@ -31,7 +31,7 @@ export default function UnstakingModal({ isOpen, onDismiss, stakingInfo }: Staki
   const addTransaction = useTransactionAdder()
   const [hash, setHash] = useState<string | undefined>()
   const [attempting, setAttempting] = useState(false)
-
+  const claimable = stakingInfo.active;
   function wrappedOndismiss() {
     setHash(undefined)
     setAttempting(false)
@@ -82,7 +82,7 @@ export default function UnstakingModal({ isOpen, onDismiss, stakingInfo }: Staki
               <TYPE.body>Deposited liquidity:</TYPE.body>
             </AutoColumn>
           )}
-          {stakingInfo?.earnedAmount && (
+          {stakingInfo?.earnedAmount && !claimable && (
             <AutoColumn justify="center" gap="md">
               <TYPE.body fontWeight={600} fontSize={36}>
                 {<FormattedCurrencyAmount currencyAmount={stakingInfo?.earnedAmount} />}
@@ -94,15 +94,15 @@ export default function UnstakingModal({ isOpen, onDismiss, stakingInfo }: Staki
             When you withdraw, your vested DFYN are claimed (if claimable) and your liquidity is removed from the farming pool.
           </TYPE.subHeader>
           <ButtonError disabled={!!error} error={!!error && !!stakingInfo?.stakedAmount} onClick={onWithdraw}>
-            {error ?? 'Withdraw & Claim'}
+            {error ?? 'Withdraw'}
           </ButtonError>
         </ContentWrapper>
       )}
       {attempting && !hash && (
         <LoadingView onDismiss={wrappedOndismiss}>
           <AutoColumn gap="12px" justify={'center'}>
-            <TYPE.body fontSize={20}>Withdrawing {stakingInfo?.stakedAmount?.toSignificant(4)} DFYN-V2</TYPE.body>
-            <TYPE.body fontSize={20}>Claiming {stakingInfo?.earnedAmount?.toSignificant(4)} DFYN</TYPE.body>
+            <TYPE.body fontSize={20}>Withdrawing {stakingInfo?.stakedAmount?.toSignificant(4)} DFYN-LP</TYPE.body>
+            {!claimable && <TYPE.body fontSize={20}>Claiming {stakingInfo?.earnedAmount?.toSignificant(4)} DFYN</TYPE.body>}
           </AutoColumn>
         </LoadingView>
       )}
@@ -111,7 +111,7 @@ export default function UnstakingModal({ isOpen, onDismiss, stakingInfo }: Staki
           <AutoColumn gap="12px" justify={'center'}>
             <TYPE.largeHeader>Transaction Submitted</TYPE.largeHeader>
             <TYPE.body fontSize={20}>Withdrew LP Tokens!</TYPE.body>
-            <TYPE.body fontSize={20}>Claimed DFYN!</TYPE.body>
+            {!claimable && <TYPE.body fontSize={20}>Claimed DFYN!</TYPE.body>}
           </AutoColumn>
         </SubmittedView>
       )}
