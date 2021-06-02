@@ -84,6 +84,9 @@ export const getTokenLogoURL = (address: string) => {
   if (address?.toLowerCase() === '0x3a3df212b7aa91aa0402b9035b098891d276572b'.toLowerCase()) {
     uri = 'https://i.imgur.com/h3tIwIg.png'
   }
+  if (address?.toLowerCase() === '0x5b4cf2c120a9702225814e18543ee658c5f8631e'.toLowerCase()) {
+    uri = 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x0202Be363B8a4820f3F4DE7FaF5224fF05943AB1/logo.png'
+  }
 
   if (address?.toLowerCase() === '0x823CD4264C1b951C9209aD0DeAea9988fE8429bF'.toLowerCase()) {
     uri = 'https://aavegotchi.com/images/matokens/maAAVE.svg'

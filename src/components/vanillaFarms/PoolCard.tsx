@@ -15,6 +15,7 @@ import { useTotalSupply } from '../../data/TotalSupply'
 import { usePair } from '../../data/Reserves'
 import useUSDCPrice from '../../utils/useUSDCPrice'
 import { BIG_INT_SECONDS_IN_DAY, EMPTY } from '../../constants'
+import { Countdown } from 'pages/VanillaFarms/Countdown'
 
 const StatContainer = styled.div`
   display: flex;
@@ -133,6 +134,9 @@ export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) 
       </TopSection>
 
       <StatContainer>
+        <RowBetween >
+          <Countdown exactEnd={stakingInfo?.periodFinish} startTime={stakingInfo?.startTime} />
+        </RowBetween>
         <RowBetween>
           <TYPE.white> Total deposited</TYPE.white>
           <TYPE.white>

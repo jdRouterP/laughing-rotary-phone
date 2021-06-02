@@ -1,6 +1,6 @@
 import { ChainId, CurrencyAmount, JSBI, Token, TokenAmount, Pair } from '@uniswap/sdk'
 import { useMemo } from 'react'
-import { UNI, USDC, DFYN, FISH } from '../../constants'
+import { UNI, USDC, DFYN, FISH, UFT, ANY } from '../../constants'
 import { STAKING_REWARDS_BASIC_FARMS_INTERFACE } from '../../constants/abis/staking-rewards-basic-farms'
 import { useActiveWeb3React } from '../../hooks'
 import { NEVER_RELOAD, useMultipleContractSingleData } from '../multicall/hooks'
@@ -17,6 +17,7 @@ export const STAKING_REWARDS_INFO: {
   [chainId in ChainId]?: {
     tokens: [Token, Token]
     baseToken?: Token
+    startTime: number
     stakingRewardAddress: string
   }[]
 } = {
@@ -24,8 +25,21 @@ export const STAKING_REWARDS_INFO: {
     {
       tokens: [FISH, DFYN],
       baseToken: DFYN,
+      startTime: 1622557800,
       stakingRewardAddress: '0xfBCE866aF59bEa3b3880330F7DE3b08d7bc26676'
-    }
+    },
+    {
+      tokens: [DFYN, ANY],
+      baseToken: DFYN,
+      startTime: 1622651400,
+      stakingRewardAddress: '0xf4822f5e1B01Dc101914C888d88E6d295c6A7FCA'
+    },
+    {
+      tokens: [DFYN, UFT],
+      baseToken: DFYN,
+      startTime: 1622651400,
+      stakingRewardAddress: '0x4cAE3C18b058eBF1EC439f01457348a9dD9CcC53'
+    },
   ]
 }
 interface TypeOfpools {
@@ -37,6 +51,7 @@ export interface StakingInfo {
   stakingRewardAddress: string
   // the tokens involved in this pair
   baseToken: any
+  startTime: number
   type: TypeOfpools
   tokens: [Token, Token]
   // the amount of token currently staked, or undefined if no account
@@ -187,6 +202,7 @@ export function useStakingInfo(pairToFilterBy?: Pair | null): StakingInfo[] {
           type: { typeOf: 'Ecosystem Farms', url: 'eco-farms' },
           stakingRewardAddress: rewardsAddress,
           baseToken: info[index].baseToken,
+          startTime: info[index].startTime ?? 0,
           tokens: info[index].tokens,
           periodFinish: periodFinishMs > 0 ? new Date(periodFinishMs) : undefined,
           earnedAmount: new TokenAmount(uni, JSBI.BigInt(earnedAmountState?.result?.[0] ?? 0)),

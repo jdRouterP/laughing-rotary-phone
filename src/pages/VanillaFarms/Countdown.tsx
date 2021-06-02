@@ -1,3 +1,4 @@
+import { RowBetween } from 'components/Row'
 import React, { useEffect, useMemo, useState } from 'react'
 import { STAKING_GENESIS, REWARDS_DURATION_DAYS } from '../../state/vanilla-stake/hooks'
 import { TYPE } from '../../theme'
@@ -7,9 +8,9 @@ const HOUR = MINUTE * 60
 const DAY = HOUR * 24
 const REWARDS_DURATION = DAY * REWARDS_DURATION_DAYS
 
-export function Countdown({ exactEnd }: { exactEnd?: Date }) {
+export function Countdown({ exactEnd, startTime, showMessage = true }: { exactEnd?: Date, startTime?: number, showMessage?: boolean }) {
   // get end/beginning times
-  const end = useMemo(() => (exactEnd ? Math.floor(exactEnd.getTime() / 1000) : STAKING_GENESIS + REWARDS_DURATION), [
+  const end = useMemo(() => (exactEnd ? Math.floor(exactEnd.getTime() / 1000) : (startTime ?? STAKING_GENESIS) + REWARDS_DURATION), [
     exactEnd
   ])
   const begin = useMemo(() => end - REWARDS_DURATION, [end])
@@ -54,15 +55,19 @@ export function Countdown({ exactEnd }: { exactEnd?: Date }) {
   const seconds = timeRemaining
 
   return (
-    <TYPE.black fontWeight={400}>
-      {message}{' '}
-      {Number.isFinite(timeRemaining) && (
-        <code>
-          {`${days}:${hours.toString().padStart(2, '0')}:${minutes
-            .toString()
-            .padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`}
-        </code>
-      )}
-    </TYPE.black>
+    <RowBetween>
+      <TYPE.white fontWeight={400}>
+        {showMessage && message}{' '}
+      </TYPE.white>
+      <TYPE.white fontWeight={400}>
+        {Number.isFinite(timeRemaining) && (
+          <code>
+            {`${days}:${hours.toString().padStart(2, '0')}:${minutes
+              .toString()
+              .padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`}
+          </code>
+        )}
+      </TYPE.white>
+    </RowBetween>
   )
 }
