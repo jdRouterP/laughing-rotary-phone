@@ -22,7 +22,7 @@ export const MULTI_STAKING_REWARDS_INFO: {
 } = {
   [ChainId.MATIC]: [
     {
-      vaultName: 'New Route vault',
+      vaultName: 'Route 6-month vault',
       vaultAddress: '0x49bDD84209612b4Cb76806aA4EE458e94A12A0A7',
       multiplier: 2
     },

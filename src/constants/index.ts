@@ -45,6 +45,11 @@ export const FISH = new Token(ChainId.MATIC, '0x3a3df212b7aa91aa0402b9035b098891
 export const DFYN = new Token(ChainId.MATIC, '0xC168E40227E4ebD8C1caE80F7a55a4F0e6D66C97', 18, 'DFYN', 'DFYN Token')
 export const ZEE = new Token(ChainId.MATIC, '0xfd4959c06FbCc02250952DAEbf8e0Fb38cF9FD8C', 18, 'ZEE', 'ZeroSwapToken')
 export const AURORA = new Token(ChainId.MATIC, '0x0c8c8ae8bc3a69dc8482c01ceacfb588bb516b01', 18, 'AURORA', 'Aurora Token')
+export const ANY = new Token(ChainId.MATIC, '0x6ab6d61428fde76768d7b45d8bfeec19c6ef91a8', 18, 'ANY', 'Anyswap')
+export const UFT = new Token(ChainId.MATIC, '0x5b4cf2c120a9702225814e18543ee658c5f8631e', 18, 'UFT', 'UniLend')
+
+
+//TEST TOKENS
 export const REWARDTEST = new Token(ChainId.MATIC, '0xD33dcD9673e1fA99F064CB4682c6299351AD771C', 18, 'TEST', 'Test Token')
 export const REWARDTEST2 = new Token(ChainId.MATIC, '0x246b774CfB1087620620dAbC1f8D46938403C487', 18, 'TEST2', 'Test2 Token')
 
