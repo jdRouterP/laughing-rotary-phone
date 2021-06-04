@@ -87,7 +87,7 @@ export default function PoolCard({ multiStakingInfo }: { multiStakingInfo: Multi
 
         {showDepositButton && <StyledInternalLink to={`/multi-vault/${multiStakingInfo?.vaultAddress}`} style={{ width: '100%' }}>
           <ButtonPrimary padding="8px" borderRadius="8px">
-            {isStaking ? 'Manage' : limitReached ? 'Filled!' : 'Deposit'}
+            {isStaking ? 'Manage' : limitReached ? 'Filled' : 'Deposit'}
           </ButtonPrimary>
         </StyledInternalLink>}
       </TopSection>

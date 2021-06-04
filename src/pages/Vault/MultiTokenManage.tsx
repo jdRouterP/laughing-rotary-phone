@@ -4,10 +4,10 @@ import styled from 'styled-components'
 // import { Link } from 'react-router-dom'
 
 import { JSBI } from '@uniswap/sdk'
-import { Link, RouteComponentProps } from 'react-router-dom'
+import { RouteComponentProps } from 'react-router-dom'
 // import DoubleCurrencyLogo from '../../components/DoubleLogo'
 import { useWalletModalToggle } from '../../state/application/hooks'
-import { TYPE } from '../../theme'
+import { ExternalLink, TYPE } from '../../theme'
 
 import { RowBetween } from '../../components/Row'
 import { CardSection, DataCard, CardNoise, CardBGImage } from '../../components/multiTokenVault/styled'
@@ -95,7 +95,7 @@ export default function Manage({
   // detect existing unstaked LP position to show add button if none found
   const userLiquidityUnstaked = useTokenBalance(account ?? undefined, stakingInfo?.stakedAmount?.token)
   const showAddLiquidityButton = Boolean(stakingInfo?.stakedAmount?.equalTo('0') && userLiquidityUnstaked?.equalTo('0'))
-  const showDepositButton = Boolean(Math.floor(Date.now() / 1000) > stakingInfo?.genesis)
+  // const showDepositButton = Boolean(Math.floor(Date.now() / 1000) > stakingInfo?.genesis)
   const apr = (stakingInfo?.dfynPrice * 100 * 2) / stakingInfo?.routePrice
   // toggle for staking modal and unstaking modal
   const [showStakingModal, setShowStakingModal] = useState(false)
@@ -164,7 +164,7 @@ export default function Manage({
         </PoolData>
       </DataRow>
 
-      {showAddLiquidityButton && (
+      {/* {showAddLiquidityButton && (
         <VoteCard>
           <CardBGImage />
           <CardNoise />
@@ -192,8 +192,8 @@ export default function Manage({
           <CardBGImage />
           <CardNoise />
         </VoteCard>
-      )}
-      {/* {showAddLiquidityButton && (
+      )} */}
+      {showAddLiquidityButton && (
         <VoteCard>
           <CardBGImage />
           <CardNoise />
@@ -204,7 +204,7 @@ export default function Manage({
               </RowBetween>
               <RowBetween style={{ marginBottom: '1rem' }}>
                 <TYPE.white fontSize={14}>
-                  {`Lock ROUTE for a period of time and earn a fixed number of Dfyn tokens.`}
+                  {`Checkout our new farms!`}
                 </TYPE.white>
               </RowBetween>
               <ExternalLink
@@ -219,7 +219,7 @@ export default function Manage({
           <CardBGImage />
           <CardNoise />
         </VoteCard>
-      )} */}
+      )}
       <RowBetween style={{ gap: '24px', alignItems: 'baseline' }}>
         {" "}
         {stakingInfo?.periodFinish && !showAddLiquidityButton && <Countdown exactEnd={stakingInfo.periodFinish} start={stakingInfo.userVaultInfo.depositTime} />}
@@ -331,11 +331,11 @@ export default function Manage({
 
         {!showAddLiquidityButton && (
           <DataRow style={{ marginBottom: '1rem' }}>
-            {stakingInfo && stakingInfo.active && showDepositButton && (
+            {/* {stakingInfo && stakingInfo.active && showDepositButton && (
               <ButtonPrimary padding="8px" borderRadius="8px" width="160px" onClick={handleDepositClick}>
                 {stakingInfo?.stakedAmount?.greaterThan(JSBI.BigInt(0)) ? 'Deposit' : 'Deposit ROUTE'}
               </ButtonPrimary>
-            )}
+            )} */}
 
             {stakingInfo?.earnedAmount && JSBI.notEqual(BIG_INT_ZERO, stakingInfo?.earnedAmount?.raw) && (
               <>
