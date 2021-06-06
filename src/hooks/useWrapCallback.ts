@@ -45,13 +45,13 @@ export default function useWrapCallback(
         execute:
           sufficientBalance && inputAmount
             ? async () => {
-                try {
-                  const txReceipt = await wethContract.deposit({ value: `0x${inputAmount.raw.toString(16)}` })
-                  addTransaction(txReceipt, { summary: `Wrap ${inputAmount.toSignificant(6)} MATIC to WMATIC` })
-                } catch (error) {
-                  console.error('Could not deposit', error)
-                }
+              try {
+                const txReceipt = await wethContract.deposit({ value: `0x${inputAmount.raw.toString(16)}` })
+                addTransaction(txReceipt, { summary: `Wrap ${inputAmount.toSignificant(6)} MATIC to WMATIC` })
+              } catch (error) {
+                console.error('Could not deposit', error)
               }
+            }
             : undefined,
         inputError: sufficientBalance ? undefined : 'Insufficient ETH balance'
       }
@@ -62,30 +62,30 @@ export default function useWrapCallback(
         execute:
           sufficientBalance && inputAmount
             ? async () => {
-                try {
-                  const txReceipt = await wethV2Contract?.deposit({ value: `0x${inputAmount.raw.toString(16)}` })
-                  addTransaction(txReceipt, { summary: `Wrap ${inputAmount.toSignificant(6)} MATIC to WMATICV2` })
-                } catch (error) {
-                  console.error('Could not deposit', error)
-                }
+              try {
+                const txReceipt = await wethV2Contract?.deposit({ value: `0x${inputAmount.raw.toString(16)}` })
+                addTransaction(txReceipt, { summary: `Wrap ${inputAmount.toSignificant(6)} MATIC to WMATICV2` })
+              } catch (error) {
+                console.error('Could not deposit', error)
               }
+            }
             : undefined,
         inputError: sufficientBalance ? undefined : 'Insufficient ETH balance'
       }
     }
-     else if (currencyEquals(WETH[chainId], inputCurrency) && outputCurrency === ETHER) {
+    else if (currencyEquals(WETH[chainId], inputCurrency) && outputCurrency === ETHER) {
       return {
         wrapType: WrapType.UNWRAP,
         execute:
           sufficientBalance && inputAmount
             ? async () => {
-                try {
-                  const txReceipt = await wethContract.withdraw(`0x${inputAmount.raw.toString(16)}`)
-                  addTransaction(txReceipt, { summary: `Unwrap ${inputAmount.toSignificant(6)} WMATIC to MATIC` })
-                } catch (error) {
-                  console.error('Could not withdraw', error)
-                }
+              try {
+                const txReceipt = await wethContract.withdraw(`0x${inputAmount.raw.toString(16)}`)
+                addTransaction(txReceipt, { summary: `Unwrap ${inputAmount.toSignificant(6)} WMATIC to MATIC` })
+              } catch (error) {
+                console.error('Could not withdraw', error)
               }
+            }
             : undefined,
         inputError: sufficientBalance ? undefined : 'Insufficient WETH balance'
       }
@@ -96,19 +96,19 @@ export default function useWrapCallback(
         execute:
           sufficientBalance && inputAmount
             ? async () => {
-                try {
-                  const txReceipt = await wethV2Contract?.withdraw(`0x${inputAmount.raw.toString(16)}`)
-                  addTransaction(txReceipt, { summary: `Unwrap ${inputAmount.toSignificant(6)} WMATIC2 to MATIC` })
-                } catch (error) {
-                  console.error('Could not withdraw', error)
-                }
+              try {
+                const txReceipt = await wethV2Contract?.withdraw(`0x${inputAmount.raw.toString(16)}`)
+                addTransaction(txReceipt, { summary: `Unwrap ${inputAmount.toSignificant(6)} WMATIC2 to MATIC` })
+              } catch (error) {
+                console.error('Could not withdraw', error)
               }
+            }
             : undefined,
         inputError: sufficientBalance ? undefined : 'Insufficient WETH balance'
       }
     }
-     else {
+    else {
       return NOT_APPLICABLE
     }
-  }, [wethContract, chainId, inputCurrency, outputCurrency, inputAmount, balance, addTransaction])
+  }, [wethContract, chainId, inputCurrency, outputCurrency, inputAmount, balance, addTransaction, wethV2Contract])
 }
