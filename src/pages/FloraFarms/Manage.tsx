@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { AutoColumn } from '../../components/Column'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
@@ -124,6 +124,11 @@ export default function Manage({
   const [showClaimRewardModal, setShowClaimRewardModal] = useState(false)
   const [showConfirmation, setShowConfirmation] = useState(false)
   const [vestingMode, setVestingMode] = useState(true)
+
+  useEffect(() => {
+    if (stakingInfo?.userVestingInfo?.hasSetConfig)
+      setVestingMode(stakingInfo?.userVestingInfo?.hasOptForVesting);
+  }, [stakingInfo])
 
   // fade cards if nothing staked or nothing earned yet
   const disableTop = !stakingInfo?.stakedAmount || stakingInfo.stakedAmount.equalTo(JSBI.BigInt(0))

@@ -131,7 +131,7 @@ const BurnConfirmationModal = ({ isOpen, setShowConfirmation, stakingInfo, setVe
                     <SubmittedView onDismiss={wrappedOnDismiss} hash={hash}>
                         <AutoColumn gap="12px" justify={'center'}>
                             <TYPE.largeHeader>Transaction Submitted</TYPE.largeHeader>
-                            <TYPE.body fontSize={20}>Now you'll get 50% of your reward rest will burn</TYPE.body>
+                            <TYPE.body fontSize={20}>{!vesting ? `Your rewards will get vested` : `Now you'll get 50% of your reward rest will burn`}</TYPE.body>
                         </AutoColumn>
                     </SubmittedView>
                 )}

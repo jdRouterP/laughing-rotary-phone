@@ -357,7 +357,7 @@ export function useStakingInfo(pairToFilterBy?: Pair | null): StakingInfo[] {
 
         let ableToClaim = !vestingActive || (Math.floor(Date.now() / 1000) >= periodFinishSeconds &&
           (userClaimedSplit !== Math.floor(currentSplit) ? true : !hasClaimedPartial))
-
+        debugger
         memo.push({
           type: { typeOf: 'Popular Farms', url: 'popular-farms' },
           stakingRewardAddress: rewardsAddress,
