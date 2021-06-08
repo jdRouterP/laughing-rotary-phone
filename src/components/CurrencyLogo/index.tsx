@@ -276,6 +276,17 @@ export const getTokenLogoURL = (address: string) => {
     uri = 'https://etherscan.io/token/images/zuzprotocol_32.png'
   }
 
+
+  if (address?.toLowerCase() === '0x24834BBEc7E39ef42f4a75EAF8E5B6486d3F0e57'.toLowerCase()) {
+    uri = '	https://etherscan.io/token/images/terra-luna_32.png'
+  }
+
+  if (address?.toLowerCase() === '0x692597b009d13C4049a947CAB2239b7d6517875F'.toLowerCase()) {
+    uri = 'https://etherscan.io/token/images/terra-ust_32.png'
+  }
+
+
+
   if (address?.toLowerCase() === '0xFdc26CDA2d2440d0E83CD1DeE8E8bE48405806DC'.toLowerCase()) {
     uri = 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xb683D83a532e2Cb7DFa5275eED3698436371cc9f/logo.png'
   }

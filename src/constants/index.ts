@@ -47,6 +47,8 @@ export const ZEE = new Token(ChainId.MATIC, '0xfd4959c06FbCc02250952DAEbf8e0Fb38
 export const AURORA = new Token(ChainId.MATIC, '0x0c8c8ae8bc3a69dc8482c01ceacfb588bb516b01', 18, 'AURORA', 'Aurora Token')
 export const ANY = new Token(ChainId.MATIC, '0x6ab6d61428fde76768d7b45d8bfeec19c6ef91a8', 18, 'ANY', 'Anyswap')
 export const UFT = new Token(ChainId.MATIC, '0x5b4cf2c120a9702225814e18543ee658c5f8631e', 18, 'UFT', 'UniLend')
+export const LUNA = new Token(ChainId.MATIC, '0x24834BBEc7E39ef42f4a75EAF8E5B6486d3F0e57', 18, 'LUNA', 'Wrapped LUNA Token')
+export const UST = new Token(ChainId.MATIC, '0x692597b009d13C4049a947CAB2239b7d6517875F', 18, 'UST', 'Wrapped UST Token')
 
 
 //TEST TOKENS
