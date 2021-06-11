@@ -23,7 +23,8 @@ const ETHERSCAN_PREFIXES: { [chainId in ChainId]: string } = {
   4: 'rinkeby.',
   5: 'goerli.',
   42: 'kovan.',
-  137: 'matic.'
+  137: 'matic',
+  66: 'okex'
 }
 
 export function getEtherscanLink(
@@ -33,7 +34,7 @@ export function getEtherscanLink(
 ): string {
   let prefix = `https://${ETHERSCAN_PREFIXES[chainId] || ETHERSCAN_PREFIXES[1]}etherscan.io`
 
-  if(chainId === ChainId.MATIC) {
+  if (chainId === ChainId.MATIC) {
     prefix = `https://explorer-mainnet.maticvigil.com`
   }
 

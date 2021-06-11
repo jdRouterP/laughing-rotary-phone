@@ -1,4 +1,4 @@
-import { ChainId, TokenAmount } from '@uniswap/sdk'
+import { TokenAmount } from '@uniswap/sdk'
 import React, { useState } from 'react'
 import { Text } from 'rebass'
 import { NavLink } from 'react-router-dom'
@@ -6,7 +6,7 @@ import { darken } from 'polished'
 import { useTranslation } from 'react-i18next'
 import { isAndroid, isIOS, isMobile } from 'react-device-detect'
 import styled from 'styled-components'
-
+import { NETWORK_LABEL } from '../../constants/networks'
 import Logo from '../../assets/images/DFYN logo final.png'
 import LogoDark from '../../assets/images/DFYN logo dark.png'
 import DarkLogoMobile from '../../assets/images/logo_white.png'
@@ -35,6 +35,7 @@ import usePrevious from '../../hooks/usePrevious'
 import QuestionHelper from 'components/QuestionHelper'
 import Toggle from 'components/Toggle'
 import FarmsMenu from 'components/FarmsMenu'
+import Web3Network from 'components/Web3Network'
 
 const HeaderFrame = styled.div`
   display: grid;
@@ -194,6 +195,8 @@ const HideSmall = styled.span`
 const NetworkCard = styled(YellowCard)`
   border-radius: 12px;
   padding: 8px 12px;
+  cursor: pointer;
+  
   ${({ theme }) => theme.mediaWidth.upToSmall`
     margin: 0;
     margin-right: 0.5rem;
@@ -326,12 +329,6 @@ export const StyledMenuButton = styled.button`
   }
 `
 
-const NETWORK_LABELS: { [chainId in ChainId]?: string } = {
-  [ChainId.RINKEBY]: 'Rinkeby',
-  [ChainId.ROPSTEN]: 'Ropsten',
-  [ChainId.GÖRLI]: 'Görli',
-  [ChainId.KOVAN]: 'Kovan'
-}
 
 export default function Header() {
   const { account, chainId } = useActiveWeb3React()
@@ -419,11 +416,6 @@ export default function Header() {
               }
             />
           </GaslessModeElement>
-          <HideSmall>
-            {chainId && NETWORK_LABELS[chainId] && (
-              <NetworkCard title={NETWORK_LABELS[chainId]}>{NETWORK_LABELS[chainId]}</NetworkCard>
-            )}
-          </HideSmall>
           {availableClaim && !showClaimPopup && (
             <UNIWrapper onClick={toggleClaimModal}>
               <UNIAmount active={!!account && !availableClaim} style={{ pointerEvents: 'auto' }}>
@@ -460,10 +452,15 @@ export default function Header() {
               <CardNoise />
             </UNIWrapper>
           )}
+          <HideSmall>
+            {chainId && NETWORK_LABEL[chainId] && (
+              <NetworkCard title={NETWORK_LABEL[chainId]}><Web3Network /></NetworkCard>
+            )}
+          </HideSmall>
           <AccountElement active={!!account} style={{ pointerEvents: 'auto' }}>
             {account && userEthBalance ? (
               <BalanceText style={{ flexShrink: 0 }} pl="0.75rem" pr="0.5rem" fontWeight={500}>
-                {userEthBalance?.toSignificant(4)} MATIC
+                {userEthBalance?.toSignificant(4)}{' '} MATIC
               </BalanceText>
             ) : null}
             <Web3Status />
