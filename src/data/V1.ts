@@ -3,7 +3,6 @@ import {
   BigintIsh,
   Currency,
   CurrencyAmount,
-  ETHER,
   JSBI,
   Pair,
   Route,
@@ -13,6 +12,7 @@ import {
   TradeType,
   WETH
 } from '@uniswap/sdk'
+import { ETHER } from '../constants'
 import { useMemo } from 'react'
 import { useActiveWeb3React } from '../hooks'
 import { useAllTokens } from '../hooks/Tokens'
@@ -150,8 +150,8 @@ export function useV1TradeExchangeAddress(trade: Trade | undefined): string | un
     return trade.inputAmount instanceof TokenAmount
       ? trade.inputAmount.token.address
       : trade.outputAmount instanceof TokenAmount
-      ? trade.outputAmount.token.address
-      : undefined
+        ? trade.outputAmount.token.address
+        : undefined
   }, [trade])
   return useV1ExchangeAddress(tokenAddress)
 }

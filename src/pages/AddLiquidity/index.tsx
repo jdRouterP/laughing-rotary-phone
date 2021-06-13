@@ -1,7 +1,7 @@
 import { splitSignature } from '@ethersproject/bytes'
 import { BigNumber } from '@ethersproject/bignumber'
 import { TransactionResponse } from '@ethersproject/providers'
-import { Currency, currencyEquals, ETHER, TokenAmount, WETH } from '@uniswap/sdk'
+import { Currency, currencyEquals, TokenAmount, WETH } from '@uniswap/sdk'
 import React, { useCallback, useContext, useState } from 'react'
 import { Plus } from 'react-feather'
 import ReactGA from 'react-ga'
@@ -170,8 +170,8 @@ export default function AddLiquidity({
       method: (...args: any) => Promise<TransactionResponse>,
       args: Array<string | string[] | number>,
       value: BigNumber | null
-    if (currencyA === ETHER || currencyB === ETHER) {
-      const tokenBIsETH = currencyB === ETHER
+    if (currencyA === Currency.getNativeCurrency(chainId) || currencyB === Currency.getNativeCurrency(chainId)) {
+      const tokenBIsETH = currencyB === Currency.getNativeCurrency(chainId)
       estimate = router.estimateGas.addLiquidityETH
       method = router.addLiquidityETH
       methodName = "addLiquidityETH"

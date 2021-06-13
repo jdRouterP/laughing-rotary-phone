@@ -1,7 +1,7 @@
 import { splitSignature } from '@ethersproject/bytes'
 import { Contract } from '@ethersproject/contracts'
 import { TransactionResponse } from '@ethersproject/providers'
-import { Currency, currencyEquals, ETHER, Percent, WETH } from '@uniswap/sdk'
+import { Currency, currencyEquals, Percent, WETH } from '@uniswap/sdk'
 import React, { useCallback, useContext, useMemo, useState } from 'react'
 import { ArrowDown, Plus } from 'react-feather'
 import ReactGA from 'react-ga'
@@ -235,8 +235,8 @@ export default function RemoveLiquidity({
     const liquidityAmount = parsedAmounts[Field.LIQUIDITY]
     if (!liquidityAmount) throw new Error('missing liquidity amount')
 
-    const currencyBIsETH = currencyB === ETHER
-    const oneCurrencyIsETH = currencyA === ETHER || currencyBIsETH
+    const currencyBIsETH = currencyB === Currency.getNativeCurrency(chainId)
+    const oneCurrencyIsETH = currencyA === Currency.getNativeCurrency(chainId) || currencyBIsETH
 
     if (!tokenA || !tokenB) throw new Error('could not wrap')
 
@@ -528,7 +528,7 @@ export default function RemoveLiquidity({
     [onUserInput]
   )
 
-  const oneCurrencyIsETH = currencyA === ETHER || currencyB === ETHER
+  const oneCurrencyIsETH = currencyA === Currency.getNativeCurrency(chainId) || currencyB === Currency.getNativeCurrency(chainId)
   const oneCurrencyIsWETH = Boolean(
     chainId &&
     ((currencyA && currencyEquals(WETH[chainId], currencyA)) ||
@@ -672,7 +672,7 @@ export default function RemoveLiquidity({
                       <RowBetween style={{ justifyContent: 'flex-end' }}>
                         {oneCurrencyIsETH ? (
                           <StyledInternalLink
-                            to={`/remove/${currencyA === ETHER ? WETH[chainId].address : currencyIdA}/${currencyB === ETHER ? WETH[chainId].address : currencyIdB
+                            to={`/remove/${currencyA === Currency.getNativeCurrency(chainId) ? WETH[chainId].address : currencyIdA}/${currencyB === Currency.getNativeCurrency(chainId) ? WETH[chainId].address : currencyIdB
                               }`}
                           >
                             Receive WMATIC
