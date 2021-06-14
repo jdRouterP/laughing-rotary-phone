@@ -682,7 +682,7 @@ export default function RemoveLiquidity({
                             to={`/remove/${currencyA && currencyEquals(currencyA, WETH[chainId]) ? 'ETH' : currencyIdA
                               }/${currencyB && currencyEquals(currencyB, WETH[chainId]) ? 'ETH' : currencyIdB}`}
                           >
-                            Receive ETH
+                            Receive {Currency.getNativeCurrencySymbol(chainId)}
                           </StyledInternalLink>
                         ) : null}
                       </RowBetween>

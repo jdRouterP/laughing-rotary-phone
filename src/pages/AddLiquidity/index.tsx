@@ -72,7 +72,7 @@ export default function AddLiquidity({
 
   const currencyA = useCurrency(currencyIdA)
   const currencyB = useCurrency(currencyIdB)
-
+  debugger
   const oneCurrencyIsWETH = Boolean(
     chainId &&
     ((currencyA && currencyEquals(currencyA, WETH[chainId])) ||
@@ -397,7 +397,7 @@ export default function AddLiquidity({
           history.push(`/add/${newCurrencyIdB}`)
         }
       } else {
-        history.push(`/add/${currencyIdA ? currencyIdA : 'ETH'}/${newCurrencyIdB}`)
+        history.push(`/add/${currencyIdA ? currencyIdA : Currency.getNativeCurrencySymbol(chainId)}/${newCurrencyIdB}`)
       }
     },
     [currencyIdA, history, currencyIdB]

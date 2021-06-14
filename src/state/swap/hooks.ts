@@ -18,7 +18,7 @@ import { SwapState } from './reducer'
 import useToggledVersion from '../../hooks/useToggledVersion'
 import { useUserSlippageTolerance } from '../user/hooks'
 import { computeSlippageAdjustedAmounts } from '../../utils/prices'
-import { UNI, ETHER as ETHER_TOKEN } from '../../constants'
+import { UNI } from '../../constants'
 
 export function useSwapState(): AppState['swap'] {
   return useSelector<AppState, AppState['swap']>(state => state.swap)
@@ -223,22 +223,30 @@ export function useDerivedSwapInfo(): {
   }
 }
 
-function parseCurrencyFromURLParameter(urlParam: any): string {
-  if (typeof urlParam === 'string') {
-    const valid = isAddress(urlParam)
-    if (valid) return valid
-    if (urlParam.toUpperCase() === 'ETH') return 'ETH'
-    if (valid === false) return "ETH"
+function parseCurrencyFromURLParameter(
+  urlParam: any,
+  chainId = ChainId.MATIC
+): string {
+  if (typeof urlParam === "string") {
+    const valid = isAddress(urlParam);
+    const nativeSymbol = Currency.getNativeCurrencySymbol(chainId);
+    if (valid) return valid;
+    if (urlParam.toUpperCase() === nativeSymbol) return nativeSymbol;
+    if (valid === false) return nativeSymbol || '';
   }
-  return ETHER_TOKEN.address ?? ''
+  return Currency.getNativeCurrencySymbol(chainId) ?? "";
 }
 
 function parseTokenAmountURLParameter(urlParam: any): string {
-  return typeof urlParam === 'string' && !isNaN(parseFloat(urlParam)) ? urlParam : ''
+  return typeof urlParam === "string" && !isNaN(parseFloat(urlParam))
+    ? urlParam
+    : "";
 }
 
 function parseIndependentFieldURLParameter(urlParam: any): Field {
-  return typeof urlParam === 'string' && urlParam.toLowerCase() === 'output' ? Field.OUTPUT : Field.INPUT
+  return typeof urlParam === "string" && urlParam.toLowerCase() === "output"
+    ? Field.OUTPUT
+    : Field.INPUT;
 }
 
 const ENS_NAME_REGEX = /^[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&/=]*)?$/
@@ -252,9 +260,18 @@ function validatedRecipient(recipient: any): string | null {
   return null
 }
 
-export function queryParametersToSwapState(parsedQs: ParsedQs): SwapState {
-  let inputCurrency = parseCurrencyFromURLParameter(parsedQs.inputCurrency)
-  let outputCurrency = parseCurrencyFromURLParameter(parsedQs.outputCurrency)
+export function queryParametersToSwapState(
+  parsedQs: ParsedQs,
+  chainId = ChainId.MATIC
+): SwapState {
+  let inputCurrency = parseCurrencyFromURLParameter(
+    parsedQs.inputCurrency,
+    chainId
+  );
+  let outputCurrency = parseCurrencyFromURLParameter(
+    parsedQs.outputCurrency,
+    chainId
+  );
   if (inputCurrency === outputCurrency) {
     if (typeof parsedQs.outputCurrency === 'string') {
       inputCurrency = UNI[ChainId.MATIC].address
@@ -291,7 +308,7 @@ export function useDefaultsFromURLSearch():
 
   useEffect(() => {
     if (!chainId) return
-    const parsed = queryParametersToSwapState(parsedQs)
+    const parsed = queryParametersToSwapState(parsedQs, chainId)
 
     dispatch(
       replaceSwapState({
