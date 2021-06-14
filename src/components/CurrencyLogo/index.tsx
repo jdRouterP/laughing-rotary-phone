@@ -1,4 +1,4 @@
-import { ChainId, Currency, Token } from '@uniswap/sdk'
+import { ChainId, Currency, Token } from '@dfyn/sdk'
 import { useActiveWeb3React } from 'hooks'
 import React, { useMemo } from 'react'
 import styled from 'styled-components'
@@ -406,7 +406,7 @@ export default function CurrencyLogo({
 
   if (currency === Currency.getNativeCurrency(chainId)) {
     if (chainId)
-      return <StyledNativeLogo src={require(logo[chainId] || `/images/tokens/unknown.png`)} size={size} style={style} />
+      return <StyledNativeLogo src={logo[chainId] || `/images/tokens/unknown.png`} size={size} style={style} />
   }
 
   return <StyledLogo size={size} srcs={srcs} alt={`${currency?.symbol ?? 'token'} logo`} style={style} />

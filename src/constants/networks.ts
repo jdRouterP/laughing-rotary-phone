@@ -1,4 +1,4 @@
-import { ChainId } from '@uniswap/sdk'
+import { ChainId } from '@dfyn/sdk'
 
 const Goerli = '/images/networks/goerli-network.jpg'
 const Kovan = '/images/networks/kovan-network.jpg'
@@ -89,4 +89,11 @@ export const SUPPORTED_NETWORKS: {
         rpcUrls: ['https://exchainrpc.okex.org'],
         blockExplorerUrls: ['https://www.oklink.com/okexchain'],
     }
+}
+
+export const HEADER_ACCESS = {
+    vault: [ChainId.MATIC],
+    charts: [ChainId.MATIC],
+    farms: [ChainId.MATIC],
+    gaslessMode: [ChainId.MATIC]
 }

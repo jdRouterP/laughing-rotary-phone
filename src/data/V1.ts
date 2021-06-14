@@ -11,7 +11,7 @@ import {
   Trade,
   TradeType,
   WETH
-} from '@uniswap/sdk'
+} from '@dfyn/sdk'
 import { ETHER } from '../constants'
 import { useMemo } from 'react'
 import { useActiveWeb3React } from '../hooks'

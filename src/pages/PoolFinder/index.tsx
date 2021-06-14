@@ -1,4 +1,4 @@
-import { Currency, JSBI, TokenAmount } from '@uniswap/sdk'
+import { Currency, JSBI, TokenAmount } from '@dfyn/sdk'
 import React, { useCallback, useEffect, useState } from 'react'
 import { Plus } from 'react-feather'
 import { Text } from 'rebass'
@@ -55,16 +55,23 @@ export default function PoolFinder() {
   const position: TokenAmount | undefined = useTokenBalance(account ?? undefined, pair?.liquidityToken)
   const hasPosition = Boolean(position && JSBI.greaterThan(position.raw, JSBI.BigInt(0)))
 
+  const switchTokens = useCallback(() => {
+    setCurrency0(currency1);
+    setCurrency1(currency0);
+  }, [currency0, currency1]);
+
   const handleCurrencySelect = useCallback(
     (currency: Currency) => {
       if (activeField === Fields.TOKEN0) {
-        setCurrency0(currency)
+        if (currency === currency1) switchTokens();
+        else setCurrency0(currency);
       } else {
-        setCurrency1(currency)
+        if (currency === currency0) switchTokens();
+        else setCurrency1(currency);
       }
     },
     [activeField]
-  )
+  );
 
   const handleSearchDismiss = useCallback(() => {
     setShowSearch(false)

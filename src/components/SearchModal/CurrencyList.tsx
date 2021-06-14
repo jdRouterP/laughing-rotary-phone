@@ -1,4 +1,4 @@
-import { ChainId, Currency, CurrencyAmount, currencyEquals, Token } from '@uniswap/sdk'
+import { ChainId, Currency, CurrencyAmount, currencyEquals, Token } from '@dfyn/sdk'
 import React, { CSSProperties, MutableRefObject, useCallback, useMemo } from 'react'
 import { FixedSizeList } from 'react-window'
 import { Text } from 'rebass'
@@ -166,15 +166,14 @@ export default function CurrencyList({
   setImportToken: (token: Token) => void
   breakIndex: number | undefined
 }) {
+  const { chainId } = useActiveWeb3React()
   const itemData: (Currency | undefined)[] = useMemo(() => {
-    let formatted: (Currency | undefined)[] = showETH ? [Currency.ETHER, ...currencies] : currencies
+    let formatted: (Currency | undefined)[] = showETH ? [Currency.getNativeCurrency(chainId), ...currencies] : currencies
     if (breakIndex !== undefined) {
       formatted = [...formatted.slice(0, breakIndex), undefined, ...formatted.slice(breakIndex, formatted.length)]
     }
     return formatted
   }, [breakIndex, currencies, showETH])
-
-  const { chainId } = useActiveWeb3React()
   const theme = useTheme()
 
   const inactiveTokens: {

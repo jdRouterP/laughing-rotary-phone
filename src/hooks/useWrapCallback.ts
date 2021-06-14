@@ -1,4 +1,4 @@
-import { Currency, currencyEquals, WETH } from '@uniswap/sdk'
+import { Currency, currencyEquals, WETH } from '@dfyn/sdk'
 import { useMemo } from 'react'
 import { tryParseAmount } from '../state/swap/hooks'
 import { useTransactionAdder } from '../state/transactions/hooks'

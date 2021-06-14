@@ -1,7 +1,7 @@
 import { splitSignature } from '@ethersproject/bytes'
 import { BigNumber } from '@ethersproject/bignumber'
 import { TransactionResponse } from '@ethersproject/providers'
-import { Currency, currencyEquals, TokenAmount, WETH } from '@uniswap/sdk'
+import { Currency, currencyEquals, TokenAmount, WETH } from '@dfyn/sdk'
 import React, { useCallback, useContext, useState } from 'react'
 import { Plus } from 'react-feather'
 import ReactGA from 'react-ga'

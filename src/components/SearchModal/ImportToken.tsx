@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Token, Currency } from '@uniswap/sdk'
+import { Token, Currency } from '@dfyn/sdk'
 import styled from 'styled-components'
 import { TYPE, CloseIcon } from 'theme'
 import Card from 'components/Card'
@@ -25,7 +25,7 @@ const Wrapper = styled.div`
   overflow: auto;
 `
 
-const WarningWrapper = styled(Card)<{ highWarning: boolean }>`
+const WarningWrapper = styled(Card) <{ highWarning: boolean }>`
   background-color: ${({ theme, highWarning }) =>
     highWarning ? transparentize(0.8, theme.red1) : transparentize(0.8, theme.yellow2)};
   width: fit-content;

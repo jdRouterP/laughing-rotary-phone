@@ -1,4 +1,4 @@
-import { ChainId, Currency } from '@uniswap/sdk'
+import { ChainId, Currency } from '@dfyn/sdk'
 import React, { useContext } from 'react'
 import styled, { ThemeContext } from 'styled-components'
 import Modal from '../Modal'
@@ -101,7 +101,7 @@ function TransactionSubmittedContent({
           {chainId && hash && (
             <ExternalLink href={getEtherscanLink(chainId, hash, 'transaction')}>
               <Text fontWeight={500} fontSize={14} color={theme.primary1}>
-                View on Matic explorer
+                View on explorer
               </Text>
             </ExternalLink>
           )}

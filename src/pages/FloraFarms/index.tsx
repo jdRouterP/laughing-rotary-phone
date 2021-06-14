@@ -9,7 +9,7 @@ import { RowBetween } from '../../components/Row'
 import { CardSection, DataCard, CardNoise, CardBGImage } from '../../components/floraFarms/styled'
 import Loader from '../../components/Loader'
 import { useActiveWeb3React } from '../../hooks'
-// import { JSBI } from '@uniswap/sdk'
+// import { JSBI } from '@dfyn/sdk'
 // import { BIG_INT_ZERO } from '../../constants'
 import { OutlineCard } from '../../components/Card'
 
@@ -70,7 +70,7 @@ export default function Earn() {
               <RowBetween>
                 <TYPE.white fontSize={14}>
                   A total of 4.875 M DFYN tokens will be distributed as rewards for this program. 25% of the DFYN token rewards can be claimed after farming ends. The remaining rewards will be released 25% every 2 months unless the user decides to claim all tokens instantly by agreeing to burn 50% tokens.
-                  </TYPE.white>
+                </TYPE.white>
 
 
               </RowBetween>{' '}

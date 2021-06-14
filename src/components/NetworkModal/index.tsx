@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { ReactComponent as Close } from '../../assets/images/x.svg'
 import { ApplicationModal } from '../../state/application/actions'
 import { useModalOpen, useNetworkModalToggle } from '../../state/application/hooks'
-import { ChainId } from '@uniswap/sdk'
+import { ChainId } from '@dfyn/sdk'
 import Modal from '../Modal'
 import Option from './Options'
 import { NETWORK_ICON, SUPPORTED_NETWORKS } from 'constants/networks'
@@ -87,78 +87,78 @@ const HoverText = styled.div`
 `
 
 export default function NetworkModal() {
-    const { account, error, library, chainId } = useActiveWeb3React()
+  const { account, error, library, chainId } = useActiveWeb3React()
 
 
-    const networkModalOpen = useModalOpen(ApplicationModal.NETWORK)
+  const networkModalOpen = useModalOpen(ApplicationModal.NETWORK)
 
-    const toggleNetworkModal = useNetworkModalToggle()
+  const toggleNetworkModal = useNetworkModalToggle()
 
-    function getOptions() {
+  function getOptions() {
 
-        return [
-            ChainId.MATIC,
-            ChainId.OKEX,
-        ].map((key: ChainId) => {
-            const option = SUPPORTED_NETWORKS[key]
-            return (
-                <Option
-                    id={`connect-${key}`}
-                    onClick={() => {
-                        toggleNetworkModal()
-                        const params = option
-                        debugger
-                        library?.send('wallet_addEthereumChain', [
-                            params,
-                            account,
-                        ])
-                    }}
-                    key={key}
-                    active={chainId === key}
-                    color={"white"}
-                    header={option?.chainName}
-                    subheader={null} //use option.descriptio to bring back multi-line
-                    icon={NETWORK_ICON[key]}
-                />
-            )
-        }
-        )
+    return [
+      ChainId.MATIC,
+      ChainId.OKEX,
+    ].map((key: ChainId) => {
+      const option = SUPPORTED_NETWORKS[key]
+      return (
+        <Option
+          id={`connect-${key}`}
+          onClick={() => {
+            toggleNetworkModal()
+            const params = option
+            debugger
+            library?.send('wallet_addEthereumChain', [
+              params,
+              account,
+            ])
+          }}
+          key={key}
+          active={chainId === key}
+          color={"white"}
+          header={option?.chainName}
+          subheader={null} //use option.descriptio to bring back multi-line
+          icon={NETWORK_ICON[key]}
+        />
+      )
     }
-
-    function getModalContent() {
-        if (error) {
-            return (
-                <UpperSection>
-                    <CloseIcon onClick={toggleNetworkModal}>
-                        <CloseColor />
-                    </CloseIcon>
-                    <HeaderRow>{'Error'}</HeaderRow>
-                    <ContentWrapper>
-                        {"Error"}
-                    </ContentWrapper>
-                </UpperSection>
-            )
-        }
-        return (
-            <UpperSection>
-                <CloseIcon onClick={toggleNetworkModal}>
-                    <CloseColor />
-                </CloseIcon>
-                <HeaderRow>
-                    <HoverText>Connect to a network</HoverText>
-                </HeaderRow>
-                <ContentWrapper>
-                    {
-                        <OptionGrid>{getOptions()}</OptionGrid>
-                    }
-                </ContentWrapper>
-            </UpperSection>
-        )
-    }
-
-    return (
-        <Modal isOpen={networkModalOpen} onDismiss={toggleNetworkModal} minHeight={false} maxHeight={90}>
-            <Wrapper>{getModalContent()}</Wrapper>
-        </Modal>
     )
+  }
+
+  function getModalContent() {
+    if (error) {
+      return (
+        <UpperSection>
+          <CloseIcon onClick={toggleNetworkModal}>
+            <CloseColor />
+          </CloseIcon>
+          <HeaderRow>{'Error'}</HeaderRow>
+          <ContentWrapper>
+            {"Error"}
+          </ContentWrapper>
+        </UpperSection>
+      )
+    }
+    return (
+      <UpperSection>
+        <CloseIcon onClick={toggleNetworkModal}>
+          <CloseColor />
+        </CloseIcon>
+        <HeaderRow>
+          <HoverText>Connect to a network</HoverText>
+        </HeaderRow>
+        <ContentWrapper>
+          {
+            <OptionGrid>{getOptions()}</OptionGrid>
+          }
+        </ContentWrapper>
+      </UpperSection>
+    )
+  }
+
+  return (
+    <Modal isOpen={networkModalOpen} onDismiss={toggleNetworkModal} minHeight={false} maxHeight={90}>
+      <Wrapper>{getModalContent()}</Wrapper>
+    </Modal>
+  )
 }

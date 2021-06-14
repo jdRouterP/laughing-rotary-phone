@@ -1,4 +1,4 @@
-import { ChainId, Currency, currencyEquals, JSBI, Price, WETH } from '@uniswap/sdk'
+import { ChainId, Currency, currencyEquals, JSBI, Price, WETH } from '@dfyn/sdk'
 import { useMemo } from 'react'
 import { DAI, USDC } from '../constants'
 import { PairState, usePairs } from '../data/Reserves'

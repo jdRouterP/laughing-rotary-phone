@@ -2,7 +2,7 @@ import { useState, useLayoutEffect } from 'react'
 import { shade } from 'polished'
 import Vibrant from 'node-vibrant'
 import { hex } from 'wcag-contrast'
-import { Token, ChainId } from '@uniswap/sdk'
+import { Token, ChainId } from '@dfyn/sdk'
 import uriToHttp from 'utils/uriToHttp'
 import { getTokenLogoURL } from 'components/CurrencyLogo'
 
@@ -25,7 +25,7 @@ async function getColorFromToken(token: Token): Promise<string | null> {
       }
       return null
     })
-    .catch((error)=> null)
+    .catch((error) => null)
 }
 
 async function getColorFromUriPath(uri: string): Promise<string | null> {

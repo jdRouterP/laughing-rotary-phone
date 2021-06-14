@@ -1,4 +1,4 @@
-import { ChainId, Currency, CurrencyAmount, Token, TokenAmount, WETH } from '@uniswap/sdk'
+import { ChainId, Currency, CurrencyAmount, Token, TokenAmount, WETH } from '@dfyn/sdk'
 
 export function wrappedCurrency(currency: Currency | undefined, chainId: ChainId | undefined): Token | undefined {
   return chainId && currency === Currency.getNativeCurrency(chainId) ? WETH[chainId] : currency instanceof Token ? currency : undefined

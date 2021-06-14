@@ -1,4 +1,4 @@
-import { CurrencyAmount, ChainId, Currency, JSBI } from '@uniswap/sdk'
+import { CurrencyAmount, ChainId, Currency, JSBI } from '@dfyn/sdk'
 import { MIN_ETH } from '../constants'
 
 /**

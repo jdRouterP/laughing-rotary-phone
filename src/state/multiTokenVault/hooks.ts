@@ -1,4 +1,4 @@
-import { ChainId, CurrencyAmount, JSBI, Token, TokenAmount } from '@uniswap/sdk'
+import { ChainId, CurrencyAmount, JSBI, Token, TokenAmount } from '@dfyn/sdk'
 import { useMemo } from 'react'
 import { DFYN, ROUTE, UNI, USDC } from '../../constants'
 import { MULTI_TOKEN_VAULT_INTERFACE } from '../../constants/abis/multiTokenVault'

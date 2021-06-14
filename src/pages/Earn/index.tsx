@@ -10,7 +10,7 @@ import { CardSection, DataCard, CardNoise, CardBGImage } from '../../components/
 // import { Countdown } from './Countdown'
 import Loader from '../../components/Loader'
 import { useActiveWeb3React } from '../../hooks'
-// import { JSBI } from '@uniswap/sdk'
+// import { JSBI } from '@dfyn/sdk'
 // import { BIG_INT_ZERO } from '../../constants'
 import { OutlineCard } from '../../components/Card'
 
@@ -71,7 +71,7 @@ export default function Earn() {
               <RowBetween>
                 <TYPE.white fontSize={14}>
                   A total of 5.6M DFYN tokens will be distributed as rewards for this program. 20% of the DFYN token rewards can be claimed after two weeks from the starting date of the program. Remaining rewards will be released 20% every other month.
-                  </TYPE.white>
+                </TYPE.white>
 
 
               </RowBetween>{' '}

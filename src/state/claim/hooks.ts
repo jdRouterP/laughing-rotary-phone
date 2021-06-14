@@ -1,5 +1,5 @@
 import { UNI } from './../../constants/index'
-import { TokenAmount, JSBI, ChainId } from '@uniswap/sdk'
+import { TokenAmount, JSBI, ChainId } from '@dfyn/sdk'
 import { TransactionResponse } from '@ethersproject/providers'
 import { useEffect, useState } from 'react'
 import { useActiveWeb3React } from '../../hooks'
@@ -47,7 +47,7 @@ export function useUserClaimData(account: string | null | undefined): UserClaimD
   useEffect(() => {
     if (!account || !chainId) return
     fetchClaim(account, chainId).then(accountClaimInfo => {
-      let fetchClaimInfo = accountClaimInfo && accountClaimInfo.claims?accountClaimInfo.claims[account]: {};
+      let fetchClaimInfo = accountClaimInfo && accountClaimInfo.claims ? accountClaimInfo.claims[account] : {};
       setClaimInfo(claimInfo => {
         return {
           ...claimInfo,
@@ -97,7 +97,7 @@ export function useClaimCallback(
   const addTransaction = useTransactionAdder()
   const distributorContract = useMerkleDistributorContract()
 
-  const claimCallback = async function() {
+  const claimCallback = async function () {
     if (!claimData || !account || !library || !chainId || !distributorContract) return
 
     const args = [claimData.index, account, claimData.amount, claimData.proof]
