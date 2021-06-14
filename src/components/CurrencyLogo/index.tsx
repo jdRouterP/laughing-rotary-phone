@@ -285,6 +285,18 @@ export const getTokenLogoURL = (address: string) => {
     uri = 'https://etherscan.io/token/images/terra-ust_32.png'
   }
 
+  if (address?.toLowerCase() === '0x033d942a6b495c4071083f4cde1f17e986fe856c'.toLowerCase()) {
+    uri = '	https://i.imgur.com/jP16jUZ.png'
+  }
+
+  if (address?.toLowerCase() === '0xf84bd51eab957c2e7b7d646a3427c5a50848281d'.toLowerCase()) {
+    uri = 'https://i.imgur.com/CqnxeQg.png'
+  }
+
+  if (address?.toLowerCase() === '0x0bd820ad2d7ab7305b5c9538ba824c9b9beb0561'.toLowerCase()) {
+    uri = 'https://raw.githubusercontent.com/RoyaleFinanceV1/royale-contracts/master/royale.png'
+  }
+
 
 
   if (address?.toLowerCase() === '0xFdc26CDA2d2440d0E83CD1DeE8E8bE48405806DC'.toLowerCase()) {

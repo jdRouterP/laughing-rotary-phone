@@ -49,6 +49,9 @@ export const ANY = new Token(ChainId.MATIC, '0x6ab6d61428fde76768d7b45d8bfeec19c
 export const UFT = new Token(ChainId.MATIC, '0x5b4cf2c120a9702225814e18543ee658c5f8631e', 18, 'UFT', 'UniLend')
 export const LUNA = new Token(ChainId.MATIC, '0x24834BBEc7E39ef42f4a75EAF8E5B6486d3F0e57', 18, 'LUNA', 'Wrapped LUNA Token')
 export const UST = new Token(ChainId.MATIC, '0x692597b009d13C4049a947CAB2239b7d6517875F', 18, 'UST', 'Wrapped UST Token')
+export const AGA = new Token(ChainId.MATIC, '0x033d942a6b495c4071083f4cde1f17e986fe856c', 4, 'AGA', 'AGA')
+export const AGAr = new Token(ChainId.MATIC, '0xf84bd51eab957c2e7b7d646a3427c5a50848281d', 8, 'AGAr', 'AGAr')
+export const ROYA = new Token(ChainId.MATIC, '0x0bD820aD2d7Ab7305b5C9538ba824C9b9bEb0561', 18, 'ROYA', 'Royale')
 
 
 //TEST TOKENS
