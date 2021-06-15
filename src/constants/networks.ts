@@ -39,7 +39,7 @@ export const RPC = {
         'https://eth-goerli.alchemyapi.io/v2/Dkk5d02QjttYEoGmhZnJG37rKt8Yl3Im',
     [ChainId.KOVAN]:
         'https://eth-kovan.alchemyapi.io/v2/6OVAa_B_rypWWl9HqtiYK26IRxXiYqER',
-    [ChainId.MATIC]: 'https://rpc-mainnet.maticvigil.com',
+    [ChainId.MATIC]: 'https://polygon-mainnet.infura.io/v3/bcfe8494044a439aaccf4ec43db5326b',
     [ChainId.OKEX]: 'https://exchainrpc.okex.org',
 }
 
@@ -97,3 +97,5 @@ export const HEADER_ACCESS = {
     farms: [ChainId.MATIC],
     gaslessMode: [ChainId.MATIC]
 }
+
+export const GASLESS_SUPPORT = [ChainId.MATIC]

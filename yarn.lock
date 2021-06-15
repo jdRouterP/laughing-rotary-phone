@@ -1260,10 +1260,10 @@
     debug "^3.1.0"
     lodash.once "^4.1.1"
 
-"@dfyn/sdk@^0.0.2":
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/@dfyn/sdk/-/sdk-0.0.2.tgz#d652a48ffb164fd8536bf3bf3453c7ed1bc34510"
-  integrity sha512-poG9J81mEXbg5fK12tHAmvCg7N9SPCMigzOQgfWaxyOFcE5s+ha9AOpt7fYaz+0JrVWD9Kc27A3hDOgiKLnk5Q==
+"@dfyn/sdk@^0.0.4":
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/@dfyn/sdk/-/sdk-0.0.4.tgz#8e4814a52e5170e6a587ada939b88089a5ff1fd0"
+  integrity sha512-vGxTzjbEPzQUsUKsGY0/NbwPq1V9JXEmJXP3BhKTR70lM7be1l6E854Ajyivllq23wUhLeKplN4Y0G79pRM4tg==
   dependencies:
     "@uniswap/v2-core" "^1.0.0"
     big.js "^5.2.2"

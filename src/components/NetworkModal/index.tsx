@@ -107,7 +107,6 @@ export default function NetworkModal() {
           onClick={() => {
             toggleNetworkModal()
             const params = option
-            debugger
             library?.send('wallet_addEthereumChain', [
               params,
               account,

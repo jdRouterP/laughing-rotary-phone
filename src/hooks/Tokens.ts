@@ -152,7 +152,6 @@ export function useToken(tokenAddress?: string): Token | undefined | null {
   const tokens = useAllTokens();
 
   const address = isAddress(tokenAddress);
-  console.log(tokenAddress, address);
   const tokenContract = useTokenContract(address ? address : undefined, false);
   const tokenContractBytes32 = useBytes32TokenContract(
     address ? address : undefined,
@@ -192,7 +191,6 @@ export function useToken(tokenAddress?: string): Token | undefined | null {
   );
 
   return useMemo(() => {
-    console.log(token, chainId, address)
     if (token) return token;
     if (!chainId || !address) return undefined;
     if (decimals.loading || symbol.loading || tokenName.loading) return null;
@@ -236,7 +234,5 @@ export function useCurrency(
   const isETH =
     currencyId?.toUpperCase() === Currency.getNativeCurrencySymbol(chainId);
   const token = useToken(isETH ? undefined : currencyId);
-  console.log(isETH ? Currency.getNativeCurrency(chainId) : token);
-  debugger
   return isETH ? Currency.getNativeCurrency(chainId) : token;
 }

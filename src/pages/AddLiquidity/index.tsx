@@ -18,7 +18,7 @@ import { AddRemoveTabs } from '../../components/NavigationTabs'
 import { MinimalPositionCard } from '../../components/PositionCard'
 import Row, { RowBetween, RowFlat } from '../../components/Row'
 
-import { ROUTER_ADDRESS, biconomyAPIKey } from '../../constants'
+import { biconomyAPIKey } from '../../constants'
 import { PairState } from '../../data/Reserves'
 import { useActiveWeb3React } from '../../hooks'
 import { useCurrency } from '../../hooks/Tokens'
@@ -31,7 +31,7 @@ import { useDerivedMintInfo, useMintActionHandlers, useMintState } from '../../s
 import { useTransactionAdder } from '../../state/transactions/hooks'
 import { useIsExpertMode, useUserDeadline, useUserSlippageTolerance, useGaslessModeManager } from '../../state/user/hooks'
 import { TYPE } from '../../theme'
-import { calculateGasMargin, calculateSlippageAmount, getRouterContract } from '../../utils'
+import { calculateGasMargin, calculateSlippageAmount, getRouterAddress, getRouterContract } from '../../utils'
 import { maxAmountSpend } from '../../utils/maxAmountSpend'
 import { wrappedCurrency } from '../../utils/wrappedCurrency'
 import AppBody from '../AppBody'
@@ -42,24 +42,10 @@ import { PoolPriceBar } from './PoolPriceBar'
 import { useIsTransactionUnsupported } from 'hooks/Trades'
 import UnsupportedCurrencyFooter from 'components/swap/UnsupportedCurrencyFooter'
 import { abi } from '@uniswap/v2-periphery/build/IUniswapV2Router02.json'
+import { RPC } from 'constants/networks'
 
 const Biconomy = require("@biconomy/mexa")
 const Web3 = require("web3");
-
-const contractAddress = ROUTER_ADDRESS
-const maticProvider = process.env.REACT_APP_NETWORK_URL
-const biconomy = new Biconomy(
-  new Web3.providers.HttpProvider(maticProvider),
-  {
-    apiKey: biconomyAPIKey,
-    debug: true
-  }
-);
-const getWeb3 = new Web3(biconomy);
-biconomy
-  .onEvent(biconomy.READY, () => {
-    console.debug("Mexa is Ready");
-  })
 
 export default function AddLiquidity({
   match: {
@@ -69,10 +55,24 @@ export default function AddLiquidity({
 }: RouteComponentProps<{ currencyIdA?: string; currencyIdB?: string }>) {
   const { account, chainId, library } = useActiveWeb3React()
   const theme = useContext(ThemeContext)
+  const contractAddress = getRouterAddress(chainId)
+  const maticProvider = chainId ? RPC[chainId] : RPC[137];
+  const biconomy = new Biconomy(
+    new Web3.providers.HttpProvider(maticProvider),
+    {
+      apiKey: biconomyAPIKey,
+      debug: false
+    }
+  );
+  const getWeb3 = new Web3(biconomy);
+  biconomy
+    .onEvent(biconomy.READY, () => {
+      console.debug("Mexa is Ready");
+    })
+
 
   const currencyA = useCurrency(currencyIdA)
   const currencyB = useCurrency(currencyIdB)
-  debugger
   const oneCurrencyIsWETH = Boolean(
     chainId &&
     ((currencyA && currencyEquals(currencyA, WETH[chainId])) ||
@@ -142,8 +142,8 @@ export default function AddLiquidity({
   )
 
   // check whether the user has approved the router on the tokens
-  const [approvalA, approveACallback] = useApproveCallback(parsedAmounts[Field.CURRENCY_A], ROUTER_ADDRESS)
-  const [approvalB, approveBCallback] = useApproveCallback(parsedAmounts[Field.CURRENCY_B], ROUTER_ADDRESS)
+  const [approvalA, approveACallback] = useApproveCallback(parsedAmounts[Field.CURRENCY_A], getRouterAddress(chainId))
+  const [approvalB, approveBCallback] = useApproveCallback(parsedAmounts[Field.CURRENCY_B], getRouterAddress(chainId))
 
   const addTransaction = useTransactionAdder()
 
@@ -277,7 +277,6 @@ export default function AddLiquidity({
             .send('eth_signTypedData_v4', [account, dataToSign])
           let signature = await splitSignature(sig)
           let { v, r, s } = signature
-          console.log('account: ', account, 'res: ', res, 'r: ', r, 's: ', s, 'v: ', v)
           try {
             let response: TransactionResponse = await biconomy_contract.methods
               .executeMetaTransaction(account, res, r, s, v)

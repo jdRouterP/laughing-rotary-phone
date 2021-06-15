@@ -17,7 +17,7 @@ import DoubleCurrencyLogo from '../../components/DoubleLogo'
 import { AddRemoveTabs } from '../../components/NavigationTabs'
 import { MinimalPositionCard } from '../../components/PositionCard'
 import Row, { RowBetween, RowFixed } from '../../components/Row'
-import { ROUTER_ADDRESS, biconomyAPIKey } from '../../constants'
+import { biconomyAPIKey } from '../../constants'
 
 import Slider from '../../components/Slider'
 import CurrencyLogo from '../../components/CurrencyLogo'
@@ -29,7 +29,7 @@ import useTransactionDeadline from '../../hooks/useTransactionDeadline'
 
 import { useTransactionAdder } from '../../state/transactions/hooks'
 import { StyledInternalLink, TYPE } from '../../theme'
-import { calculateGasMargin, calculateSlippageAmount, getRouterContract } from '../../utils'
+import { calculateGasMargin, calculateSlippageAmount, getRouterAddress, getRouterContract } from '../../utils'
 import { currencyId } from '../../utils/currencyId'
 import useDebouncedChangeHandler from '../../utils/useDebouncedChangeHandler'
 import { wrappedCurrency } from '../../utils/wrappedCurrency'
@@ -44,27 +44,11 @@ import { useWalletModalToggle } from '../../state/application/hooks'
 import { useUserSlippageTolerance, useGaslessModeManager } from '../../state/user/hooks'
 import { BigNumber } from '@ethersproject/bignumber'
 import { abi } from '@uniswap/v2-periphery/build/IUniswapV2Router02.json'
+import { RPC } from 'constants/networks'
 
 const Biconomy = require("@biconomy/mexa")
 const Web3 = require("web3");
 // swap, add Liquidity
-
-const contractAddress = ROUTER_ADDRESS;
-const maticProvider = process.env.REACT_APP_NETWORK_URL
-const biconomy = new Biconomy(
-  new Web3.providers.HttpProvider(maticProvider),
-  {
-    apiKey: biconomyAPIKey,
-    debug: true
-  }
-);
-// const web3 = new Web3(window.ethereum);
-const getWeb3 = new Web3(biconomy);
-biconomy
-  .onEvent(biconomy.READY, () => {
-    console.debug("Mexa is Ready");
-  })
-
 
 export default function RemoveLiquidity({
   history,
@@ -81,6 +65,23 @@ export default function RemoveLiquidity({
   ])
 
   const theme = useContext(ThemeContext)
+
+  const contractAddress = chainId && getRouterAddress(chainId);
+  const maticProvider = chainId ? RPC[chainId] : RPC[137];
+  const biconomy = new Biconomy(
+    new Web3.providers.HttpProvider(maticProvider),
+    {
+      apiKey: biconomyAPIKey,
+      debug: false
+    }
+  );
+  // const web3 = new Web3(window.ethereum);
+  const getWeb3 = new Web3(biconomy);
+  biconomy
+    .onEvent(biconomy.READY, () => {
+      console.debug("Mexa is Ready");
+    })
+
 
   // toggle wallet when disconnected
   const toggleWalletModal = useWalletModalToggle()
@@ -123,7 +124,7 @@ export default function RemoveLiquidity({
 
   // allowance handling
   const [signatureData, setSignatureData] = useState<{ v: number; r: string; s: string; deadline: number } | null>(null)
-  const [approval, approveCallback] = useApproveCallback(parsedAmounts[Field.LIQUIDITY], ROUTER_ADDRESS)
+  const [approval, approveCallback] = useApproveCallback(parsedAmounts[Field.LIQUIDITY], contractAddress)
 
   const isArgentWallet = useIsArgentWallet()
 
@@ -160,7 +161,7 @@ export default function RemoveLiquidity({
     ]
     const message = {
       owner: account,
-      spender: ROUTER_ADDRESS,
+      spender: contractAddress,
       value: liquidityAmount.raw.toString(),
       nonce: nonce.toHexString(),
       deadline: deadline.toNumber()

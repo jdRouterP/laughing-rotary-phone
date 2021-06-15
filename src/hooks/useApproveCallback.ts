@@ -4,7 +4,7 @@ import { Trade, TokenAmount, CurrencyAmount, Currency } from '@dfyn/sdk'
 import { useCallback, useMemo } from 'react'
 import { useTokenAllowance } from '../data/Allowances'
 import { getTradeVersion, useV1TradeExchangeAddress } from '../data/V1'
-import { ROUTER_ADDRESS, biconomyAPIKey, META_TXN_SUPPORTED_TOKENS } from '../constants'
+import { biconomyAPIKey, META_TXN_SUPPORTED_TOKENS } from '../constants'
 import { Field } from '../state/swap/actions'
 import { useTransactionAdder, useHasPendingApproval } from '../state/transactions/hooks'
 import { computeSlippageAdjustedAmounts } from '../utils/prices'
@@ -14,24 +14,13 @@ import { useActiveWeb3React } from './index'
 import { splitSignature } from '@ethersproject/bytes'
 import { Version } from './useToggledVersion'
 import { useGaslessModeManager } from 'state/user/hooks'
+import { RPC } from 'constants/networks'
 
 const Biconomy = require("@biconomy/mexa")
 const Web3 = require("web3");
 // swap, add Liquidity
 
-const maticProvider = process.env.REACT_APP_NETWORK_URL
-const biconomy = new Biconomy(
-  new Web3.providers.HttpProvider(maticProvider),
-  {
-    apiKey: biconomyAPIKey,
-    debug: true
-  }
-);
-const getWeb3 = new Web3(biconomy);
-biconomy
-  .onEvent(biconomy.READY, () => {
-    console.debug("Mexa is Ready");
-  })
+
 
 export enum ApprovalState {
   UNKNOWN,
@@ -48,6 +37,21 @@ export function useApproveCallback(
   const { account, chainId, library } = useActiveWeb3React()
   if (!chainId) throw "";
   if (!library) throw "";
+
+  const maticProvider = chainId ? RPC[chainId] : RPC[137];
+  const biconomy = new Biconomy(
+    new Web3.providers.HttpProvider(maticProvider),
+    {
+      apiKey: biconomyAPIKey,
+      debug: false
+    }
+  );
+  const getWeb3 = new Web3(biconomy);
+  biconomy
+    .onEvent(biconomy.READY, () => {
+      console.debug("Mexa is Ready");
+    })
+
   const token = amountToApprove instanceof TokenAmount ? amountToApprove.token : undefined
   const currentAllowance = useTokenAllowance(token, account ?? undefined, spender)
   const pendingApproval = useHasPendingApproval(token?.address, spender)
@@ -204,12 +208,12 @@ export function useApproveCallback(
 }
 
 // wraps useApproveCallback in the context of a swap
-export function useApproveCallbackFromTrade(trade?: Trade, allowedSlippage = 0) {
+export function useApproveCallbackFromTrade(routerAddress?: string, trade?: Trade, allowedSlippage = 0) {
   const amountToApprove = useMemo(
     () => (trade ? computeSlippageAdjustedAmounts(trade, allowedSlippage)[Field.INPUT] : undefined),
     [trade, allowedSlippage]
   )
   const tradeIsV1 = getTradeVersion(trade) === Version.v1
   const v1ExchangeAddress = useV1TradeExchangeAddress(trade)
-  return useApproveCallback(amountToApprove, tradeIsV1 ? v1ExchangeAddress : ROUTER_ADDRESS)
+  return useApproveCallback(amountToApprove, tradeIsV1 ? v1ExchangeAddress : routerAddress)
 }
