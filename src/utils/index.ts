@@ -17,42 +17,102 @@ export function isAddress(value: any): string | false {
   }
 }
 
-const ETHERSCAN_PREFIXES: { [chainId in ChainId]: string } = {
-  1: '',
-  3: 'ropsten.',
-  4: 'rinkeby.',
-  5: 'goerli.',
-  42: 'kovan.',
-  137: 'matic',
-  66: 'okex'
+const explorerConfig = {
+  etherscan: (
+    chainName: string,
+    data: string,
+    type: "transaction" | "token" | "address" | "block"
+  ) => {
+    const prefix = `https://${chainName ? `${chainName}.` : ""}etherscan.io`;
+    switch (type) {
+      case "transaction":
+        return `${prefix}/tx/${data}`;
+      default:
+        return `${prefix}/${type}/${data}`;
+    }
+  },
+  matic: (
+    chainName: string,
+    data: string,
+    type: "transaction" | "token" | "address" | "block"
+  ) => {
+    // const prefix = `https://explorer-${chainName}.maticvigil.com`
+    const prefix = "https://polygonscan.com";
+    switch (type) {
+      case "transaction":
+        return `${prefix}/tx/${data}`;
+      case "token":
+        return `${prefix}/tokens/${data}`;
+      default:
+        return `${prefix}/${type}/${data}`;
+    }
+  },
+  okex: (
+    chainName = "",
+    data: string,
+    type: "transaction" | "token" | "address" | "block"
+  ) => {
+    const prefix = "https://www.oklink.com/okexchain";
+    switch (type) {
+      case "transaction":
+        return `${prefix}/tx/${data}`;
+      case "token":
+        return `${prefix}/tokenAddr/${data}`;
+      default:
+        return `${prefix}/${type}/${data}`;
+    }
+  },
+};
+
+interface ChainObject {
+  [chainId: number]: {
+    chainName: string;
+    builder: (
+      chainName: string,
+      data: string,
+      type: "transaction" | "token" | "address" | "block"
+    ) => string;
+  };
 }
 
-export function getEtherscanLink(
+const chains: ChainObject = {
+  [ChainId.MAINNET]: {
+    chainName: "",
+    builder: explorerConfig.etherscan,
+  },
+  [ChainId.ROPSTEN]: {
+    chainName: "ropsten",
+    builder: explorerConfig.etherscan,
+  },
+  [ChainId.RINKEBY]: {
+    chainName: "rinkeby",
+    builder: explorerConfig.etherscan,
+  },
+  [ChainId.GÖRLI]: {
+    chainName: "goerli",
+    builder: explorerConfig.etherscan,
+  },
+  [ChainId.KOVAN]: {
+    chainName: "kovan",
+    builder: explorerConfig.etherscan,
+  },
+  [ChainId.MATIC]: {
+    chainName: "mainnet",
+    builder: explorerConfig.matic,
+  },
+  [ChainId.OKEX]: {
+    chainName: "",
+    builder: explorerConfig.okex,
+  },
+};
+
+export function getExplorerLink(
   chainId: ChainId,
   data: string,
-  type: 'transaction' | 'token' | 'address' | 'block'
+  type: "transaction" | "token" | "address" | "block"
 ): string {
-  let prefix = `https://${ETHERSCAN_PREFIXES[chainId] || ETHERSCAN_PREFIXES[1]}etherscan.io`
-
-  if (chainId === ChainId.MATIC) {
-    prefix = `https://explorer-mainnet.maticvigil.com`
-  }
-
-  switch (type) {
-    case 'transaction': {
-      return `${prefix}/tx/${data}`
-    }
-    case 'token': {
-      return `${prefix}/tokens/${data}`
-    }
-    case 'block': {
-      return `${prefix}/blocks/${data}`
-    }
-    case 'address':
-    default: {
-      return `${prefix}/address/${data}`
-    }
-  }
+  const chain = chains[chainId];
+  return chain.builder(chain.chainName, data, type);
 }
 
 // shorten the checksummed version of the input address to have 0x + 4 characters at start and end
