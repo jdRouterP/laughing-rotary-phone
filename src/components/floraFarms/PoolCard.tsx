@@ -16,6 +16,7 @@ import { usePair } from '../../data/Reserves'
 import useUSDCPrice from '../../utils/useUSDCPrice'
 import { BIG_INT_SECONDS_IN_DAY, EMPTY } from '../../constants'
 import { Countdown } from 'pages/FloraFarms/Countdown'
+import { useActiveWeb3React } from 'hooks'
 
 const StatContainer = styled.div`
   display: flex;
@@ -72,6 +73,7 @@ const BottomSection = styled.div<{ showBackground: boolean }>`
 export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) {
   const token0 = stakingInfo.tokens[0]
   const token1 = stakingInfo.tokens[1]
+  const { chainId } = useActiveWeb3React()
 
   const currency0 = unwrappedToken(token0)
   const currency1 = unwrappedToken(token1)
@@ -126,7 +128,7 @@ export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) 
           {currency0.symbol}-{currency1.symbol}
         </TYPE.white>
 
-        <StyledInternalLink to={`/popular-farms/${currencyId(currency0)}/${currencyId(currency1)}`} style={{ width: '100%' }}>
+        <StyledInternalLink to={`/popular-farms/${currencyId(currency0, chainId)}/${currencyId(currency1, chainId)}`} style={{ width: '100%' }}>
           <ButtonPrimary padding="8px" borderRadius="8px">
             {isStaking ? 'Manage' : 'Deposit'}
           </ButtonPrimary>

@@ -161,7 +161,7 @@ export function MinimalPositionCard({ pair, showUnwrapped = false, border }: Pos
 }
 
 export default function FullPositionCard({ pair, border, stakedBalance, stakingInfo }: PositionCardProps) {
-  const { account } = useActiveWeb3React()
+  const { account, chainId } = useActiveWeb3React()
 
   const currency0 = unwrappedToken(pair.token0)
   const currency1 = unwrappedToken(pair.token1)
@@ -309,7 +309,7 @@ export default function FullPositionCard({ pair, border, stakedBalance, stakingI
                   padding="8px"
                   borderRadius="8px"
                   as={Link}
-                  to={`/add/${currencyId(currency0)}/${currencyId(currency1)}`}
+                  to={`/add/${currencyId(currency0, chainId)}/${currencyId(currency1, chainId)}`}
                   width="48%"
                 >
                   Add
@@ -319,7 +319,7 @@ export default function FullPositionCard({ pair, border, stakedBalance, stakingI
                   borderRadius="8px"
                   as={Link}
                   width="48%"
-                  to={`/remove/${currencyId(currency0)}/${currencyId(currency1)}`}
+                  to={`/remove/${currencyId(currency0, chainId)}/${currencyId(currency1, chainId)}`}
                 >
                   Remove
                 </ButtonPrimary>
@@ -331,7 +331,7 @@ export default function FullPositionCard({ pair, border, stakedBalance, stakingI
                   padding="8px"
                   borderRadius="8px"
                   as={Link}
-                  to={`/add/${currencyId(currency0)}/${currencyId(currency1)}`}
+                  to={`/add/${currencyId(currency0, chainId)}/${currencyId(currency1, chainId)}`}
                   width="100%"
                 >
                   Add
@@ -343,7 +343,7 @@ export default function FullPositionCard({ pair, border, stakedBalance, stakingI
                 padding="8px"
                 borderRadius="8px"
                 as={Link}
-                to={`/${stakingInfo ? stakingInfo.type.url : "flora-farms"}/${currencyId(currency0)}/${currencyId(currency1)}`}
+                to={`/${stakingInfo ? stakingInfo.type.url : "flora-farms"}/${currencyId(currency0, chainId)}/${currencyId(currency1, chainId)}`}
                 width="100%"
               >
                 {`Manage Liquidity in ${stakingInfo ? stakingInfo.type.typeOf : "flora-farms"}`}

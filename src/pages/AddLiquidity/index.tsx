@@ -47,19 +47,7 @@ import { RPC } from 'constants/networks'
 const Biconomy = require("@biconomy/mexa")
 const Web3 = require("web3");
 
-const maticProvider = RPC[137];
-const biconomy = new Biconomy(
-  new Web3.providers.HttpProvider(maticProvider),
-  {
-    apiKey: biconomyAPIKey,
-    debug: false
-  }
-);
-const getWeb3 = new Web3(biconomy);
-biconomy
-  .onEvent(biconomy.READY, () => {
-    console.debug("Mexa is Ready");
-  })
+
 
 export default function AddLiquidity({
   match: {
@@ -84,7 +72,22 @@ export default function AddLiquidity({
 
   const expertMode = useIsExpertMode()
   const [gaslessMode] = useGaslessModeManager()
-
+  let getWeb3: any = 0
+  if(gaslessMode){
+    const maticProvider = RPC[137];
+    const biconomy = new Biconomy(
+    new Web3.providers.HttpProvider(maticProvider),
+    {
+      apiKey: biconomyAPIKey,
+      debug: false
+    }
+);
+  getWeb3 = new Web3(biconomy);
+  biconomy
+    .onEvent(biconomy.READY, () => {
+      console.debug("Mexa is Ready");
+    })
+  }
 
   // mint state
   const { independentField, typedValue, otherTypedValue } = useMintState()
@@ -114,7 +117,6 @@ export default function AddLiquidity({
   const [deadline] = useUserDeadline() // custom from users settings
   const [allowedSlippage] = useUserSlippageTolerance() // custom from users
   const [txHash, setTxHash] = useState<string>('')
-
   // get formatted amounts
   const formattedAmounts = {
     [independentField]: typedValue,
@@ -151,7 +153,6 @@ export default function AddLiquidity({
   async function onAdd() {
     if (!chainId || !library || !account) return
     const router = getRouterContract(chainId, library, account)
-
     const { [Field.CURRENCY_A]: parsedAmountA, [Field.CURRENCY_B]: parsedAmountB } = parsedAmounts
     if (!parsedAmountA || !parsedAmountB || !currencyA || !currencyB || !deadline) {
       return
@@ -161,8 +162,12 @@ export default function AddLiquidity({
       [Field.CURRENCY_A]: calculateSlippageAmount(parsedAmountA, noLiquidity ? 0 : allowedSlippage)[0],
       [Field.CURRENCY_B]: calculateSlippageAmount(parsedAmountB, noLiquidity ? 0 : allowedSlippage)[0]
     }
-    const biconomy_contract = new getWeb3.eth.Contract(abi, contractAddress);
-    let biconomy_nonce = await biconomy_contract.methods.getNonce(account).call();
+    let biconomy_contract :any = 0
+    let biconomy_nonce :any = 0
+    if(gaslessMode){
+      biconomy_contract = new getWeb3.eth.Contract(abi, contractAddress);
+      biconomy_nonce = await biconomy_contract.methods.getNonce(account).call();
+    }
     let methodName: any = ""
     const deadlineFromNow = Math.ceil(Date.now() / 1000) + deadline
 
@@ -378,7 +383,7 @@ export default function AddLiquidity({
 
   const handleCurrencyASelect = useCallback(
     (currencyA: Currency) => {
-      const newCurrencyIdA = currencyId(currencyA)
+      const newCurrencyIdA = currencyId(currencyA, chainId)
       if (newCurrencyIdA === currencyIdB) {
         history.push(`/add/${currencyIdB}/${currencyIdA}`)
       } else {
@@ -389,7 +394,7 @@ export default function AddLiquidity({
   )
   const handleCurrencyBSelect = useCallback(
     (currencyB: Currency) => {
-      const newCurrencyIdB = currencyId(currencyB)
+      const newCurrencyIdB = currencyId(currencyB, chainId)
       if (currencyIdA === newCurrencyIdB) {
         if (currencyIdB) {
           history.push(`/add/${currencyIdB}/${newCurrencyIdB}`)

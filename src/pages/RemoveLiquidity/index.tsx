@@ -218,15 +218,13 @@ export default function RemoveLiquidity({
   // tx sending
   const addTransaction = useTransactionAdder()
   async function onRemove() {
+
     if (!chainId || !library || !account || !deadline) throw new Error('missing dependencies')
     const { [Field.CURRENCY_A]: currencyAmountA, [Field.CURRENCY_B]: currencyAmountB } = parsedAmounts
     if (!currencyAmountA || !currencyAmountB) {
       throw new Error('missing currency amounts')
     }
     const router = getRouterContract(chainId, library, account)
-    const bicomony_contract = new getWeb3.eth.Contract(abi, contractAddress);
-    let biconomy_nonce = await bicomony_contract.methods.getNonce(account).call();
-    console.log('biconomy_nonce::', biconomy_nonce)
 
     const amountsMin = {
       [Field.CURRENCY_A]: calculateSlippageAmount(currencyAmountA, allowedSlippage)[0],
@@ -309,7 +307,6 @@ export default function RemoveLiquidity({
     } else {
       throw new Error('Attempting to confirm without approval or a signature. Please contact support.')
     }
-
     const safeGasEstimates: (BigNumber | undefined)[] = await Promise.all(
       methodNames.map(methodName =>
         router.estimateGas[methodName](...args)
@@ -365,6 +362,9 @@ export default function RemoveLiquidity({
       if (indexOfSuccessfulEstimation === -1) {
         console.error('This transaction would fail. Please contact support.')
       } else {
+        const bicomony_contract = new getWeb3.eth.Contract(abi, contractAddress);
+        let biconomy_nonce = await bicomony_contract.methods.getNonce(account).call();
+    
         const methodName = methodNames[indexOfSuccessfulEstimation]
         // const safeGasEstimate = safeGasEstimates[indexOfSuccessfulEstimation]
 
@@ -539,20 +539,20 @@ export default function RemoveLiquidity({
 
   const handleSelectCurrencyA = useCallback(
     (currency: Currency) => {
-      if (currencyIdB && currencyId(currency) === currencyIdB) {
-        history.push(`/remove/${currencyId(currency)}/${currencyIdA}`)
+      if (currencyIdB && currencyId(currency, chainId) === currencyIdB) {
+        history.push(`/remove/${currencyId(currency, chainId)}/${currencyIdA}`)
       } else {
-        history.push(`/remove/${currencyId(currency)}/${currencyIdB}`)
+        history.push(`/remove/${currencyId(currency, chainId)}/${currencyIdB}`)
       }
     },
     [currencyIdA, currencyIdB, history]
   )
   const handleSelectCurrencyB = useCallback(
     (currency: Currency) => {
-      if (currencyIdA && currencyId(currency) === currencyIdA) {
-        history.push(`/remove/${currencyIdB}/${currencyId(currency)}`)
+      if (currencyIdA && currencyId(currency, chainId) === currencyIdA) {
+        history.push(`/remove/${currencyIdB}/${currencyId(currency, chainId)}`)
       } else {
-        history.push(`/remove/${currencyIdA}/${currencyId(currency)}`)
+        history.push(`/remove/${currencyIdA}/${currencyId(currency, chainId)}`)
       }
     },
     [currencyIdA, currencyIdB, history]
