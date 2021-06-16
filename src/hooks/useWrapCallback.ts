@@ -40,6 +40,7 @@ export default function useWrapCallback(
     const sufficientBalance = inputAmount && balance && !balance.lessThan(inputAmount)
 
     if (inputCurrency === Currency.getNativeCurrency(chainId) && currencyEquals(WETH[chainId], outputCurrency)) {
+
       return {
         wrapType: WrapType.WRAP,
         execute:
@@ -62,6 +63,7 @@ export default function useWrapCallback(
       }
     }
     else if (inputCurrency === Currency.getNativeCurrency(chainId) && currencyEquals(WETH_V2, outputCurrency)) {
+
       return {
         wrapType: WrapType.WRAP,
         execute:
