@@ -47,6 +47,20 @@ import { RPC } from 'constants/networks'
 const Biconomy = require("@biconomy/mexa")
 const Web3 = require("web3");
 
+const maticProvider = RPC[137];
+const biconomy = new Biconomy(
+  new Web3.providers.HttpProvider(maticProvider),
+  {
+    apiKey: biconomyAPIKey,
+    debug: false
+  }
+);
+const getWeb3 = new Web3(biconomy);
+biconomy
+  .onEvent(biconomy.READY, () => {
+    console.debug("Mexa is Ready");
+  })
+
 export default function AddLiquidity({
   match: {
     params: { currencyIdA, currencyIdB }
@@ -56,19 +70,6 @@ export default function AddLiquidity({
   const { account, chainId, library } = useActiveWeb3React()
   const theme = useContext(ThemeContext)
   const contractAddress = getRouterAddress(chainId)
-  const maticProvider = chainId ? RPC[chainId] : RPC[137];
-  const biconomy = new Biconomy(
-    new Web3.providers.HttpProvider(maticProvider),
-    {
-      apiKey: biconomyAPIKey,
-      debug: false
-    }
-  );
-  const getWeb3 = new Web3(biconomy);
-  biconomy
-    .onEvent(biconomy.READY, () => {
-      console.debug("Mexa is Ready");
-    })
 
 
   const currencyA = useCurrency(currencyIdA)

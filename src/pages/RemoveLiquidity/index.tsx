@@ -50,6 +50,22 @@ const Biconomy = require("@biconomy/mexa")
 const Web3 = require("web3");
 // swap, add Liquidity
 
+const maticProvider = RPC[137];
+const biconomy = new Biconomy(
+  new Web3.providers.HttpProvider(maticProvider),
+  {
+    apiKey: biconomyAPIKey,
+    debug: false
+  }
+);
+// const web3 = new Web3(window.ethereum);
+const getWeb3 = new Web3(biconomy);
+biconomy
+  .onEvent(biconomy.READY, () => {
+    console.debug("Mexa is Ready");
+  })
+
+
 export default function RemoveLiquidity({
   history,
   match: {
@@ -67,21 +83,6 @@ export default function RemoveLiquidity({
   const theme = useContext(ThemeContext)
 
   const contractAddress = chainId && getRouterAddress(chainId);
-  const maticProvider = chainId ? RPC[chainId] : RPC[137];
-  const biconomy = new Biconomy(
-    new Web3.providers.HttpProvider(maticProvider),
-    {
-      apiKey: biconomyAPIKey,
-      debug: false
-    }
-  );
-  // const web3 = new Web3(window.ethereum);
-  const getWeb3 = new Web3(biconomy);
-  biconomy
-    .onEvent(biconomy.READY, () => {
-      console.debug("Mexa is Ready");
-    })
-
 
   // toggle wallet when disconnected
   const toggleWalletModal = useWalletModalToggle()
