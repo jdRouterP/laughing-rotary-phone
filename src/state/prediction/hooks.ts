@@ -1,8 +1,7 @@
 import { request, gql } from 'graphql-request'
-import { GRAPH_API_PREDICTION } from 'config/constants/endpoints'
-import { Bet, BetPosition, Market, PredictionStatus, Round, RoundData } from 'state/types'
-import makeBatchRequest from 'utils/makeBatchRequest'
-import { getPredictionsContract } from 'utils/contractHelpers'
+import { GRAPH_API_PREDICTION, PREDICTION_ADDRESS } from '../../constants'
+import { Bet, BetPosition, Market, PredictionStatus, Round, RoundData } from './types'
+
 import {
   BetResponse,
   getRoundBaseFields,
@@ -11,6 +10,8 @@ import {
   RoundResponse,
   MarketResponse,
 } from './queries'
+import { usePredictionContract } from 'hooks/useContract'
+import { useSingleCallResult } from 'state/multicall/hooks'
 
 export enum Result {
   WIN = 'win',
@@ -180,15 +181,14 @@ export const getUnclaimedWinningBets = (bets: Bet[]): Bet[] => {
 /**
  * Gets static data from the contract
  */
-export const getStaticPredictionsData = async () => {
-  const { methods } = getPredictionsContract()
-  const [currentEpoch, intervalBlocks, minBetAmount, isPaused, bufferBlocks] = await makeBatchRequest([
-    methods.currentEpoch().call,
-    methods.intervalBlocks().call,
-    methods.minBetAmount().call,
-    methods.paused().call,
-    methods.bufferBlocks().call,
-  ])
+export const useStaticPredictionsData = async () => {
+  const contract = usePredictionContract(PREDICTION_ADDRESS)
+  const currentEpoch = useSingleCallResult(contract, 'currentEpoch', undefined)?.result?.[0]
+  const intervalBlocks = useSingleCallResult(contract, 'intervalBlocks', undefined)?.result?.[0]
+  const minBetAmount = useSingleCallResult(contract, 'minBetAmount', undefined)?.result?.[0]
+  const isPaused = useSingleCallResult(contract, 'paused', undefined)?.result?.[0]
+  const bufferBlocks = useSingleCallResult(contract, 'bufferBlocks', undefined)?.result?.[0]
+
 
   return {
     status: isPaused ? PredictionStatus.PAUSED : PredictionStatus.LIVE,

@@ -10,7 +10,7 @@ import {
     transformBetResponse,
     getBet,
     makeRoundData,
-} from './helpers'
+} from './hooks'
 
 const initialState: PredictionsState = {
     status: PredictionStatus.INITIAL,
