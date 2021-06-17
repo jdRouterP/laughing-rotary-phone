@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { request, gql } from 'graphql-request'
 import { GRAPH_API_PREDICTION, PREDICTION_ADDRESS } from '../../constants'
 import { Bet, BetPosition, Market, PredictionStatus, Round, RoundData } from './types'
@@ -30,6 +31,7 @@ export const numberOrNull = (value: string) => {
 }
 
 export const makeFutureRoundResponse = (epoch: number, startBlock: number): RoundResponse => {
+
   return {
     id: epoch.toString(),
     epoch: epoch.toString(),

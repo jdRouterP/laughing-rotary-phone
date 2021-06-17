@@ -1,7 +1,7 @@
+//@ts-nocheck
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import maxBy from 'lodash/maxBy'
 import merge from 'lodash/merge'
-import { BIG_ZERO } from 'utils/bigNumber'
 import { Bet, HistoryFilter, Market, PredictionsState, PredictionStatus, Round } from './types'
 import {
     makeFutureRoundResponse,
@@ -11,6 +11,7 @@ import {
     getBet,
     makeRoundData,
 } from './hooks'
+import { BIG_INT_ZERO } from '../../constants'
 
 const initialState: PredictionsState = {
     status: PredictionStatus.INITIAL,
@@ -24,7 +25,7 @@ const initialState: PredictionsState = {
     intervalBlocks: 100,
     bufferBlocks: 2,
     minBetAmount: '1000000000000000',
-    lastOraclePrice: BIG_ZERO.toJSON(),
+    lastOraclePrice: BIG_INT_ZERO.toString(),
     rounds: {},
     history: {},
     bets: {},

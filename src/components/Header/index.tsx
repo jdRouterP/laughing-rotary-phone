@@ -391,6 +391,9 @@ export default function Header() {
           >
             {t('pool')}
           </StyledNavLink>
+          <StyledNavLink id={`prediction-nav-link`} to={'/prediction'}>
+            Prediction
+          </StyledNavLink>
           <StyledNavLink id={`vault-nav-link`} to={'/vault'}>
             Vault
           </StyledNavLink>

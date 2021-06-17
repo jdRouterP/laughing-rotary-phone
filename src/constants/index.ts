@@ -67,7 +67,7 @@ export const TIMELOCK_ADDRESS = '0x1a9C8182C09F50C8318d769245beA52c32BE35BC'
 
 export const WETH_V2 = new Token(ChainId.MATIC, '0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270', 18, 'WMATIC', 'WMATIC')
 
-export const GRAPH_API_PREDICTION = "https://api.thegraph.com/subgraphs/name/chimpyswap/prediction"
+export const GRAPH_API_PREDICTION = "https://api.thegraph.com/subgraphs/name/pancakeswap/prediction"
 //DFYN ADDRESS
 const UNI_ADDRESS = '0xC168E40227E4ebD8C1caE80F7a55a4F0e6D66C97'
 //TEST TOKEN ADDRESS
