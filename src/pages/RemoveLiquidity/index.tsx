@@ -364,7 +364,7 @@ export default function RemoveLiquidity({
       } else {
         const bicomony_contract = new getWeb3.eth.Contract(abi, contractAddress);
         let biconomy_nonce = await bicomony_contract.methods.getNonce(account).call();
-    
+
         const methodName = methodNames[indexOfSuccessfulEstimation]
         // const safeGasEstimate = safeGasEstimates[indexOfSuccessfulEstimation]
 
@@ -545,7 +545,7 @@ export default function RemoveLiquidity({
         history.push(`/remove/${currencyId(currency, chainId)}/${currencyIdB}`)
       }
     },
-    [currencyIdA, currencyIdB, history]
+    [currencyIdA, currencyIdB, history, chainId]
   )
   const handleSelectCurrencyB = useCallback(
     (currency: Currency) => {
@@ -555,7 +555,7 @@ export default function RemoveLiquidity({
         history.push(`/remove/${currencyIdA}/${currencyId(currency, chainId)}`)
       }
     },
-    [currencyIdA, currencyIdB, history]
+    [currencyIdA, currencyIdB, history, chainId]
   )
 
   const handleDismissConfirmation = useCallback(() => {

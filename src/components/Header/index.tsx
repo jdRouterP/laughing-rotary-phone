@@ -194,9 +194,19 @@ const HideSmall = styled.span`
 
 const NetworkCard = styled(YellowCard)`
   border-radius: 12px;
-  padding: 8px 12px;
+  padding: 6px 12px;
   cursor: pointer;
-  
+  border-style: solid;
+  border-width:2px;
+
+  :hover {
+    background-color: rgba(228, 126, 33,0.3);
+  }
+
+  :focus {
+    border: 1px solid blue;
+  }
+
   ${({ theme }) => theme.mediaWidth.upToSmall`
     margin: 0;
     margin-right: 0.5rem;

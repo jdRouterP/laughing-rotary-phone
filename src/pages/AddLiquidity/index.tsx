@@ -390,7 +390,7 @@ export default function AddLiquidity({
         history.push(`/add/${newCurrencyIdA}/${currencyIdB}`)
       }
     },
-    [currencyIdB, history, currencyIdA]
+    [currencyIdB, history, currencyIdA, chainId]
   )
   const handleCurrencyBSelect = useCallback(
     (currencyB: Currency) => {
@@ -405,7 +405,7 @@ export default function AddLiquidity({
         history.push(`/add/${currencyIdA ? currencyIdA : Currency.getNativeCurrencySymbol(chainId)}/${newCurrencyIdB}`)
       }
     },
-    [currencyIdA, history, currencyIdB]
+    [currencyIdA, history, currencyIdB, chainId]
   )
 
   const handleDismissConfirmation = useCallback(() => {
