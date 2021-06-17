@@ -73,20 +73,20 @@ export default function AddLiquidity({
   const expertMode = useIsExpertMode()
   const [gaslessMode] = useGaslessModeManager()
   let getWeb3: any = 0
-  if(gaslessMode){
+  if (gaslessMode) {
     const maticProvider = RPC[137];
     const biconomy = new Biconomy(
-    new Web3.providers.HttpProvider(maticProvider),
-    {
-      apiKey: biconomyAPIKey,
-      debug: false
-    }
-);
-  getWeb3 = new Web3(biconomy);
-  biconomy
-    .onEvent(biconomy.READY, () => {
-      console.debug("Mexa is Ready");
-    })
+      new Web3.providers.HttpProvider(maticProvider),
+      {
+        apiKey: biconomyAPIKey,
+        debug: false
+      }
+    );
+    getWeb3 = new Web3(biconomy);
+    biconomy
+      .onEvent(biconomy.READY, () => {
+        console.debug("Mexa is Ready");
+      })
   }
 
   // mint state
@@ -162,9 +162,9 @@ export default function AddLiquidity({
       [Field.CURRENCY_A]: calculateSlippageAmount(parsedAmountA, noLiquidity ? 0 : allowedSlippage)[0],
       [Field.CURRENCY_B]: calculateSlippageAmount(parsedAmountB, noLiquidity ? 0 : allowedSlippage)[0]
     }
-    let biconomy_contract :any = 0
-    let biconomy_nonce :any = 0
-    if(gaslessMode){
+    let biconomy_contract: any = 0
+    let biconomy_nonce: any = 0
+    if (gaslessMode) {
       biconomy_contract = new getWeb3.eth.Contract(abi, contractAddress);
       biconomy_nonce = await biconomy_contract.methods.getNonce(account).call();
     }
