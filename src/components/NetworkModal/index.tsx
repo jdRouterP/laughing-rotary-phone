@@ -87,7 +87,7 @@ const HoverText = styled.div`
 `
 
 export default function NetworkModal() {
-  const { account, error, library, chainId } = useActiveWeb3React()
+  const { error, chainId } = useActiveWeb3React()
 
 
   const networkModalOpen = useModalOpen(ApplicationModal.NETWORK)
@@ -101,16 +101,19 @@ export default function NetworkModal() {
       ChainId.OKEX,
     ].map((key: ChainId) => {
       const option = SUPPORTED_NETWORKS[key]
+      const { ethereum } = window;
       return (
         <Option
           id={`connect-${key}`}
           onClick={() => {
             toggleNetworkModal()
             const params = option
-            library?.send('wallet_addEthereumChain', [
-              params,
-              account,
-            ])
+            // @ts-ignore
+            ethereum && ethereum.request({
+              method: 'wallet_addEthereumChain', params: [
+                params
+              ]
+            })
           }}
           key={key}
           active={chainId === key}
