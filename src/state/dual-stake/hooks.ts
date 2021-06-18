@@ -263,7 +263,10 @@ export function useStakingInfo(pairToFilterBy?: Pair | null): StakingInfo[] {
     rewardRates,
     stakingRewardAddress,
     totalSupplies,
-    uni
+    uni,
+    bothRewardToken,
+    start, 
+    tokenPrices
   ])
 }
 
@@ -292,7 +295,7 @@ export function useTotalDualFarmUniEarned(): TokenAmount | undefined {
         new TokenAmount(DFYN, '0')
       ) ?? new TokenAmount(DFYN, '0')
     )
-  }, [stakingInfos, DFYN])
+  }, [stakingInfos])
 }
 
 // based on typed value

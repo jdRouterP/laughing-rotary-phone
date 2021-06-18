@@ -225,7 +225,13 @@ export function useMultiStakingInfo(vaultToFilterBy?: string | null): MultiStaki
     info,
     rewardsAddresses,
     totalSupplies,
-    uni
+    uni,
+    dfynPrice,
+    routePrice,
+    genesis,
+    userVaultInfo,
+    vaultLimit,
+    vesting
   ])
 }
 

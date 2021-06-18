@@ -227,7 +227,11 @@ export function useStakingInfo(vaultToFilterBy?: string | null): StakingInfo[] {
     info,
     rewardsAddresses,
     totalSupplies,
-    uni
+    uni,
+    interestRate,
+    userVaultInfo,
+    vaultLimit,
+    vesting
   ])
 }
 

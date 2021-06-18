@@ -1,4 +1,5 @@
-import React, { useCallback, useState } from 'react'
+// import React, { useCallback, useState } from 'react'
+import React, { useState } from 'react'
 import { AutoColumn } from '../../components/Column'
 import styled from 'styled-components'
 // import { Link } from 'react-router-dom'
@@ -6,7 +7,7 @@ import styled from 'styled-components'
 import { JSBI } from '@dfyn/sdk'
 import { RouteComponentProps } from 'react-router-dom'
 // import DoubleCurrencyLogo from '../../components/DoubleLogo'
-import { useWalletModalToggle } from '../../state/application/hooks'
+// import { useWalletModalToggle } from '../../state/application/hooks'
 import { ExternalLink, TYPE } from '../../theme'
 
 import { RowBetween } from '../../components/Row'
@@ -109,16 +110,16 @@ export default function Manage({
   const countUpTokenAmountPrevious = usePrevious(countUpTokenAmount) ?? '0'
   const countUpRewardAmountPrevious = usePrevious(countUpRewardAmount) ?? '0'
 
-  const toggleWalletModal = useWalletModalToggle()
+  // const toggleWalletModal = useWalletModalToggle()
 
   //@ts-ignore
-  const handleDepositClick = useCallback(() => {
-    if (account) {
-      setShowStakingModal(true)
-    } else {
-      toggleWalletModal()
-    }
-  }, [account, toggleWalletModal])
+  // const handleDepositClick = useCallback(() => {
+  //   if (account) {
+  //     setShowStakingModal(true)
+  //   } else {
+  //     toggleWalletModal()
+  //   }
+  // }, [account, toggleWalletModal])
 
   return (
     <PageWrapper gap="lg" justify="center">

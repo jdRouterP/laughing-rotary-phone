@@ -70,7 +70,7 @@ export default function PoolFinder() {
         else setCurrency1(currency);
       }
     },
-    [activeField]
+    [activeField, currency0, currency1, switchTokens]
   );
 
   const handleSearchDismiss = useCallback(() => {

@@ -369,7 +369,8 @@ export function useStakingInfo(pairToFilterBy?: Pair | null): StakingInfo[] {
     splits,
     hasClaimed,
     vesting,
-    uni
+    uni,
+    dfynPrice
   ])
 }
 

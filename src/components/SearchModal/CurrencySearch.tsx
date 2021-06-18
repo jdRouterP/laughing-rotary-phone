@@ -147,7 +147,7 @@ export function CurrencySearch({
         }
       }
     },
-    [filteredSortedTokens, handleCurrencySelect, debouncedQuery]
+    [filteredSortedTokens, handleCurrencySelect, debouncedQuery, chainId]
   )
 
   // menu ui

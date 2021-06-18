@@ -227,7 +227,8 @@ export function useStakingInfo(pairToFilterBy?: Pair | null): StakingInfo[] {
     rewardRates,
     rewardsAddresses,
     totalSupplies,
-    uni
+    uni,
+    dfynPrice
   ])
 }
 

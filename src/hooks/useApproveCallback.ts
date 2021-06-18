@@ -48,8 +48,8 @@ export function useApproveCallback(
   spender?: string
 ): [ApprovalState, () => Promise<void>] {
   const { account, chainId, library } = useActiveWeb3React()
-  if (!chainId) throw "";
-  if (!library) throw "";
+  if (!chainId) throw new Error("Error");
+  if (!library) throw new Error("Error");
 
   const token = amountToApprove instanceof TokenAmount ? amountToApprove.token : undefined
   const currentAllowance = useTokenAllowance(token, account ?? undefined, spender)
@@ -68,7 +68,7 @@ export function useApproveCallback(
         ? ApprovalState.PENDING
         : ApprovalState.NOT_APPROVED
       : ApprovalState.APPROVED
-  }, [amountToApprove, currentAllowance, pendingApproval, spender])
+  }, [amountToApprove, currentAllowance, pendingApproval, spender, chainId])
 
   const tokenContract = useTokenContract(token?.address)
   const addTransaction = useTransactionAdder()
@@ -201,7 +201,7 @@ export function useApproveCallback(
     //     console.debug('Failed to approve token', error)
     //     throw error
     //   })
-  }, [approvalState, token, tokenContract, amountToApprove, spender, addTransaction])
+  }, [approvalState, token, tokenContract, amountToApprove, spender, addTransaction, chainId, gaslessMode, library, account])
 
   return [approvalState, approve]
 }

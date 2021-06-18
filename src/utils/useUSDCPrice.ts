@@ -70,5 +70,5 @@ export default function useUSDCPrice(currency?: Currency): Price | undefined {
       }
     }
     return undefined
-  }, [chainId, currency, ethPair, ethPairState, usdcEthPair, usdcEthPairState, usdcPair, usdcPairState, wrapped])
+  }, [chainId, currency, ethPair, ethPairState, usdcEthPair, usdcEthPairState, usdcPair, usdcPairState, wrapped, daiPair, daiPairState])
 }

@@ -45,7 +45,7 @@ export function useSwapActionHandlers(): {
         })
       )
     },
-    [dispatch]
+    [dispatch, chainId]
   )
 
   const onSwitchTokens = useCallback(() => {
