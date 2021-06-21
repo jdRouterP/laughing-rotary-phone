@@ -183,15 +183,41 @@ export const getUnclaimedWinningBets = (bets: Bet[]): Bet[] => {
 /**
  * Gets static data from the contract
  */
-export const useStaticPredictionsData = async () => {
-  const contract = usePredictionContract(PREDICTION_ADDRESS)
+export const useStaticPredictionsData = () => {
+  const contract = usePredictionContract();
   const currentEpoch = useSingleCallResult(contract, 'currentEpoch', undefined)?.result?.[0]
   const intervalBlocks = useSingleCallResult(contract, 'intervalBlocks', undefined)?.result?.[0]
   const minBetAmount = useSingleCallResult(contract, 'minBetAmount', undefined)?.result?.[0]
   const isPaused = useSingleCallResult(contract, 'paused', undefined)?.result?.[0]
   const bufferBlocks = useSingleCallResult(contract, 'bufferBlocks', undefined)?.result?.[0]
 
-
+  // return useMemo(() => {
+  //   if (token) return token
+  //   if (!chainId || !address) return undefined
+  //   if (decimals.loading || symbol.loading || tokenName.loading) return null
+  //   if (decimals.result) {
+  //     return new Token(
+  //       chainId,
+  //       address,
+  //       decimals.result[0],
+  //       parseStringOrBytes32(symbol.result?.[0], symbolBytes32.result?.[0], 'UNKNOWN'),
+  //       parseStringOrBytes32(tokenName.result?.[0], tokenNameBytes32.result?.[0], 'Unknown Token')
+  //     )
+  //   }
+  //   return undefined
+  // }, [
+  //   address,
+  //   chainId,
+  //   decimals.loading,
+  //   decimals.result,
+  //   symbol.loading,
+  //   symbol.result,
+  //   symbolBytes32.result,
+  //   token,
+  //   tokenName.loading,
+  //   tokenName.result,
+  //   tokenNameBytes32.result
+  // ])
   return {
     status: isPaused ? PredictionStatus.PAUSED : PredictionStatus.LIVE,
     currentEpoch: Number(currentEpoch),

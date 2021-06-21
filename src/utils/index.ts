@@ -28,12 +28,12 @@ const ETHERSCAN_PREFIXES: { [chainId in ChainId]: string } = {
 
 export function getEtherscanLink(
   chainId: ChainId,
-  data: string,
+  data: string | number,
   type: 'transaction' | 'token' | 'address' | 'block'
 ): string {
   let prefix = `https://${ETHERSCAN_PREFIXES[chainId] || ETHERSCAN_PREFIXES[1]}etherscan.io`
 
-  if(chainId === ChainId.MATIC) {
+  if (chainId === ChainId.MATIC) {
     prefix = `https://explorer-mainnet.maticvigil.com`
   }
 

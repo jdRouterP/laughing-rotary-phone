@@ -64,6 +64,7 @@ export const PROPOSAL_LENGTH_IN_SECS = AVERAGE_BLOCK_TIME_IN_SECS * PROPOSAL_LEN
 export const GOVERNANCE_ADDRESS = '0x5e4be8Bc9637f0EAA1A755019e06A68ce081D58F'
 
 export const TIMELOCK_ADDRESS = '0x1a9C8182C09F50C8318d769245beA52c32BE35BC'
+export const CHAINLINK_ADDRESS = '0xAB594600376Ec9fD91F8e885dADF0CE036862dE0'
 
 export const WETH_V2 = new Token(ChainId.MATIC, '0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270', 18, 'WMATIC', 'WMATIC')
 
@@ -82,6 +83,7 @@ export const UNI: { [chainId in ChainId]: Token } = {
   [ChainId.MATIC]: new Token(ChainId.MATIC, UNI_ADDRESS, 18, 'DFYN', 'Dfyn')
 }
 
+export const POLYGON_BLOCK_TIME = 3
 export const REWARD_TOKENS: Token[] = [ROUTE, DFYN, ZEE, AURORA]
 
 export const COMMON_CONTRACT_NAMES: { [address: string]: string } = {
