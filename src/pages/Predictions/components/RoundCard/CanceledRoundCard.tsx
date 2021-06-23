@@ -2,7 +2,7 @@ import React from 'react'
 import { CardBody, Text, Flex, BlockIcon, LinkExternal } from '@pancakeswap/uikit'
 import { useTranslation } from 'react-i18next'
 import { Round, BetPosition } from 'state/prediction/types'
-import { useGetTotalIntervalBlocks } from 'state/hook'
+import { useGetTotalinterval } from 'state/hook'
 import ReclaimPositionButton from '../ReclaimPositionButton'
 import useIsRefundable from '../../hooks/useIsRefundable'
 import { RoundResultBox } from '../RoundResult'
@@ -16,7 +16,7 @@ interface CanceledRoundCardProps {
 
 const CanceledRoundCard: React.FC<CanceledRoundCardProps> = ({ round }) => {
   const { t } = useTranslation()
-  const interval = useGetTotalIntervalBlocks()
+  const interval = useGetTotalinterval()
   const { isRefundable, setIsRefundable } = useIsRefundable(round.epoch)
   const { epoch, startBlock } = round
   const estimatedEndBlock = startBlock + interval

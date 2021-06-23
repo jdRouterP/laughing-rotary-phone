@@ -4,9 +4,9 @@ import { useCountUp } from 'react-countup'
 import { CardBody, Flex, PlayCircleOutlineIcon, Skeleton, Text, TooltipText, useTooltip } from '@pancakeswap/uikit'
 import { useTranslation } from 'react-i18next'
 import { Round, BetPosition } from 'state/prediction/types'
-import { useGetIntervalBlocks, useGetLastOraclePrice } from 'state/hook'
+import { useGetinterval, useGetLastOraclePrice } from 'state/hook'
 import BlockProgress from 'components/BlockProgress'
-import { formatUsd, getBubbleGumBackground } from '../../helpers'
+import { formatUsd } from '../../helpers'
 import PositionTag from '../PositionTag'
 import { RoundResultBox, LockPriceRow, PrizePoolRow } from '../RoundResult'
 import MultiplierArrow from './MultiplierArrow'
@@ -32,7 +32,7 @@ const GradientBorder = styled.div`
 `
 
 const GradientCard = styled(Card)`
-  background: ${({ theme }) => getBubbleGumBackground(theme)};
+  background: #64d789;
 `
 
 const LiveRoundCard: React.FC<LiveRoundCardProps> = ({
@@ -46,7 +46,7 @@ const LiveRoundCard: React.FC<LiveRoundCardProps> = ({
   const { t } = useTranslation()
   const { lockPrice, lockBlock, totalAmount } = round
   const currentBlock = useBlockNumber() ?? 0
-  const totalInterval = useGetIntervalBlocks()
+  const totalInterval = useGetinterval()
   const price = useGetLastOraclePrice()
   const isBull = price.gt(lockPrice)
   const priceColor = isBull ? 'success' : 'failure'

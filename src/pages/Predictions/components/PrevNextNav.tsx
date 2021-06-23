@@ -13,10 +13,10 @@ const StyledPrevNextNav = styled(Card)`
   position: relative;
   width: 128px;
 
-  ${({ theme }) => theme.mediaWidth.upToLarge} {
-    display: flex;
-  }
-`
+  `
+// ${({ theme }) => theme.mediaWidth.upToLarge} {
+//   display: flex;
+// }
 
 const Icon = styled.div`
   cursor: pointer;

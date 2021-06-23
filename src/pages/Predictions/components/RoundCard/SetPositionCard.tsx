@@ -23,7 +23,7 @@ import { usePredictionContract } from 'hooks/useContract'
 import { useTokenBalance } from 'state/wallet/hooks'
 import { BetPosition } from 'state/prediction/types'
 import { getDecimalAmount } from 'utils/formatBalance'
-import { BIG_TEN } from 'utils/bigNumber'
+import { BIG_ZERO } from 'utils/bigNumber'
 import PositionTag from '../PositionTag'
 import { getBnbAmount } from '../../helpers'
 import useSwiper from '../../hooks/useSwiper'
@@ -31,7 +31,7 @@ import FlexRow from '../FlexRow'
 import Card from './Card'
 import { useTransactionAdder } from 'state/transactions/hooks'
 import { useActiveWeb3React } from 'hooks'
-import { WETH } from '@uniswap/sdk'
+import { JSBI, TokenAmount, WETH } from '@uniswap/sdk'
 
 interface SetPositionCardProps {
   position: BetPosition
@@ -45,7 +45,8 @@ interface SetPositionCardProps {
 // // TODO: Remove on beta-v2 smart contract release.
 // const gasPrice = new BigNumber(6).times(BIG_TEN.pow(BIG_NINE)).toString()
 
-const dust = new BigNumber(0.01).times(BIG_TEN.pow(18))
+// const dust = new BigNumber(0.01).times(BIG_TEN.pow(18))
+const dust = JSBI.BigInt("10000000000000000"); //TODO
 const percentShortcuts = [10, 25, 50, 75]
 
 const getButtonProps = (value: BigNumber, balance: BigNumber, minBetAmountBalance: BigNumber) => {
@@ -72,18 +73,25 @@ const SetPositionCard: React.FC<SetPositionCardProps> = ({ position, togglePosit
   const addTransaction = useTransactionAdder()
   const { swiper } = useSwiper()
   const { account, chainId } = useActiveWeb3React()
-  const [errorMessage, setErrorMessage] = useState(null)
-  const balance = useTokenBalance(account ?? undefined, WETH[chainId ?? 137])
+  const [errorMessage, setErrorMessage] = useState({ key: '' } || null)
+  let balance = useTokenBalance(account ?? undefined, WETH[chainId ?? 137])
+
   const minBetAmount = useGetMinBetAmount()
   const { t } = useTranslation()
   const predictionsContract = usePredictionContract()
 
   const balanceDisplay = useMemo(() => {
-    return getBnbAmount(balance).toString()
+    return balance ? balance.toFixed(3) : 0;
   }, [balance])
+
   const maxBalance = useMemo(() => {
-    return getBnbAmount(balance.gt(dust) ? balance.minus(dust) : balance)
+    if (balance === undefined) {
+      return BIG_ZERO;
+    }
+    let dustToken = new TokenAmount(WETH[chainId ?? 137], dust);
+    return balance.greaterThan(dust) ? balance.subtract(dustToken) : balance
   }, [balance])
+
   const minBetAmountBalance = useMemo(() => {
     return getBnbAmount(minBetAmount)
   }, [minBetAmount])

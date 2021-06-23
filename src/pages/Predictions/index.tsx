@@ -4,7 +4,7 @@ import { useWeb3React } from '@web3-react/core'
 import { Helmet } from 'react-helmet-async'
 import { useMatchBreakpoints, useModal } from '@pancakeswap/uikit'
 import { useDispatch } from 'react-redux'
-import { useGetPredictionsStatus, useInitialBlock, useIsChartPaneOpen } from 'state/hook'
+import { useGetPredictionsStatus, useInitialBlock, useIsChartPaneOpen, usePollBlockNumber } from 'state/hook'
 import {
   getMarketData,
   useStaticPredictionsData,
@@ -26,6 +26,9 @@ import Mobile from './Mobile'
 import RiskDisclaimer from './components/RiskDisclaimer'
 import ChartDisclaimer from './components/ChartDisclaimer'
 
+import { ThemeProvider as SCThemeProvider } from 'styled-components'
+import { light, dark } from '@pancakeswap/uikit'
+
 const FUTURE_ROUND_COUNT = 2 // the number of rounds in the future to show
 
 const Predictions = () => {
@@ -37,7 +40,7 @@ const Predictions = () => {
     localStorageKey: 'pancake_predictions_chart',
   })
   const { account } = useWeb3React()
-  const staticPredictionsData = useStaticPredictionsData();
+  const _staticPredictionsData = useStaticPredictionsData();
   const status = useGetPredictionsStatus()
   const isChartPaneOpen = useIsChartPaneOpen()
   const dispatch = useDispatch()
@@ -69,11 +72,13 @@ const Predictions = () => {
   useEffect(() => {
 
     const fetchInitialData = async () => {
-      const [marketData] = await Promise.all([getMarketData()])
-      const { currentEpoch, intervalBlocks, bufferBlocks } = staticPredictionsData
+      const [staticPredictionsData, marketData] = await Promise.all([_staticPredictionsData, getMarketData()])
+      const { currentEpoch, interval, buffer } = staticPredictionsData
       const latestRound = marketData.rounds.find((round) => round.epoch === currentEpoch)
 
       // Fetch data on current unclaimed bets
+      console.log({ account, marketData, roundIds: marketData.rounds.map((round) => round.id) });
+
       dispatch(fetchCurrentBets({ account, roundIds: marketData.rounds.map((round) => round.id) }))
 
       if (marketData.market.paused) {
@@ -81,14 +86,13 @@ const Predictions = () => {
       } else if (latestRound && latestRound.epoch === currentEpoch) {
         const currentRoundStartBlock = Number(latestRound.startBlock)
         const futureRounds = []
-        const halfInterval = (intervalBlocks + bufferBlocks) / 2
+        const halfInterval = (interval + buffer) / 2
 
         for (let i = 1; i <= FUTURE_ROUND_COUNT; i++) {
           futureRounds.push(makeFutureRoundResponse(currentEpoch + i, (currentRoundStartBlock + halfInterval) * i))
         }
 
         const roundData = makeRoundData([...marketData.rounds, ...futureRounds.map(transformRoundResponse)])
-
         dispatch(
           initialize({
             ...(staticPredictionsData as Omit<PredictionsState, 'rounds'>),
@@ -111,6 +115,7 @@ const Predictions = () => {
     }
   }, [initialBlock, dispatch, account])
 
+  usePollBlockNumber()
   usePollRoundData()
   usePollOraclePrice()
 
@@ -120,15 +125,14 @@ const Predictions = () => {
 
   return (
     <>
-      <Helmet>
-        <script src="https://s3.tradingview.com/tv.js" type="text/javascript" id="tradingViewWidget" />
-      </Helmet>
-      <SwiperProvider>
-        <Container>
-          {isDesktop ? <Desktop /> : <Mobile />}
-          <CollectWinningsPopup />
-        </Container>
-      </SwiperProvider>
+      <SCThemeProvider theme={light}>
+        <SwiperProvider>
+          <Container>
+            {isDesktop ? <Desktop /> : <Mobile />}
+            <CollectWinningsPopup />
+          </Container>
+        </SwiperProvider>
+      </SCThemeProvider>
     </>
   )
 }

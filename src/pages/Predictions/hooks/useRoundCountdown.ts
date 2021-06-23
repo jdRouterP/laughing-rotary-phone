@@ -1,11 +1,11 @@
-import { useGetCurrentRoundBlockNumber, useGetIntervalBlocks } from 'state/hook'
+import { useGetCurrentRoundBlockNumber, useGetinterval } from 'state/hook'
 import useBlockCountdown from 'hooks/useGetBlockCountdown'
 
 /**
  * Returns a countdown in seconds of a given block
  */
 const useRoundCountdown = (intervalsToAdd = 1) => {
-  const interval = useGetIntervalBlocks()
+  const interval = useGetinterval()
   const currentRoundBlockNum = useGetCurrentRoundBlockNumber()
   const blocksToAdd = intervalsToAdd * interval
   const seconds = useBlockCountdown(currentRoundBlockNum + blocksToAdd)

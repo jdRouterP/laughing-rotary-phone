@@ -22,10 +22,10 @@ const StyledMobile = styled.div`
   height: 100%;
   max-height: 100%;
 
-  ${({ theme }) => theme.mediaWidth.upToExtraSmall} {
-    display: none;
-  }
-`
+  `
+// ${({ theme }) => theme.mediaWidth.upToExtraSmall} {
+//   display: none;
+// }
 
 const View = styled.div<{ isVisible: boolean }>`
   height: 100%;

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Flex, Spinner, Text } from '@pancakeswap/uikit'
+import { Flex, Text } from '@pancakeswap/uikit'
 import { useWeb3React } from '@web3-react/core'
 import styled from 'styled-components'
 import { useTranslation } from 'react-i18next'
@@ -19,7 +19,7 @@ import RoundsTab from './components/History/RoundsTab'
 import PnlTab from './components/History/PnlTab/PnlTab'
 
 const StyledHistory = styled.div`
-  background-color: ${({ theme }) => theme.card.background};
+  background-color: 'white'
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -34,7 +34,6 @@ const BetWrapper = styled.div`
 
 const SpinnerWrapper = styled.div`
   align-items: center;
-  background-color: ${({ theme }) => theme.card.background};
   display: flex;
   left: 0;
   height: 100%;
@@ -86,14 +85,13 @@ const History = () => {
       </Flex>
     )
   }
-
   return (
     <StyledHistory>
       <Header activeTab={activeTab} setActiveTab={setActiveTab} />
       <BetWrapper>
         {isFetchingHistory ? (
           <SpinnerWrapper>
-            <Spinner size={72} />
+            <Text>Loading...</Text>
           </SpinnerWrapper>
         ) : (
           activeTabComponent

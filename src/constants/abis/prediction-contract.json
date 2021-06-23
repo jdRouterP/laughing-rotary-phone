@@ -18,13 +18,18 @@
                     "type": "address"
                 },
                 {
+                    "internalType": "address",
+                    "name": "_rewardToken",
+                    "type": "address"
+                },
+                {
                     "internalType": "uint256",
-                    "name": "_intervalBlocks",
+                    "name": "_interval",
                     "type": "uint256"
                 },
                 {
                     "internalType": "uint256",
-                    "name": "_bufferBlocks",
+                    "name": "_buffer",
                     "type": "uint256"
                 },
                 {
@@ -141,7 +146,7 @@
                 {
                     "indexed": false,
                     "internalType": "uint256",
-                    "name": "blockNumber",
+                    "name": "time",
                     "type": "uint256"
                 },
                 {
@@ -166,7 +171,7 @@
                 {
                     "indexed": false,
                     "internalType": "uint256",
-                    "name": "blockNumber",
+                    "name": "time",
                     "type": "uint256"
                 },
                 {
@@ -311,7 +316,7 @@
                 {
                     "indexed": false,
                     "internalType": "uint256",
-                    "name": "blockNumber",
+                    "name": "time",
                     "type": "uint256"
                 }
             ],
@@ -371,22 +376,34 @@
             "type": "function"
         },
         {
-            "inputs": [],
+            "inputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "amount",
+                    "type": "uint256"
+                }
+            ],
             "name": "betBear",
             "outputs": [],
-            "stateMutability": "payable",
+            "stateMutability": "nonpayable",
             "type": "function"
         },
         {
-            "inputs": [],
+            "inputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "amount",
+                    "type": "uint256"
+                }
+            ],
             "name": "betBull",
             "outputs": [],
-            "stateMutability": "payable",
+            "stateMutability": "nonpayable",
             "type": "function"
         },
         {
             "inputs": [],
-            "name": "bufferBlocks",
+            "name": "buffer",
             "outputs": [
                 {
                     "internalType": "uint256",
@@ -537,7 +554,7 @@
         },
         {
             "inputs": [],
-            "name": "intervalBlocks",
+            "name": "interval",
             "outputs": [
                 {
                     "internalType": "uint256",
@@ -564,7 +581,7 @@
             "name": "ledger",
             "outputs": [
                 {
-                    "internalType": "enum BnbPricePrediction.Position",
+                    "internalType": "enum DfynPricePrediction.Position",
                     "name": "position",
                     "type": "uint8"
                 },
@@ -712,6 +729,19 @@
             "type": "function"
         },
         {
+            "inputs": [],
+            "name": "rewardToken",
+            "outputs": [
+                {
+                    "internalType": "contract IERC20",
+                    "name": "",
+                    "type": "address"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
             "inputs": [
                 {
                     "internalType": "uint256",
@@ -728,17 +758,17 @@
                 },
                 {
                     "internalType": "uint256",
-                    "name": "startBlock",
+                    "name": "startTime",
                     "type": "uint256"
                 },
                 {
                     "internalType": "uint256",
-                    "name": "lockBlock",
+                    "name": "lockTime",
                     "type": "uint256"
                 },
                 {
                     "internalType": "uint256",
-                    "name": "endBlock",
+                    "name": "endTime",
                     "type": "uint256"
                 },
                 {
@@ -802,11 +832,11 @@
             "inputs": [
                 {
                     "internalType": "uint256",
-                    "name": "_bufferBlocks",
+                    "name": "_buffer",
                     "type": "uint256"
                 }
             ],
-            "name": "setBufferBlocks",
+            "name": "setBuffer",
             "outputs": [],
             "stateMutability": "nonpayable",
             "type": "function"
@@ -815,11 +845,11 @@
             "inputs": [
                 {
                     "internalType": "uint256",
-                    "name": "_intervalBlocks",
+                    "name": "_interval",
                     "type": "uint256"
                 }
             ],
-            "name": "setIntervalBlocks",
+            "name": "setInterval",
             "outputs": [],
             "stateMutability": "nonpayable",
             "type": "function"

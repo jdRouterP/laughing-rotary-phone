@@ -15,17 +15,17 @@ interface CardHeaderProps {
 const getBackgroundColor = (theme: DefaultTheme, status: Status) => {
   switch (status) {
     case 'calculating':
-      return theme.colors.gradients.cardHeader
+      return 'blue'
     case 'live':
       return 'transparent'
     case 'canceled':
-      return theme.colors.warning
+      return 'pink'
     case 'next':
-      return theme.colors.secondary
+      return 'green'
     case 'expired':
     case 'soon':
     default:
-      return theme.colors.cardBorder
+      return 'yellow'
   }
 }
 

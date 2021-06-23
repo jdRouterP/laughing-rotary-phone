@@ -12,6 +12,7 @@ export const getBalanceAmount = (amount: BigNumber, decimals = 18) => {
   return new BigNumber(amount).dividedBy(BIG_TEN.pow(decimals))
 }
 
+
 /**
  * This function is not really necessary but is used throughout the site.
  */

@@ -88,8 +88,8 @@ export interface PredictionsState {
     historyFilter: HistoryFilter
     currentEpoch: number
     currentRoundStartBlockNumber: number
-    intervalBlocks: number
-    bufferBlocks: number
+    interval: number
+    buffer: number
     minBetAmount: string
     lastOraclePrice: string
     rounds: RoundData

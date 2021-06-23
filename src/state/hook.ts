@@ -1,9 +1,11 @@
-import { useMemo } from 'react'
-import { useSelector } from 'react-redux'
+import { useEffect, useMemo } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { AppState } from 'state'
 import { orderBy } from 'lodash'
 import { getCanClaim } from './prediction/hooks'
 import BigNumber from 'bignumber.js'
+import { useActiveWeb3React } from 'hooks'
+import { setBlock } from './block'
 
 // Predictions
 export const useIsHistoryPaneOpen = () => {
@@ -27,22 +29,22 @@ export const useGetCurrentEpoch = () => {
     return useSelector((state: AppState) => state.predictions.currentEpoch)
 }
 
-export const useGetIntervalBlocks = () => {
-    return useSelector((state: AppState) => state.predictions.intervalBlocks)
+export const useGetinterval = () => {
+    return useSelector((state: AppState) => state.predictions.interval)
 }
 
-export const useGetBufferBlocks = () => {
-    return useSelector((state: AppState) => state.predictions.bufferBlocks)
+export const useGetbuffer = () => {
+    return useSelector((state: AppState) => state.predictions.buffer)
 }
 
 export const useInitialBlock = () => {
     return useSelector((state: AppState) => state.block.initialBlock)
 }
 
-export const useGetTotalIntervalBlocks = () => {
-    const intervalBlocks = useGetIntervalBlocks()
-    const bufferBlocks = useGetBufferBlocks()
-    return intervalBlocks + bufferBlocks
+export const useGetTotalinterval = () => {
+    const interval = useGetinterval()
+    const buffer = useGetbuffer()
+    return interval + buffer
 }
 
 export const useGetRound = (id: string) => {
@@ -117,4 +119,17 @@ export const useBetCanClaim = (account: string, roundId: string) => {
 export const useGetLastOraclePrice = (): BigNumber => {
     const lastOraclePrice = useSelector((state: AppState) => state.predictions.lastOraclePrice)
     return new BigNumber(lastOraclePrice)
+}
+
+export const usePollBlockNumber = () => {
+    const dispatch = useDispatch()
+    const { library } = useActiveWeb3React()
+    useEffect(() => {
+        const interval = setInterval(async () => {
+            const blockNumber = await library?.getBlockNumber() ?? 0;
+            dispatch(setBlock(blockNumber))
+        }, 6000)
+
+        return () => clearInterval(interval)
+    }, [dispatch])
 }

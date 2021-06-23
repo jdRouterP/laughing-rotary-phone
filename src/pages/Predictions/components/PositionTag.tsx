@@ -10,7 +10,7 @@ interface TagProps extends FlexProps {
 }
 
 const StyledTag = styled(Flex) <{ bg: TagProps['bg'] }>`
-  background-color: ${({ bg, theme }) => theme.colors[bg]};
+  background-color: 'blue';
   display: inline-flex;
 `
 

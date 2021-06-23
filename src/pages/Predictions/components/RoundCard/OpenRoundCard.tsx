@@ -6,7 +6,7 @@ import { CardBody, PlayCircleOutlineIcon, Button, useTooltip, ArrowUpIcon, Arrow
 import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
 import { BetPosition, Round } from 'state/prediction/types'
-import { useGetIntervalBlocks } from 'state/hook'
+import { useGetinterval } from 'state/hook'
 import { markPositionAsEntered } from 'state/prediction/reducer'
 import CardFlip from '../CardFlip'
 import { formatBnb, getBnbAmount } from '../../helpers'
@@ -14,8 +14,9 @@ import { RoundResultBox, PrizePoolRow } from '../RoundResult'
 import MultiplierArrow from './MultiplierArrow'
 import Card from './Card'
 import CardHeader from './CardHeader'
-import SetPositionCard from './SetPositionCard'
+// import SetPositionCard from './SetPositionCard'
 import { useBlockNumber } from 'state/application/hooks'
+import SetPositionCard from './SetPositionCard'
 
 interface OpenRoundCardProps {
   round: Round
@@ -44,7 +45,7 @@ const OpenRoundCard: React.FC<OpenRoundCardProps> = ({
     position: BetPosition.BULL,
   })
   const { t } = useTranslation()
-  const interval = useGetIntervalBlocks()
+  const interval = useGetinterval()
   const { account } = useWeb3React()
   const dispatch = useDispatch()
   const currentBlock = useBlockNumber() ?? 0

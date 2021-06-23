@@ -1,4 +1,4 @@
-// @ts-nocheck
+
 /**
  * There is ts-nocheck at the top of this file for the following reasons:
  * 1. You can't ignore block in TS at the moment https://stackoverflow.com/questions/51145180/how-to-use-ts-ignore-for-a-block
@@ -10,30 +10,15 @@
  * I'll leave TODO: comment here to check back later if there is update to types
  *
  */
-import styled, { keyframes } from 'styled-components'
+import styled from 'styled-components'
 
 interface SliceProps {
   length: number
   offset?: number
 }
 
-export const DrawAnimation = keyframes`
-  from {
-    stroke-dasharray: 0, 339.292
-  }
-  to {
-    stroke-dasharray: ${({ length }: SliceProps) => length} 339.292;
-  }
-`
 
-export const OffsetAnimation = keyframes`
-  from {
-    stroke-dashoffset: 0
-  }
-  to {
-    stroke-dashoffset: ${(props) => -props.offset};
-  }
-`
+
 
 export const SVG = styled.svg`
   width: 128px;
@@ -49,13 +34,10 @@ const DefaultSlice = styled.circle<SliceProps>`
 
 export const LostSlice = styled(DefaultSlice)`
   stroke: #ed4b9e;
-  animation: ${DrawAnimation} 1s ease;
 `
 
 export const WonSlice = styled(DefaultSlice)`
   stroke: #31d0aa;
-  stroke-dashoffset: ${(props) => -props.offset};
-  animation: ${DrawAnimation} 1s ease, ${OffsetAnimation} 1s ease;
 `
 
 export const Wrapper = styled.div`

@@ -1,8 +1,8 @@
 import React from 'react'
-import { CardBody, Flex, Spinner, WaitIcon, TooltipText, useTooltip, InfoIcon } from '@pancakeswap/uikit'
+import { CardBody, Flex, WaitIcon, TooltipText, Text, useTooltip, InfoIcon } from '@pancakeswap/uikit'
 import { useTranslation } from 'react-i18next'
 import { Round, BetPosition } from 'state/prediction/types'
-import { useGetTotalIntervalBlocks } from 'state/hook'
+import { useGetTotalinterval } from 'state/hook'
 import { RoundResultBox } from '../RoundResult'
 import MultiplierArrow from './MultiplierArrow'
 import Card from './Card'
@@ -14,7 +14,7 @@ interface CalculatingCardProps {
 
 const CalculatingCard: React.FC<CalculatingCardProps> = ({ round }) => {
   const { t } = useTranslation()
-  const interval = useGetTotalIntervalBlocks()
+  const interval = useGetTotalinterval()
   const estimatedEndBlock = round.startBlock + interval
   const { targetRef, tooltip, tooltipVisible } = useTooltip(
     t('This round’s closing transaction has been submitted to the blockchain, and is awaiting confirmation.'),
@@ -35,7 +35,7 @@ const CalculatingCard: React.FC<CalculatingCardProps> = ({ round }) => {
           <MultiplierArrow isDisabled />
           <RoundResultBox>
             <Flex alignItems="center" justifyContent="center" flexDirection="column">
-              <Spinner size={96} />
+              <Text>Loading..</Text>
               <Flex mt="8px" ref={targetRef}>
                 <TooltipText>{t('Calculating')}</TooltipText>
                 <InfoIcon ml="4px" />

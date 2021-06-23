@@ -40,7 +40,8 @@ import { OpenClaimAddressModalAndRedirectToSwap, RedirectPathToSwapOnly, Redirec
 // import Vote from './Vote'
 import VotePage from './Vote/VotePage'
 // import PredictionMarket from './PredictionMarket'
-import Predictions from './Predictions'
+// import Predictions from './Predictions'
+import PredictionMarket from './PredictionMarket'
 
 const AppWrapper = styled.div`
   display: flex;
@@ -111,7 +112,7 @@ export default function App() {
               <Route exact strict path="/dual-farms" component={DualFarms} />
               <Route exact strict path="/popular-farms" component={FloraFarms} />
               <Route exact strict path="/vault" component={Vault} />
-              <Route exact strict path="/prediction" component={Predictions} />
+              <Route exact strict path="/prediction" component={PredictionMarket} />
               {/* <Route exact strict path="/vote" component={Vote} /> */}
               <Route exact strict path="/create" component={RedirectToAddLiquidity} />
               <Route exact path="/add" component={AddLiquidity} />

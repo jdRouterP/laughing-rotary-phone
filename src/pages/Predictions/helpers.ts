@@ -1,6 +1,5 @@
 import BigNumber from 'bignumber.js'
 import { Bet, BetPosition } from 'state/prediction/types'
-import { DefaultTheme } from 'styled-components'
 import { formatNumber, getBalanceAmount } from 'utils/formatBalance'
 import getTimePeriods from 'utils/getTimePeriods'
 
@@ -55,10 +54,7 @@ export const getPayout = (bet: Bet | null) => {
 }
 
 // TODO: Move this to the UI Kit
-export const getBubbleGumBackground = (theme: DefaultTheme) => {
-  if (theme.isDark) {
-    return 'linear-gradient(139.73deg, #142339 0%, #24243D 47.4%, #37273F 100%)'
-  }
+export const getBubbleGumBackground = () => {
 
   return 'linear-gradient(139.73deg, #E6FDFF 0%, #EFF4F5 46.87%, #F3EFFF 100%)'
 }

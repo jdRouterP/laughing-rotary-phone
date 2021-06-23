@@ -13,7 +13,6 @@ const usePollRoundData = () => {
   useEffect(() => {
     const timer = setInterval(async () => {
       const marketData = await getMarketData()
-      debugger
       dispatch(updateMarketData(marketData))
     }, POLL_TIME_IN_SECONDS * 1000)
 

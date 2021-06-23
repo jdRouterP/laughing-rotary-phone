@@ -9,39 +9,38 @@ import HistoryButton from './HistoryButton'
 
 const SetCol = styled.div`
   flex: none;
-  width: auto;
-
-  ${({ theme }) => theme.mediaWidth.upToLarge} {
-    width: 270px;
-  }
-`
+  width: auto;  
+  width: 270px;
+  `
+// ${({ theme }) => theme.mediaWidth.upToLarge} {
+// }
 
 const HelpButtonWrapper = styled.div`
   order: 1;
   margin: 0 8px 0 0;
 
-  ${({ theme }) => theme.mediaWidth.upToLarge} {
-    order: 2;
-    margin: 0 0 0 8px;
-  }
-`
+  `
+// ${({ theme }) => theme.mediaWidth.upToLarge} {
+//   order: 2;
+//   margin: 0 0 0 8px;
+// }
 
 const TimerLabelWrapper = styled.div`
   order: 2;
 
-  ${({ theme }) => theme.mediaWidth.upToLarge} {
-    order: 1;
-  }
-`
+  `
+// ${({ theme }) => theme.mediaWidth.upToLarge} {
+//   order: 1;
+// }
 
 const HistoryButtonWrapper = styled.div`
   display: none;
   order: 3;
 
-  ${({ theme }) => theme.mediaWidth.upToLarge} {
-    display: initial;
-  }
-`
+  `
+// ${({ theme }) => theme.mediaWidth.upToLarge} {
+//   display: initial;
+// }
 
 const Menu = () => {
   return (

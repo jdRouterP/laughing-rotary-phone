@@ -22,9 +22,9 @@ const initialState: PredictionsState = {
     historyFilter: HistoryFilter.ALL,
     currentEpoch: 0,
     currentRoundStartBlockNumber: 0,
-    intervalBlocks: 100,
-    bufferBlocks: 2,
-    minBetAmount: '1000000000000000',
+    interval: 100,
+    buffer: 2,
+    minBetAmount: '10000',
     lastOraclePrice: BIG_INT_ZERO.toString(),
     rounds: {},
     history: {},
@@ -106,6 +106,7 @@ export const predictionsSlice = createSlice({
             state.historyFilter = action.payload
         },
         initialize: (state, action: PayloadAction<PredictionsState>) => {
+            debugger
             return {
                 ...state,
                 ...action.payload,
@@ -120,7 +121,7 @@ export const predictionsSlice = createSlice({
                 // Add new round
                 const newestRound = maxBy(rounds, 'epoch') as Round
                 const futureRound = transformRoundResponse(
-                    makeFutureRoundResponse(newestRound.epoch + 2, newestRound.startBlock + state.intervalBlocks),
+                    makeFutureRoundResponse(newestRound.epoch + 2, newestRound.startBlock + state.interval),
                 )
 
                 newRoundData[futureRound.id] = futureRound

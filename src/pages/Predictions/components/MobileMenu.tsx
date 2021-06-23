@@ -29,15 +29,14 @@ const TabNav = styled.div`
 
 const StyledMobileMenu = styled.div`
   align-items: center;
-  background-color: ${({ theme }) => theme.card.background};
   display: flex;
   flex: none;
   height: 64px;
 
-  ${({ theme }) => theme.mediaWidth.upToLarge} {
-    display: none;
-  }
-`
+  `
+// ${({ theme }) => theme.mediaWidth.upToLarge} {
+//   display: none;
+// }
 
 const getActiveIndex = (isHistoryOpen: boolean, isChartOpen: boolean) => {
   if (isHistoryOpen) {

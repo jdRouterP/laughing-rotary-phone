@@ -1,6 +1,5 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Spinner } from '@pancakeswap/uikit'
 
 
 const Wrapper = styled.div`
@@ -12,7 +11,7 @@ const Wrapper = styled.div`
 const PageLoader: React.FC = () => {
   return (
     <Wrapper>
-      <Spinner />
+      <h1>Loading...</h1>
     </Wrapper>
   )
 }

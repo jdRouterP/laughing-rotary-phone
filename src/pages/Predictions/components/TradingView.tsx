@@ -27,7 +27,7 @@ const initializeTradingView = (TradingViewObj: any, theme: DefaultTheme) => {
     symbol: 'BINANCE:BNBUSDT',
     interval: '5',
     timezone: 'Etc/UTC',
-    theme: theme.isDark ? 'dark' : 'light',
+    theme: 'dark',
     style: '1',
     toolbar_bg: '#f1f3f6',
     enable_publishing: false,

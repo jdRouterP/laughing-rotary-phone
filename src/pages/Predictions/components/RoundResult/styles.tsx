@@ -101,18 +101,18 @@ const getBackgroundColor = ({
   }
 
   if (hasEntered || isLive) {
-    return theme.colors.secondary
+    return 'pink'
   }
 
   if (betPosition === BetPosition.BULL) {
-    return theme.colors.success
+    return 'green'
   }
 
   if (betPosition === BetPosition.BEAR) {
-    return theme.colors.failure
+    return 'red'
   }
 
-  return theme.colors.cardBorder
+  return 'blue'
 }
 
 const Background = styled(Box) <RoundResultBoxProps>`
@@ -122,7 +122,6 @@ const Background = styled(Box) <RoundResultBoxProps>`
 `
 
 const StyledRoundResultBox = styled.div`
-  background: ${({ theme }) => theme.card.background};
   border-radius: 14px;
   padding: 16px;
 `

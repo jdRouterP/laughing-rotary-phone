@@ -18,7 +18,6 @@ import { setHistoryFilter, setHistoryPaneState, fetchHistory } from 'state/predi
 import { useGetHistoryFilter, useGetIsFetchingHistory } from 'state/hook'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
-import { getBubbleGumBackground } from '../../helpers'
 
 const Filter = styled.label`
   align-items: center;
@@ -28,7 +27,6 @@ const Filter = styled.label`
 `
 
 const StyledHeader = styled(Box)`
-  background: ${({ theme }) => getBubbleGumBackground(theme)};
   flex: none;
   padding: 16px;
 `

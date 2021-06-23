@@ -24,24 +24,24 @@ const Title = styled(Text)`
   font-size: 16px;
   line-height: 21px;
 
-  ${({ theme }) => theme.mediaWidth.upToLarge} {
-    font-size: 20px;
-    line-height: 22px;
-  }
-`
+  `
+// ${({ theme }) => theme.mediaWidth.upToLarge} {
+//   font-size: 20px;
+//   line-height: 22px;
+// }
 
 const Price = styled(Text)`
   height: 18px;
   justify-self: start;
   width: 60px;
 
-  ${({ theme }) => theme.mediaWidth.upToLarge} {
-    text-align: center;
-  }
-`
+  `
+// ${({ theme }) => theme.mediaWidth.upToLarge} {
+//   text-align: center;
+// }
 
 const Interval = styled(Text)`
-  ${({ theme }) => theme.mediaWidth.upToLarge} {
+  {
     text-align: center;
     width: 32px;
   }
@@ -55,13 +55,13 @@ const Label = styled(Card) <{ dir: 'left' | 'right' }>`
   overflow: initial;
   padding: ${({ dir }) => (dir === 'right' ? '0 28px 0 8px' : '0 8px 0 24px')};
 
-  ${({ theme }) => theme.mediaWidth.upToLarge} {
-    align-items: center;
-    border-radius: 16px;
-    flex-direction: row;
-    padding: ${({ dir }) => (dir === 'right' ? '8px 40px 8px 8px' : '8px 8px 8px 40px')};
-  }
-`
+  `
+// ${({ theme }) => theme.mediaWidth.upToLarge} {
+//   align-items: center;
+//   border-radius: 16px;
+//   flex-direction: row;
+//   padding: ${({ dir }) => (dir === 'right' ? '8px 40px 8px 8px' : '8px 8px 8px 40px')};
+// }
 
 export const PricePairLabel: React.FC = () => {
   const price = useGetLastOraclePrice()

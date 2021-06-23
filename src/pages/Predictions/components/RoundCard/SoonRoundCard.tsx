@@ -2,7 +2,7 @@ import React from 'react'
 import { CardBody, Text, WaitIcon } from '@pancakeswap/uikit'
 import { useTranslation } from 'react-i18next'
 import { Round, BetPosition } from 'state/prediction/types'
-import { useGetCurrentEpoch, useGetTotalIntervalBlocks } from 'state/hook'
+import { useGetCurrentEpoch, useGetTotalinterval } from 'state/hook'
 import { formatRoundTime } from '../../helpers'
 import useRoundCountdown from '../../hooks/useRoundCountdown'
 import { RoundResultBox } from '../RoundResult'
@@ -16,7 +16,7 @@ interface SoonRoundCardProps {
 
 const SoonRoundCard: React.FC<SoonRoundCardProps> = ({ round }) => {
   const { t } = useTranslation()
-  const interval = useGetTotalIntervalBlocks()
+  const interval = useGetTotalinterval()
   const currentEpoch = useGetCurrentEpoch()
   const estimatedEndBlock = round.startBlock + interval
   const seconds = useRoundCountdown(round.epoch - currentEpoch + 1)

@@ -52,7 +52,8 @@ const HistoryPane = styled.div<{ isHistoryPaneOpen: boolean }>`
 `
 
 const StyledDesktop = styled.div`
-  display: none;
+  display: flex;
+   height: 100%;
 
 
 `
@@ -75,13 +76,12 @@ const PositionPane = styled.div`
 `
 
 const Gutter = styled.div`
-  background: ${({ theme }) => theme.colors.dropdown};
   cursor: row-resize;
   height: 12px;
   position: relative;
 
   &:before {
-    background-color: ${({ theme }) => theme.colors.textSubtle};
+    background-color:white;
     border-radius: 8px;
     content: '';
     height: 4px;
