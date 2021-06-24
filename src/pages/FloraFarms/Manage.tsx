@@ -8,7 +8,7 @@ import { RouteComponentProps } from 'react-router-dom'
 import DoubleCurrencyLogo from '../../components/DoubleLogo'
 import { useCurrency } from '../../hooks/Tokens'
 import { useWalletModalToggle } from '../../state/application/hooks'
-import { TYPE } from '../../theme'
+import { ExternalLink, TYPE } from '../../theme'
 
 import { RowBetween } from '../../components/Row'
 import { CardSection, DataCard, CardNoise, CardBGImage } from '../../components/floraFarms/styled'
@@ -113,7 +113,6 @@ export default function Manage({
 
   const [, stakingTokenPair] = usePair(tokenA, tokenB)
   const stakingInfo = useStakingInfo(stakingTokenPair, version)?.[0]
-
   // detect existing unstaked LP position to show add button if none found
   const userLiquidityUnstaked = useTokenBalance(account ?? undefined, stakingInfo?.stakedAmount?.token)
   const showAddLiquidityButton = Boolean(stakingInfo?.stakedAmount?.equalTo('0') && userLiquidityUnstaked?.equalTo('0'))
@@ -225,7 +224,7 @@ export default function Manage({
         </PoolData>
       </DataRow>
 
-      {showAddLiquidityButton && (
+      {showAddLiquidityButton && (stakingInfo?.active ? (
         <VoteCard>
           <CardBGImage />
           <CardNoise />
@@ -253,7 +252,33 @@ export default function Manage({
           <CardBGImage />
           <CardNoise />
         </VoteCard>
-      )}
+      ) : (
+        <VoteCard>
+          <CardBGImage />
+          <CardNoise />
+          <CardSection>
+            <AutoColumn gap="md">
+              <RowBetween>
+                <TYPE.white fontWeight={600}>This farm has ended!</TYPE.white>
+              </RowBetween>
+              <RowBetween style={{ marginBottom: '1rem' }}>
+                <TYPE.white fontSize={14}>
+                  {`Checkout our new farms!`}
+                </TYPE.white>
+              </RowBetween>
+              <ExternalLink
+                style={{ color: 'white', textDecoration: 'underline' }}
+                href="https://dfyn-network.medium.com/introducing-dfyn-yield-farming-phase-3-482498683528"
+                target="_blank"
+              >
+                <TYPE.white fontSize={14}>Read more about Dfyn Farms Phase 3</TYPE.white>
+              </ExternalLink>
+            </AutoColumn>
+          </CardSection>
+          <CardBGImage />
+          <CardNoise />
+        </VoteCard>
+      ))}
       {
         stakingInfo &&
         <RowBetween style={{ gap: '12px' }}>

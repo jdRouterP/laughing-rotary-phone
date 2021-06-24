@@ -75,9 +75,13 @@ export default function ClaimRewardModal({ isOpen, onDismiss, stakingInfo }: Sta
           </RowBetween>
           {unClaimedAmount && (
             <AutoColumn justify="center" gap="md">
-              <TYPE.body fontWeight={600} fontSize={36}>
-                {unClaimedAmount}
-              </TYPE.body>
+              {stakingInfo.userVestingInfo.hasSetConfig ? stakingInfo.userVestingInfo.hasOptForVesting ? <TYPE.body fontWeight={600} fontSize={36}>
+                {'25%'}
+              </TYPE.body> : <TYPE.body fontWeight={600} fontSize={36}>
+                {parseFloat(stakingInfo?.earnedAmount.toFixed(3)) / 2}
+              </TYPE.body> : <TYPE.body fontWeight={600} fontSize={36}>
+                {'25%'}
+              </TYPE.body>}
               <TYPE.body>Unclaimed DFYN</TYPE.body>
             </AutoColumn>
           )}
