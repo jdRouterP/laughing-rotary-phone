@@ -1,6 +1,6 @@
 import { ChainId, CurrencyAmount, JSBI, Token, TokenAmount, Pair } from '@uniswap/sdk'
 import { useMemo } from 'react'
-import { UNI, ROUTE, REWARD_TOKENS, EMPTY, DFYN, USDC, ZEE, AURORA, BOOTY, ROYA } from '../../constants'
+import { UNI, ROUTE, REWARD_TOKENS, EMPTY, DFYN, USDC, ZEE, AURORA, BOOTY, ROYA, SX } from '../../constants'
 import { STAKING_REWARDS_DUAL_FARMS_INTERFACE } from '../../constants/abis/staking-rewards-dual-farms'
 import { useActiveWeb3React } from '../../hooks'
 import { NEVER_RELOAD, useMultipleContractSingleData } from '../multicall/hooks'
@@ -30,6 +30,13 @@ export const STAKING_REWARDS_INFO: {
       baseToken: DFYN,
       start: 1622033000000,
       stakingRewardAddress: '0xf997c8e2e7e7387C8fd9120280ad9B3db31A5381'
+    },
+    {
+      tokens: [SX, DFYN],
+      rewardTokens: [DFYN, SX],
+      baseToken: DFYN,
+      start: 1623947400000,
+      stakingRewardAddress: '0x9a9592279B61A875BEc036091D96cc4093B374C0'
     },
     {
       tokens: [BOOTY, DFYN],
