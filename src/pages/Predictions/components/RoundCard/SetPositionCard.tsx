@@ -1,4 +1,3 @@
-//@ts-nocheck
 import React, { useEffect, useMemo, useState } from 'react'
 import {
   ArrowBackIcon,
@@ -16,28 +15,32 @@ import {
   AutoRenewIcon,
 } from '@pancakeswap/uikit'
 import { TransactionResponse } from '@ethersproject/providers'
-import BigNumber from 'bignumber.js'
 import { useGetMinBetAmount } from 'state/hook'
 import { useTranslation } from 'react-i18next'
 import { usePredictionContract } from 'hooks/useContract'
 import { useTokenBalance } from 'state/wallet/hooks'
 import { BetPosition } from 'state/prediction/types'
 import { getDecimalAmount } from 'utils/formatBalance'
-import { BIG_ZERO } from 'utils/bigNumber'
 import PositionTag from '../PositionTag'
-import { getBnbAmount } from '../../helpers'
 import useSwiper from '../../hooks/useSwiper'
 import FlexRow from '../FlexRow'
 import Card from './Card'
 import { useTransactionAdder } from 'state/transactions/hooks'
 import { useActiveWeb3React } from 'hooks'
-import { JSBI, TokenAmount, WETH } from '@uniswap/sdk'
+import { ChainId, JSBI, TokenAmount, WETH } from '@uniswap/sdk'
+import { BIG_INT_ZERO } from '../../../../constants'
+
 
 interface SetPositionCardProps {
   position: BetPosition
   togglePosition: () => void
   onBack: () => void
-  onSuccess: (decimalValue: BigNumber, hash: string) => Promise<void>
+  onSuccess: (chainId: ChainId, decimalValue: JSBI | string | number, hash: string) => Promise<void>
+}
+
+interface ErrorMessageType {
+  key: string,
+  data?: Object
 }
 
 // // /!\ TEMPORARY /!\
@@ -49,22 +52,23 @@ interface SetPositionCardProps {
 const dust = JSBI.BigInt("10000000000000000"); //TODO
 const percentShortcuts = [10, 25, 50, 75]
 
-const getButtonProps = (value: BigNumber, balance: BigNumber, minBetAmountBalance: BigNumber) => {
+const getButtonProps = (value: JSBI, balance: TokenAmount, minBetAmountBalance: TokenAmount) => {
+  const balanceBn = balance.raw;
   const hasSufficientBalance = () => {
-    if (value.gt(0)) {
-      return value.lte(balance)
+    if (JSBI.greaterThan(value, BIG_INT_ZERO)) {
+      return JSBI.lessThanOrEqual(value, balanceBn)
     }
-    return balance.gt(0)
+    return JSBI.greaterThan(balanceBn, BIG_INT_ZERO)
   }
 
   if (!hasSufficientBalance()) {
-    return { key: 'Insufficient BNB balance', disabled: true }
+    return { key: 'Insufficient balance', disabled: true }
   }
 
-  if (value.eq(0) || value.isNaN()) {
+  if (JSBI.equal(value, BIG_INT_ZERO)) {
     return { key: 'Enter an amount', disabled: true }
   }
-  return { key: 'Confirm', disabled: value.lt(minBetAmountBalance) }
+  return { key: 'Confirm', disabled: JSBI.lessThan(value, minBetAmountBalance.raw) }
 }
 
 const SetPositionCard: React.FC<SetPositionCardProps> = ({ position, togglePosition, onBack, onSuccess }) => {
@@ -73,38 +77,35 @@ const SetPositionCard: React.FC<SetPositionCardProps> = ({ position, togglePosit
   const addTransaction = useTransactionAdder()
   const { swiper } = useSwiper()
   const { account, chainId } = useActiveWeb3React()
-  const [errorMessage, setErrorMessage] = useState({ key: '' } || null)
+  const [errorMessage, setErrorMessage] = useState<ErrorMessageType | null>(null)
   let balance = useTokenBalance(account ?? undefined, WETH[chainId ?? 137])
 
-  const minBetAmount = useGetMinBetAmount()
+  const minBetAmountBalance = useGetMinBetAmount()
   const { t } = useTranslation()
   const predictionsContract = usePredictionContract()
 
   const balanceDisplay = useMemo(() => {
-    return balance ? balance.toFixed(3) : 0;
+    return balance ? balance.toFixed(6) : '0';
   }, [balance])
 
   const maxBalance = useMemo(() => {
     if (balance === undefined) {
-      return BIG_ZERO;
+      return new TokenAmount(WETH[chainId ?? 137], BIG_INT_ZERO);
     }
     let dustToken = new TokenAmount(WETH[chainId ?? 137], dust);
     return balance.greaterThan(dust) ? balance.subtract(dustToken) : balance
   }, [balance])
 
-  const minBetAmountBalance = useMemo(() => {
-    return getBnbAmount(minBetAmount)
-  }, [minBetAmount])
+  const valueAsBn = JSBI.BigInt(value);
 
-  const valueAsBn = new BigNumber(value)
-
-  const showFieldWarning = account && valueAsBn.gt(0) && errorMessage !== null
+  const showFieldWarning = account && JSBI.greaterThan(valueAsBn, BIG_INT_ZERO) && errorMessage !== null
 
   const [percent, setPercent] = useState(0)
 
   const handleInputChange = (input: string) => {
     if (input) {
-      const percentage = Math.floor(new BigNumber(input).dividedBy(maxBalance).multipliedBy(100).toNumber())
+      // const percentage = Math.floor(new BigNumber(input).dividedBy(maxBalance).multipliedBy(100).toNumber())
+      const percentage = Math.floor(JSBI.toNumber(JSBI.multiply(JSBI.divide(JSBI.BigInt(input), maxBalance.raw), JSBI.BigInt(100))));
       setPercent(Math.min(percentage, 100))
     } else {
       setPercent(0)
@@ -114,8 +115,8 @@ const SetPositionCard: React.FC<SetPositionCardProps> = ({ position, togglePosit
 
   const handlePercentChange = (sliderPercent: number) => {
     if (sliderPercent > 0) {
-      const percentageOfStakingMax = maxBalance.dividedBy(100).multipliedBy(sliderPercent)
-      setValue(percentageOfStakingMax.toFormat(18))
+      const percentageOfStakingMax = maxBalance.divide(JSBI.BigInt(100)).multiply(JSBI.BigInt(sliderPercent));
+      setValue(percentageOfStakingMax.toSignificant(6))
     } else {
       setValue('')
     }
@@ -146,7 +147,7 @@ const SetPositionCard: React.FC<SetPositionCardProps> = ({ position, togglePosit
 
   const handleEnterPosition = () => {
     const betMethod = position === BetPosition.BULL ? 'betBull' : 'betBear'
-    const decimalValue = getDecimalAmount(valueAsBn)
+    const decimalValue = getDecimalAmount(WETH[chainId ?? 137], valueAsBn)
     setIsPendingTx(true);
     predictionsContract?.[betMethod](decimalValue, { gasLimit: 350000 })
       .then(async (response: TransactionResponse) => {
@@ -155,7 +156,7 @@ const SetPositionCard: React.FC<SetPositionCardProps> = ({ position, togglePosit
         })
         setIsPendingTx(false)
         if (onSuccess) {
-          onSuccess(decimalValue, response.hash)
+          onSuccess(chainId ?? 137, decimalValue.toSignificant(6), response.hash)
         }
       })
       .catch((error: any) => {
@@ -167,12 +168,13 @@ const SetPositionCard: React.FC<SetPositionCardProps> = ({ position, togglePosit
 
   // Warnings
   useEffect(() => {
-    const bnValue = new BigNumber(value)
-    const hasSufficientBalance = bnValue.gt(0) && bnValue.lte(maxBalance)
+    const bnValue = JSBI.BigInt(value);
+    // const hasSufficientBalance = bnValue.gt(0) && bnValue.lte(maxBalance)
+    const hasSufficientBalance = JSBI.greaterThan(bnValue, BIG_INT_ZERO) && JSBI.lessThanOrEqual(bnValue, maxBalance.raw)
 
     if (!hasSufficientBalance) {
       setErrorMessage({ key: 'Insufficient BNB balance' })
-    } else if (bnValue.gt(0) && bnValue.lt(minBetAmountBalance)) {
+    } else if (JSBI.greaterThan(bnValue, BIG_INT_ZERO) && JSBI.lessThan(bnValue, minBetAmountBalance.raw)) {
       setErrorMessage({
         key: 'A minimum amount of %num% %token% is required',
         data: { num: minBetAmountBalance, token: 'BNB' },
@@ -212,6 +214,7 @@ const SetPositionCard: React.FC<SetPositionCardProps> = ({ position, togglePosit
         <BalanceInput
           value={value}
           onUserInput={handleInputChange}
+          //@ts-ignore
           isWarning={showFieldWarning}
           inputProps={{ disabled: !account || isPendingTx }}
         />

@@ -1,20 +1,21 @@
 import { useEffect, useState } from 'react'
-import BigNumber from 'bignumber.js'
 import { useChainlinkOracleContract } from 'hooks/useContract'
 import useLastUpdated from 'hooks/useLastUpdated'
-import { getBalanceAmount } from 'utils/formatBalance'
-import { BIG_ZERO } from 'utils/bigNumber'
-import { CHAINLINK_ADDRESS } from '../../../constants'
+import { CHAINLINK_ADDRESS, MATIC_USD } from '../../../constants'
+import { JSBI, TokenAmount } from '@uniswap/sdk'
 
 const useGetLatestOraclePrice = () => {
-  const [price, setPrice] = useState(BIG_ZERO)
+  const [price, setPrice] = useState('');
   const { lastUpdated, setLastUpdated: refresh } = useLastUpdated()
   const chainlinkOracleContract = useChainlinkOracleContract(CHAINLINK_ADDRESS)
 
   useEffect(() => {
     const fetchPrice = async () => {
       const response = await chainlinkOracleContract?.latestAnswer()
-      setPrice(getBalanceAmount(new BigNumber(response.toNumber()), 8))
+
+      const tokenAmountUSD = new TokenAmount(MATIC_USD, JSBI.BigInt(response)).toSignificant(6);
+
+      setPrice(tokenAmountUSD)
     }
 
     fetchPrice()

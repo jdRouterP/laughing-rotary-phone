@@ -12,6 +12,7 @@ import {
     makeRoundData,
 } from './hooks'
 import { BIG_INT_ZERO } from '../../constants'
+import { JSBI } from '@uniswap/sdk'
 
 const initialState: PredictionsState = {
     status: PredictionStatus.INITIAL,
@@ -24,7 +25,7 @@ const initialState: PredictionsState = {
     currentRoundStartBlockNumber: 0,
     interval: 100,
     buffer: 2,
-    minBetAmount: '10000',
+    minBetAmount: JSBI.BigInt('10000'),
     lastOraclePrice: BIG_INT_ZERO.toString(),
     rounds: {},
     history: {},
@@ -106,7 +107,6 @@ export const predictionsSlice = createSlice({
             state.historyFilter = action.payload
         },
         initialize: (state, action: PayloadAction<PredictionsState>) => {
-            debugger
             return {
                 ...state,
                 ...action.payload,

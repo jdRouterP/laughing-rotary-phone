@@ -21,7 +21,7 @@ const usePollOraclePrice = (seconds = 30) => {
 
   // If the price changed update global state
   useEffect(() => {
-    dispatch(setLastOraclePrice(price.toJSON()))
+    dispatch(setLastOraclePrice(price))
   }, [price, dispatch])
 }
 

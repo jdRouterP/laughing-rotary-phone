@@ -6,6 +6,7 @@ import { getCanClaim } from './prediction/hooks'
 import BigNumber from 'bignumber.js'
 import { useActiveWeb3React } from 'hooks'
 import { setBlock } from './block'
+import { TokenAmount, WETH } from '@uniswap/sdk'
 
 // Predictions
 export const useIsHistoryPaneOpen = () => {
@@ -72,7 +73,8 @@ export const useGetCurrentRoundBlockNumber = () => {
 
 export const useGetMinBetAmount = () => {
     const minBetAmount = useSelector((state: AppState) => state.predictions.minBetAmount)
-    return useMemo(() => new BigNumber(minBetAmount), [minBetAmount])
+    const { chainId } = useActiveWeb3React()
+    return useMemo(() => new TokenAmount(WETH[chainId ?? 137], minBetAmount), [minBetAmount])
 }
 
 export const useGetIsFetchingHistory = () => {

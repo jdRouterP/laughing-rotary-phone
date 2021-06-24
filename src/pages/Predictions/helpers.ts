@@ -1,11 +1,8 @@
-import BigNumber from 'bignumber.js'
+
 import { Bet, BetPosition } from 'state/prediction/types'
-import { formatNumber, getBalanceAmount } from 'utils/formatBalance'
+import { formatNumber } from 'utils/formatBalance'
 import getTimePeriods from 'utils/getTimePeriods'
 
-export const getBnbAmount = (bnbBn: BigNumber) => {
-  return getBalanceAmount(bnbBn, 18)
-}
 
 export const formatUsd = (usd: number) => {
   return `$${formatNumber(usd || 0, 3, 3)}`
@@ -13,10 +10,6 @@ export const formatUsd = (usd: number) => {
 
 export const formatBnb = (bnb: number) => {
   return bnb ? bnb.toLocaleString(undefined, { minimumFractionDigits: 3, maximumFractionDigits: 3 }) : '0'
-}
-
-export const formatBnbFromBigNumber = (bnbBn: BigNumber) => {
-  return formatBnb(getBnbAmount(bnbBn).toNumber())
 }
 
 export const padTime = (num: number) => num.toString().padStart(2, '0')

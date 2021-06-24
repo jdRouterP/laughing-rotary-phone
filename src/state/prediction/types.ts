@@ -1,5 +1,7 @@
 // Predictions
 
+import { JSBI } from "@uniswap/sdk";
+
 export enum BetPosition {
     BULL = 'Bull',
     BEAR = 'Bear',
@@ -90,7 +92,7 @@ export interface PredictionsState {
     currentRoundStartBlockNumber: number
     interval: number
     buffer: number
-    minBetAmount: string
+    minBetAmount: JSBI
     lastOraclePrice: string
     rounds: RoundData
     history: HistoryData

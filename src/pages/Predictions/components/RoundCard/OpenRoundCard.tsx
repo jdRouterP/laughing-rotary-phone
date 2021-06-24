@@ -9,7 +9,7 @@ import { BetPosition, Round } from 'state/prediction/types'
 import { useGetinterval } from 'state/hook'
 import { markPositionAsEntered } from 'state/prediction/reducer'
 import CardFlip from '../CardFlip'
-import { formatBnb, getBnbAmount } from '../../helpers'
+import { formatBnb } from '../../helpers'
 import { RoundResultBox, PrizePoolRow } from '../RoundResult'
 import MultiplierArrow from './MultiplierArrow'
 import Card from './Card'
@@ -17,6 +17,7 @@ import CardHeader from './CardHeader'
 // import SetPositionCard from './SetPositionCard'
 import { useBlockNumber } from 'state/application/hooks'
 import SetPositionCard from './SetPositionCard'
+import { ChainId, JSBI, TokenAmount, WETH } from '@uniswap/sdk'
 
 interface OpenRoundCardProps {
   round: Round
@@ -96,7 +97,7 @@ const OpenRoundCard: React.FC<OpenRoundCardProps> = ({
     }))
   }
 
-  const handleSuccess = async (decimalValue: BigNumber, hash: string) => {
+  const handleSuccess = async (chainId: ChainId, decimalValue: JSBI, hash: string) => {
     // Optimistically set the user bet so we see the entered position immediately.
     dispatch(
       markPositionAsEntered({
@@ -106,7 +107,7 @@ const OpenRoundCard: React.FC<OpenRoundCardProps> = ({
           hash,
           round,
           position,
-          amount: getBnbAmount(decimalValue).toNumber(),
+          amount: new TokenAmount(WETH[chainId ?? 137], decimalValue),
           claimed: false,
           claimedHash: null,
         },

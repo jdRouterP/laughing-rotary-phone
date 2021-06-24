@@ -24,7 +24,6 @@ const useBlockCountdown = (blockNumber: number) => {
 
         timer.current = setInterval(() => {
           setSecondsRemaining((prevSecondsRemaining) => {
-            console.log(timer.current);
             if (prevSecondsRemaining === 1) {
               //clearInterval(timer.current)
             }
