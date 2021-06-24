@@ -1,6 +1,6 @@
 import { ChainId, CurrencyAmount, JSBI, Token, TokenAmount, Pair } from '@uniswap/sdk'
 import { useMemo } from 'react'
-import { UNI, ROUTE, REWARD_TOKENS, EMPTY, DFYN, USDC, ZEE, AURORA, BOOTY, ROYA, SX } from '../../constants'
+import { UNI, ROUTE, REWARD_TOKENS, EMPTY, DFYN, USDC, ZEE, AURORA, BOOTY, ROYA, SX, EZ, UFARM, NWC, mRTK } from '../../constants'
 import { STAKING_REWARDS_DUAL_FARMS_INTERFACE } from '../../constants/abis/staking-rewards-dual-farms'
 import { useActiveWeb3React } from '../../hooks'
 import { NEVER_RELOAD, useMultipleContractSingleData } from '../multicall/hooks'
@@ -30,6 +30,34 @@ export const STAKING_REWARDS_INFO: {
       baseToken: DFYN,
       start: 1622033000000,
       stakingRewardAddress: '0xf997c8e2e7e7387C8fd9120280ad9B3db31A5381'
+    },
+    {
+      tokens: [DFYN, EZ],
+      rewardTokens: [DFYN, EZ],
+      baseToken: DFYN,
+      start: 1624552200000,
+      stakingRewardAddress: '0xA8453cFae7EC47e7099115789258226C5cb75534'
+    },
+    {
+      tokens: [DFYN, UFARM],
+      rewardTokens: [DFYN, UFARM],
+      baseToken: DFYN,
+      start: 1624552200000,
+      stakingRewardAddress: '0x7ba448d0b438723fFffDB3b842AA72e6EB7588C5'
+    },
+    {
+      tokens: [DFYN, NWC],
+      rewardTokens: [DFYN, NWC],
+      baseToken: DFYN,
+      start: 1624552200000,
+      stakingRewardAddress: '0x91174CBa63E8A2A1755ba473820183e4e64a3Dc8'
+    },
+    {
+      tokens: [DFYN, mRTK],
+      rewardTokens: [DFYN, mRTK],
+      baseToken: DFYN,
+      start: 1624552200000,
+      stakingRewardAddress: '0x5190430648eD5E8879665c36e0CE8Bd76f1449B8'
     },
     {
       tokens: [SX, DFYN],

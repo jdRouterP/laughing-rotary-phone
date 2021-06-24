@@ -212,6 +212,22 @@ export const getTokenLogoURL = (address: string) => {
     address = '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2'
   }
 
+
+  if (address?.toLowerCase() === '0x38332D8671961aE13d0BDe040d536eB336495eEA'.toLowerCase()) {
+    uri = 'https://assets.coingecko.com/coins/images/11102/small/rtk-logo.png'
+  }
+  if (address?.toLowerCase() === '0xa7305ae84519ff8be02484cda45834c4e7d13dd6'.toLowerCase()) {
+    uri = 'https://oropocket.com/ufarm.png'
+  }
+  if (address?.toLowerCase() === '0x968F6f898a6Df937fC1859b323aC2F14643e3fED'.toLowerCase()) {
+    uri = 'https://assets.coingecko.com/coins/images/9805/small/Tu1_NI3s_%281%29.png?1614745476'
+  }
+  if (address?.toLowerCase() === '0x34C1b299A74588D6Abdc1b85A53345A48428a521'.toLowerCase()) {
+    uri = 'https://etherscan.io/token/images/easyfi_32.png'
+  }
+
+
+
   if (address?.toLowerCase() === '0x53E0bca35eC356BD5ddDFebbD1Fc0fD03FaBad39'.toLowerCase()) {
     uri = 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x514910771AF9Ca656af840dff83E8264EcF986CA/logo.png'
   }

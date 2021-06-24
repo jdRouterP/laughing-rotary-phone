@@ -57,6 +57,13 @@ export const SX = new Token(ChainId.MATIC, '0x840195888Db4D6A99ED9F73FcD3B225Bb3
 export const CRV = new Token(ChainId.MATIC, '0x172370d5cd63279efa6d502dab29171933a610af', 18, 'CRV', 'Curve')
 export const LINK = new Token(ChainId.MATIC, '0x53e0bca35ec356bd5dddfebbd1fc0fd03fabad39', 18, 'LINK', 'Chain Link')
 
+export const EZ = new Token(ChainId.MATIC, '0x34C1b299A74588D6Abdc1b85A53345A48428a521', 18, 'EZ', 'EASY V2')
+export const UFARM = new Token(ChainId.MATIC, '0xa7305ae84519ff8be02484cda45834c4e7d13dd6', 18, 'UFARM', 'Unifarm Token')
+export const NWC = new Token(ChainId.MATIC, '0x968F6f898a6Df937fC1859b323aC2F14643e3fED', 18, 'NWC', 'Newscrypto')
+export const mRTK = new Token(ChainId.MATIC, '0x38332D8671961aE13d0BDe040d536eB336495eEA', 18, 'mRTK', 'mRTK')
+
+
+
 
 //TEST TOKENS
 export const REWARDTEST = new Token(ChainId.MATIC, '0xD33dcD9673e1fA99F064CB4682c6299351AD771C', 18, 'TEST', 'Test Token')
@@ -87,7 +94,7 @@ export const UNI: { [chainId in ChainId]: Token } = {
   [ChainId.MATIC]: new Token(ChainId.MATIC, UNI_ADDRESS, 18, 'DFYN', 'Dfyn')
 }
 
-export const REWARD_TOKENS: Token[] = [ROUTE, DFYN, ZEE, AURORA, ROYA, BOOTY, SX]
+export const REWARD_TOKENS: Token[] = [ROUTE, DFYN, ZEE, AURORA, ROYA, BOOTY, SX, EZ, UFARM, NWC, mRTK]
 
 export const COMMON_CONTRACT_NAMES: { [address: string]: string } = {
   [UNI_ADDRESS]: 'DFYN',
