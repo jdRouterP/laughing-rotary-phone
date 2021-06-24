@@ -110,7 +110,6 @@ export default function Manage({
 
   const toggleWalletModal = useWalletModalToggle()
 
-  //@ts-ignore
   const handleDepositClick = useCallback(() => {
     if (account) {
       setShowStakingModal(true)
@@ -321,11 +320,11 @@ export default function Manage({
 
         {!showAddLiquidityButton && (
           <DataRow style={{ marginBottom: '1rem' }}>
-            {/* {stakingInfo && stakingInfo.active && (
+            {stakingInfo && stakingInfo.active && (
               <ButtonPrimary padding="8px" borderRadius="8px" width="160px" onClick={handleDepositClick}>
                 {stakingInfo?.stakedAmount?.greaterThan(JSBI.BigInt(0)) ? 'Deposit' : 'Deposit DFYN'}
               </ButtonPrimary>
-            )} */}
+            )}
 
             {stakingInfo?.earnedAmount && JSBI.notEqual(BIG_INT_ZERO, stakingInfo?.earnedAmount?.raw) && (
               <>
