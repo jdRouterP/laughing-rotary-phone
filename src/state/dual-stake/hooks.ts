@@ -32,28 +32,28 @@ export const STAKING_REWARDS_INFO: {
       stakingRewardAddress: '0xf997c8e2e7e7387C8fd9120280ad9B3db31A5381'
     },
     {
-      tokens: [DFYN, EZ],
+      tokens: [EZ, DFYN],
       rewardTokens: [DFYN, EZ],
       baseToken: DFYN,
       start: 1624552200000,
       stakingRewardAddress: '0xA8453cFae7EC47e7099115789258226C5cb75534'
     },
     {
-      tokens: [DFYN, UFARM],
+      tokens: [UFARM, DFYN],
       rewardTokens: [DFYN, UFARM],
       baseToken: DFYN,
       start: 1624552200000,
       stakingRewardAddress: '0x7ba448d0b438723fFffDB3b842AA72e6EB7588C5'
     },
     {
-      tokens: [DFYN, NWC],
+      tokens: [NWC, DFYN],
       rewardTokens: [DFYN, NWC],
       baseToken: DFYN,
       start: 1624552200000,
       stakingRewardAddress: '0x91174CBa63E8A2A1755ba473820183e4e64a3Dc8'
     },
     {
-      tokens: [DFYN, mRTK],
+      tokens: [mRTK, DFYN],
       rewardTokens: [DFYN, mRTK],
       baseToken: DFYN,
       start: 1624552200000,
