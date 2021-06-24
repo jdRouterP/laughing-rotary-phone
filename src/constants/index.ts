@@ -52,6 +52,10 @@ export const UST = new Token(ChainId.MATIC, '0x692597b009d13C4049a947CAB2239b7d6
 export const AGA = new Token(ChainId.MATIC, '0x033d942a6b495c4071083f4cde1f17e986fe856c', 4, 'AGA', 'AGA')
 export const AGAr = new Token(ChainId.MATIC, '0xf84bd51eab957c2e7b7d646a3427c5a50848281d', 8, 'AGAr', 'AGAr')
 export const ROYA = new Token(ChainId.MATIC, '0x0bD820aD2d7Ab7305b5C9538ba824C9b9bEb0561', 18, 'ROYA', 'Royale')
+export const BOOTY = new Token(ChainId.MATIC, '0xd12dc5319808bb31ba95ae5764def2627d5966ce', 18, 'BOOTY', 'PirateBooty')
+export const SX = new Token(ChainId.MATIC, '0x840195888Db4D6A99ED9F73FcD3B225Bb3cB1A79', 18, 'SX', 'SportX')
+export const CRV = new Token(ChainId.MATIC, '0x172370d5cd63279efa6d502dab29171933a610af', 18, 'CRV', 'Curve')
+export const LINK = new Token(ChainId.MATIC, '0x53e0bca35ec356bd5dddfebbd1fc0fd03fabad39', 18, 'LINK', 'Chain Link')
 
 
 //TEST TOKENS
@@ -83,7 +87,7 @@ export const UNI: { [chainId in ChainId]: Token } = {
   [ChainId.MATIC]: new Token(ChainId.MATIC, UNI_ADDRESS, 18, 'DFYN', 'Dfyn')
 }
 
-export const REWARD_TOKENS: Token[] = [ROUTE, DFYN, ZEE, AURORA]
+export const REWARD_TOKENS: Token[] = [ROUTE, DFYN, ZEE, AURORA, ROYA, BOOTY, SX]
 
 export const COMMON_CONTRACT_NAMES: { [address: string]: string } = {
   [UNI_ADDRESS]: 'DFYN',
@@ -109,7 +113,7 @@ const WETH_ONLY: ChainTokenList = {
 // used to construct intermediary pairs for trading
 export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
   ...WETH_ONLY,
-  [ChainId.MATIC]: [...WETH_ONLY[ChainId.MATIC], DAI, USDC, USDT, mWETH, ROUTE, OM, EASY, IGG, RAZOR, QUICK, COR, FRONT, GLCH, STR, UNN, NORD, RAGE, AAVE, UNI_TOKEN, DFYN]
+  [ChainId.MATIC]: [...WETH_ONLY[ChainId.MATIC], DAI, USDC, USDT, mWETH, ROUTE, AAVE, UNI_TOKEN, DFYN, WBTC, UST, LUNA, FISH, LINK, CRV, QUICK]
   // [ChainId.MATIC]: [...WETH_ONLY[ChainId.MATIC], DAI, USDC, USDT, mWETH]
 }
 

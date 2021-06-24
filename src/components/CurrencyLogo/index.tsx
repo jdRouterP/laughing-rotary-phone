@@ -235,6 +235,12 @@ export const getTokenLogoURL = (address: string) => {
   if (address?.toLowerCase() === '0xeCf8f2FA183b1C4d2A269BF98A54fCe86C812d3e'.toLowerCase()) {
     uri = 'https://i.imgur.com/Z8V1O7H.png'
   }
+  if (address?.toLowerCase() === '0xd12dc5319808bb31ba95ae5764def2627d5966ce'.toLowerCase()) {
+    uri = 'https://piratedice.xyz/booty.png'
+  }
+  if (address?.toLowerCase() === '0x0bd820ad2d7ab7305b5c9538ba824c9b9beb0561'.toLowerCase()) {
+    uri = 'https://raw.githubusercontent.com/RoyaleFinanceV1/royale-contracts/master/royale.png'
+  }
 
   if (address?.toLowerCase() === '0xa1428174F516F527fafdD146b883bB4428682737'.toLowerCase()) {
     uri = 'https://assets.coingecko.com/coins/images/14040/small/6YPdWn6.png?1613975899'

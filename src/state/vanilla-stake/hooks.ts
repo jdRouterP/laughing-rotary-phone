@@ -47,13 +47,13 @@ export const STAKING_REWARDS_INFO: {
       stakingRewardAddress: '0xfBCE866aF59bEa3b3880330F7DE3b08d7bc26676'
     },
     {
-      tokens: [DFYN, ANY],
+      tokens: [ANY, DFYN],
       baseToken: DFYN,
       startTime: 1622651400,
       stakingRewardAddress: '0xf4822f5e1B01Dc101914C888d88E6d295c6A7FCA'
     },
     {
-      tokens: [DFYN, UFT],
+      tokens: [UFT, DFYN],
       baseToken: DFYN,
       startTime: 1622651400,
       stakingRewardAddress: '0x4cAE3C18b058eBF1EC439f01457348a9dD9CcC53'
