@@ -9,8 +9,8 @@ import { RowBetween } from '../../components/Row'
 import { CardSection, DataCard, CardNoise, CardBGImage } from '../../components/floraFarms/styled'
 import Loader from '../../components/Loader'
 import { useActiveWeb3React } from '../../hooks'
-// import { JSBI } from '@uniswap/sdk'
-// import { BIG_INT_ZERO } from '../../constants'
+import { JSBI } from '@uniswap/sdk'
+import { BIG_INT_ZERO } from '../../constants'
 import { OutlineCard } from '../../components/Card'
 
 const PageWrapper = styled(AutoColumn)`
@@ -48,7 +48,14 @@ export default function Earn() {
    * only show staking cards with balance
    * @todo only account for this if rewards are inactive
    */
-  const stakingInfosWithBalance = stakingInfos
+  const stakingInfosWithBalance = stakingInfos?.filter((s) => JSBI.greaterThan(s.stakedAmount.raw, BIG_INT_ZERO))
+
+  const activeFarms = stakingInfos?.filter((s) => s.active);
+
+  const stakingInfosWithRewards = stakingInfos?.filter((s) => JSBI.greaterThan(s.earnedAmount.raw, BIG_INT_ZERO))
+
+  const stakingFarms = [...new Set([...stakingInfosWithBalance, ...activeFarms, ...stakingInfosWithRewards])]
+  console.log(stakingInfosWithBalance, activeFarms, stakingInfosWithRewards, stakingFarms)
 
   // toggle copy if rewards are inactive
   const stakingRewardsExist = Boolean(typeof chainId === 'number' && (STAKING_REWARDS_INFO[chainId]?.length ?? 0) > 0)
@@ -70,7 +77,7 @@ export default function Earn() {
               <RowBetween>
                 <TYPE.white fontSize={14}>
                   A total of 4.875 M DFYN tokens will be distributed as rewards for this program. 25% of the DFYN token rewards can be claimed after farming ends. The remaining rewards will be released 25% every 2 months unless the user decides to claim all tokens instantly by agreeing to burn 50% tokens.
-                  </TYPE.white>
+                </TYPE.white>
 
 
               </RowBetween>{' '}
@@ -98,10 +105,10 @@ export default function Earn() {
             <Loader style={{ margin: 'auto' }} />
           ) : !stakingRewardsExist ? (
             <OutlineCard>No active pools</OutlineCard>
-          ) : stakingInfos?.length !== 0 && stakingInfosWithBalance.length === 0 ? (
+          ) : stakingFarms?.length === 0 ? (
             <OutlineCard>No active pools</OutlineCard>
           ) : (
-            stakingInfosWithBalance?.map(stakingInfo => {
+            stakingFarms?.map(stakingInfo => {
               // need to sort by added liquidity here
               return <PoolCard key={stakingInfo.stakingRewardAddress} stakingInfo={stakingInfo} />
             })
