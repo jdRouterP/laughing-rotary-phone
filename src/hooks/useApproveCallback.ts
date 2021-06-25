@@ -20,21 +20,6 @@ const Biconomy = require("@biconomy/mexa")
 const Web3 = require("web3");
 // swap, add Liquidity
 
-// const maticProvider = chainId ? RPC[chainId] : RPC[137];
-const maticProvider = RPC[137];
-const biconomy = new Biconomy(
-  new Web3.providers.HttpProvider(maticProvider),
-  {
-    apiKey: biconomyAPIKey,
-    debug: false
-  }
-);
-const getWeb3 = new Web3(biconomy);
-biconomy
-  .onEvent(biconomy.READY, () => {
-    console.debug("Mexa is Ready");
-  })
-
 export enum ApprovalState {
   UNKNOWN,
   NOT_APPROVED,
@@ -55,6 +40,24 @@ export function useApproveCallback(
   const currentAllowance = useTokenAllowance(token, account ?? undefined, spender)
   const pendingApproval = useHasPendingApproval(token?.address, spender)
   const [gaslessMode] = useGaslessModeManager();
+
+  let getWeb3: any = 0
+  if (gaslessMode) {
+    const maticProvider = RPC[137];
+    const biconomy = new Biconomy(
+      new Web3.providers.HttpProvider(maticProvider),
+      {
+        apiKey: biconomyAPIKey,
+        debug: false
+      }
+    );
+    getWeb3 = new Web3(biconomy);
+    biconomy
+      .onEvent(biconomy.READY, () => {
+        console.debug("Mexa is Ready");
+      })
+  }
+
   // check the current approval status
   const approvalState: ApprovalState = useMemo(() => {
     if (!amountToApprove || !spender) return ApprovalState.UNKNOWN
@@ -201,6 +204,7 @@ export function useApproveCallback(
     //     console.debug('Failed to approve token', error)
     //     throw error
     //   })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [approvalState, token, tokenContract, amountToApprove, spender, addTransaction, chainId, gaslessMode, library, account])
 
   return [approvalState, approve]

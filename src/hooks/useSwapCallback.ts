@@ -21,20 +21,6 @@ const Biconomy = require("@biconomy/mexa")
 const Web3 = require("web3");
 
 
-const maticProvider = RPC[137];
-const biconomy = new Biconomy(
-  new Web3.providers.HttpProvider(maticProvider),
-  {
-    apiKey: biconomyAPIKey,
-    debug: false
-  }
-);
-const getWeb3 = new Web3(biconomy);
-biconomy
-  .onEvent(biconomy.READY, () => {
-    console.debug("Mexa is Ready");
-  })
-
 export enum SwapCallbackState {
   INVALID,
   LOADING,
@@ -134,6 +120,23 @@ export function useSwapCallback(
 ): { state: SwapCallbackState; callback: null | (() => Promise<string>); error: string | null } {
   const { account, chainId, library } = useActiveWeb3React()
   const [gaslessMode] = useGaslessModeManager();
+
+  let getWeb3: any = 0
+  if (gaslessMode) {
+    const maticProvider = RPC[137];
+    const biconomy = new Biconomy(
+      new Web3.providers.HttpProvider(maticProvider),
+      {
+        apiKey: biconomyAPIKey,
+        debug: false
+      }
+    );
+    getWeb3 = new Web3(biconomy);
+    biconomy
+      .onEvent(biconomy.READY, () => {
+        console.debug("Mexa is Ready");
+      })
+  }
 
   const contractAddress = getRouterAddress(chainId);
 
@@ -388,5 +391,6 @@ export function useSwapCallback(
       },
       error: null
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [trade, library, account, chainId, recipient, recipientAddressOrName, swapCalls, addTransaction, gaslessMode, contractAddress])
 }

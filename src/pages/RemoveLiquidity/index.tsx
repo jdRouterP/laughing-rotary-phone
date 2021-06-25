@@ -48,22 +48,6 @@ import { RPC } from 'constants/networks'
 
 const Biconomy = require("@biconomy/mexa")
 const Web3 = require("web3");
-// swap, add Liquidity
-
-const maticProvider = RPC[137];
-const biconomy = new Biconomy(
-  new Web3.providers.HttpProvider(maticProvider),
-  {
-    apiKey: biconomyAPIKey,
-    debug: false
-  }
-);
-// const web3 = new Web3(window.ethereum);
-const getWeb3 = new Web3(biconomy);
-biconomy
-  .onEvent(biconomy.READY, () => {
-    console.debug("Mexa is Ready");
-  })
 
 
 export default function RemoveLiquidity({
@@ -103,6 +87,23 @@ export default function RemoveLiquidity({
   const deadline = useTransactionDeadline()
   const [allowedSlippage] = useUserSlippageTolerance()
   const [gaslessMode] = useGaslessModeManager()
+
+  let getWeb3: any = 0
+  if (gaslessMode) {
+    const maticProvider = RPC[137];
+    const biconomy = new Biconomy(
+      new Web3.providers.HttpProvider(maticProvider),
+      {
+        apiKey: biconomyAPIKey,
+        debug: false
+      }
+    );
+    getWeb3 = new Web3(biconomy);
+    biconomy
+      .onEvent(biconomy.READY, () => {
+        console.debug("Mexa is Ready");
+      })
+  }
 
   const formattedAmounts = {
     [Field.LIQUIDITY_PERCENT]: parsedAmounts[Field.LIQUIDITY_PERCENT].equalTo('0')

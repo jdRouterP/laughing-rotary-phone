@@ -10,7 +10,7 @@ import { CardSection, DataCard, CardNoise, CardBGImage } from '../../components/
 // import { Countdown } from './Countdown'
 import Loader from '../../components/Loader'
 import { useActiveWeb3React } from '../../hooks'
-import { JSBI } from '@uniswap/sdk'
+import { JSBI } from '@dfyn/sdk'
 import { BIG_INT_ZERO } from '../../constants'
 import { OutlineCard } from '../../components/Card'
 
@@ -49,7 +49,7 @@ export default function Earn() {
    * only show staking cards with balance
    * @todo only account for this if rewards are inactive
    */
-  const stakingInfosWithBalance = stakingInfos?.filter((s) => JSBI.greaterThan(s.stakedAmount.quotient, BIG_INT_ZERO))
+  const stakingInfosWithBalance = stakingInfos?.filter((s) => JSBI.greaterThan(s.stakedAmount.raw, BIG_INT_ZERO))
 
   const activeFarms = stakingInfos?.filter((s) => s.active);
 

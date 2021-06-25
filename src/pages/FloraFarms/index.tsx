@@ -9,7 +9,7 @@ import { RowBetween } from '../../components/Row'
 import { CardSection, DataCard, CardNoise, CardBGImage } from '../../components/floraFarms/styled'
 import Loader from '../../components/Loader'
 import { useActiveWeb3React } from '../../hooks'
-import { JSBI } from '@uniswap/sdk'
+import { JSBI } from '@dfyn/sdk'
 import { BIG_INT_ZERO } from '../../constants'
 import { OutlineCard } from '../../components/Card'
 
