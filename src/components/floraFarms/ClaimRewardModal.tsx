@@ -18,7 +18,7 @@ const ContentWrapper = styled(AutoColumn)`
 `
 
 interface StakingModalProps {
-  isOpen: boolean
+  isOpen: boolean  
   onDismiss: () => void
   stakingInfo: StakingInfo
 }

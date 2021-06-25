@@ -497,7 +497,7 @@ export function useStakingInfo(pairToFilterBy?: Pair | null, version: string = '
         currentSplit = currentSplit > splits ? splits : currentSplit;
 
         const unlockAt = active ? periodFinishSeconds : vestingActive ? (periodFinishSeconds + (Math.floor(currentSplit + 1) * splitWindowSeconds)) : vestingEndsSeconds;
-
+        // debugger
         //const unclaimedAmount = JSBI.divide(JSBI.multiply(JSBI.BigInt(totalVestedAmountState?.result?.[0] ?? 0), JSBI.BigInt((Math.floor(currentSplit + 1) - userClaimedSplit))), splits);
         // totalvestedamount*(currentsplit-userclaimedlastsplit)/splits;
         const unclaimedSplits = BigNumber.from((Math.floor(currentSplit) - userClaimedSplit))

@@ -84,9 +84,16 @@ export default function UnstakingModal({ isOpen, onDismiss, stakingInfo }: Staki
           )}
           {stakingInfo?.earnedAmount && !claimable && (
             <AutoColumn justify="center" gap="md">
-              <TYPE.body fontWeight={600} fontSize={36}>
+              {/* <TYPE.body fontWeight={600} fontSize={36}>
                 {<FormattedCurrencyAmount currencyAmount={stakingInfo?.earnedAmount} />}
-              </TYPE.body>
+              </TYPE.body> */}
+              {stakingInfo.userVestingInfo.hasSetConfig ? stakingInfo.userVestingInfo.hasOptForVesting ? <TYPE.body fontWeight={600} fontSize={36}>
+                {'25%'}
+              </TYPE.body> : <TYPE.body fontWeight={600} fontSize={36}>
+                {parseFloat(stakingInfo?.earnedAmount.toFixed(3)) / 2}
+              </TYPE.body> : <TYPE.body fontWeight={600} fontSize={36}>
+                {'25%'}
+              </TYPE.body>}
               <TYPE.body>Unclaimed DFYN</TYPE.body>
             </AutoColumn>
           )}
@@ -102,7 +109,7 @@ export default function UnstakingModal({ isOpen, onDismiss, stakingInfo }: Staki
         <LoadingView onDismiss={wrappedOndismiss}>
           <AutoColumn gap="12px" justify={'center'}>
             <TYPE.body fontSize={20}>Withdrawing {stakingInfo?.stakedAmount?.toSignificant(4)} DFYN-LP</TYPE.body>
-            {!claimable && <TYPE.body fontSize={20}>Claiming {stakingInfo?.earnedAmount?.toSignificant(4)} DFYN</TYPE.body>}
+            {!claimable && <TYPE.body fontSize={20}>Claiming DFYN</TYPE.body>}
           </AutoColumn>
         </LoadingView>
       )}

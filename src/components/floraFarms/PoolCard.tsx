@@ -116,6 +116,9 @@ export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) 
   const rate = stakingInfo?.totalRewardRate?.multiply(BIG_INT_SECONDS_IN_DAY).toFixed(5);
   //@ts-ignore
   const valueOfDfynGivenPerYear: any = parseFloat(rate) * stakingInfo?.dfynPrice * 365;
+// if(parseInt(rate) === 0){
+//   debugger
+// }
   const apr = valueOfTotalStakedAmountInUSDC && valueOfDfynGivenPerYear / Number(valueOfTotalStakedAmountInUSDC?.toSignificant(6)) * 100;
   return (
     <Wrapper showBackground={isStaking} bgColor={backgroundColor}>
@@ -130,7 +133,7 @@ export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) 
 
         <StyledInternalLink to={`/popular-farms/${currencyId(currency0, chainId)}/${currencyId(currency1, chainId)}/${stakingInfo.version}`} style={{ width: '100%' }}>
           <ButtonPrimary padding="8px" borderRadius="8px">
-            {isStaking ? 'Manage' : 'Deposit'}
+            {isStaking || !(stakingInfo?.active) ? 'Manage' : 'Deposit'}
           </ButtonPrimary>
         </StyledInternalLink>
       </TopSection>
@@ -147,6 +150,7 @@ export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) 
               : `${valueOfTotalStakedAmountInBaseToken?.toSignificant(4, { groupSeparator: ',' }) ?? '-'} ETH`}
           </TYPE.white>
         </RowBetween>
+        {stakingInfo?.active &&         
         <RowBetween>
           <TYPE.white> Pool rate </TYPE.white>
           <TYPE.white>
@@ -159,10 +163,14 @@ export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) 
               : '-'}
           </TYPE.white>
         </RowBetween>
+}
+        {stakingInfo?.active &&         
         <RowBetween>
           <TYPE.white> APR</TYPE.white>
           <TYPE.white>{`${apr ? apr?.toFixed(2) : 0}%`}</TYPE.white>
         </RowBetween>
+        }
+
       </StatContainer>
 
       {isStaking && (

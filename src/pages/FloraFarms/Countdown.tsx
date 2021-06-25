@@ -13,8 +13,10 @@ export function Countdown({ exactEnd, startTime, showMessage = true }: { exactEn
   const end = useMemo(() => (exactEnd ? Math.floor(exactEnd.getTime() / 1000) : (startTime ?? STAKING_GENESIS) + REWARDS_DURATION), [
     exactEnd, startTime
   ])
-  const begin = useMemo(() => end - REWARDS_DURATION, [end])
-
+  // const begin = useMemo(() => end - REWARDS_DURATION, [end])
+  const begin = useMemo(() => startTime ?? STAKING_GENESIS, [startTime])
+  // debugger
+  // const begin = startTime
   // get current time
   const [time, setTime] = useState(() => Math.floor(Date.now() / 1000))
   useEffect((): (() => void) | void => {

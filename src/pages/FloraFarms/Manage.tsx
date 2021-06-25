@@ -113,6 +113,7 @@ export default function Manage({
 
   const [, stakingTokenPair] = usePair(tokenA, tokenB)
   const stakingInfo = useStakingInfo(stakingTokenPair, version)?.[0]
+  // debugger
   // detect existing unstaked LP position to show add button if none found
   const userLiquidityUnstaked = useTokenBalance(account ?? undefined, stakingInfo?.stakedAmount?.token)
   const showAddLiquidityButton = Boolean(stakingInfo?.stakedAmount?.equalTo('0') && userLiquidityUnstaked?.equalTo('0'))
@@ -362,7 +363,8 @@ export default function Manage({
                 </div>
                 {stakingInfo?.earnedAmount && JSBI.notEqual(BIG_INT_ZERO, stakingInfo?.earnedAmount?.raw) && (<>
                   <div hidden={stakingInfo?.ableToClaim}>
-                    <TYPE.black>{<Countdown showMessage={false} exactEnd={stakingInfo?.unlockAt} />}</TYPE.black>
+                    {/* <TYPE.black>{<Countdown showMessage={false} exactEnd={stakingInfo?.unlockAt} startTime={Math.floor((stakingInfo?.periodFinish?.getTime() || 0 )/1000)} />}</TYPE.black> */}
+                    <TYPE.black>{<Countdown showMessage={false} exactEnd={stakingInfo?.unlockAt}  />}</TYPE.black>
                   </div>
                   {stakingInfo?.ableToClaim && <ButtonPrimary
                     padding="8px"
