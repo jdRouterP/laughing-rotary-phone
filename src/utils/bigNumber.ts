@@ -1,6 +1,6 @@
-import BigNumber from 'bignumber.js'
+import { JSBI } from '@uniswap/sdk'
 
-export const BIG_ZERO = new BigNumber(0)
-export const BIG_ONE = new BigNumber(1)
-export const BIG_NINE = new BigNumber(9)
-export const BIG_TEN = new BigNumber(10)
+export const BIG_INT_ZERO = JSBI.BigInt(0)
+export const BIG_INT_ONE = JSBI.BigInt(1)
+export const BIG_INT_NINE = JSBI.BigInt(9)
+export const BIG_INT_TEN = JSBI.BigInt(10)
