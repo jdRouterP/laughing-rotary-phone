@@ -18,7 +18,6 @@ import { AddRemoveTabs } from '../../components/NavigationTabs'
 import { MinimalPositionCard } from '../../components/PositionCard'
 import Row, { RowBetween, RowFlat } from '../../components/Row'
 
-import { biconomyAPIKey } from '../../constants'
 import { PairState } from '../../data/Reserves'
 import { useActiveWeb3React } from '../../hooks'
 import { useCurrency } from '../../hooks/Tokens'
@@ -42,10 +41,7 @@ import { PoolPriceBar } from './PoolPriceBar'
 import { useIsTransactionUnsupported } from 'hooks/Trades'
 import UnsupportedCurrencyFooter from 'components/swap/UnsupportedCurrencyFooter'
 import { abi } from '@uniswap/v2-periphery/build/IUniswapV2Router02.json'
-import { RPC } from 'constants/networks'
-
-const Biconomy = require("@biconomy/mexa")
-const Web3 = require("web3");
+import getBiconomy from 'hooks/getBiconomy'
 
 
 
@@ -72,23 +68,7 @@ export default function AddLiquidity({
 
   const expertMode = useIsExpertMode()
   const [gaslessMode] = useGaslessModeManager()
-  let getWeb3: any = 0
-  if (gaslessMode) {
-    const maticProvider = RPC[137];
-    const biconomy = new Biconomy(
-      new Web3.providers.HttpProvider(maticProvider),
-      {
-        apiKey: biconomyAPIKey,
-        debug: false
-      }
-    );
-    getWeb3 = new Web3(biconomy);
-    biconomy
-      .onEvent(biconomy.READY, () => {
-        console.debug("Mexa is Ready");
-      })
-  }
-
+  const getWeb3 = getBiconomy(gaslessMode);
   // mint state
   const { independentField, typedValue, otherTypedValue } = useMintState()
   const {

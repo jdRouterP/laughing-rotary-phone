@@ -17,7 +17,6 @@ import DoubleCurrencyLogo from '../../components/DoubleLogo'
 import { AddRemoveTabs } from '../../components/NavigationTabs'
 import { MinimalPositionCard } from '../../components/PositionCard'
 import Row, { RowBetween, RowFixed } from '../../components/Row'
-import { biconomyAPIKey } from '../../constants'
 
 import Slider from '../../components/Slider'
 import CurrencyLogo from '../../components/CurrencyLogo'
@@ -44,10 +43,8 @@ import { useWalletModalToggle } from '../../state/application/hooks'
 import { useUserSlippageTolerance, useGaslessModeManager } from '../../state/user/hooks'
 import { BigNumber } from '@ethersproject/bignumber'
 import { abi } from '@uniswap/v2-periphery/build/IUniswapV2Router02.json'
-import { RPC } from 'constants/networks'
+import getBiconomy from 'hooks/getBiconomy'
 
-const Biconomy = require("@biconomy/mexa")
-const Web3 = require("web3");
 
 
 export default function RemoveLiquidity({
@@ -88,22 +85,7 @@ export default function RemoveLiquidity({
   const [allowedSlippage] = useUserSlippageTolerance()
   const [gaslessMode] = useGaslessModeManager()
 
-  let getWeb3: any = 0
-  if (gaslessMode) {
-    const maticProvider = RPC[137];
-    const biconomy = new Biconomy(
-      new Web3.providers.HttpProvider(maticProvider),
-      {
-        apiKey: biconomyAPIKey,
-        debug: false
-      }
-    );
-    getWeb3 = new Web3(biconomy);
-    biconomy
-      .onEvent(biconomy.READY, () => {
-        console.debug("Mexa is Ready");
-      })
-  }
+  const getWeb3 = getBiconomy(gaslessMode);
 
   const formattedAmounts = {
     [Field.LIQUIDITY_PERCENT]: parsedAmounts[Field.LIQUIDITY_PERCENT].equalTo('0')

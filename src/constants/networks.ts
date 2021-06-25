@@ -39,7 +39,7 @@ export const RPC = {
         'https://eth-goerli.alchemyapi.io/v2/Dkk5d02QjttYEoGmhZnJG37rKt8Yl3Im',
     [ChainId.KOVAN]:
         'https://eth-kovan.alchemyapi.io/v2/6OVAa_B_rypWWl9HqtiYK26IRxXiYqER',
-    [ChainId.MATIC]: 'https://polygon-mainnet.infura.io/v3/bcfe8494044a439aaccf4ec43db5326b',
+    [ChainId.MATIC]: 'https://rpc-dfyn-mainnet.maticvigil.com/v1/4317c87b41879d5bfafb90308aee37d202f8ddf7',
     [ChainId.OKEX]: 'https://exchainrpc.okex.org',
 }
 

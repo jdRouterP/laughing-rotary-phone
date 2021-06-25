@@ -2,7 +2,7 @@ import { BigNumber } from '@ethersproject/bignumber'
 import { Contract } from '@ethersproject/contracts'
 import { JSBI, Percent, Router, SwapParameters, Trade, TradeType } from '@dfyn/sdk'
 import { useMemo } from 'react'
-import { BIPS_BASE, INITIAL_ALLOWED_SLIPPAGE, biconomyAPIKey } from '../constants'
+import { BIPS_BASE, INITIAL_ALLOWED_SLIPPAGE } from '../constants'
 import { getTradeVersion, useV1TradeExchangeAddress } from '../data/V1'
 import { splitSignature } from '@ethersproject/bytes'
 import { useTransactionAdder } from '../state/transactions/hooks'
@@ -16,9 +16,7 @@ import useTransactionDeadline from './useTransactionDeadline'
 import useENS from './useENS'
 import { Version } from './useToggledVersion'
 import { useGaslessModeManager } from 'state/user/hooks'
-import { RPC } from 'constants/networks'
-const Biconomy = require("@biconomy/mexa")
-const Web3 = require("web3");
+import getBiconomy from './getBiconomy'
 
 
 export enum SwapCallbackState {
@@ -120,23 +118,8 @@ export function useSwapCallback(
 ): { state: SwapCallbackState; callback: null | (() => Promise<string>); error: string | null } {
   const { account, chainId, library } = useActiveWeb3React()
   const [gaslessMode] = useGaslessModeManager();
+  const getWeb3 = getBiconomy(gaslessMode);
 
-  let getWeb3: any = 0
-  if (gaslessMode) {
-    const maticProvider = RPC[137];
-    const biconomy = new Biconomy(
-      new Web3.providers.HttpProvider(maticProvider),
-      {
-        apiKey: biconomyAPIKey,
-        debug: false
-      }
-    );
-    getWeb3 = new Web3(biconomy);
-    biconomy
-      .onEvent(biconomy.READY, () => {
-        console.debug("Mexa is Ready");
-      })
-  }
 
   const contractAddress = getRouterAddress(chainId);
 
@@ -271,7 +254,7 @@ export function useSwapCallback(
           const bicomony_contract = new getWeb3.eth.Contract(abi, contractAddress);
           let biconomy_nonce = await bicomony_contract.methods.getNonce(account).call();
           let gasLimit = calculateGasMargin(gasEstimate)
-          console.log(gasLimit)
+          console.log("gasLimit", gasLimit);
           let res = bicomony_contract.methods[methodName](...args).encodeABI()
           let message: any = {};
           message.nonce = parseInt(biconomy_nonce);
@@ -305,7 +288,7 @@ export function useSwapCallback(
             .send('eth_signTypedData_v4', [account, dataToSign])
           let signature = await splitSignature(sig)
           let { v, r, s } = signature
-          console.log('account: ', account, 'res: ', res, 'r: ', r, 's: ', s, 'v: ', v)
+          // console.log('account: ', account, 'res: ', res, 'r: ', r, 's: ', s, 'v: ', v)
           return bicomony_contract.methods
             .executeMetaTransaction(account, res, r, s, v)
             .send({

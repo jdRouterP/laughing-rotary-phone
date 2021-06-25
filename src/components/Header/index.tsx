@@ -25,7 +25,7 @@ import Menu from '../Menu'
 import Row, { RowFixed } from '../Row'
 import Web3Status from '../Web3Status'
 import ClaimModal from '../claim/ClaimModal'
-import { useToggleSelfClaimModal, useShowClaimPopup } from '../../state/application/hooks'
+import { useToggleSelfClaimModal, useShowClaimPopup, useNetworkModalToggle } from '../../state/application/hooks'
 import { useUserHasAvailableClaim } from '../../state/claim/hooks'
 import { useUserHasSubmittedClaim } from '../../state/transactions/hooks'
 import { Dots } from '../swap/styleds'
@@ -350,6 +350,7 @@ export default function Header() {
   // const [isDark] = useDarkModeManager()
   const [darkMode, toggleDarkMode] = useDarkModeManager()
   const [gaslessMode, toggleSetGaslessMode] = useGaslessModeManager()
+  const toggleNetworkModal = useNetworkModalToggle()
 
   const toggleClaimModal = useToggleSelfClaimModal()
 
@@ -464,7 +465,7 @@ export default function Header() {
           )}
           <HideSmall>
             {library && library.provider.isMetaMask && chainId && NETWORK_LABEL[chainId] && (
-              <NetworkCard title={NETWORK_LABEL[chainId]}><Web3Network /></NetworkCard>
+              <NetworkCard onClick={() => toggleNetworkModal()} title={NETWORK_LABEL[chainId]}><Web3Network /></NetworkCard>
             )}
           </HideSmall>
           <AccountElement active={!!account} style={{ pointerEvents: 'auto' }}>

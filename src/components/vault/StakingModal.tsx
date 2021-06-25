@@ -83,7 +83,7 @@ export default function StakingModal({ isOpen, onDismiss, stakingInfo, userLiqui
     setAttempting(true)
     if (vaultContract && parsedAmount) {
       if (approval === ApprovalState.APPROVED) {
-        console.log("stake ", parsedAmount.raw.toString(16));
+
         await vaultContract.stake(`0x${parsedAmount.raw.toString(16)}`, { gasLimit: 350000 }).then((response: TransactionResponse) => {
           addTransaction(response, {
             summary: `Deposit Tokens`

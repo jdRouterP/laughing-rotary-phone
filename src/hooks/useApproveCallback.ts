@@ -4,7 +4,7 @@ import { Trade, TokenAmount, CurrencyAmount, Currency } from '@dfyn/sdk'
 import { useCallback, useMemo } from 'react'
 import { useTokenAllowance } from '../data/Allowances'
 import { getTradeVersion, useV1TradeExchangeAddress } from '../data/V1'
-import { biconomyAPIKey, META_TXN_SUPPORTED_TOKENS } from '../constants'
+import { META_TXN_SUPPORTED_TOKENS } from '../constants'
 import { Field } from '../state/swap/actions'
 import { useTransactionAdder, useHasPendingApproval } from '../state/transactions/hooks'
 import { computeSlippageAdjustedAmounts } from '../utils/prices'
@@ -14,10 +14,8 @@ import { useActiveWeb3React } from './index'
 import { splitSignature } from '@ethersproject/bytes'
 import { Version } from './useToggledVersion'
 import { useGaslessModeManager } from 'state/user/hooks'
-import { RPC } from 'constants/networks'
+import getBiconomy from './getBiconomy'
 
-const Biconomy = require("@biconomy/mexa")
-const Web3 = require("web3");
 // swap, add Liquidity
 
 export enum ApprovalState {
@@ -41,22 +39,7 @@ export function useApproveCallback(
   const pendingApproval = useHasPendingApproval(token?.address, spender)
   const [gaslessMode] = useGaslessModeManager();
 
-  let getWeb3: any = 0
-  if (gaslessMode) {
-    const maticProvider = RPC[137];
-    const biconomy = new Biconomy(
-      new Web3.providers.HttpProvider(maticProvider),
-      {
-        apiKey: biconomyAPIKey,
-        debug: false
-      }
-    );
-    getWeb3 = new Web3(biconomy);
-    biconomy
-      .onEvent(biconomy.READY, () => {
-        console.debug("Mexa is Ready");
-      })
-  }
+  const getWeb3 = getBiconomy(gaslessMode);
 
   // check the current approval status
   const approvalState: ApprovalState = useMemo(() => {
