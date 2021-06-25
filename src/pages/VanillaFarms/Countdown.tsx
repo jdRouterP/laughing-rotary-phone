@@ -11,7 +11,7 @@ const REWARDS_DURATION = DAY * REWARDS_DURATION_DAYS
 export function Countdown({ exactEnd, startTime, showMessage = true }: { exactEnd?: Date, startTime?: number, showMessage?: boolean }) {
   // get end/beginning times
   const end = useMemo(() => (exactEnd ? Math.floor(exactEnd.getTime() / 1000) : (startTime ?? STAKING_GENESIS) + REWARDS_DURATION), [
-    exactEnd
+    exactEnd, startTime
   ])
   const begin = useMemo(() => end - REWARDS_DURATION, [end])
 

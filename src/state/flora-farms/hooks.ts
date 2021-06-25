@@ -1,5 +1,5 @@
-// import { ChainId, CurrencyAmount, JSBI, Token, TokenAmount, WETH, Pair } from '@uniswap/sdk'
-import { ChainId, CurrencyAmount, JSBI, Token, TokenAmount, Pair } from '@uniswap/sdk'
+// import { ChainId, CurrencyAmount, JSBI, Token, TokenAmount, WETH, Pair } from '@dfyn/sdk'
+import { ChainId, CurrencyAmount, JSBI, Token, TokenAmount, Pair } from '@dfyn/sdk'
 import { useMemo } from 'react'
 import { BigNumber } from 'ethers'
 import { ROUTE, UNI, ETHER, USDC, DFYN, WBTC, USDT, DAI, WMATIC, UNI_TOKEN, AAVE, LUNA, UST, LINK, CRV, QUICK } from '../../constants'
@@ -327,7 +327,7 @@ export function useStakingInfo(pairToFilterBy?: Pair | null, version: string = '
               pairToFilterBy.involvesToken(stakingRewardInfo.tokens[1]) && version === stakingRewardInfo.version
         ) ?? []
         : [],
-    [chainId, pairToFilterBy]
+    [chainId, pairToFilterBy, version]
   )
 
   const uni = chainId ? UNI[chainId] : undefined

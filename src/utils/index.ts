@@ -3,10 +3,10 @@ import { getAddress } from '@ethersproject/address'
 import { AddressZero } from '@ethersproject/constants'
 import { JsonRpcSigner, Web3Provider } from '@ethersproject/providers'
 import { BigNumber } from '@ethersproject/bignumber'
-import { abi as IUniswapV2Router02ABI } from '@uniswap/v2-periphery/build/IUniswapV2Router02.json'
-import { ROUTER_ADDRESS } from '../constants'
-import { ChainId, JSBI, Percent, Token, CurrencyAmount, Currency, ETHER } from '@uniswap/sdk'
+import IUniswapV2Router02ABI from "../constants/abis/uniswap-v2-router-02.json";
+import { ChainId, JSBI, Percent, Token, CurrencyAmount, Currency, ROUTER_ADDRESS } from '@dfyn/sdk'
 import { TokenAddressMap } from '../state/lists/hooks'
+
 
 // returns the checksummed address if the address is valid, otherwise returns false
 export function isAddress(value: any): string | false {
@@ -17,41 +17,102 @@ export function isAddress(value: any): string | false {
   }
 }
 
-const ETHERSCAN_PREFIXES: { [chainId in ChainId]: string } = {
-  1: '',
-  3: 'ropsten.',
-  4: 'rinkeby.',
-  5: 'goerli.',
-  42: 'kovan.',
-  137: 'matic.'
+const explorerConfig = {
+  etherscan: (
+    chainName: string,
+    data: string,
+    type: "transaction" | "token" | "address" | "block"
+  ) => {
+    const prefix = `https://${chainName ? `${chainName}.` : ""}etherscan.io`;
+    switch (type) {
+      case "transaction":
+        return `${prefix}/tx/${data}`;
+      default:
+        return `${prefix}/${type}/${data}`;
+    }
+  },
+  matic: (
+    chainName: string,
+    data: string,
+    type: "transaction" | "token" | "address" | "block"
+  ) => {
+    // const prefix = `https://explorer-${chainName}.maticvigil.com`
+    const prefix = "https://polygonscan.com";
+    switch (type) {
+      case "transaction":
+        return `${prefix}/tx/${data}`;
+      case "token":
+        return `${prefix}/tokens/${data}`;
+      default:
+        return `${prefix}/${type}/${data}`;
+    }
+  },
+  okex: (
+    chainName = "",
+    data: string,
+    type: "transaction" | "token" | "address" | "block"
+  ) => {
+    const prefix = "https://www.oklink.com/okexchain";
+    switch (type) {
+      case "transaction":
+        return `${prefix}/tx/${data}`;
+      case "token":
+        return `${prefix}/tokenAddr/${data}`;
+      default:
+        return `${prefix}/${type}/${data}`;
+    }
+  },
+};
+
+interface ChainObject {
+  [chainId: number]: {
+    chainName: string;
+    builder: (
+      chainName: string,
+      data: string,
+      type: "transaction" | "token" | "address" | "block"
+    ) => string;
+  };
 }
 
-export function getEtherscanLink(
+const chains: ChainObject = {
+  [ChainId.MAINNET]: {
+    chainName: "",
+    builder: explorerConfig.etherscan,
+  },
+  [ChainId.ROPSTEN]: {
+    chainName: "ropsten",
+    builder: explorerConfig.etherscan,
+  },
+  [ChainId.RINKEBY]: {
+    chainName: "rinkeby",
+    builder: explorerConfig.etherscan,
+  },
+  [ChainId.GÖRLI]: {
+    chainName: "goerli",
+    builder: explorerConfig.etherscan,
+  },
+  [ChainId.KOVAN]: {
+    chainName: "kovan",
+    builder: explorerConfig.etherscan,
+  },
+  [ChainId.MATIC]: {
+    chainName: "mainnet",
+    builder: explorerConfig.matic,
+  },
+  [ChainId.OKEX]: {
+    chainName: "",
+    builder: explorerConfig.okex,
+  },
+};
+
+export function getExplorerLink(
   chainId: ChainId,
   data: string,
-  type: 'transaction' | 'token' | 'address' | 'block'
+  type: "transaction" | "token" | "address" | "block"
 ): string {
-  let prefix = `https://${ETHERSCAN_PREFIXES[chainId] || ETHERSCAN_PREFIXES[1]}etherscan.io`
-
-  if(chainId === ChainId.MATIC) {
-    prefix = `https://explorer-mainnet.maticvigil.com`
-  }
-
-  switch (type) {
-    case 'transaction': {
-      return `${prefix}/tx/${data}`
-    }
-    case 'token': {
-      return `${prefix}/tokens/${data}`
-    }
-    case 'block': {
-      return `${prefix}/blocks/${data}`
-    }
-    case 'address':
-    default: {
-      return `${prefix}/address/${data}`
-    }
-  }
+  const chain = chains[chainId];
+  return chain.builder(chain.chainName, data, type);
 }
 
 // shorten the checksummed version of the input address to have 0x + 4 characters at start and end
@@ -102,16 +163,24 @@ export function getContract(address: string, ABI: any, library: Web3Provider, ac
   return new Contract(address, ABI, getProviderOrSigner(library, account) as any)
 }
 
+export function getRouterAddress(chainId?: ChainId) {
+  if (!chainId) {
+    throw Error(`Undefined 'chainId' parameter '${chainId}'.`);
+  }
+  return ROUTER_ADDRESS[chainId];
+}
+
+
 // account is optional
-export function getRouterContract(_: number, library: Web3Provider, account?: string): Contract {
-  return getContract(ROUTER_ADDRESS, IUniswapV2Router02ABI, library, account)
+export function getRouterContract(chainId: number, library: Web3Provider, account?: string): Contract {
+  return getContract(getRouterAddress(chainId), IUniswapV2Router02ABI, library, account)
 }
 
 export function escapeRegExp(string: string): string {
   return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') // $& means the whole matched string
 }
 
-export function isTokenOnList(defaultTokens: TokenAddressMap, currency?: Currency): boolean {
-  if (currency === ETHER) return true
+export function isTokenOnList(defaultTokens: TokenAddressMap, currency?: Currency, chainId = ChainId.MATIC): boolean {
+  if (currency === Currency.getNativeCurrency(chainId)) return true
   return Boolean(currency instanceof Token && defaultTokens[currency.chainId]?.[currency.address])
 }

@@ -1,4 +1,4 @@
-import { Currency, ETHER, JSBI, TokenAmount } from '@uniswap/sdk'
+import { Currency, JSBI, TokenAmount } from '@dfyn/sdk'
 import React, { useCallback, useEffect, useState } from 'react'
 import { Plus } from 'react-feather'
 import { Text } from 'rebass'
@@ -27,12 +27,12 @@ enum Fields {
 }
 
 export default function PoolFinder() {
-  const { account } = useActiveWeb3React()
+  const { account, chainId } = useActiveWeb3React()
 
   const [showSearch, setShowSearch] = useState<boolean>(false)
   const [activeField, setActiveField] = useState<number>(Fields.TOKEN1)
 
-  const [currency0, setCurrency0] = useState<Currency | null>(ETHER)
+  const [currency0, setCurrency0] = useState<Currency | null>(Currency.getNativeCurrency(chainId))
   const [currency1, setCurrency1] = useState<Currency | null>(null)
 
   const [pairState, pair] = usePair(currency0 ?? undefined, currency1 ?? undefined)
@@ -47,24 +47,31 @@ export default function PoolFinder() {
     pairState === PairState.NOT_EXISTS ||
     Boolean(
       pairState === PairState.EXISTS &&
-        pair &&
-        JSBI.equal(pair.reserve0.raw, JSBI.BigInt(0)) &&
-        JSBI.equal(pair.reserve1.raw, JSBI.BigInt(0))
+      pair &&
+      JSBI.equal(pair.reserve0.raw, JSBI.BigInt(0)) &&
+      JSBI.equal(pair.reserve1.raw, JSBI.BigInt(0))
     )
 
   const position: TokenAmount | undefined = useTokenBalance(account ?? undefined, pair?.liquidityToken)
   const hasPosition = Boolean(position && JSBI.greaterThan(position.raw, JSBI.BigInt(0)))
 
+  const switchTokens = useCallback(() => {
+    setCurrency0(currency1);
+    setCurrency1(currency0);
+  }, [currency0, currency1]);
+
   const handleCurrencySelect = useCallback(
     (currency: Currency) => {
       if (activeField === Fields.TOKEN0) {
-        setCurrency0(currency)
+        if (currency === currency1) switchTokens();
+        else setCurrency0(currency);
       } else {
-        setCurrency1(currency)
+        if (currency === currency0) switchTokens();
+        else setCurrency1(currency);
       }
     },
-    [activeField]
-  )
+    [activeField, currency0, currency1, switchTokens]
+  );
 
   const handleSearchDismiss = useCallback(() => {
     setShowSearch(false)
@@ -154,7 +161,7 @@ export default function PoolFinder() {
               <LightCard padding="45px 10px">
                 <AutoColumn gap="sm" justify="center">
                   <Text textAlign="center">You don’t have liquidity in this pool yet.</Text>
-                  <StyledInternalLink to={`/add/${currencyId(currency0)}/${currencyId(currency1)}`}>
+                  <StyledInternalLink to={`/add/${currencyId(currency0, chainId)}/${currencyId(currency1, chainId)}`}>
                     <Text textAlign="center">Add liquidity.</Text>
                   </StyledInternalLink>
                 </AutoColumn>
@@ -164,7 +171,7 @@ export default function PoolFinder() {
             <LightCard padding="45px 10px">
               <AutoColumn gap="sm" justify="center">
                 <Text textAlign="center">No pool found.</Text>
-                <StyledInternalLink to={`/add/${currencyId(currency0)}/${currencyId(currency1)}`}>
+                <StyledInternalLink to={`/add/${currencyId(currency0, chainId)}/${currencyId(currency1, chainId)}`}>
                   Create pool.
                 </StyledInternalLink>
               </AutoColumn>

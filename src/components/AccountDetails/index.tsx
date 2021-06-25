@@ -11,7 +11,7 @@ import Transaction from './Transaction'
 
 import { SUPPORTED_WALLETS } from '../../constants'
 import { ReactComponent as Close } from '../../assets/images/x.svg'
-import { getEtherscanLink } from '../../utils'
+import { getExplorerLink } from '../../utils'
 import { injected, walletconnect, walletlink, fortmatic, portis } from '../../connectors'
 import CoinbaseWalletIcon from '../../assets/images/coinbaseWalletIcon.svg'
 import WalletConnectIcon from '../../assets/images/walletConnectIcon.svg'
@@ -131,7 +131,7 @@ const AccountControl = styled.div`
   }
 `
 
-const AddressLink = styled(ExternalLink)<{ hasENS: boolean; isENS: boolean }>`
+const AddressLink = styled(ExternalLink) <{ hasENS: boolean; isENS: boolean }>`
   font-size: 0.825rem;
   color: ${({ theme }) => theme.text3};
   margin-left: 1rem;
@@ -306,7 +306,7 @@ export default function AccountDetails({
                     <WalletAction
                       style={{ fontSize: '.825rem', fontWeight: 400, marginRight: '8px' }}
                       onClick={() => {
-                        ;(connector as any).close()
+                        ; (connector as any).close()
                       }}
                     >
                       Disconnect
@@ -355,10 +355,10 @@ export default function AccountDetails({
                           <AddressLink
                             hasENS={!!ENSName}
                             isENS={true}
-                            href={chainId && getEtherscanLink(chainId, ENSName, 'address')}
+                            href={chainId && getExplorerLink(chainId, ENSName, 'address')}
                           >
                             <LinkIcon size={16} />
-                            <span style={{ marginLeft: '4px' }}>View on Matic explorer</span>
+                            <span style={{ marginLeft: '4px' }}>View on explorer</span>
                           </AddressLink>
                         )}
                       </div>
@@ -377,10 +377,10 @@ export default function AccountDetails({
                           <AddressLink
                             hasENS={!!ENSName}
                             isENS={false}
-                            href={getEtherscanLink(chainId, account, 'address')}
+                            href={getExplorerLink(chainId, account, 'address')}
                           >
                             <LinkIcon size={16} />
-                            <span style={{ marginLeft: '4px' }}>View on Matic explorer</span>
+                            <span style={{ marginLeft: '4px' }}>View on explorer</span>
                           </AddressLink>
                         )}
                       </div>

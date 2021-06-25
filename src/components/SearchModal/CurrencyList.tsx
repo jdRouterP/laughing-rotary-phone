@@ -1,4 +1,4 @@
-import { Currency, CurrencyAmount, currencyEquals, ETHER, Token } from '@uniswap/sdk'
+import { ChainId, Currency, CurrencyAmount, currencyEquals, Token } from '@dfyn/sdk'
 import React, { CSSProperties, MutableRefObject, useCallback, useMemo } from 'react'
 import { FixedSizeList } from 'react-window'
 import { Text } from 'rebass'
@@ -22,8 +22,8 @@ import TokenListLogo from '../../assets/svg/tokenlist.svg'
 import QuestionHelper from 'components/QuestionHelper'
 import useTheme from 'hooks/useTheme'
 
-function currencyKey(currency: Currency): string {
-  return currency instanceof Token ? currency.address : currency === ETHER ? 'ETHER' : ''
+function currencyKey(currency: Currency, chainId = ChainId.MATIC): string {
+  return currency instanceof Token ? currency.address : currency === Currency.getNativeCurrency(chainId) ? Currency.getNativeCurrencySymbol(chainId) || 'MATIC ' : ''
 }
 
 const StyledBalanceText = styled(Text)`
@@ -110,7 +110,7 @@ function CurrencyRow({
   otherSelected: boolean
   style: CSSProperties
 }) {
-  const { account } = useActiveWeb3React()
+  const { account, chainId } = useActiveWeb3React()
   const key = currencyKey(currency)
   const selectedTokenList = useCombinedActiveList()
   const isOnSelectedList = isTokenOnList(selectedTokenList, currency)
@@ -128,11 +128,11 @@ function CurrencyRow({
     >
       <CurrencyLogo currency={currency} size={'24px'} />
       <Column>
-        <Text title={currency.name} fontWeight={500}>
-          {currency.symbol}
+        <Text title={currency.getName(chainId)} fontWeight={500}>
+          {currency.getSymbol(chainId)}
         </Text>
         <TYPE.darkGray ml="0px" fontSize={'12px'} fontWeight={300}>
-          {currency.name} {!isOnSelectedList && customAdded && '• Added by user'}
+          {currency.getName(chainId)} {!isOnSelectedList && customAdded && '• Added by user'}
         </TYPE.darkGray>
       </Column>
       <TokenTags currency={currency} />
@@ -166,15 +166,14 @@ export default function CurrencyList({
   setImportToken: (token: Token) => void
   breakIndex: number | undefined
 }) {
+  const { chainId } = useActiveWeb3React()
   const itemData: (Currency | undefined)[] = useMemo(() => {
-    let formatted: (Currency | undefined)[] = showETH ? [Currency.ETHER, ...currencies] : currencies
+    let formatted: (Currency | undefined)[] = showETH ? [Currency.getNativeCurrency(chainId), ...currencies] : currencies
     if (breakIndex !== undefined) {
       formatted = [...formatted.slice(0, breakIndex), undefined, ...formatted.slice(breakIndex, formatted.length)]
     }
     return formatted
-  }, [breakIndex, currencies, showETH])
-
-  const { chainId } = useActiveWeb3React()
+  }, [breakIndex, currencies, showETH, chainId])
   const theme = useTheme()
 
   const inactiveTokens: {

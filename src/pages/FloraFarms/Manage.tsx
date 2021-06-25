@@ -3,7 +3,7 @@ import { AutoColumn } from '../../components/Column'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 
-import { JSBI, TokenAmount, ETHER } from '@uniswap/sdk'
+import { JSBI, TokenAmount } from '@dfyn/sdk'
 import { RouteComponentProps } from 'react-router-dom'
 import DoubleCurrencyLogo from '../../components/DoubleLogo'
 import { useCurrency } from '../../hooks/Tokens'
@@ -29,7 +29,7 @@ import { useTotalSupply } from '../../data/TotalSupply'
 import { usePair } from '../../data/Reserves'
 import usePrevious from '../../hooks/usePrevious'
 import useUSDCPrice from '../../utils/useUSDCPrice'
-import { BIG_INT_ZERO, BIG_INT_SECONDS_IN_DAY } from '../../constants'
+import { BIG_INT_ZERO, BIG_INT_SECONDS_IN_DAY, ETHER } from '../../constants'
 import { Countdown } from './Countdown'
 import Toggle from 'components/Toggle'
 import QuestionHelper from 'components/QuestionHelper'
@@ -243,7 +243,7 @@ export default function Manage({
                 borderRadius="8px"
                 width={'fit-content'}
                 as={Link}
-                to={`/add/${currencyA && currencyId(currencyA)}/${currencyB && currencyId(currencyB)}`}
+                to={`/add/${currencyA && currencyId(currencyA, chainId)}/${currencyB && currencyId(currencyB, chainId)}`}
               >
                 {`Add ${currencyA?.symbol}-${currencyB?.symbol} liquidity`}
               </ButtonPrimary>

@@ -1,5 +1,5 @@
 import { Interface } from '@ethersproject/abi'
-import { ChainId } from '@uniswap/sdk'
+import { ChainId } from '@dfyn/sdk'
 import V1_EXCHANGE_ABI from './v1_exchange.json'
 import V1_FACTORY_ABI from './v1_factory.json'
 
@@ -9,7 +9,8 @@ const V1_FACTORY_ADDRESSES: { [chainId in ChainId]: string } = {
   [ChainId.RINKEBY]: '0xf5D915570BC477f9B8D6C0E980aA81757A3AaC36',
   [ChainId.GÖRLI]: '0x6Ce570d02D73d4c384b46135E87f8C592A8c86dA',
   [ChainId.KOVAN]: '0xD3E51Ef092B2845f10401a0159B2B96e8B6c3D30',
-  [ChainId.MATIC]: '0x2d7882beDcbfDDce29Ba99965dd3cdF7fcB10A1e'
+  [ChainId.MATIC]: '0x2d7882beDcbfDDce29Ba99965dd3cdF7fcB10A1e',
+  [ChainId.OKEX]: '0x2d7882beDcbfDDce29Ba99965dd3cdF7fcB10A1e'
 }
 
 const V1_FACTORY_INTERFACE = new Interface(V1_FACTORY_ABI)

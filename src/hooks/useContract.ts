@@ -6,8 +6,10 @@ import { abi as STAKING_REWARDS_DUAL_FARMING_ABI } from '../constants/abis/staki
 import { abi as STAKING_REWARDS_FLORA_FARMING_ABI } from '../constants/abis/staking-rewards-flora-farms.json'
 import { abi as VAULT_ABI } from '../constants/abis/vault.json'
 import { abi as MERKLE_DISTRIBUTOR_ABI } from '@uniswap/merkle-distributor/build/MerkleDistributor.json'
-import { ChainId, WETH } from '@uniswap/sdk'
-import { abi as IUniswapV2PairABI } from '@uniswap/v2-core/build/IUniswapV2Pair.json'
+import { ChainId, FACTORY_ADDRESS, WETH, ROUTER_ADDRESS } from '@dfyn/sdk'
+import IUniswapV2PairABI from '../constants/abis/uniswap-v2-pair.json'
+import FACTORY_ABI from "../constants/abis/factory.json";
+import ROUTER_ABI from "../constants/abis/uniswap-v2-router-02.json";
 import { useMemo } from 'react'
 import { GOVERNANCE_ADDRESS, MERKLE_DISTRIBUTOR_ADDRESS, UNI } from '../constants'
 import {
@@ -46,6 +48,16 @@ function useContract(address: string | undefined, ABI: any, withSignerIfPossible
 export function useV1FactoryContract(): Contract | null {
   const { chainId } = useActiveWeb3React()
   return useContract(chainId && V1_FACTORY_ADDRESSES[chainId], V1_FACTORY_ABI, false)
+}
+
+export function useFactoryContract(): Contract | null {
+  const { chainId } = useActiveWeb3React();
+  return useContract(chainId && FACTORY_ADDRESS[chainId], FACTORY_ABI, false);
+}
+
+export function useRouterContract(): Contract | null {
+  const { chainId } = useActiveWeb3React();
+  return useContract(chainId && ROUTER_ADDRESS[chainId], ROUTER_ABI, true);
 }
 
 export function useV2MigratorContract(): Contract | null {

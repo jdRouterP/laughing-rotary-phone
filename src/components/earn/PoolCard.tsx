@@ -4,7 +4,7 @@ import { RowBetween } from '../Row'
 import styled from 'styled-components'
 import { TYPE, StyledInternalLink } from '../../theme'
 import DoubleCurrencyLogo from '../DoubleLogo'
-import { JSBI, TokenAmount } from '@uniswap/sdk'
+import { JSBI, TokenAmount } from '@dfyn/sdk'
 import { ButtonPrimary } from '../Button'
 import { StakingInfo } from '../../state/stake/hooks'
 import { useColor } from '../../hooks/useColor'
@@ -15,6 +15,7 @@ import { useTotalSupply } from '../../data/TotalSupply'
 import { usePair } from '../../data/Reserves'
 import useUSDCPrice from '../../utils/useUSDCPrice'
 import { BIG_INT_SECONDS_IN_DAY, EMPTY } from '../../constants'
+import { useActiveWeb3React } from 'hooks'
 
 const StatContainer = styled.div`
   display: flex;
@@ -71,7 +72,7 @@ const BottomSection = styled.div<{ showBackground: boolean }>`
 export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) {
   const token0 = stakingInfo.tokens[0]
   const token1 = stakingInfo.tokens[1]
-
+  const {chainId} = useActiveWeb3React()
   const currency0 = unwrappedToken(token0)
   const currency1 = unwrappedToken(token1)
   const baseTokenCurrency = unwrappedToken(stakingInfo.baseToken);
@@ -110,9 +111,9 @@ export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) 
 
   const valueOfTotalStakedAmountInUSDC = valueOfTotalStakedAmountInBaseToken && USDPrice?.quote(valueOfTotalStakedAmountInBaseToken)
 
-  const rate = stakingInfo?.totalRewardRate?.multiply(BIG_INT_SECONDS_IN_DAY).toFixed(5);
+  // const rate = stakingInfo?.totalRewardRate?.multiply(BIG_INT_SECONDS_IN_DAY).toFixed(5);
   //@ts-ignore
-  const valueOfDfynGivenPerYear: any = parseFloat(rate) * stakingInfo?.dfynPrice * 365;
+  // const valueOfDfynGivenPerYear: any = parseFloat(rate) * stakingInfo?.dfynPrice * 365;
   // const apr = valueOfTotalStakedAmountInUSDC && valueOfDfynGivenPerYear / Number(valueOfTotalStakedAmountInUSDC?.toSignificant(6)) * 100;
   return (
     <Wrapper showBackground={isStaking} bgColor={backgroundColor}>
@@ -125,7 +126,7 @@ export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) 
           {currency0.symbol}-{currency1.symbol}
         </TYPE.white>
 
-        <StyledInternalLink to={`/dfyn/${currencyId(currency0)}/${currencyId(currency1)}`} style={{ width: '100%' }}>
+        <StyledInternalLink to={`/dfyn/${currencyId(currency0, chainId)}/${currencyId(currency1, chainId)}`} style={{ width: '100%' }}>
           <ButtonPrimary padding="8px" borderRadius="8px">
             {'Manage'}
           </ButtonPrimary>

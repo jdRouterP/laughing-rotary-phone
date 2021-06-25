@@ -6,9 +6,9 @@ import { TYPE, ExternalLinkIcon, TrashIcon, ButtonText, ExternalLink } from 'the
 import { useToken } from 'hooks/Tokens'
 import styled from 'styled-components'
 import { useUserAddedTokens, useRemoveUserAddedToken } from 'state/user/hooks'
-import { Token } from '@uniswap/sdk'
+import { Token } from '@dfyn/sdk'
 import CurrencyLogo from 'components/CurrencyLogo'
-import { getEtherscanLink, isAddress } from 'utils'
+import { getExplorerLink, isAddress } from 'utils'
 import { useActiveWeb3React } from 'hooks'
 import Card from 'components/Card'
 import ImportRow from './ImportRow'
@@ -78,7 +78,7 @@ export default function ManageTokens({
         <RowBetween key={token.address} width="100%">
           <RowFixed>
             <CurrencyLogo currency={token} size={'20px'} />
-            <ExternalLink href={getEtherscanLink(chainId, token.address, 'address')}>
+            <ExternalLink href={getExplorerLink(chainId, token.address, 'address')}>
               <TYPE.main ml={'10px'} fontWeight={600}>
                 {token.symbol}
               </TYPE.main>
@@ -86,7 +86,7 @@ export default function ManageTokens({
           </RowFixed>
           <RowFixed>
             <TrashIcon onClick={() => removeToken(chainId, token.address)} />
-            <ExternalLinkIcon href={getEtherscanLink(chainId, token.address, 'address')} />
+            <ExternalLinkIcon href={getExplorerLink(chainId, token.address, 'address')} />
           </RowFixed>
         </RowBetween>
       ))

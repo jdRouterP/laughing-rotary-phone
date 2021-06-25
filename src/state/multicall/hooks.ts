@@ -202,7 +202,6 @@ export function useSingleContractMultipleData(
 //     }) : undefined,//[["0xsdf","0xsedfrs"],[]]
 //     [callInputs, contractInterface, fragment]
 //   )//[[a,b],[c,d]]
-//   debugger
 //   const calls = useMemo(
 //     () =>
 //       fragment && addresses && addresses.length > 0 && callData?.length

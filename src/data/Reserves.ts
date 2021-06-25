@@ -1,4 +1,4 @@
-import { TokenAmount, Pair, Currency, Token } from '@uniswap/sdk'
+import { TokenAmount, Pair, Currency, Token } from '@dfyn/sdk'
 import { useMemo } from 'react'
 import { abi as IUniswapV2PairABI } from '@uniswap/v2-core/build/IUniswapV2Pair.json'
 import { Interface } from '@ethersproject/abi'
@@ -71,7 +71,7 @@ export function usePairsWithBaseToken(baseToken: Currency | undefined, currencie
 
   const _baseToken = useMemo(
     () => wrappedCurrency(baseToken, chainId),
-    [chainId, currencies]
+    [chainId, baseToken]
   )
 
   let arrangedTokens: (Token | undefined)[][] = [];
@@ -86,7 +86,7 @@ export function usePairsWithBaseToken(baseToken: Currency | undefined, currencie
       arrangedTokens.map(([tokenA, tokenB]) => {
         return tokenA && tokenB && !tokenA.equals(tokenB) ? Pair.getAddress(tokenA, tokenB) : undefined
       }),
-    [tokens]
+    [arrangedTokens]
   )
   //[usdc,a,usdc,b]
 

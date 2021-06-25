@@ -1,4 +1,5 @@
-import { Trade, TradeType } from '@uniswap/sdk'
+import { Trade, TradeType } from '@dfyn/sdk'
+import { useActiveWeb3React } from 'hooks'
 import React, { useContext, useMemo, useState } from 'react'
 import { Repeat } from 'react-feather'
 import { Text } from 'rebass'
@@ -33,6 +34,7 @@ export default function SwapModalFooter({
 }) {
   const [showInverted, setShowInverted] = useState<boolean>(false)
   const theme = useContext(ThemeContext)
+  const { chainId } = useActiveWeb3React();
   const slippageAdjustedAmounts = useMemo(() => computeSlippageAdjustedAmounts(trade, allowedSlippage), [
     allowedSlippage,
     trade
@@ -59,7 +61,7 @@ export default function SwapModalFooter({
               paddingLeft: '10px'
             }}
           >
-            {formatExecutionPrice(trade, showInverted)}
+            {formatExecutionPrice(trade, showInverted, chainId)}
             <StyledBalanceMaxMini onClick={() => setShowInverted(!showInverted)}>
               <Repeat size={14} />
             </StyledBalanceMaxMini>
@@ -81,8 +83,8 @@ export default function SwapModalFooter({
             </TYPE.black>
             <TYPE.black fontSize={14} marginLeft={'4px'}>
               {trade.tradeType === TradeType.EXACT_INPUT
-                ? trade.outputAmount.currency.symbol
-                : trade.inputAmount.currency.symbol}
+                ? trade.outputAmount.currency.getSymbol(chainId)
+                : trade.inputAmount.currency.getSymbol(chainId)}
             </TYPE.black>
           </RowFixed>
         </RowBetween>

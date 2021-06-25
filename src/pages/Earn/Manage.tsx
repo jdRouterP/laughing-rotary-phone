@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react'
 import { AutoColumn } from '../../components/Column'
 import styled from 'styled-components'
 
-import { JSBI, TokenAmount, ETHER } from '@uniswap/sdk'
+import { JSBI, TokenAmount } from '@dfyn/sdk'
 import { RouteComponentProps } from 'react-router-dom'
 import DoubleCurrencyLogo from '../../components/DoubleLogo'
 import { useCurrency } from '../../hooks/Tokens'
@@ -26,7 +26,7 @@ import { useTotalSupply } from '../../data/TotalSupply'
 import { usePair } from '../../data/Reserves'
 import usePrevious from '../../hooks/usePrevious'
 import useUSDCPrice from '../../utils/useUSDCPrice'
-import { BIG_INT_ZERO, BIG_INT_SECONDS_IN_DAY } from '../../constants'
+import { BIG_INT_ZERO, BIG_INT_SECONDS_IN_DAY, ETHER } from '../../constants'
 import { Countdown } from './Countdown'
 
 const PageWrapper = styled(AutoColumn)`

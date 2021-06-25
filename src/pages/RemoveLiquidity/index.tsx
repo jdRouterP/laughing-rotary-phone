@@ -1,7 +1,7 @@
 import { splitSignature } from '@ethersproject/bytes'
 import { Contract } from '@ethersproject/contracts'
 import { TransactionResponse } from '@ethersproject/providers'
-import { Currency, currencyEquals, ETHER, Percent, WETH } from '@uniswap/sdk'
+import { Currency, currencyEquals, Percent, WETH } from '@dfyn/sdk'
 import React, { useCallback, useContext, useMemo, useState } from 'react'
 import { ArrowDown, Plus } from 'react-feather'
 import ReactGA from 'react-ga'
@@ -17,7 +17,7 @@ import DoubleCurrencyLogo from '../../components/DoubleLogo'
 import { AddRemoveTabs } from '../../components/NavigationTabs'
 import { MinimalPositionCard } from '../../components/PositionCard'
 import Row, { RowBetween, RowFixed } from '../../components/Row'
-import { ROUTER_ADDRESS, biconomyAPIKey } from '../../constants'
+import { biconomyAPIKey } from '../../constants'
 
 import Slider from '../../components/Slider'
 import CurrencyLogo from '../../components/CurrencyLogo'
@@ -29,7 +29,7 @@ import useTransactionDeadline from '../../hooks/useTransactionDeadline'
 
 import { useTransactionAdder } from '../../state/transactions/hooks'
 import { StyledInternalLink, TYPE } from '../../theme'
-import { calculateGasMargin, calculateSlippageAmount, getRouterContract } from '../../utils'
+import { calculateGasMargin, calculateSlippageAmount, getRouterAddress, getRouterContract } from '../../utils'
 import { currencyId } from '../../utils/currencyId'
 import useDebouncedChangeHandler from '../../utils/useDebouncedChangeHandler'
 import { wrappedCurrency } from '../../utils/wrappedCurrency'
@@ -44,18 +44,18 @@ import { useWalletModalToggle } from '../../state/application/hooks'
 import { useUserSlippageTolerance, useGaslessModeManager } from '../../state/user/hooks'
 import { BigNumber } from '@ethersproject/bignumber'
 import { abi } from '@uniswap/v2-periphery/build/IUniswapV2Router02.json'
+import { RPC } from 'constants/networks'
 
 const Biconomy = require("@biconomy/mexa")
 const Web3 = require("web3");
 // swap, add Liquidity
 
-const contractAddress = ROUTER_ADDRESS;
-const maticProvider = process.env.REACT_APP_NETWORK_URL
+const maticProvider = RPC[137];
 const biconomy = new Biconomy(
   new Web3.providers.HttpProvider(maticProvider),
   {
     apiKey: biconomyAPIKey,
-    debug: true
+    debug: false
   }
 );
 // const web3 = new Web3(window.ethereum);
@@ -81,6 +81,8 @@ export default function RemoveLiquidity({
   ])
 
   const theme = useContext(ThemeContext)
+
+  const contractAddress = chainId && getRouterAddress(chainId);
 
   // toggle wallet when disconnected
   const toggleWalletModal = useWalletModalToggle()
@@ -123,7 +125,7 @@ export default function RemoveLiquidity({
 
   // allowance handling
   const [signatureData, setSignatureData] = useState<{ v: number; r: string; s: string; deadline: number } | null>(null)
-  const [approval, approveCallback] = useApproveCallback(parsedAmounts[Field.LIQUIDITY], ROUTER_ADDRESS)
+  const [approval, approveCallback] = useApproveCallback(parsedAmounts[Field.LIQUIDITY], contractAddress)
 
   const isArgentWallet = useIsArgentWallet()
 
@@ -160,7 +162,7 @@ export default function RemoveLiquidity({
     ]
     const message = {
       owner: account,
-      spender: ROUTER_ADDRESS,
+      spender: contractAddress,
       value: liquidityAmount.raw.toString(),
       nonce: nonce.toHexString(),
       deadline: deadline.toNumber()
@@ -216,15 +218,13 @@ export default function RemoveLiquidity({
   // tx sending
   const addTransaction = useTransactionAdder()
   async function onRemove() {
+
     if (!chainId || !library || !account || !deadline) throw new Error('missing dependencies')
     const { [Field.CURRENCY_A]: currencyAmountA, [Field.CURRENCY_B]: currencyAmountB } = parsedAmounts
     if (!currencyAmountA || !currencyAmountB) {
       throw new Error('missing currency amounts')
     }
     const router = getRouterContract(chainId, library, account)
-    const bicomony_contract = new getWeb3.eth.Contract(abi, contractAddress);
-    let biconomy_nonce = await bicomony_contract.methods.getNonce(account).call();
-    console.log('biconomy_nonce::', biconomy_nonce)
 
     const amountsMin = {
       [Field.CURRENCY_A]: calculateSlippageAmount(currencyAmountA, allowedSlippage)[0],
@@ -235,8 +235,8 @@ export default function RemoveLiquidity({
     const liquidityAmount = parsedAmounts[Field.LIQUIDITY]
     if (!liquidityAmount) throw new Error('missing liquidity amount')
 
-    const currencyBIsETH = currencyB === ETHER
-    const oneCurrencyIsETH = currencyA === ETHER || currencyBIsETH
+    const currencyBIsETH = currencyB === Currency.getNativeCurrency(chainId)
+    const oneCurrencyIsETH = currencyA === Currency.getNativeCurrency(chainId) || currencyBIsETH
 
     if (!tokenA || !tokenB) throw new Error('could not wrap')
 
@@ -307,7 +307,6 @@ export default function RemoveLiquidity({
     } else {
       throw new Error('Attempting to confirm without approval or a signature. Please contact support.')
     }
-
     const safeGasEstimates: (BigNumber | undefined)[] = await Promise.all(
       methodNames.map(methodName =>
         router.estimateGas[methodName](...args)
@@ -363,6 +362,9 @@ export default function RemoveLiquidity({
       if (indexOfSuccessfulEstimation === -1) {
         console.error('This transaction would fail. Please contact support.')
       } else {
+        const bicomony_contract = new getWeb3.eth.Contract(abi, contractAddress);
+        let biconomy_nonce = await bicomony_contract.methods.getNonce(account).call();
+
         const methodName = methodNames[indexOfSuccessfulEstimation]
         // const safeGasEstimate = safeGasEstimates[indexOfSuccessfulEstimation]
 
@@ -528,7 +530,7 @@ export default function RemoveLiquidity({
     [onUserInput]
   )
 
-  const oneCurrencyIsETH = currencyA === ETHER || currencyB === ETHER
+  const oneCurrencyIsETH = currencyA === Currency.getNativeCurrency(chainId) || currencyB === Currency.getNativeCurrency(chainId)
   const oneCurrencyIsWETH = Boolean(
     chainId &&
     ((currencyA && currencyEquals(WETH[chainId], currencyA)) ||
@@ -537,23 +539,23 @@ export default function RemoveLiquidity({
 
   const handleSelectCurrencyA = useCallback(
     (currency: Currency) => {
-      if (currencyIdB && currencyId(currency) === currencyIdB) {
-        history.push(`/remove/${currencyId(currency)}/${currencyIdA}`)
+      if (currencyIdB && currencyId(currency, chainId) === currencyIdB) {
+        history.push(`/remove/${currencyId(currency, chainId)}/${currencyIdA}`)
       } else {
-        history.push(`/remove/${currencyId(currency)}/${currencyIdB}`)
+        history.push(`/remove/${currencyId(currency, chainId)}/${currencyIdB}`)
       }
     },
-    [currencyIdA, currencyIdB, history]
+    [currencyIdA, currencyIdB, history, chainId]
   )
   const handleSelectCurrencyB = useCallback(
     (currency: Currency) => {
-      if (currencyIdA && currencyId(currency) === currencyIdA) {
-        history.push(`/remove/${currencyIdB}/${currencyId(currency)}`)
+      if (currencyIdA && currencyId(currency, chainId) === currencyIdA) {
+        history.push(`/remove/${currencyIdB}/${currencyId(currency, chainId)}`)
       } else {
-        history.push(`/remove/${currencyIdA}/${currencyId(currency)}`)
+        history.push(`/remove/${currencyIdA}/${currencyId(currency, chainId)}`)
       }
     },
-    [currencyIdA, currencyIdB, history]
+    [currencyIdA, currencyIdB, history, chainId]
   )
 
   const handleDismissConfirmation = useCallback(() => {
@@ -672,7 +674,7 @@ export default function RemoveLiquidity({
                       <RowBetween style={{ justifyContent: 'flex-end' }}>
                         {oneCurrencyIsETH ? (
                           <StyledInternalLink
-                            to={`/remove/${currencyA === ETHER ? WETH[chainId].address : currencyIdA}/${currencyB === ETHER ? WETH[chainId].address : currencyIdB
+                            to={`/remove/${currencyA === Currency.getNativeCurrency(chainId) ? WETH[chainId].address : currencyIdA}/${currencyB === Currency.getNativeCurrency(chainId) ? WETH[chainId].address : currencyIdB
                               }`}
                           >
                             Receive WMATIC
@@ -682,7 +684,7 @@ export default function RemoveLiquidity({
                             to={`/remove/${currencyA && currencyEquals(currencyA, WETH[chainId]) ? 'ETH' : currencyIdA
                               }/${currencyB && currencyEquals(currencyB, WETH[chainId]) ? 'ETH' : currencyIdB}`}
                           >
-                            Receive ETH
+                            Receive {Currency.getNativeCurrencySymbol(chainId)}
                           </StyledInternalLink>
                         ) : null}
                       </RowBetween>

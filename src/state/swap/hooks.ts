@@ -1,7 +1,7 @@
 import useENS from '../../hooks/useENS'
 import { Version } from '../../hooks/useToggledVersion'
 import { parseUnits } from '@ethersproject/units'
-import { ChainId, Currency, CurrencyAmount, ETHER, JSBI, Token, TokenAmount, Trade } from '@uniswap/sdk'
+import { ChainId, Currency, CurrencyAmount, JSBI, Token, TokenAmount, Trade } from '@dfyn/sdk'
 import { ParsedQs } from 'qs'
 import { useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
@@ -18,7 +18,7 @@ import { SwapState } from './reducer'
 import useToggledVersion from '../../hooks/useToggledVersion'
 import { useUserSlippageTolerance } from '../user/hooks'
 import { computeSlippageAdjustedAmounts } from '../../utils/prices'
-import { UNI, ETHER as ETHER_TOKEN } from '../../constants'
+import { UNI } from '../../constants'
 
 export function useSwapState(): AppState['swap'] {
   return useSelector<AppState, AppState['swap']>(state => state.swap)
@@ -30,17 +30,22 @@ export function useSwapActionHandlers(): {
   onUserInput: (field: Field, typedValue: string) => void
   onChangeRecipient: (recipient: string | null) => void
 } {
+  const { chainId } = useActiveWeb3React()
   const dispatch = useDispatch<AppDispatch>()
   const onCurrencySelection = useCallback(
     (field: Field, currency: Currency) => {
       dispatch(
         selectCurrency({
           field,
-          currencyId: currency instanceof Token ? currency.address : currency === ETHER ? 'ETH' : ''
+          currencyId:
+            currency instanceof Token
+              ? currency.address
+              : currency === Currency.getNativeCurrency(chainId)
+                ? Currency.getNativeCurrencySymbol(chainId) || 'MATIC' : '',
         })
       )
     },
-    [dispatch]
+    [dispatch, chainId]
   )
 
   const onSwitchTokens = useCallback(() => {
@@ -79,7 +84,7 @@ export function tryParseAmount(value?: string, currency?: Currency): CurrencyAmo
     if (typedValueParsed !== '0') {
       return currency instanceof Token
         ? new TokenAmount(currency, JSBI.BigInt(typedValueParsed))
-        : CurrencyAmount.ether(JSBI.BigInt(typedValueParsed))
+        : new CurrencyAmount(currency, JSBI.BigInt(typedValueParsed))
     }
   } catch (error) {
     // should fail if the user specifies too many decimal places of precision (or maybe exceed max uint?)
@@ -218,22 +223,30 @@ export function useDerivedSwapInfo(): {
   }
 }
 
-function parseCurrencyFromURLParameter(urlParam: any): string {
-  if (typeof urlParam === 'string') {
-    const valid = isAddress(urlParam)
-    if (valid) return valid
-    if (urlParam.toUpperCase() === 'ETH') return 'ETH'
-    if (valid === false) return "ETH"
+function parseCurrencyFromURLParameter(
+  urlParam: any,
+  chainId = ChainId.MATIC
+): string {
+  if (typeof urlParam === "string") {
+    const valid = isAddress(urlParam);
+    const nativeSymbol = Currency.getNativeCurrencySymbol(chainId);
+    if (valid) return valid;
+    if (urlParam.toUpperCase() === nativeSymbol) return nativeSymbol;
+    if (valid === false) return nativeSymbol || '';
   }
-  return ETHER_TOKEN.address ?? ''
+  return Currency.getNativeCurrencySymbol(chainId) ?? "";
 }
 
 function parseTokenAmountURLParameter(urlParam: any): string {
-  return typeof urlParam === 'string' && !isNaN(parseFloat(urlParam)) ? urlParam : ''
+  return typeof urlParam === "string" && !isNaN(parseFloat(urlParam))
+    ? urlParam
+    : "";
 }
 
 function parseIndependentFieldURLParameter(urlParam: any): Field {
-  return typeof urlParam === 'string' && urlParam.toLowerCase() === 'output' ? Field.OUTPUT : Field.INPUT
+  return typeof urlParam === "string" && urlParam.toLowerCase() === "output"
+    ? Field.OUTPUT
+    : Field.INPUT;
 }
 
 const ENS_NAME_REGEX = /^[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&/=]*)?$/
@@ -247,9 +260,18 @@ function validatedRecipient(recipient: any): string | null {
   return null
 }
 
-export function queryParametersToSwapState(parsedQs: ParsedQs): SwapState {
-  let inputCurrency = parseCurrencyFromURLParameter(parsedQs.inputCurrency)
-  let outputCurrency = parseCurrencyFromURLParameter(parsedQs.outputCurrency)
+export function queryParametersToSwapState(
+  parsedQs: ParsedQs,
+  chainId = ChainId.MATIC
+): SwapState {
+  let inputCurrency = parseCurrencyFromURLParameter(
+    parsedQs.inputCurrency,
+    chainId
+  );
+  let outputCurrency = parseCurrencyFromURLParameter(
+    parsedQs.outputCurrency,
+    chainId
+  );
   if (inputCurrency === outputCurrency) {
     if (typeof parsedQs.outputCurrency === 'string') {
       inputCurrency = UNI[ChainId.MATIC].address
@@ -286,7 +308,7 @@ export function useDefaultsFromURLSearch():
 
   useEffect(() => {
     if (!chainId) return
-    const parsed = queryParametersToSwapState(parsedQs)
+    const parsed = queryParametersToSwapState(parsedQs, chainId)
 
     dispatch(
       replaceSwapState({

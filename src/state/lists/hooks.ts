@@ -1,6 +1,6 @@
 import { UNSUPPORTED_LIST_URLS } from './../../constants/lists'
 import DEFAULT_TOKEN_LIST from '@uniswap/default-token-list'
-import { ChainId, Token } from '@uniswap/sdk'
+import { ChainId, Token } from '@dfyn/sdk'
 import { Tags, TokenInfo, TokenList } from '@uniswap/token-lists'
 import { useMemo } from 'react'
 import { useSelector } from 'react-redux'
@@ -43,6 +43,7 @@ const EMPTY_LIST: TokenAddressMap = {
   [ChainId.GÖRLI]: {},
   [ChainId.MAINNET]: {},
   [ChainId.MATIC]: {},
+  [ChainId.OKEX]: {},
 }
 
 const listCache: WeakMap<TokenList, TokenAddressMap> | null =
@@ -99,6 +100,7 @@ function combineMaps(map1: TokenAddressMap, map2: TokenAddressMap): TokenAddress
     5: { ...map1[5], ...map2[5] },
     42: { ...map1[42], ...map2[42] },
     137: { ...map1[137], ...map2[137] },
+    66: { ...map1[66], ...map2[66] },
   }
 }
 

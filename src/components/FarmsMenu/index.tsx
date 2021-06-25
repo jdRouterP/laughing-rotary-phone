@@ -130,9 +130,9 @@ export default function FarmsMenu() {
   return (
     // https://github.com/DefinitelyTyped/DefinitelyTyped/issues/30451
     <StyledMenu ref={node as any}>
-
+      
       <StyledMenuButton onClick={toggle}>
-        ⚡FARMS
+        <span role="img" aria-label="FARMS">⚡FARMS</span> 
       </StyledMenuButton>
 
       {open && (

@@ -1,7 +1,7 @@
 import { splitSignature } from '@ethersproject/bytes'
 import { BigNumber } from '@ethersproject/bignumber'
 import { TransactionResponse } from '@ethersproject/providers'
-import { Currency, currencyEquals, ETHER, TokenAmount, WETH } from '@uniswap/sdk'
+import { Currency, currencyEquals, TokenAmount, WETH } from '@dfyn/sdk'
 import React, { useCallback, useContext, useState } from 'react'
 import { Plus } from 'react-feather'
 import ReactGA from 'react-ga'
@@ -18,7 +18,7 @@ import { AddRemoveTabs } from '../../components/NavigationTabs'
 import { MinimalPositionCard } from '../../components/PositionCard'
 import Row, { RowBetween, RowFlat } from '../../components/Row'
 
-import { ROUTER_ADDRESS, biconomyAPIKey } from '../../constants'
+import { biconomyAPIKey } from '../../constants'
 import { PairState } from '../../data/Reserves'
 import { useActiveWeb3React } from '../../hooks'
 import { useCurrency } from '../../hooks/Tokens'
@@ -31,7 +31,7 @@ import { useDerivedMintInfo, useMintActionHandlers, useMintState } from '../../s
 import { useTransactionAdder } from '../../state/transactions/hooks'
 import { useIsExpertMode, useUserDeadline, useUserSlippageTolerance, useGaslessModeManager } from '../../state/user/hooks'
 import { TYPE } from '../../theme'
-import { calculateGasMargin, calculateSlippageAmount, getRouterContract } from '../../utils'
+import { calculateGasMargin, calculateSlippageAmount, getRouterAddress, getRouterContract } from '../../utils'
 import { maxAmountSpend } from '../../utils/maxAmountSpend'
 import { wrappedCurrency } from '../../utils/wrappedCurrency'
 import AppBody from '../AppBody'
@@ -42,24 +42,12 @@ import { PoolPriceBar } from './PoolPriceBar'
 import { useIsTransactionUnsupported } from 'hooks/Trades'
 import UnsupportedCurrencyFooter from 'components/swap/UnsupportedCurrencyFooter'
 import { abi } from '@uniswap/v2-periphery/build/IUniswapV2Router02.json'
+import { RPC } from 'constants/networks'
 
 const Biconomy = require("@biconomy/mexa")
 const Web3 = require("web3");
 
-const contractAddress = ROUTER_ADDRESS
-const maticProvider = process.env.REACT_APP_NETWORK_URL
-const biconomy = new Biconomy(
-  new Web3.providers.HttpProvider(maticProvider),
-  {
-    apiKey: biconomyAPIKey,
-    debug: true
-  }
-);
-const getWeb3 = new Web3(biconomy);
-biconomy
-  .onEvent(biconomy.READY, () => {
-    console.debug("Mexa is Ready");
-  })
+
 
 export default function AddLiquidity({
   match: {
@@ -69,10 +57,11 @@ export default function AddLiquidity({
 }: RouteComponentProps<{ currencyIdA?: string; currencyIdB?: string }>) {
   const { account, chainId, library } = useActiveWeb3React()
   const theme = useContext(ThemeContext)
+  const contractAddress = getRouterAddress(chainId)
+
 
   const currencyA = useCurrency(currencyIdA)
   const currencyB = useCurrency(currencyIdB)
-
   const oneCurrencyIsWETH = Boolean(
     chainId &&
     ((currencyA && currencyEquals(currencyA, WETH[chainId])) ||
@@ -83,7 +72,22 @@ export default function AddLiquidity({
 
   const expertMode = useIsExpertMode()
   const [gaslessMode] = useGaslessModeManager()
-
+  let getWeb3: any = 0
+  if (gaslessMode) {
+    const maticProvider = RPC[137];
+    const biconomy = new Biconomy(
+      new Web3.providers.HttpProvider(maticProvider),
+      {
+        apiKey: biconomyAPIKey,
+        debug: false
+      }
+    );
+    getWeb3 = new Web3(biconomy);
+    biconomy
+      .onEvent(biconomy.READY, () => {
+        console.debug("Mexa is Ready");
+      })
+  }
 
   // mint state
   const { independentField, typedValue, otherTypedValue } = useMintState()
@@ -113,7 +117,6 @@ export default function AddLiquidity({
   const [deadline] = useUserDeadline() // custom from users settings
   const [allowedSlippage] = useUserSlippageTolerance() // custom from users
   const [txHash, setTxHash] = useState<string>('')
-
   // get formatted amounts
   const formattedAmounts = {
     [independentField]: typedValue,
@@ -142,15 +145,14 @@ export default function AddLiquidity({
   )
 
   // check whether the user has approved the router on the tokens
-  const [approvalA, approveACallback] = useApproveCallback(parsedAmounts[Field.CURRENCY_A], ROUTER_ADDRESS)
-  const [approvalB, approveBCallback] = useApproveCallback(parsedAmounts[Field.CURRENCY_B], ROUTER_ADDRESS)
+  const [approvalA, approveACallback] = useApproveCallback(parsedAmounts[Field.CURRENCY_A], getRouterAddress(chainId))
+  const [approvalB, approveBCallback] = useApproveCallback(parsedAmounts[Field.CURRENCY_B], getRouterAddress(chainId))
 
   const addTransaction = useTransactionAdder()
 
   async function onAdd() {
     if (!chainId || !library || !account) return
     const router = getRouterContract(chainId, library, account)
-
     const { [Field.CURRENCY_A]: parsedAmountA, [Field.CURRENCY_B]: parsedAmountB } = parsedAmounts
     if (!parsedAmountA || !parsedAmountB || !currencyA || !currencyB || !deadline) {
       return
@@ -160,8 +162,12 @@ export default function AddLiquidity({
       [Field.CURRENCY_A]: calculateSlippageAmount(parsedAmountA, noLiquidity ? 0 : allowedSlippage)[0],
       [Field.CURRENCY_B]: calculateSlippageAmount(parsedAmountB, noLiquidity ? 0 : allowedSlippage)[0]
     }
-    const biconomy_contract = new getWeb3.eth.Contract(abi, contractAddress);
-    let biconomy_nonce = await biconomy_contract.methods.getNonce(account).call();
+    let biconomy_contract: any = 0
+    let biconomy_nonce: any = 0
+    if (gaslessMode) {
+      biconomy_contract = new getWeb3.eth.Contract(abi, contractAddress);
+      biconomy_nonce = await biconomy_contract.methods.getNonce(account).call();
+    }
     let methodName: any = ""
     const deadlineFromNow = Math.ceil(Date.now() / 1000) + deadline
 
@@ -170,8 +176,8 @@ export default function AddLiquidity({
       method: (...args: any) => Promise<TransactionResponse>,
       args: Array<string | string[] | number>,
       value: BigNumber | null
-    if (currencyA === ETHER || currencyB === ETHER) {
-      const tokenBIsETH = currencyB === ETHER
+    if (currencyA === Currency.getNativeCurrency(chainId) || currencyB === Currency.getNativeCurrency(chainId)) {
+      const tokenBIsETH = currencyB === Currency.getNativeCurrency(chainId)
       estimate = router.estimateGas.addLiquidityETH
       method = router.addLiquidityETH
       methodName = "addLiquidityETH"
@@ -277,7 +283,6 @@ export default function AddLiquidity({
             .send('eth_signTypedData_v4', [account, dataToSign])
           let signature = await splitSignature(sig)
           let { v, r, s } = signature
-          console.log('account: ', account, 'res: ', res, 'r: ', r, 's: ', s, 'v: ', v)
           try {
             let response: TransactionResponse = await biconomy_contract.methods
               .executeMetaTransaction(account, res, r, s, v)
@@ -378,18 +383,18 @@ export default function AddLiquidity({
 
   const handleCurrencyASelect = useCallback(
     (currencyA: Currency) => {
-      const newCurrencyIdA = currencyId(currencyA)
+      const newCurrencyIdA = currencyId(currencyA, chainId)
       if (newCurrencyIdA === currencyIdB) {
         history.push(`/add/${currencyIdB}/${currencyIdA}`)
       } else {
         history.push(`/add/${newCurrencyIdA}/${currencyIdB}`)
       }
     },
-    [currencyIdB, history, currencyIdA]
+    [currencyIdB, history, currencyIdA, chainId]
   )
   const handleCurrencyBSelect = useCallback(
     (currencyB: Currency) => {
-      const newCurrencyIdB = currencyId(currencyB)
+      const newCurrencyIdB = currencyId(currencyB, chainId)
       if (currencyIdA === newCurrencyIdB) {
         if (currencyIdB) {
           history.push(`/add/${currencyIdB}/${newCurrencyIdB}`)
@@ -397,10 +402,10 @@ export default function AddLiquidity({
           history.push(`/add/${newCurrencyIdB}`)
         }
       } else {
-        history.push(`/add/${currencyIdA ? currencyIdA : 'ETH'}/${newCurrencyIdB}`)
+        history.push(`/add/${currencyIdA ? currencyIdA : Currency.getNativeCurrencySymbol(chainId)}/${newCurrencyIdB}`)
       }
     },
-    [currencyIdA, history, currencyIdB]
+    [currencyIdA, history, currencyIdB, chainId]
   )
 
   const handleDismissConfirmation = useCallback(() => {

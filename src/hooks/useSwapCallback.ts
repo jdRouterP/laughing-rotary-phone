@@ -1,13 +1,13 @@
 import { BigNumber } from '@ethersproject/bignumber'
 import { Contract } from '@ethersproject/contracts'
-import { JSBI, Percent, Router, SwapParameters, Trade, TradeType } from '@uniswap/sdk'
+import { JSBI, Percent, Router, SwapParameters, Trade, TradeType } from '@dfyn/sdk'
 import { useMemo } from 'react'
-import { BIPS_BASE, INITIAL_ALLOWED_SLIPPAGE, biconomyAPIKey, ROUTER_ADDRESS } from '../constants'
+import { BIPS_BASE, INITIAL_ALLOWED_SLIPPAGE, biconomyAPIKey } from '../constants'
 import { getTradeVersion, useV1TradeExchangeAddress } from '../data/V1'
 import { splitSignature } from '@ethersproject/bytes'
 import { useTransactionAdder } from '../state/transactions/hooks'
 import { abi } from '@uniswap/v2-periphery/build/IUniswapV2Router02.json'
-import { calculateGasMargin, getRouterContract, isAddress, shortenAddress } from '../utils'
+import { calculateGasMargin, getRouterAddress, getRouterContract, isAddress, shortenAddress } from '../utils'
 import isZero from '../utils/isZero'
 import v1SwapArguments from '../utils/v1SwapArguments'
 import { useActiveWeb3React } from './index'
@@ -16,16 +16,17 @@ import useTransactionDeadline from './useTransactionDeadline'
 import useENS from './useENS'
 import { Version } from './useToggledVersion'
 import { useGaslessModeManager } from 'state/user/hooks'
+import { RPC } from 'constants/networks'
 const Biconomy = require("@biconomy/mexa")
 const Web3 = require("web3");
 
-const contractAddress = ROUTER_ADDRESS
-const maticProvider = process.env.REACT_APP_NETWORK_URL
+
+const maticProvider = RPC[137];
 const biconomy = new Biconomy(
   new Web3.providers.HttpProvider(maticProvider),
   {
     apiKey: biconomyAPIKey,
-    debug: true
+    debug: false
   }
 );
 const getWeb3 = new Web3(biconomy);
@@ -33,7 +34,6 @@ biconomy
   .onEvent(biconomy.READY, () => {
     console.debug("Mexa is Ready");
   })
-
 
 export enum SwapCallbackState {
   INVALID,
@@ -134,6 +134,9 @@ export function useSwapCallback(
 ): { state: SwapCallbackState; callback: null | (() => Promise<string>); error: string | null } {
   const { account, chainId, library } = useActiveWeb3React()
   const [gaslessMode] = useGaslessModeManager();
+
+  const contractAddress = getRouterAddress(chainId);
+
   const swapCalls = useSwapCallArguments(trade, allowedSlippage, recipientAddressOrName)
 
   const addTransaction = useTransactionAdder()
@@ -226,8 +229,8 @@ export function useSwapCallback(
             ...(value && !isZero(value) ? { value, from: account } : { from: account })
           })
             .then((response: any) => {
-              const inputSymbol = trade.inputAmount.currency.symbol
-              const outputSymbol = trade.outputAmount.currency.symbol
+              const inputSymbol = trade.inputAmount.currency.getSymbol(chainId);
+              const outputSymbol = trade.outputAmount.currency.getSymbol(chainId);
               const inputAmount = trade.inputAmount.toSignificant(3)
               const outputAmount = trade.outputAmount.toSignificant(3)
 
@@ -385,5 +388,5 @@ export function useSwapCallback(
       },
       error: null
     }
-  }, [trade, library, account, chainId, recipient, recipientAddressOrName, swapCalls, addTransaction])
+  }, [trade, library, account, chainId, recipient, recipientAddressOrName, swapCalls, addTransaction, gaslessMode, contractAddress])
 }

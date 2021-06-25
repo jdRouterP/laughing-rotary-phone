@@ -1,10 +1,10 @@
 import { MaxUint256 } from '@ethersproject/constants'
 import { TransactionResponse } from '@ethersproject/providers'
-import { Trade, TokenAmount, CurrencyAmount, ETHER } from '@uniswap/sdk'
+import { Trade, TokenAmount, CurrencyAmount, Currency } from '@dfyn/sdk'
 import { useCallback, useMemo } from 'react'
 import { useTokenAllowance } from '../data/Allowances'
 import { getTradeVersion, useV1TradeExchangeAddress } from '../data/V1'
-import { ROUTER_ADDRESS, biconomyAPIKey, META_TXN_SUPPORTED_TOKENS } from '../constants'
+import { biconomyAPIKey, META_TXN_SUPPORTED_TOKENS } from '../constants'
 import { Field } from '../state/swap/actions'
 import { useTransactionAdder, useHasPendingApproval } from '../state/transactions/hooks'
 import { computeSlippageAdjustedAmounts } from '../utils/prices'
@@ -14,17 +14,19 @@ import { useActiveWeb3React } from './index'
 import { splitSignature } from '@ethersproject/bytes'
 import { Version } from './useToggledVersion'
 import { useGaslessModeManager } from 'state/user/hooks'
+import { RPC } from 'constants/networks'
 
 const Biconomy = require("@biconomy/mexa")
 const Web3 = require("web3");
 // swap, add Liquidity
 
-const maticProvider = process.env.REACT_APP_NETWORK_URL
+// const maticProvider = chainId ? RPC[chainId] : RPC[137];
+const maticProvider = RPC[137];
 const biconomy = new Biconomy(
   new Web3.providers.HttpProvider(maticProvider),
   {
     apiKey: biconomyAPIKey,
-    debug: true
+    debug: false
   }
 );
 const getWeb3 = new Web3(biconomy);
@@ -46,8 +48,9 @@ export function useApproveCallback(
   spender?: string
 ): [ApprovalState, () => Promise<void>] {
   const { account, chainId, library } = useActiveWeb3React()
-  if (!chainId) throw "";
-  if (!library) throw "";
+  if (!chainId) throw new Error("Error");
+  if (!library) throw new Error("Error");
+
   const token = amountToApprove instanceof TokenAmount ? amountToApprove.token : undefined
   const currentAllowance = useTokenAllowance(token, account ?? undefined, spender)
   const pendingApproval = useHasPendingApproval(token?.address, spender)
@@ -55,7 +58,7 @@ export function useApproveCallback(
   // check the current approval status
   const approvalState: ApprovalState = useMemo(() => {
     if (!amountToApprove || !spender) return ApprovalState.UNKNOWN
-    if (amountToApprove.currency === ETHER) return ApprovalState.APPROVED
+    if (amountToApprove.currency === Currency.getNativeCurrency(chainId)) return ApprovalState.APPROVED
     // we might not have enough data to know whether or not we need to approve
     if (!currentAllowance) return ApprovalState.UNKNOWN
 
@@ -65,7 +68,7 @@ export function useApproveCallback(
         ? ApprovalState.PENDING
         : ApprovalState.NOT_APPROVED
       : ApprovalState.APPROVED
-  }, [amountToApprove, currentAllowance, pendingApproval, spender])
+  }, [amountToApprove, currentAllowance, pendingApproval, spender, chainId])
 
   const tokenContract = useTokenContract(token?.address)
   const addTransaction = useTransactionAdder()
@@ -143,7 +146,7 @@ export function useApproveCallback(
               if (!response.hash)
                 response.hash = response.transactionHash;
               addTransaction(response, {
-                summary: 'Approve ' + amountToApprove.currency.symbol,
+                summary: 'Approve ' + amountToApprove.currency.getSymbol(chainId),
                 approval: { tokenAddress: token.address, spender: spender }
               })
             })
@@ -167,7 +170,7 @@ export function useApproveCallback(
         })
         .then((response: TransactionResponse) => {
           addTransaction(response, {
-            summary: 'Approve ' + amountToApprove.currency.symbol,
+            summary: 'Approve ' + amountToApprove.currency.getSymbol(chainId),
             approval: { tokenAddress: token.address, spender: spender }
           })
         })
@@ -198,18 +201,18 @@ export function useApproveCallback(
     //     console.debug('Failed to approve token', error)
     //     throw error
     //   })
-  }, [approvalState, token, tokenContract, amountToApprove, spender, addTransaction])
+  }, [approvalState, token, tokenContract, amountToApprove, spender, addTransaction, chainId, gaslessMode, library, account])
 
   return [approvalState, approve]
 }
 
 // wraps useApproveCallback in the context of a swap
-export function useApproveCallbackFromTrade(trade?: Trade, allowedSlippage = 0) {
+export function useApproveCallbackFromTrade(routerAddress?: string, trade?: Trade, allowedSlippage = 0) {
   const amountToApprove = useMemo(
     () => (trade ? computeSlippageAdjustedAmounts(trade, allowedSlippage)[Field.INPUT] : undefined),
     [trade, allowedSlippage]
   )
   const tradeIsV1 = getTradeVersion(trade) === Version.v1
   const v1ExchangeAddress = useV1TradeExchangeAddress(trade)
-  return useApproveCallback(amountToApprove, tradeIsV1 ? v1ExchangeAddress : ROUTER_ADDRESS)
+  return useApproveCallback(amountToApprove, tradeIsV1 ? v1ExchangeAddress : routerAddress)
 }

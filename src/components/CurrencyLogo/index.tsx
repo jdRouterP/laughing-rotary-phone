@@ -1,8 +1,10 @@
-import { Currency, ETHER, Token } from '@uniswap/sdk'
+import { ChainId, Currency, Token } from '@dfyn/sdk'
+import { useActiveWeb3React } from 'hooks'
 import React, { useMemo } from 'react'
 import styled from 'styled-components'
 
-import EthereumLogo from '../../assets/images/matic-logo.png'
+import MaticLogo from '../../assets/images/matic-logo.png'
+import OKExLogo from '../../assets/images/okex-logo.png'
 import useHttpLocations from '../../hooks/useHttpLocations'
 import { WrappedTokenInfo } from '../../state/lists/hooks'
 import Logo from '../Logo'
@@ -391,8 +393,12 @@ export const getTokenLogoURL = (address: string) => {
   return uri;
 }
 
+const logo: { readonly [chainId in ChainId]?: string } = {
+  [ChainId.MATIC]: MaticLogo,
+  [ChainId.OKEX]: OKExLogo,
+}
 
-const StyledEthereumLogo = styled.img<{ size: string }>`
+const StyledNativeLogo = styled.img<{ size: string }>`
   width: ${({ size }) => size};
   height: ${({ size }) => size};
   box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.075);
@@ -416,10 +422,12 @@ export default function CurrencyLogo({
   size?: string
   style?: React.CSSProperties
 }) {
+  const { chainId } = useActiveWeb3React()
   const uriLocations = useHttpLocations(currency instanceof WrappedTokenInfo ? currency.logoURI : undefined)
 
   const srcs: string[] = useMemo(() => {
-    if (currency === ETHER) return []
+    if (!chainId) return []
+    if (currency === Currency.getNativeCurrency(chainId)) return []
 
     if (currency instanceof Token) {
       if (currency instanceof WrappedTokenInfo) {
@@ -428,11 +436,12 @@ export default function CurrencyLogo({
       return [getTokenLogoURL(currency.address)]
     }
     return []
-  }, [currency, uriLocations])
+  }, [chainId, currency, uriLocations])
 
-  if (currency === ETHER) {
-    return <StyledEthereumLogo src={EthereumLogo} size={size} style={style} />
+  if (currency === Currency.getNativeCurrency(chainId)) {
+    if (chainId)
+      return <StyledNativeLogo src={logo[chainId] || `/images/tokens/unknown.png`} size={size} style={style} />
   }
 
-  return <StyledLogo size={size} srcs={srcs} alt={`${currency?.symbol ?? 'token'} logo`} style={style} />
+  return <StyledLogo size={size} srcs={srcs} alt={`${currency?.getSymbol(chainId) ?? 'token'} logo`} style={style} />
 }

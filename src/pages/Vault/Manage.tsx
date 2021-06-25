@@ -1,9 +1,10 @@
 import React, { useCallback, useState } from 'react'
+// import React, { useState } from 'react'
 import { AutoColumn } from '../../components/Column'
 import styled from 'styled-components'
 // import { Link } from 'react-router-dom'
 
-import { JSBI } from '@uniswap/sdk'
+import { JSBI } from '@dfyn/sdk'
 import { RouteComponentProps } from 'react-router-dom'
 // import DoubleCurrencyLogo from '../../components/DoubleLogo'
 import { useWalletModalToggle } from '../../state/application/hooks'

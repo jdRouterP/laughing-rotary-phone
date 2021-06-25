@@ -1,5 +1,5 @@
 import React, { useRef } from 'react'
-import { Info, PieChart, Send, Book } from 'react-feather'
+import { Info, Send, Book } from 'react-feather'
 import styled from 'styled-components'
 import { ReactComponent as MenuIcon } from '../../assets/images/menu.svg'
 // import { useActiveWeb3React } from '../../hooks'
@@ -116,10 +116,10 @@ export default function Menu() {
             <Send size={14} />
             Telegram
           </MenuItem>
-          <MenuItem id="link" href="https://info.dfyn.network/">
+          {/* <MenuItem id="link" href="https://info.dfyn.network/">
             <PieChart size={14} />
             Analytics
-          </MenuItem>
+          </MenuItem> */}
           {/* {account && (
             <ButtonPrimary onClick={openClaimModal} padding="8px 10px" width="100%" borderRadius="12px" mt="0.5rem">
               Claim DFYN

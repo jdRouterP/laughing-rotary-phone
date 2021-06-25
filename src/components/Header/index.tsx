@@ -1,4 +1,4 @@
-import { ChainId, TokenAmount } from '@uniswap/sdk'
+import { TokenAmount, Currency } from '@dfyn/sdk'
 import React, { useState } from 'react'
 import { Text } from 'rebass'
 import { NavLink } from 'react-router-dom'
@@ -6,7 +6,7 @@ import { darken } from 'polished'
 import { useTranslation } from 'react-i18next'
 import { isAndroid, isIOS, isMobile } from 'react-device-detect'
 import styled from 'styled-components'
-
+import { HEADER_ACCESS, NETWORK_LABEL } from '../../constants/networks'
 import Logo from '../../assets/images/DFYN logo final.png'
 import LogoDark from '../../assets/images/DFYN logo dark.png'
 import DarkLogoMobile from '../../assets/images/logo_white.png'
@@ -35,6 +35,7 @@ import usePrevious from '../../hooks/usePrevious'
 import QuestionHelper from 'components/QuestionHelper'
 import Toggle from 'components/Toggle'
 import FarmsMenu from 'components/FarmsMenu'
+import Web3Network from 'components/Web3Network'
 
 const HeaderFrame = styled.div`
   display: grid;
@@ -193,7 +194,19 @@ const HideSmall = styled.span`
 
 const NetworkCard = styled(YellowCard)`
   border-radius: 12px;
-  padding: 8px 12px;
+  padding: 6px 12px;
+  cursor: pointer;
+  border-style: solid;
+  border-width:2px;
+
+  :hover {
+    background-color: rgba(228, 126, 33,0.3);
+  }
+
+  :focus {
+    border: 1px solid blue;
+  }
+
   ${({ theme }) => theme.mediaWidth.upToSmall`
     margin: 0;
     margin-right: 0.5rem;
@@ -326,15 +339,9 @@ export const StyledMenuButton = styled.button`
   }
 `
 
-const NETWORK_LABELS: { [chainId in ChainId]?: string } = {
-  [ChainId.RINKEBY]: 'Rinkeby',
-  [ChainId.ROPSTEN]: 'Ropsten',
-  [ChainId.GÖRLI]: 'Görli',
-  [ChainId.KOVAN]: 'Kovan'
-}
 
 export default function Header() {
-  const { account, chainId } = useActiveWeb3React()
+  const { account, chainId, library } = useActiveWeb3React()
   const { t } = useTranslation()
 
   const mobile = isMobile || isAndroid || isIOS;
@@ -391,21 +398,21 @@ export default function Header() {
           >
             {t('pool')}
           </StyledNavLink>
-          <StyledNavLink id={`vault-nav-link`} to={'/vault'}>
+          {chainId && HEADER_ACCESS.vault.includes(chainId) && <StyledNavLink id={`vault-nav-link`} to={'/vault'}>
             Vault
-          </StyledNavLink>
-          <StyledExternalLink id={`stake-nav-link`} href={'https://info.dfyn.network/home/'}>
+          </StyledNavLink>}
+          {chainId && HEADER_ACCESS.charts.includes(chainId) && <StyledExternalLink id={`stake-nav-link`} href={'https://info.dfyn.network/home/'}>
             Charts <span style={{ fontSize: '11px' }}>↗</span>
-          </StyledExternalLink>
+          </StyledExternalLink>}
           {/* <StyledDocsLink id={`docs-nav-link`} href={'https://docs.dfyn.network/'}>
             Docs {!mobile && <span style={{ fontSize: '11px' }}>↗</span>}
           </StyledDocsLink> */}
-          <FarmsMenu />
+          {chainId && HEADER_ACCESS.farms.includes(chainId) && <FarmsMenu />}
         </HeaderLinks>
       </HeaderRow>
       <HeaderControls>
         <HeaderElement>
-          <GaslessModeElement>
+          {chainId && HEADER_ACCESS.gaslessMode.includes(chainId) && <GaslessModeElement>
             <TYPE.black fontWeight={400} fontSize={14}>
               Gasless Mode
             </TYPE.black>
@@ -418,12 +425,7 @@ export default function Header() {
                 () => toggleSetGaslessMode()
               }
             />
-          </GaslessModeElement>
-          <HideSmall>
-            {chainId && NETWORK_LABELS[chainId] && (
-              <NetworkCard title={NETWORK_LABELS[chainId]}>{NETWORK_LABELS[chainId]}</NetworkCard>
-            )}
-          </HideSmall>
+          </GaslessModeElement>}
           {availableClaim && !showClaimPopup && (
             <UNIWrapper onClick={toggleClaimModal}>
               <UNIAmount active={!!account && !availableClaim} style={{ pointerEvents: 'auto' }}>
@@ -460,10 +462,18 @@ export default function Header() {
               <CardNoise />
             </UNIWrapper>
           )}
+          <HideSmall>
+            {library && library.provider.isMetaMask && chainId && NETWORK_LABEL[chainId] && (
+              <NetworkCard title={NETWORK_LABEL[chainId]}><Web3Network /></NetworkCard>
+            )}
+          </HideSmall>
           <AccountElement active={!!account} style={{ pointerEvents: 'auto' }}>
             {account && userEthBalance ? (
               <BalanceText style={{ flexShrink: 0 }} pl="0.75rem" pr="0.5rem" fontWeight={500}>
-                {userEthBalance?.toSignificant(4)} MATIC
+                {userEthBalance?.toSignificant(4)}{' '}
+                {Currency.getNativeCurrencySymbol(
+                  chainId
+                )}
               </BalanceText>
             ) : null}
             <Web3Status />

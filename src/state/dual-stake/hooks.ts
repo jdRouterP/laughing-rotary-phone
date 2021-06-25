@@ -1,4 +1,4 @@
-import { ChainId, CurrencyAmount, JSBI, Token, TokenAmount, Pair } from '@uniswap/sdk'
+import { ChainId, CurrencyAmount, JSBI, Token, TokenAmount, Pair } from '@dfyn/sdk'
 import { useMemo } from 'react'
 import { UNI, ROUTE, REWARD_TOKENS, EMPTY, DFYN, USDC, ZEE, AURORA, BOOTY, ROYA, SX, EZ, UFARM, NWC, mRTK } from '../../constants'
 import { STAKING_REWARDS_DUAL_FARMS_INTERFACE } from '../../constants/abis/staking-rewards-dual-farms'
@@ -312,7 +312,10 @@ export function useStakingInfo(pairToFilterBy?: Pair | null): StakingInfo[] {
     rewardRates,
     stakingRewardAddress,
     totalSupplies,
-    uni
+    uni,
+    bothRewardToken,
+    start, 
+    tokenPrices
   ])
 }
 
@@ -341,7 +344,7 @@ export function useTotalDualFarmUniEarned(): TokenAmount | undefined {
         new TokenAmount(DFYN, '0')
       ) ?? new TokenAmount(DFYN, '0')
     )
-  }, [stakingInfos, DFYN])
+  }, [stakingInfos])
 }
 
 // based on typed value
