@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import styled from 'styled-components'
 import { Dialog } from '@material-ui/core';
 import { Tabs, Tab } from '@material-ui/core';
+import RoundsContent from './RoundsContent';
 
 interface Props {
 
@@ -41,7 +42,7 @@ const Modal = styled(Dialog)`
 `;
 
 const HistoryWrapper = styled.div`
-    height: 651px;
+    height: 700px;
     width: 451px;
     background: ${({ theme }) => theme.bg1};
     border-radius: 20px;
@@ -64,7 +65,6 @@ const StyledTabsWrapper = styled.div`
     border: 1px solid ${({ theme }) => theme.red1};
     border-radius: 11.5px;
     margin: 0 auto;
-    margin-bottom: 30px;
     width: 351px;
 `
 
@@ -81,6 +81,15 @@ const StyledTabs = styled(Tabs)`
     .PrivateTabIndicator-colorSecondary-4{
         display:none; 
     }
+    .jss3{
+		display:none !important; 
+	}
+	.jss1{
+		display:none !important; 
+	}
+	.MuiTabs-indicator{
+		display:none !important; 
+	}
 `
 
 const StyledTab = styled(Tab) <{ active: boolean }>`
@@ -109,7 +118,7 @@ const PnlWrapper = styled.div`
 
 const History = (props: Props) => {
 
-    const [openHistory, setOpenHistory] = useState(false)
+    const [openHistory, setOpenHistory] = useState(true)
     const [tabValue, setTabValue] = useState<number>(0);
 
     const handleTabChange = (event: React.ChangeEvent<{}>, newValue: number) => {
@@ -135,7 +144,7 @@ const History = (props: Props) => {
                         {
                             (tabValue === 0) &&
                             <RoundsWraper>
-                                Rounds Content
+                                <RoundsContent />
                             </RoundsWraper>
                         }
                         {
