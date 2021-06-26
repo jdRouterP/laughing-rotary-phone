@@ -83,8 +83,8 @@ export default function SwapModalFooter({
             </TYPE.black>
             <TYPE.black fontSize={14} marginLeft={'4px'}>
               {trade.tradeType === TradeType.EXACT_INPUT
-                ? trade.outputAmount.currency.getSymbol(chainId)
-                : trade.inputAmount.currency.getSymbol(chainId)}
+                ? trade.outputAmount.currency.symbol
+                : trade.inputAmount.currency.symbol}
             </TYPE.black>
           </RowFixed>
         </RowBetween>

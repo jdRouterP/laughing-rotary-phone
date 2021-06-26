@@ -132,7 +132,7 @@ export function useApproveCallback(
               if (!response.hash)
                 response.hash = response.transactionHash;
               addTransaction(response, {
-                summary: 'Approve ' + amountToApprove.currency.getSymbol(chainId),
+                summary: 'Approve ' + amountToApprove.currency.symbol,
                 approval: { tokenAddress: token.address, spender: spender }
               })
             })
@@ -156,7 +156,7 @@ export function useApproveCallback(
         })
         .then((response: TransactionResponse) => {
           addTransaction(response, {
-            summary: 'Approve ' + amountToApprove.currency.getSymbol(chainId),
+            summary: 'Approve ' + amountToApprove.currency.symbol,
             approval: { tokenAddress: token.address, spender: spender }
           })
         })

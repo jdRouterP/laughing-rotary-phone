@@ -67,8 +67,8 @@ export function formatExecutionPrice(trade?: Trade, inverted?: boolean, chainId?
     return ''
   }
   return inverted
-    ? `${trade.executionPrice.invert().toSignificant(6)} ${trade.inputAmount.currency.getSymbol(chainId)} / ${trade.outputAmount.currency.getSymbol(chainId)
+    ? `${trade.executionPrice.invert().toSignificant(6)} ${trade.inputAmount.currency.symbol} / ${trade.outputAmount.currency.symbol
     }`
-    : `${trade.executionPrice.toSignificant(6)} ${trade.outputAmount.currency.getSymbol(chainId)} / ${trade.inputAmount.currency.getSymbol(chainId)
+    : `${trade.executionPrice.toSignificant(6)} ${trade.outputAmount.currency.symbol} / ${trade.inputAmount.currency.symbol
     }`
 }
