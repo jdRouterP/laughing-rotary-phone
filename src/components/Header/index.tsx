@@ -50,7 +50,7 @@ const HeaderFrame = styled.div`
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   padding: 1rem;
   z-index: 2;
-  ${({ theme }) => theme.mediaWidth.upToMedium`
+  ${({ theme }) => theme.mediaWidth.upToLarge`
     grid-template-columns: 1fr;
     padding: 0 1rem;
     width: calc(100%);
@@ -68,12 +68,12 @@ const HeaderControls = styled.div`
   align-items: center;
   justify-self: flex-end;
 
-  ${({ theme }) => theme.mediaWidth.upToMedium`
+  ${({ theme }) => theme.mediaWidth.upToLarge`
     flex-direction: row;
     justify-content: space-between;
     justify-self: center;
     width: 100%;
-    max-width: 960px;
+    max-width: 100vw;
     padding: 1rem;
     position: fixed;
     bottom: 0px;
@@ -95,7 +95,7 @@ const HeaderElement = styled.div`
     margin-left: 8px;
   }
 
-  ${({ theme }) => theme.mediaWidth.upToMedium`
+  ${({ theme }) => theme.mediaWidth.upToLarge`
    flex-direction: row-reverse;
     align-items: center;
   `};
@@ -112,7 +112,7 @@ const GaslessModeElement = styled.div`
     margin-left: 8px;
   }
 
-  ${({ theme }) => theme.mediaWidth.upToMedium`
+  ${({ theme }) => theme.mediaWidth.upToLarge`
     display: flex;
     width: 100%;
     margin-bottom: 110px;
@@ -136,15 +136,16 @@ const HeaderElementWrap = styled.div`
 `
 
 const HeaderRow = styled(RowFixed)`
-  ${({ theme }) => theme.mediaWidth.upToMedium`
+  ${({ theme }) => theme.mediaWidth.upToLarge`
    width: 100%;
   `};
 `
 
 const HeaderLinks = styled(Row)`
   justify-content: center;
-  ${({ theme }) => theme.mediaWidth.upToMedium`
-    padding: 1rem 0 1rem 1rem;
+  ${({ theme }) => theme.mediaWidth.upToLarge`
+    padding: 1rem 2rem 1rem 1rem;
+    justify-content: flex-end;
 `};
 `
 
