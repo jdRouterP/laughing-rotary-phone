@@ -234,6 +234,5 @@ export function useCurrency(
   const isETH =
     currencyId?.toUpperCase() === Currency.getNativeCurrencySymbol(chainId);
   const token = useToken(isETH ? undefined : currencyId);
-  debugger
   return isETH ? Currency.getNativeCurrency(chainId) : token;
 }
