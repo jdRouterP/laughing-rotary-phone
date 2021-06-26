@@ -4,7 +4,7 @@ import { AddressZero } from '@ethersproject/constants'
 import { JsonRpcSigner, Web3Provider } from '@ethersproject/providers'
 import { BigNumber } from '@ethersproject/bignumber'
 import { abi as IUniswapV2Router02ABI } from '@uniswap/v2-periphery/build/IUniswapV2Router02.json'
-import { ROUTER_ADDRESS } from '../constants'
+import { PREDICTION_ADDRESS, ROUTER_ADDRESS } from '../constants'
 import { ChainId, JSBI, Percent, Token, CurrencyAmount, Currency, ETHER } from '@uniswap/sdk'
 import { TokenAddressMap } from '../state/lists/hooks'
 
@@ -28,12 +28,12 @@ const ETHERSCAN_PREFIXES: { [chainId in ChainId]: string } = {
 
 export function getEtherscanLink(
   chainId: ChainId,
-  data: string,
+  data: string | number,
   type: 'transaction' | 'token' | 'address' | 'block'
 ): string {
   let prefix = `https://${ETHERSCAN_PREFIXES[chainId] || ETHERSCAN_PREFIXES[1]}etherscan.io`
 
-  if(chainId === ChainId.MATIC) {
+  if (chainId === ChainId.MATIC) {
     prefix = `https://explorer-mainnet.maticvigil.com`
   }
 
@@ -105,6 +105,9 @@ export function getContract(address: string, ABI: any, library: Web3Provider, ac
 // account is optional
 export function getRouterContract(_: number, library: Web3Provider, account?: string): Contract {
   return getContract(ROUTER_ADDRESS, IUniswapV2Router02ABI, library, account)
+}
+export function getPredictionContract(_: number, library: Web3Provider, account?: string): Contract {
+  return getContract(PREDICTION_ADDRESS, IUniswapV2Router02ABI, library, account)
 }
 
 export function escapeRegExp(string: string): string {

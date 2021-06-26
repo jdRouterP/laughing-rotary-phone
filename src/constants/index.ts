@@ -7,6 +7,7 @@ import tokenABI from "./abis/token.json"
 import { fortmatic, injected, portis, walletconnect, walletlink } from '../connectors'
 
 export const ROUTER_ADDRESS = '0xA102072A4C07F06EC3B4900FDC4C7B80b6c57429'
+export const PREDICTION_ADDRESS = '0x54F6Ff4f094D169FcDA0D88Be5DE135798CC0197'
 
 export const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000'
 
@@ -63,9 +64,11 @@ export const PROPOSAL_LENGTH_IN_SECS = AVERAGE_BLOCK_TIME_IN_SECS * PROPOSAL_LEN
 export const GOVERNANCE_ADDRESS = '0x5e4be8Bc9637f0EAA1A755019e06A68ce081D58F'
 
 export const TIMELOCK_ADDRESS = '0x1a9C8182C09F50C8318d769245beA52c32BE35BC'
+export const CHAINLINK_ADDRESS = '0xAB594600376Ec9fD91F8e885dADF0CE036862dE0'
 
 export const WETH_V2 = new Token(ChainId.MATIC, '0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270', 18, 'WMATIC', 'WMATIC')
 
+export const GRAPH_API_PREDICTION = "https://api.thegraph.com/subgraphs/name/iamshashvat/matic-prediction"
 //DFYN ADDRESS
 const UNI_ADDRESS = '0xC168E40227E4ebD8C1caE80F7a55a4F0e6D66C97'
 //TEST TOKEN ADDRESS
@@ -80,6 +83,7 @@ export const UNI: { [chainId in ChainId]: Token } = {
   [ChainId.MATIC]: new Token(ChainId.MATIC, UNI_ADDRESS, 18, 'DFYN', 'Dfyn')
 }
 
+export const POLYGON_BLOCK_TIME = 3
 export const REWARD_TOKENS: Token[] = [ROUTE, DFYN, ZEE, AURORA]
 
 export const COMMON_CONTRACT_NAMES: { [address: string]: string } = {

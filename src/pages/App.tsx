@@ -39,6 +39,8 @@ import Swap from './Swap'
 import { OpenClaimAddressModalAndRedirectToSwap, RedirectPathToSwapOnly, RedirectToSwap } from './Swap/redirects'
 // import Vote from './Vote'
 import VotePage from './Vote/VotePage'
+// import PredictionMarket from './PredictionMarket'
+// import Predictions from './Predictions'
 import PredictionMarket from './PredictionMarket'
 
 const AppWrapper = styled.div`
