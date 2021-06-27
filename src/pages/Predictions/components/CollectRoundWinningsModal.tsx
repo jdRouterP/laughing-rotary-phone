@@ -23,7 +23,6 @@ import { useTranslation } from 'react-i18next'
 import { usePredictionContract } from 'hooks/useContract'
 import { formatBnb } from '../helpers'
 import { useTransactionAdder } from 'state/transactions/hooks'
-import BigNumber from 'bignumber.js'
 
 interface CollectRoundWinningsModalProps extends InjectedModalProps {
   payout: number
@@ -57,8 +56,6 @@ const CollectRoundWinningsModal: React.FC<CollectRoundWinningsModalProps> = ({
   const { t } = useTranslation()
   const [, setHash] = useState<string | undefined>()
   const predictionsContract = usePredictionContract()
-  // const bnbBusdPrice = usePriceBnbBusd()
-  const bnbBusdPrice = new BigNumber(300);
   const dispatch = useDispatch()
 
   const handleClick = async () => {
@@ -103,9 +100,9 @@ const CollectRoundWinningsModal: React.FC<CollectRoundWinningsModalProps> = ({
           <Text>{t('Collecting')}</Text>
           <Box style={{ textAlign: 'right' }}>
             <Text>{`${formatBnb(payout)} BNB`}</Text>
-            <Text fontSize="12px" color="textSubtle">
+            {/* <Text fontSize="12px" color="textSubtle">
               {`~$${formatBnb(bnbBusdPrice.times(payout).toNumber())}`}
-            </Text>
+            </Text> */}
           </Box>
         </Flex>
         <Button

@@ -1,6 +1,4 @@
-//@ts-nocheck
 import React, { useState } from 'react'
-import BigNumber from 'bignumber.js'
 import { useWeb3React } from '@web3-react/core'
 import { CardBody, PlayCircleOutlineIcon, Button, useTooltip, ArrowUpIcon, ArrowDownIcon } from '@pancakeswap/uikit'
 import { useTranslation } from 'react-i18next'
@@ -97,8 +95,16 @@ const OpenRoundCard: React.FC<OpenRoundCardProps> = ({
     }))
   }
 
-  const handleSuccess = async (chainId: ChainId, decimalValue: JSBI, hash: string) => {
+  const handleSuccess = async (chainId: ChainId, decimalValue: JSBI | number | string, hash: string) => {
     // Optimistically set the user bet so we see the entered position immediately.
+    if (!!!account) return
+    let decimalValueBN: JSBI;
+    if (!(decimalValue instanceof JSBI)) {
+      decimalValueBN = JSBI.BigInt(decimalValue);
+    }
+    else {
+      decimalValueBN = decimalValue;
+    }
     dispatch(
       markPositionAsEntered({
         account,
@@ -107,7 +113,7 @@ const OpenRoundCard: React.FC<OpenRoundCardProps> = ({
           hash,
           round,
           position,
-          amount: new TokenAmount(WETH[chainId ?? 137], decimalValue),
+          amount: parseFloat(new TokenAmount(WETH[chainId ?? 137], decimalValueBN).toSignificant(6)),
           claimed: false,
           claimedHash: null,
         },

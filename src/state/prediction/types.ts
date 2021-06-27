@@ -48,7 +48,7 @@ export interface Bet {
     amount: number
     position: BetPosition
     claimed: boolean
-    claimedHash: string
+    claimedHash: string | null
     user?: PredictionUser
     round: Round
 }

@@ -5,13 +5,12 @@ import { useWeb3React } from '@web3-react/core'
 import { Box, Flex, Heading, Text, Button, Link, OpenNewIcon } from '@pancakeswap/uikit'
 import { useTranslation } from 'react-i18next'
 import { getEtherscanLink } from 'utils'
-import { useGetCurrentEpoch } from 'state/hook'
+import { useGetCurrentEpoch, useGetLastOraclePrice } from 'state/hook'
 import { Bet, BetPosition } from 'state/prediction/types'
 import { formatBnb, getMultiplier, getPayout } from 'pages/Predictions/helpers'
 import { getRoundResult, Result } from 'state/prediction/hooks'
 import PnlChart from './PnlChart'
 import SummaryRow from './SummaryRow'
-import BigNumber from 'bignumber.js'
 
 interface PnlTabProps {
   hasBetHistory: boolean
@@ -113,7 +112,7 @@ const PnlTab: React.FC<PnlTabProps> = ({ hasBetHistory, bets }: PnlTabProps) => 
   const { account, chainId } = useWeb3React()
   const currentEpoch = useGetCurrentEpoch()
   // const bnbBusdPrice = usePriceBnbBusd()
-  const bnbBusdPrice = new BigNumber(300);
+  const bnbBusdPrice = useGetLastOraclePrice();
   const summary = getPnlSummary(bets, currentEpoch)
   const netResultAmount = summary.won.payout - summary.lost.amount
   const netResultIsPositive = netResultAmount > 0
@@ -139,7 +138,7 @@ const PnlTab: React.FC<PnlTabProps> = ({ hasBetHistory, bets }: PnlTabProps) => 
             {`${netResultIsPositive ? '+' : ''}${formatBnb(netResultAmount)} BNB`}
           </Text>
           <Text small color="textSubtle">
-            {`~$${formatBnb(bnbBusdPrice.times(netResultAmount).toNumber())}`}
+            {`~$${formatBnb(bnbBusdPrice * (netResultAmount))}`}
           </Text>
         </Flex>
       </Flex>
@@ -151,7 +150,7 @@ const PnlTab: React.FC<PnlTabProps> = ({ hasBetHistory, bets }: PnlTabProps) => 
           {`${avgBnbWonIsPositive ? '+' : ''}${formatBnb(avgBnbWonPerRound)} BNB`}
         </Text>
         <Text small color="textSubtle">
-          {`~$${formatBnb(bnbBusdPrice.times(avgBnbWonPerRound).toNumber())}`}
+          {`~$${formatBnb(bnbBusdPrice * (avgBnbWonPerRound))}`}
         </Text>
 
         {hasBestRound && (
@@ -166,7 +165,7 @@ const PnlTab: React.FC<PnlTabProps> = ({ hasBetHistory, bets }: PnlTabProps) => 
               </Text>
             </Flex>
             <Text small color="textSubtle">
-              {`~$${formatBnb(bnbBusdPrice.times(summary.won.bestRound.payout).toNumber())}`}
+              {`~$${formatBnb(bnbBusdPrice * (summary.won.bestRound.payout))}`}
             </Text>
           </>
         )}
@@ -176,7 +175,7 @@ const PnlTab: React.FC<PnlTabProps> = ({ hasBetHistory, bets }: PnlTabProps) => 
         </Text>
         <Text bold>{`${formatBnb(avgPositionEntered)} BNB`}</Text>
         <Text small color="textSubtle">
-          {`~$${formatBnb(bnbBusdPrice.times(avgPositionEntered).toNumber())}`}
+          {`~$${formatBnb(bnbBusdPrice * (avgPositionEntered))}`}
         </Text>
 
         <Divider />

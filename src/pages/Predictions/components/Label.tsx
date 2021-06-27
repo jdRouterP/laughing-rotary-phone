@@ -1,4 +1,3 @@
-//@ts-nocheck
 import React, { useEffect } from 'react'
 import { useCountUp } from 'react-countup'
 import styled from 'styled-components'
@@ -67,13 +66,13 @@ export const PricePairLabel: React.FC = () => {
   const price = useGetLastOraclePrice()
   const { countUp, update } = useCountUp({
     start: 0,
-    end: price.toNumber(),
+    end: price,
     duration: 1,
     decimals: 3,
   })
 
   useEffect(() => {
-    update(price.toNumber())
+    update(price)
   }, [price, update])
 
   return (
@@ -83,7 +82,7 @@ export const PricePairLabel: React.FC = () => {
       </Token>
       <Label dir="left">
         <Title bold textTransform="uppercase">
-          BNBUSDT
+          MATIC/USD
         </Title>
         <Price fontSize="12px">{`$${countUp}`}</Price>
       </Label>

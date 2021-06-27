@@ -34,9 +34,9 @@ const TimerLabelWrapper = styled.div`
 // }
 
 const HistoryButtonWrapper = styled.div`
-  display: none;
+  display: initial;
   order: 3;
-
+  
   `
 // ${({ theme }) => theme.mediaWidth.upToLarge} {
 //   display: initial;

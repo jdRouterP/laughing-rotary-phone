@@ -1,10 +1,11 @@
 
+import { JSBI } from '@uniswap/sdk'
 import { Bet, BetPosition } from 'state/prediction/types'
 import { formatNumber } from 'utils/formatBalance'
 import getTimePeriods from 'utils/getTimePeriods'
 
 
-export const formatUsd = (usd: number) => {
+export const formatUsd = (usd: number | JSBI) => {
   return `$${formatNumber(usd || 0, 3, 3)}`
 }
 

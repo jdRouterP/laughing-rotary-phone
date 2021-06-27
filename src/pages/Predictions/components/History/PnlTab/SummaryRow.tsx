@@ -1,5 +1,4 @@
 import React from 'react'
-import BigNumber from 'bignumber.js'
 import { Flex, Text } from '@pancakeswap/uikit'
 import { formatBnb } from 'pages/Predictions/helpers'
 import { useTranslation } from 'react-i18next'
@@ -9,7 +8,7 @@ type SummaryType = 'won' | 'lost' | 'entered'
 interface SummaryRowProps {
   type: SummaryType
   summary: any
-  bnbBusdPrice: BigNumber
+  bnbBusdPrice: number
 }
 
 const summaryTypeColors = {
@@ -53,7 +52,7 @@ const SummaryRow: React.FC<SummaryRowProps> = ({ type, summary, bnbBusdPrice }) 
             {`${summaryTypeSigns[type]}${formatBnb(displayAmount)} BNB`}
           </Text>
           <Text fontSize="12px" color="textSubtle">
-            {`~$${formatBnb(bnbBusdPrice.times(displayAmount).toNumber())}`}
+            {`~$${formatBnb(bnbBusdPrice * displayAmount)}`}
           </Text>
         </Flex>
       </Flex>

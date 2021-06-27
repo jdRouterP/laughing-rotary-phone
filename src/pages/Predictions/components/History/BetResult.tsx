@@ -1,3 +1,4 @@
+//@ts-nocheck
 import React from 'react'
 import { useWeb3React } from '@web3-react/core'
 import { Box, Flex, Heading, Text, PrizeIcon, BlockIcon, LinkExternal } from '@pancakeswap/uikit'
@@ -14,7 +15,6 @@ import { formatBnb, getPayout } from '../../helpers'
 import CollectWinningsButton from '../CollectWinningsButton'
 import PositionTag from '../PositionTag'
 import ReclaimPositionButton from '../ReclaimPositionButton'
-import BigNumber from 'bignumber.js'
 import useUSDCPrice from 'utils/useUSDCPrice'
 import { WETH } from '@uniswap/sdk'
 interface BetResultProps {
@@ -34,7 +34,7 @@ const BetResult: React.FC<BetResultProps> = ({ bet, result }) => {
   const dispatch = useDispatch()
   const { account, chainId } = useWeb3React()
   const { isRefundable } = useIsRefundable(bet.round.epoch)
-  const tokenUSDCPrice = useUSDCPrice(WETH[chainId ?? 137])
+  //const tokenUSDCPrice = useUSDCPrice(WETH[chainId ?? 137])
   const canClaim = useBetCanClaim(account ?? '', bet.round.id)
 
   // Winners get the payout, otherwise the claim what they put it if it was canceled
@@ -144,7 +144,8 @@ const BetResult: React.FC<BetResultProps> = ({ bet, result }) => {
           <Box style={{ textAlign: 'right' }}>
             <Text bold color={getResultColor()}>{`${result === Result.LOSE ? '-' : '+'}${formatBnb(payout)} BNB`}</Text>
             <Text fontSize="12px" color="textSubtle">
-              {`~$${formatBnb(bnbBusdPrice.times(payout).toNumber())}`}
+              {/* 
+              {`~$${formatBnb(bnbBusdPrice.times(payout).toNumber())}`} */}
             </Text>
           </Box>
         </Flex>

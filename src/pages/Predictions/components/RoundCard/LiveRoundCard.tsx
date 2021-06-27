@@ -48,13 +48,13 @@ const LiveRoundCard: React.FC<LiveRoundCardProps> = ({
   const currentBlock = useBlockNumber() ?? 0
   const totalInterval = useGetinterval()
   const price = useGetLastOraclePrice()
-  const isBull = price.gt(lockPrice)
+  const isBull = price > lockPrice;
   const priceColor = isBull ? 'success' : 'failure'
   const estimatedEndBlock = lockBlock + totalInterval
-  const priceDifference = price.minus(lockPrice).toNumber()
+  const priceDifference = price - lockPrice
   const { countUp, update } = useCountUp({
     start: 0,
-    end: price.toNumber(),
+    end: price,
     duration: 1,
     decimals: 3,
   })
@@ -63,7 +63,7 @@ const LiveRoundCard: React.FC<LiveRoundCardProps> = ({
   })
 
   useEffect(() => {
-    update(price.toNumber())
+    update(price)
   }, [price, update])
 
   if (round.failed) {
@@ -99,7 +99,7 @@ const LiveRoundCard: React.FC<LiveRoundCardProps> = ({
             <Flex alignItems="center" justifyContent="space-between" mb="16px" height="36px">
               <div ref={targetRef}>
                 <TooltipText bold color={priceColor} fontSize="24px" style={{ minHeight: '36px' }}>
-                  {price.gt(0) ? `$${countUp}` : <Skeleton height="36px" width="94px" />}
+                  {price > 0 ? `$${countUp}` : <Skeleton height="36px" width="94px" />}
                 </TooltipText>
               </div>
               <PositionTag betPosition={isBull ? BetPosition.BULL : BetPosition.BEAR}>

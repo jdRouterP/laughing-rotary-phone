@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import { AppState } from 'state'
 import { orderBy } from 'lodash'
 import { getCanClaim } from './prediction/hooks'
-import BigNumber from 'bignumber.js'
 import { useActiveWeb3React } from 'hooks'
 import { setBlock } from './block'
 import { TokenAmount, WETH } from '@uniswap/sdk'
@@ -118,9 +117,9 @@ export const useBetCanClaim = (account: string, roundId: string) => {
     return getCanClaim(bet)
 }
 
-export const useGetLastOraclePrice = (): BigNumber => {
+export const useGetLastOraclePrice = (): number => {
     const lastOraclePrice = useSelector((state: AppState) => state.predictions.lastOraclePrice)
-    return new BigNumber(lastOraclePrice)
+    return parseFloat(lastOraclePrice);
 }
 
 export const usePollBlockNumber = () => {
