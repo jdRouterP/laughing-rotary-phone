@@ -18,8 +18,8 @@ const CanceledRoundCard: React.FC<CanceledRoundCardProps> = ({ round }) => {
   const { t } = useTranslation()
   const interval = useGetTotalinterval()
   const { isRefundable, setIsRefundable } = useIsRefundable(round.epoch)
-  const { epoch, startBlock } = round
-  const estimatedEndBlock = startBlock + interval
+  const { epoch, startAt } = round
+  const estimatedEndTime = startAt + interval
 
   const handleSuccess = async () => {
     setIsRefundable(false)
@@ -32,7 +32,7 @@ const CanceledRoundCard: React.FC<CanceledRoundCardProps> = ({ round }) => {
         icon={<BlockIcon mr="4px" width="21px" />}
         title={t('Canceled')}
         epoch={round.epoch}
-        blockNumber={estimatedEndBlock}
+        blockTime={estimatedEndTime}
       />
       <CardBody p="16px">
         <MultiplierArrow isDisabled />

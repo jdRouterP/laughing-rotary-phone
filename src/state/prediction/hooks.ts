@@ -191,7 +191,6 @@ export const useStaticPredictionsData = async () => {
     const minBetAmount = await contract.minBetAmount()
     const isPaused = await contract.paused()
     const buffer = await contract.buffer()
-    console.log(currentEpoch, interval);
     return {
       status: isPaused ? PredictionStatus.PAUSED : PredictionStatus.LIVE,
       currentEpoch: Number(currentEpoch),

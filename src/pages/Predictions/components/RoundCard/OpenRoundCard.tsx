@@ -13,9 +13,9 @@ import MultiplierArrow from './MultiplierArrow'
 import Card from './Card'
 import CardHeader from './CardHeader'
 // import SetPositionCard from './SetPositionCard'
-import { useBlockNumber } from 'state/application/hooks'
 import SetPositionCard from './SetPositionCard'
 import { ChainId, JSBI, TokenAmount, WETH } from '@uniswap/sdk'
+import useCurrentBlockTimestamp from 'hooks/useCurrentBlockTimestamp'
 
 interface OpenRoundCardProps {
   round: Round
@@ -47,9 +47,9 @@ const OpenRoundCard: React.FC<OpenRoundCardProps> = ({
   const interval = useGetinterval()
   const { account } = useWeb3React()
   const dispatch = useDispatch()
-  const currentBlock = useBlockNumber() ?? 0
+  const currentTimestamp = useCurrentBlockTimestamp()
   const { isSettingPosition, position } = state
-  const isBufferPhase = currentBlock >= round.startBlock + interval
+  const isBufferPhase = currentTimestamp && currentTimestamp.toNumber() >= round.startAt + interval
   const positionDisplay = position === BetPosition.BULL ? t('Up').toUpperCase() : t('Down').toUpperCase()
   const { targetRef, tooltipVisible, tooltip } = useTooltip(
     <div style={{ whiteSpace: 'nowrap' }}>{`${formatBnb(betAmount)} BNB`}</div>,
@@ -58,7 +58,7 @@ const OpenRoundCard: React.FC<OpenRoundCardProps> = ({
 
   // Bettable rounds do not have an lockBlock set so we approximate it by adding the block interval
   // to the start block
-  const estimatedLockBlock = round.startBlock + interval
+  const estimatedLockTime = round.startAt + interval
 
   const getCanEnterPosition = () => {
     if (hasEnteredUp || hasEnteredDown) {
@@ -140,7 +140,7 @@ const OpenRoundCard: React.FC<OpenRoundCardProps> = ({
         <CardHeader
           status="next"
           epoch={round.epoch}
-          blockNumber={estimatedLockBlock}
+          blockTime={estimatedLockTime}
           icon={<PlayCircleOutlineIcon color="white" mr="4px" width="21px" />}
           title={t('Next')}
         />

@@ -94,7 +94,7 @@ const SetPositionCard: React.FC<SetPositionCardProps> = ({ position, togglePosit
     }
     let dustToken = new TokenAmount(WETH[chainId ?? 137], dust);
     return balance.greaterThan(dust) ? balance.subtract(dustToken) : balance
-  }, [balance])
+  }, [balance, chainId])
 
   const valueAsBn = JSBI.BigInt(value);
 

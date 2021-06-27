@@ -1,7 +1,5 @@
-//@ts-nocheck
 import React, { useEffect, useRef } from 'react'
 import { useWeb3React } from '@web3-react/core'
-import { Helmet } from 'react-helmet-async'
 import { useMatchBreakpoints, useModal } from '@pancakeswap/uikit'
 import { useDispatch } from 'react-redux'
 import { useGetPredictionsStatus, useInitialBlock, useIsChartPaneOpen, usePollBlockNumber } from 'state/hook'
@@ -27,7 +25,7 @@ import RiskDisclaimer from './components/RiskDisclaimer'
 import ChartDisclaimer from './components/ChartDisclaimer'
 
 import { ThemeProvider as SCThemeProvider } from 'styled-components'
-import { light, dark } from '@pancakeswap/uikit'
+import { light } from '@pancakeswap/uikit'
 
 const FUTURE_ROUND_COUNT = 2 // the number of rounds in the future to show
 
@@ -73,18 +71,18 @@ const Predictions = () => {
 
     const fetchInitialData = async () => {
       const [staticPredictionsData, marketData] = await Promise.all([_staticPredictionsData, getMarketData()])
+      //@ts-ignore
       const { currentEpoch, interval, buffer } = staticPredictionsData
       const latestRound = marketData.rounds.find((round) => round.epoch === currentEpoch)
 
       // Fetch data on current unclaimed bets
-      console.log({ account, marketData, roundIds: marketData.rounds.map((round) => round.id) });
-
+      //@ts-ignore
       dispatch(fetchCurrentBets({ account, roundIds: marketData.rounds.map((round) => round.id) }))
 
       if (marketData.market.paused) {
         dispatch(setPredictionStatus(PredictionStatus.PAUSED))
       } else if (latestRound && latestRound.epoch === currentEpoch) {
-        const currentRoundStartBlock = Number(latestRound.startBlock)
+        const currentRoundStartBlock = Number(latestRound.startBlock1)
         const futureRounds = []
         const halfInterval = (interval + buffer) / 2
 

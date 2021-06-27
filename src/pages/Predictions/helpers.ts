@@ -9,8 +9,9 @@ export const formatUsd = (usd: number | JSBI) => {
   return `$${formatNumber(usd || 0, 3, 3)}`
 }
 
-export const formatBnb = (bnb: number) => {
-  return bnb ? bnb.toLocaleString(undefined, { minimumFractionDigits: 3, maximumFractionDigits: 3 }) : '0'
+export const formatBnb = (bnb: number | string) => {
+  const value = typeof bnb === "string" ? parseFloat(bnb) : bnb;
+  return value ? value.toLocaleString(undefined, { minimumFractionDigits: 3, maximumFractionDigits: 3 }) : '0'
 }
 
 export const padTime = (num: number) => num.toString().padStart(2, '0')

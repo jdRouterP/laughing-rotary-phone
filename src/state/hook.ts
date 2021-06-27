@@ -69,6 +69,9 @@ export const useGetHistoryFilter = () => {
 export const useGetCurrentRoundBlockNumber = () => {
     return useSelector((state: AppState) => state.predictions.currentRoundStartBlockNumber)
 }
+export const useGetCurrentRoundTime = () => {
+    return useSelector((state: AppState) => state.predictions.currentRoundStartTime)
+}
 
 export const useGetMinBetAmount = () => {
     const minBetAmount = useSelector((state: AppState) => state.predictions.minBetAmount)

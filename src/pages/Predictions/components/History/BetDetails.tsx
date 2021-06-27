@@ -44,14 +44,14 @@ const BetDetails: React.FC<BetDetailsProps> = ({ bet, result }) => {
       </RoundResult>
       <Flex alignItems="center" justifyContent="space-between" mb="8px">
         <Text>{t('Opening Block')}</Text>
-        {chainId && <Link href={getEtherscanLink(chainId, bet.round.lockBlock, "block")} external>
-          {bet.round.lockBlock}
+        {chainId && <Link href={getEtherscanLink(chainId, bet.round.lockBlock1, "block")} external>
+          {bet.round.lockBlock1}
         </Link>}
       </Flex>
       <Flex alignItems="center" justifyContent="space-between">
         <Text>{t('Closing Block')}</Text>
-        {chainId && <Link href={getEtherscanLink(chainId, bet.round.endBlock, "block")} external>
-          {bet.round.endBlock}
+        {chainId && <Link href={getEtherscanLink(chainId, bet.round.endBlock1, "block")} external>
+          {bet.round.endBlock1}
         </Link>}
       </Flex>
     </StyledBetDetails>

@@ -13,7 +13,7 @@ export interface BetResponse {
     amount: string
     position: string
     claimed: boolean
-    claimedHash: string
+    claimedHash: string | null
     user?: UserResponse
     round?: RoundResponse
 }

@@ -8,7 +8,7 @@ interface CardHeaderProps {
   status: Status
   title: string
   epoch: number
-  blockNumber: number
+  blockTime: number
   icon?: ReactElement
 }
 

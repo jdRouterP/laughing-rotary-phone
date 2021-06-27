@@ -1,21 +1,21 @@
 import { useEffect, useRef, useState } from 'react'
-import { POLYGON_BLOCK_TIME } from '../constants'
 import { useActiveWeb3React } from 'hooks'
 
 /**
  * Returns a countdown in seconds of a given block
  */
-const useBlockCountdown = (blockNumber: number) => {
+const useTimeCountdown = (time: number) => {
   const timer: { current: NodeJS.Timeout | null } = useRef(null)
   const [secondsRemaining, setSecondsRemaining] = useState(0)
   const { library } = useActiveWeb3React()
   useEffect(() => {
 
     const startCountdown = async () => {
-      const currentBlock = await library?.getBlockNumber() ?? 0;
-
-      if (blockNumber > currentBlock) {
-        setSecondsRemaining((blockNumber - currentBlock) * POLYGON_BLOCK_TIME)
+      const currentBlock = await library?.getBlockNumber();
+      const currentTime = currentBlock && (await library?.getBlock(currentBlock))?.timestamp || 0;
+      debugger
+      if (time > currentTime) {
+        setSecondsRemaining((time - currentTime))
 
         // Clear previous interval
         if (timer.current) {
@@ -24,8 +24,8 @@ const useBlockCountdown = (blockNumber: number) => {
 
         timer.current = setInterval(() => {
           setSecondsRemaining((prevSecondsRemaining) => {
-            if (prevSecondsRemaining === 1) {
-              //clearInterval(timer.current)
+            if (prevSecondsRemaining === 1 && timer.current) {
+              clearInterval(timer.current)
             }
 
             return prevSecondsRemaining - 1
@@ -37,11 +37,13 @@ const useBlockCountdown = (blockNumber: number) => {
     startCountdown()
 
     return () => {
-      //clearInterval(timer.current)
+      if (timer.current) {
+        clearInterval(timer.current)
+      }
     }
-  }, [setSecondsRemaining, blockNumber, timer])
+  }, [setSecondsRemaining, time, timer])
 
   return secondsRemaining
 }
 
-export default useBlockCountdown
+export default useTimeCountdown

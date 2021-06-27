@@ -19,12 +19,12 @@ export interface Round {
     id: string
     epoch: number
     failed?: boolean
-    startBlock: number
+    startBlock1: number
     startAt: number
     lockAt: number
-    lockBlock: number
+    lockBlock1: number
     lockPrice: number
-    endBlock: number
+    endBlock1: number
     closePrice: number
     totalBets: number
     totalAmount: number
@@ -56,7 +56,7 @@ export interface Bet {
 export interface PredictionUser {
     id: string
     address: string
-    block: number
+    block1: number
     totalBets: number
     totalBNB: number
 }
@@ -90,6 +90,7 @@ export interface PredictionsState {
     historyFilter: HistoryFilter
     currentEpoch: number
     currentRoundStartBlockNumber: number
+    currentRoundStartTime: number
     interval: number
     buffer: number
     minBetAmount: JSBI

@@ -14,7 +14,7 @@ import Card from './Card'
 import CardHeader from './CardHeader'
 import CanceledRoundCard from './CanceledRoundCard'
 import CalculatingCard from './CalculatingCard'
-import { useBlockNumber } from 'state/application/hooks'
+import useCurrentBlockTimestamp from 'hooks/useCurrentBlockTimestamp'
 
 interface LiveRoundCardProps {
   round: Round
@@ -44,13 +44,13 @@ const LiveRoundCard: React.FC<LiveRoundCardProps> = ({
   bearMultiplier,
 }) => {
   const { t } = useTranslation()
-  const { lockPrice, lockBlock, totalAmount } = round
-  const currentBlock = useBlockNumber() ?? 0
+  const { lockPrice, lockAt, totalAmount } = round
+  const currentTimestamp = useCurrentBlockTimestamp()
   const totalInterval = useGetinterval()
   const price = useGetLastOraclePrice()
   const isBull = price > lockPrice;
   const priceColor = isBull ? 'success' : 'failure'
-  const estimatedEndBlock = lockBlock + totalInterval
+  const estimatedEndTime = lockAt + totalInterval
   const priceDifference = price - lockPrice
   const { countUp, update } = useCountUp({
     start: 0,
@@ -70,7 +70,7 @@ const LiveRoundCard: React.FC<LiveRoundCardProps> = ({
     return <CanceledRoundCard round={round} />
   }
 
-  if (currentBlock > estimatedEndBlock) {
+  if (currentTimestamp && (currentTimestamp.toNumber() > estimatedEndTime)) {
     return <CalculatingCard round={round} />
   }
 
@@ -82,9 +82,9 @@ const LiveRoundCard: React.FC<LiveRoundCardProps> = ({
           icon={<PlayCircleOutlineIcon mr="4px" width="24px" color="secondary" />}
           title={t('Live')}
           epoch={round.epoch}
-          blockNumber={estimatedEndBlock}
+          blockTime={estimatedEndTime}
         />
-        <BlockProgress variant="flat" scale="sm" startBlock={lockBlock} endBlock={estimatedEndBlock} />
+        <BlockProgress variant="flat" scale="sm" startBlock={lockAt} endBlock={estimatedEndTime} />
         <CardBody p="16px">
           <MultiplierArrow
             betAmount={betAmount}

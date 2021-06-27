@@ -1,4 +1,3 @@
-//@ts-nocheck
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import maxBy from 'lodash/maxBy'
 import merge from 'lodash/merge'
@@ -13,6 +12,7 @@ import {
 } from './hooks'
 import { BIG_INT_ZERO } from '../../constants'
 import { JSBI } from '@uniswap/sdk'
+import { BetResponse } from './queries'
 
 const initialState: PredictionsState = {
     status: PredictionStatus.INITIAL,
@@ -23,6 +23,7 @@ const initialState: PredictionsState = {
     historyFilter: HistoryFilter.ALL,
     currentEpoch: 0,
     currentRoundStartBlockNumber: 0,
+    currentRoundStartTime: 0,
     interval: 100,
     buffer: 2,
     minBetAmount: JSBI.BigInt('10000'),
@@ -45,6 +46,7 @@ export const fetchBet = createAsyncThunk<{ account: string; bet: Bet }, { accoun
 export const fetchRoundBet = createAsyncThunk<
     { account: string; roundId: string; bet: Bet },
     { account: string; roundId: string }
+//@ts-ignore
 >('predictions/fetchRoundBet', async ({ account, roundId }) => {
     const betResponses = await getBetHistory({
         user: account.toLowerCase(),
@@ -79,10 +81,12 @@ export const fetchCurrentBets = createAsyncThunk<
 export const fetchHistory = createAsyncThunk<{ account: string; bets: Bet[] }, { account: string; claimed?: boolean }>(
     'predictions/fetchHistory',
     async ({ account, claimed }) => {
-        const response = await getBetHistory({
-            user: account.toLowerCase(),
-            claimed,
-        })
+        let response: BetResponse[] = [];
+        if (claimed !== undefined)
+            response = await getBetHistory({
+                user: account.toLowerCase(),
+                claimed,
+            })
         const bets = response.map(transformBetResponse)
 
         return { account, bets }
@@ -117,18 +121,19 @@ export const predictionsSlice = createSlice({
             const newRoundData = makeRoundData(rounds)
             const incomingCurrentRound = maxBy(rounds, 'epoch')
 
-            if (state.currentEpoch !== incomingCurrentRound.epoch) {
+            if (incomingCurrentRound && (state.currentEpoch !== incomingCurrentRound.epoch)) {
                 // Add new round
                 const newestRound = maxBy(rounds, 'epoch') as Round
                 const futureRound = transformRoundResponse(
-                    makeFutureRoundResponse(newestRound.epoch + 2, newestRound.startBlock + state.interval),
+                    makeFutureRoundResponse(newestRound.epoch + 2, newestRound.startBlock1 + state.interval),
                 )
 
                 newRoundData[futureRound.id] = futureRound
             }
 
-            state.currentEpoch = incomingCurrentRound.epoch
-            state.currentRoundStartBlockNumber = incomingCurrentRound.startBlock
+            state.currentEpoch = incomingCurrentRound?.epoch ?? 0
+            state.currentRoundStartBlockNumber = incomingCurrentRound?.startBlock1 ?? 0
+            state.currentRoundStartTime = incomingCurrentRound?.startAt ?? 0
             state.status = market.paused ? PredictionStatus.PAUSED : PredictionStatus.LIVE
             state.rounds = { ...state.rounds, ...newRoundData }
         },
