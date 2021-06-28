@@ -1,24 +1,32 @@
-import React, { useState } from 'react'
+//@ts-nocheck
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { Dialog } from '@material-ui/core';
 import { Tabs, Tab } from '@material-ui/core';
 import RoundsContent from './RoundsContent';
-
-interface Props {
-
-}
+import { useGetCurrentEpoch, useGetHistoryByAccount, useGetHistoryFilter, useGetIsFetchingHistory, useIsHistoryPaneOpen } from 'state/hook';
+import { useDispatch } from 'react-redux';
+import { fetchHistory, setHistoryPaneState } from 'state/prediction/reducer';
+import { useActiveWeb3React } from 'hooks';
+import { HistoryTabs } from 'pages/Predictions/components/History';
+import { HistoryFilter } from 'state/prediction/types';
+import { getUnclaimedWinningBets } from 'state/prediction/hooks';
+import { Flex, Text } from '@pancakeswap/uikit';
+import { ButtonLight } from 'components/Button';
+import { useWalletModalToggle } from 'state/application/hooks';
+import { useTranslation } from 'react-i18next';
 
 const Wrapper = styled.div`
 
 `
 
-const HistoryOpenButton = styled.div`
-    width:51px;
-    height: 51px;
-    border-radius: 16px;
-    background: rgb(122, 110, 170);
-    cursor: pointer;
-`
+// const HistoryOpenButton = styled.div`
+//     width:51px;
+//     height: 51px;
+//     border-radius: 16px;
+//     background: rgb(122, 110, 170);
+//     cursor: pointer;
+// `
 
 const Modal = styled(Dialog)`
 &&&{
@@ -116,18 +124,66 @@ const PnlWrapper = styled.div`
 
 `
 
-const History = (props: Props) => {
+const History = () => {
 
-    const [openHistory, setOpenHistory] = useState(true)
     const [tabValue, setTabValue] = useState<number>(0);
-
+    const { account } = useActiveWeb3React()
+    const toggleWalletModal = useWalletModalToggle()
+    const isHistoryPaneOpen = useIsHistoryPaneOpen()
+    const dispatch = useDispatch();
+    const { t } = useTranslation()
+    const historyFilter = useGetHistoryFilter()
+    const currentEpoch = useGetCurrentEpoch()
+    const bets = useGetHistoryByAccount(account)
+    const [activeTab, setActiveTab] = useState(HistoryTabs.ROUNDS)
+    const isFetchingHistory = useGetIsFetchingHistory();
     const handleTabChange = (event: React.ChangeEvent<{}>, newValue: number) => {
         setTabValue(newValue);
     };
 
+    useEffect(() => {
+        if (account && isHistoryPaneOpen) {
+            dispatch(fetchHistory({ account }))
+        }
+    }, [account, currentEpoch, isHistoryPaneOpen, dispatch])
+
+    // Currently the api cannot filter by unclaimed AND won so we do it here
+    // when the user has selected Uncollected only include positions they won
+    const results = historyFilter === HistoryFilter.UNCOLLECTED ? getUnclaimedWinningBets(bets) : bets
+
+    const hasBetHistory = results && results.length > 0
+
+    let activeTabComponent = null
+
+    switch (activeTab) {
+        case HistoryTabs.PNL:
+            //   activeTabComponent = <PnlTab hasBetHistory={hasBetHistory} bets={results} />
+            activeTabComponent = 'PNL Content'
+            break
+        case HistoryTabs.ROUNDS:
+        default:
+            //   activeTabComponent = <RoundsTab hasBetHistory={hasBetHistory} bets={results} />
+            activeTabComponent = <RoundsContent />
+            break
+    }
+
+    if (!account) {
+        activeTabComponent = (
+            <Flex justifyContent="center" alignItems="center" flexDirection="column" mt="32px">
+                <ButtonLight onClick={toggleWalletModal}>Connect Wallet</ButtonLight>
+                <Text mt="8px">{t('Connect your wallet to view your prediction history')}</Text>
+            </Flex>
+        )
+    }
+
+
+    const handleClick = () => {
+        dispatch(setHistoryPaneState(!isHistoryPaneOpen))
+    }
+
     return (
         <Wrapper>
-            <Modal onClose={() => setOpenHistory(false)} open={openHistory}>
+            <Modal onClose={handleClick} open={isHistoryPaneOpen}>
                 <HistoryWrapper>
                     <HistoryHeader>
                         <HistoryTitle>
@@ -156,8 +212,6 @@ const History = (props: Props) => {
                     </HistoryContent>
                 </HistoryWrapper>
             </Modal>
-            <HistoryOpenButton onClick={() => setOpenHistory(true)}>
-            </HistoryOpenButton>
         </Wrapper>
     )
 }

@@ -1,4 +1,3 @@
-//@ts-nocheck
 import React from 'react'
 import styled from 'styled-components'
 import { useWeb3React } from '@web3-react/core'
@@ -185,7 +184,7 @@ const PnlTab: React.FC<PnlTabProps> = ({ hasBetHistory, bets }: PnlTabProps) => 
         <SummaryRow type="entered" summary={summary} tokenusdPrice={tokenusdPrice} />
 
         <Flex justifyContent="center" mt="24px">
-          {chainId && <Link href={`${getEtherscanLink(chainId, account, "address")}#internaltx`} mb="16px" external>
+          {(chainId && account) && <Link href={`${getEtherscanLink(chainId, account, "address")}#internaltx`} mb="16px" external>
             <Button mt="8px" width="100%">
               {t('View Reclaimed & Won')}
               <OpenNewIcon color="white" ml="4px" />

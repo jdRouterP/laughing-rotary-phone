@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import { useCountUp } from 'react-countup'
-import { CardBody, Flex, PlayCircleOutlineIcon, Skeleton, Text, useTooltip } from '@pancakeswap/uikit'
+import { CardBody, Flex, PlayCircleOutlineIcon, Skeleton, Text } from '@pancakeswap/uikit'
 import { useTranslation } from 'react-i18next'
 import { Round, BetPosition } from 'state/prediction/types'
 import { useGetinterval, useGetLastOraclePrice } from 'state/hook'
@@ -59,9 +59,6 @@ const LiveRoundCard: React.FC<LiveRoundCardProps> = ({
     duration: 1,
     decimals: 3,
   })
-  const { targetRef, tooltip, tooltipVisible } = useTooltip(t('Last price from Chainlink Oracle'), {
-    placement: 'bottom',
-  })
 
   useEffect(() => {
     let isMounted = true;
@@ -100,11 +97,9 @@ const LiveRoundCard: React.FC<LiveRoundCardProps> = ({
               {t('Last Price')}
             </Text>
             <Flex alignItems="center" justifyContent="space-between" mb="16px" height="36px">
-              <div ref={targetRef}>
-                <MouseoverTooltip text={'Last price from Chainlink Oracle'}>
-                  {price > 0 ? `$${countUp}` : <Skeleton height="36px" width="94px" />}
-                </MouseoverTooltip>
-              </div>
+              <MouseoverTooltip text={'Last price from Chainlink Oracle'} placement='bottom'>
+                {price > 0 ? `$${countUp}` : <Skeleton height="36px" width="94px" />}
+              </MouseoverTooltip>
               <PositionTag betPosition={isBull ? BetPosition.BULL : BetPosition.BEAR}>
                 {formatUsd(priceDifference)}
               </PositionTag>
@@ -121,7 +116,6 @@ const LiveRoundCard: React.FC<LiveRoundCardProps> = ({
           />
         </CardBody>
       </GradientCard>
-      {tooltipVisible && tooltip}
     </GradientBorder>
   )
 }

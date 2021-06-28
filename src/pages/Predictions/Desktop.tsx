@@ -6,7 +6,7 @@ import { useGetPredictionsStatus, useIsHistoryPaneOpen } from 'state/hook'
 import { PredictionStatus } from 'state/prediction/types'
 // import TradingView from './components/TradingView'
 import { ErrorNotification, PauseNotification } from './components/Notification'
-import History from './History'
+import History from 'pages/PredictionMarket/components/History'
 import Positions from './Positions'
 
 
@@ -134,9 +134,9 @@ const Desktop: React.FC = () => {
             <TradingView />
           </ChartPane> */}
         </SplitWrapper>
-        <HistoryPane isHistoryPaneOpen={isHistoryPaneOpen}>
-          <History />
-        </HistoryPane>
+        {isHistoryPaneOpen && <History />}
+
+
       </StyledDesktop>
     </>
   )
