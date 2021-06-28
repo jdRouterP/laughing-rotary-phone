@@ -102,7 +102,7 @@ const YourHistoryCard = (props: Props) => {
                         Your position
                     </span>
                     <span>
-                        0.010 BNB
+                        0.010 MATIC
                     </span>
                 </DirectionWrapper>
                 <ResultWrapper>

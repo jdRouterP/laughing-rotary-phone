@@ -3,9 +3,10 @@ import React from 'react'
 import styled from 'styled-components'
 import { Flex, HelpIcon, IconButton } from '@pancakeswap/uikit'
 import FlexRow from './FlexRow'
-import { PricePairLabel, TimerLabel } from './Label'
 import PrevNextNav from './PrevNextNav'
 import HistoryButton from './HistoryButton'
+import TokenUSDPrice from './TokenUSDPrice'
+import TimerLabel from './TimerLabel'
 
 const SetCol = styled.div`
   flex: none;
@@ -42,37 +43,19 @@ const HistoryButtonWrapper = styled.div`
 //   display: initial;
 // }
 
+const Header = styled.div`
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
+`
+
 const Menu = () => {
   return (
-    <FlexRow alignItems="center" p="16px">
-      <SetCol>
-        <PricePairLabel />
-      </SetCol>
-      <FlexRow justifyContent="center">
-        <PrevNextNav />
-      </FlexRow>
-      <SetCol>
-        <Flex alignItems="center" justifyContent="flex-end">
-          <TimerLabelWrapper>
-            <TimerLabel interval="5" unit="m" />
-          </TimerLabelWrapper>
-          <HelpButtonWrapper>
-            <IconButton
-              variant="subtle"
-              as="a"
-              href="https://docs.pancakeswap.finance/products/prediction"
-              target="_blank"
-              rel="noreferrer noopener"
-            >
-              <HelpIcon width="24px" color="white" />
-            </IconButton>
-          </HelpButtonWrapper>
-          <HistoryButtonWrapper>
-            <HistoryButton />
-          </HistoryButtonWrapper>
-        </Flex>
-      </SetCol>
-    </FlexRow>
+    <Header>
+      <TokenUSDPrice />
+      <TimerLabel interval="10" unit="m" />
+      <HistoryButton />
+    </Header>
   )
 }
 

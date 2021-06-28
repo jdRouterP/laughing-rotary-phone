@@ -21,7 +21,7 @@ import { useDispatch } from 'react-redux'
 import { markBetAsCollected } from 'state/prediction/reducer'
 import { useTranslation } from 'react-i18next'
 import { usePredictionContract } from 'hooks/useContract'
-import { formatBnb } from '../helpers'
+import { formatToken } from '../helpers'
 import { useTransactionAdder } from 'state/transactions/hooks'
 
 interface CollectRoundWinningsModalProps extends InjectedModalProps {
@@ -99,9 +99,9 @@ const CollectRoundWinningsModal: React.FC<CollectRoundWinningsModalProps> = ({
         <Flex alignItems="start" justifyContent="space-between" mb="24px">
           <Text>{t('Collecting')}</Text>
           <Box style={{ textAlign: 'right' }}>
-            <Text>{`${formatBnb(payout)} BNB`}</Text>
+            <Text>{`${formatToken(payout)} MATIC`}</Text>
             {/* <Text fontSize="12px" color="textSubtle">
-              {`~$${formatBnb(bnbBusdPrice.times(payout).toNumber())}`}
+              {`~$${formatToken(tokenusdPrice.times(payout).toNumber())}`}
             </Text> */}
           </Box>
         </Flex>

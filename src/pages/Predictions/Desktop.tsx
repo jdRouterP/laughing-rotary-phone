@@ -4,7 +4,7 @@ import styled from 'styled-components'
 // import {  Button } from '@pancakeswap/uikit'
 import { useGetPredictionsStatus, useIsHistoryPaneOpen } from 'state/hook'
 import { PredictionStatus } from 'state/prediction/types'
-import TradingView from './components/TradingView'
+// import TradingView from './components/TradingView'
 import { ErrorNotification, PauseNotification } from './components/Notification'
 import History from './History'
 import Positions from './Positions'
@@ -39,10 +39,10 @@ const SplitWrapper = styled.div`
   overflow: hidden;
 `
 
-const ChartPane = styled.div`
-  overflow: hidden;
-  position: relative;
-`
+// const ChartPane = styled.div`
+//   overflow: hidden;
+//   position: relative;
+// `
 
 const HistoryPane = styled.div<{ isHistoryPaneOpen: boolean }>`
   flex: none;
@@ -75,28 +75,29 @@ const PositionPane = styled.div`
   }
 `
 
-const Gutter = styled.div`
-  cursor: row-resize;
-  height: 12px;
-  position: relative;
+// const Gutter = styled.div`
+// background: ${({ theme }) => theme.advancedBG};
+//   cursor: row-resize;
+//   height: 12px;
+//   position: relative;
 
-  &:before {
-    background-color:white;
-    border-radius: 8px;
-    content: '';
-    height: 4px;
-    left: 50%;
-    margin-left: -32px;
-    position: absolute;
-    top: 4px;
-    width: 64px;
-  }
-`
+//   &:before {
+//     background-color: ${({ theme }) => theme.bg3};
+//     border-radius: 8px;
+//     content: '';
+//     height: 4px;
+//     left: 50%;
+//     margin-left: -32px;
+//     position: absolute;
+//     top: 4px;
+//     width: 64px;
+//   }
+// `
 
 const Desktop: React.FC = () => {
   const splitWrapperRef = useRef<HTMLDivElement>()
-  const chartRef = useRef<HTMLDivElement>()
-  const gutterRef = useRef<HTMLDivElement>()
+  // const chartRef = useRef<HTMLDivElement>()
+  // const gutterRef = useRef<HTMLDivElement>()
   const isHistoryPaneOpen = useIsHistoryPaneOpen()
   const status = useGetPredictionsStatus()
 
@@ -123,15 +124,15 @@ const Desktop: React.FC = () => {
             {status === PredictionStatus.ERROR && <ErrorNotification />}
             {status === PredictionStatus.PAUSED && <PauseNotification />}
             {status === PredictionStatus.LIVE && (
-              <div>
+              <>
                 <Positions />
-              </div>
+              </>
             )}
           </PositionPane>
-          <Gutter ref={gutterRef} />
-          <ChartPane ref={chartRef}>
+          {/* <Gutter ref={gutterRef} /> */}
+          {/* <ChartPane ref={chartRef}>
             <TradingView />
-          </ChartPane>
+          </ChartPane> */}
         </SplitWrapper>
         <HistoryPane isHistoryPaneOpen={isHistoryPaneOpen}>
           <History />

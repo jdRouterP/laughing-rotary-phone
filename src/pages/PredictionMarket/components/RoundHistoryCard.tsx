@@ -99,11 +99,11 @@ const RoundHistoryCard = (props: Props) => {
                 </PrizePoolWrapper>
                 <RowWrapper>
                     <ClosedPrice>UP:</ClosedPrice>
-                    <ClosedPrice>1.76x Payout | 17.118 BNB</ClosedPrice>
+                    <ClosedPrice>1.76x Payout | 17.118 MATIC</ClosedPrice>
                 </RowWrapper>
                 <RowWrapper>
                     <ClosedPrice>DOWN:</ClosedPrice>
-                    <ClosedPrice>1.76x Payout | 17.118 BNB</ClosedPrice>
+                    <ClosedPrice>1.76x Payout | 17.118 MATIC</ClosedPrice>
                 </RowWrapper>
             </Content>
         </Wrapper>

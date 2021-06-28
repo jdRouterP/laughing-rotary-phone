@@ -39,7 +39,7 @@ import Swap from './Swap'
 import { OpenClaimAddressModalAndRedirectToSwap, RedirectPathToSwapOnly, RedirectToSwap } from './Swap/redirects'
 // import Vote from './Vote'
 import VotePage from './Vote/VotePage'
-// import PredictionMarket from './PredictionMarket'
+import PredictionMarket from './PredictionMarket'
 import Predictions from './Predictions'
 
 const AppWrapper = styled.div`
@@ -112,6 +112,7 @@ export default function App() {
               <Route exact strict path="/popular-farms" component={FloraFarms} />
               <Route exact strict path="/vault" component={Vault} />
               <Route exact strict path="/prediction" component={Predictions} />
+              <Route exact strict path="/predictionMarket" component={PredictionMarket} />
               {/* <Route exact strict path="/vote" component={Vote} /> */}
               <Route exact strict path="/create" component={RedirectToAddLiquidity} />
               <Route exact path="/add" component={AddLiquidity} />

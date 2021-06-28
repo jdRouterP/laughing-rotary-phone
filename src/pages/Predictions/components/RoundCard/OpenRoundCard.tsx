@@ -7,12 +7,11 @@ import { BetPosition, Round } from 'state/prediction/types'
 import { useGetinterval } from 'state/hook'
 import { markPositionAsEntered } from 'state/prediction/reducer'
 import CardFlip from '../CardFlip'
-import { formatBnb } from '../../helpers'
+import { formatToken } from '../../helpers'
 import { RoundResultBox, PrizePoolRow } from '../RoundResult'
 import MultiplierArrow from './MultiplierArrow'
 import Card from './Card'
 import CardHeader from './CardHeader'
-// import SetPositionCard from './SetPositionCard'
 import SetPositionCard from './SetPositionCard'
 import { ChainId, JSBI, TokenAmount, WETH } from '@uniswap/sdk'
 import useCurrentBlockTimestamp from 'hooks/useCurrentBlockTimestamp'
@@ -52,7 +51,7 @@ const OpenRoundCard: React.FC<OpenRoundCardProps> = ({
   const isBufferPhase = currentTimestamp && currentTimestamp.toNumber() >= round.startAt + interval
   const positionDisplay = position === BetPosition.BULL ? t('Up').toUpperCase() : t('Down').toUpperCase()
   const { targetRef, tooltipVisible, tooltip } = useTooltip(
-    <div style={{ whiteSpace: 'nowrap' }}>{`${formatBnb(betAmount)} BNB`}</div>,
+    <div style={{ whiteSpace: 'nowrap' }}>{`${formatToken(betAmount)} MATIC`}</div>,
     { placement: 'top' },
   )
 

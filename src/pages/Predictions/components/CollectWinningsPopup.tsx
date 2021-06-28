@@ -1,7 +1,5 @@
-// @ts-nocheck
 
 import React, { useEffect, useRef, useState } from 'react'
-import { useWeb3React } from '@web3-react/core'
 import styled, { css, keyframes } from 'styled-components'
 import { Button, CloseIcon, IconButton, TrophyGoldIcon } from '@pancakeswap/uikit'
 import { CSSTransition } from 'react-transition-group'
@@ -11,6 +9,7 @@ import { useGetPredictionsStatus, useIsHistoryPaneOpen } from 'state/hook'
 import { useDispatch } from 'react-redux'
 import { setHistoryPaneState } from 'state/prediction/reducer'
 import { AutoColumn } from 'components/Column'
+import { useActiveWeb3React } from 'hooks'
 
 /**
  * @see https://github.com/animate-css/animate.css/tree/main/source
@@ -117,8 +116,8 @@ const CollectWinningsPopup = () => {
   const [isOpen, setIsOpen] = useState(false)
   const { t } = useTranslation()
   const ref = useRef(null)
-  const timer = useRef(null)
-  const { account } = useWeb3React()
+  const timer = useRef<ReturnType<typeof setTimeout>>()
+  const { account } = useActiveWeb3React()
   const predictionStatus = useGetPredictionsStatus()
   const isHistoryPaneOpen = useIsHistoryPaneOpen()
   const dispatch = useDispatch()
@@ -129,7 +128,7 @@ const CollectWinningsPopup = () => {
 
   const handleClick = () => {
     setIsOpen(false)
-    clearInterval(timer?.current)
+    if (timer.current) clearInterval(timer.current)
   }
 
   // Check user's history for unclaimed winners
@@ -142,7 +141,7 @@ const CollectWinningsPopup = () => {
         if (!isCancelled) {
           // Filter out bets that were not winners
           const winnerBets = bets.filter((bet) => {
-            return bet.position === bet?.round.position
+            return bet.position === bet?.round?.position
           })
 
           if (!isHistoryPaneOpen) {
@@ -153,7 +152,7 @@ const CollectWinningsPopup = () => {
     }
 
     return () => {
-      clearInterval(timer.current)
+      timer.current && clearInterval(timer.current)
       isCancelled = true
     }
   }, [account, timer, predictionStatus, setIsOpen, isHistoryPaneOpen])

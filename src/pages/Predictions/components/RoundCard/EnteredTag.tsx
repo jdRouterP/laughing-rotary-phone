@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { CheckmarkCircleIcon, Tag, useTooltip } from '@pancakeswap/uikit'
 import { useTranslation } from 'react-i18next'
-import { formatBnb } from '../../helpers'
+import { formatToken } from '../../helpers'
 
 interface EnteredTagProps {
   amount?: number
@@ -19,7 +19,7 @@ const StyledEnteredTag = styled(Tag).attrs({
 const EnteredTag: React.FC<EnteredTagProps> = ({ amount }: EnteredTagProps) => {
   const { t } = useTranslation()
   const { targetRef, tooltipVisible, tooltip } = useTooltip(
-    <div style={{ whiteSpace: 'nowrap' }}>{`${formatBnb(amount ?? 0)} BNB`}</div>,
+    <div style={{ whiteSpace: 'nowrap' }}>{`${formatToken(amount ?? 0)} MATIC`}</div>,
     { placement: 'bottom' },
   )
 

@@ -91,7 +91,7 @@ const UpcomingCard = ({ totalTime }: Props) => {
         return () => {
             clearInterval(timer);
         }
-    }, [])
+    }, [setTimeLeft])
 
     return (
         <Wrapper>

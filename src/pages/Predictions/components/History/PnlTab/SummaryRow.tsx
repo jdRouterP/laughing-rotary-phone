@@ -1,6 +1,6 @@
 import React from 'react'
 import { Flex, Text } from '@pancakeswap/uikit'
-import { formatBnb } from 'pages/Predictions/helpers'
+import { formatToken } from 'pages/Predictions/helpers'
 import { useTranslation } from 'react-i18next'
 
 type SummaryType = 'won' | 'lost' | 'entered'
@@ -8,7 +8,7 @@ type SummaryType = 'won' | 'lost' | 'entered'
 interface SummaryRowProps {
   type: SummaryType
   summary: any
-  bnbBusdPrice: number
+  tokenusdPrice: number
 }
 
 const summaryTypeColors = {
@@ -23,7 +23,7 @@ const summaryTypeSigns = {
   entered: '',
 }
 
-const SummaryRow: React.FC<SummaryRowProps> = ({ type, summary, bnbBusdPrice }) => {
+const SummaryRow: React.FC<SummaryRowProps> = ({ type, summary, tokenusdPrice }) => {
   const { t } = useTranslation()
 
   const color = summaryTypeColors[type]
@@ -49,10 +49,10 @@ const SummaryRow: React.FC<SummaryRowProps> = ({ type, summary, bnbBusdPrice }) 
         </Flex>
         <Flex flex="3" flexDirection="column">
           <Text bold fontSize="20px" color={color}>
-            {`${summaryTypeSigns[type]}${formatBnb(displayAmount)} BNB`}
+            {`${summaryTypeSigns[type]}${formatToken(displayAmount)} MATIC`}
           </Text>
           <Text fontSize="12px" color="textSubtle">
-            {`~$${formatBnb(bnbBusdPrice * displayAmount)}`}
+            {`~$${formatToken(tokenusdPrice * displayAmount)}`}
           </Text>
         </Flex>
       </Flex>

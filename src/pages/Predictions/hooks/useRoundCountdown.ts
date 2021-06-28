@@ -8,7 +8,6 @@ const useRoundCountdown = (intervalsToAdd = 1) => {
   const interval = useGetinterval()
   const currentRoundBlockTime = useGetCurrentRoundTime()
   const blocksToAdd = intervalsToAdd * interval
-  debugger
   const seconds = useTimeCountdown(currentRoundBlockTime + blocksToAdd)
   return seconds
 }

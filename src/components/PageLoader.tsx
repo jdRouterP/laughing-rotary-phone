@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
-
+import tokenLogo from '../assets/big-dfyn.svg'
+import { UniTokenAnimated } from 'theme'
 
 const Wrapper = styled.div`
   display: flex;
@@ -11,7 +12,7 @@ const Wrapper = styled.div`
 const PageLoader: React.FC = () => {
   return (
     <Wrapper>
-      <h1>Loading...</h1>
+      <UniTokenAnimated width="168px" src={tokenLogo} />
     </Wrapper>
   )
 }

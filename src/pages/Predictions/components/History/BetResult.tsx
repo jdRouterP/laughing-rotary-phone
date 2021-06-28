@@ -11,7 +11,7 @@ import { fetchBet } from 'state/prediction/reducer'
 import { Result } from 'state/prediction/hooks'
 import { getEtherscanLink } from 'utils'
 import useIsRefundable from '../../hooks/useIsRefundable'
-import { formatBnb, getPayout } from '../../helpers'
+import { formatToken, getPayout } from '../../helpers'
 import CollectWinningsButton from '../CollectWinningsButton'
 import PositionTag from '../PositionTag'
 import ReclaimPositionButton from '../ReclaimPositionButton'
@@ -137,15 +137,15 @@ const BetResult: React.FC<BetResultProps> = ({ bet, result }) => {
         </Flex>
         <Flex alignItems="center" justifyContent="space-between" mb="16px">
           <Text>{t('Your position')}</Text>
-          <Text>{`${formatBnb(bet.amount)} BNB`}</Text>
+          <Text>{`${formatToken(bet.amount)} MATIC`}</Text>
         </Flex>
         <Flex alignItems="start" justifyContent="space-between">
           <Text bold>{t('Your Result')}</Text>
           <Box style={{ textAlign: 'right' }}>
-            <Text bold color={getResultColor()}>{`${result === Result.LOSE ? '-' : '+'}${formatBnb(payout)} BNB`}</Text>
+            <Text bold color={getResultColor()}>{`${result === Result.LOSE ? '-' : '+'}${formatToken(payout)} MATIC`}</Text>
             <Text fontSize="12px" color="textSubtle">
               {/* 
-              {`~$${formatBnb(bnbBusdPrice.times(payout).toNumber())}`} */}
+              {`~$${formatToken(tokenusdPrice.times(payout).toNumber())}`} */}
             </Text>
           </Box>
         </Flex>

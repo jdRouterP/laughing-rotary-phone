@@ -1,8 +1,8 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect } from 'react'
 import { useWeb3React } from '@web3-react/core'
-import { useMatchBreakpoints, useModal } from '@pancakeswap/uikit'
+import { useMatchBreakpoints } from '@pancakeswap/uikit'
 import { useDispatch } from 'react-redux'
-import { useGetPredictionsStatus, useInitialBlock, useIsChartPaneOpen, usePollBlockNumber } from 'state/hook'
+import { useGetPredictionsStatus, useInitialBlock, usePollBlockNumber } from 'state/hook'
 import {
   getMarketData,
   useStaticPredictionsData,
@@ -12,7 +12,7 @@ import {
 } from 'state/prediction/hooks'
 import { fetchCurrentBets, initialize, setPredictionStatus } from 'state/prediction/reducer'
 import { HistoryFilter, PredictionsState, PredictionStatus } from 'state/prediction/types'
-import usePersistState from 'hooks/usePersistState'
+// import usePersistState from 'hooks/usePersistState'
 import PageLoader from 'components/PageLoader'
 import usePollOraclePrice from './hooks/usePollOraclePrice'
 import usePollRoundData from './hooks/usePollRoundData'
@@ -21,8 +21,8 @@ import CollectWinningsPopup from './components/CollectWinningsPopup'
 import SwiperProvider from './context/SwiperProvider'
 import Desktop from './Desktop'
 import Mobile from './Mobile'
-import RiskDisclaimer from './components/RiskDisclaimer'
-import ChartDisclaimer from './components/ChartDisclaimer'
+// import RiskDisclaimer from './components/RiskDisclaimer'
+// import ChartDisclaimer from './components/ChartDisclaimer'
 
 import { ThemeProvider as SCThemeProvider } from 'styled-components'
 import { light } from '@pancakeswap/uikit'
@@ -31,41 +31,41 @@ const FUTURE_ROUND_COUNT = 2 // the number of rounds in the future to show
 
 const Predictions = () => {
   const { isXl } = useMatchBreakpoints()
-  const [hasAcceptedRisk, setHasAcceptedRisk] = usePersistState(false, {
-    localStorageKey: 'pancake_predictions_accepted_risk',
-  })
-  const [hasAcceptedChart, setHasAcceptedChart] = usePersistState(false, {
-    localStorageKey: 'pancake_predictions_chart',
-  })
+  // const [hasAcceptedRisk, setHasAcceptedRisk] = usePersistState(false, {
+  //   localStorageKey: 'pancake_predictions_accepted_risk',
+  // })
+  // const [hasAcceptedChart, setHasAcceptedChart] = usePersistState(false, {
+  //   localStorageKey: 'pancake_predictions_chart',
+  // })
   const { account } = useWeb3React()
   const _staticPredictionsData = useStaticPredictionsData();
   const status = useGetPredictionsStatus()
-  const isChartPaneOpen = useIsChartPaneOpen()
+  // const isChartPaneOpen = useIsChartPaneOpen()
   const dispatch = useDispatch()
   const initialBlock = useInitialBlock()
   const isDesktop = isXl
-  const handleAcceptRiskSuccess = () => setHasAcceptedRisk(true)
-  const handleAcceptChart = () => setHasAcceptedChart(true)
-  const [onPresentRiskDisclaimer] = useModal(<RiskDisclaimer onSuccess={handleAcceptRiskSuccess} />, false)
-  const [onPresentChartDisclaimer] = useModal(<ChartDisclaimer onSuccess={handleAcceptChart} />, false)
+  // const handleAcceptRiskSuccess = () => setHasAcceptedRisk(true)
+  // const handleAcceptChart = () => setHasAcceptedChart(true)
+  // const [onPresentRiskDisclaimer] = useModal(<RiskDisclaimer onSuccess={handleAcceptRiskSuccess} />, false)
+  // const [onPresentChartDisclaimer] = useModal(<ChartDisclaimer onSuccess={handleAcceptChart} />, false)
 
   // TODO: memoize modal's handlers
-  const onPresentRiskDisclaimerRef = useRef(onPresentRiskDisclaimer)
-  const onPresentChartDisclaimerRef = useRef(onPresentChartDisclaimer)
+  // const onPresentRiskDisclaimerRef = useRef(onPresentRiskDisclaimer)
+  // const onPresentChartDisclaimerRef = useRef(onPresentChartDisclaimer)
 
   // Disclaimer
-  useEffect(() => {
-    if (!hasAcceptedRisk) {
-      onPresentRiskDisclaimerRef.current()
-    }
-  }, [hasAcceptedRisk, onPresentRiskDisclaimerRef])
+  // useEffect(() => {
+  //   if (!hasAcceptedRisk) {
+  //     onPresentRiskDisclaimerRef.current()
+  //   }
+  // }, [hasAcceptedRisk, onPresentRiskDisclaimerRef])
 
-  // Chart Disclaimer
-  useEffect(() => {
-    if (!hasAcceptedChart && isChartPaneOpen) {
-      onPresentChartDisclaimerRef.current()
-    }
-  }, [onPresentChartDisclaimerRef, hasAcceptedChart, isChartPaneOpen])
+  // // Chart Disclaimer
+  // useEffect(() => {
+  //   if (!hasAcceptedChart && isChartPaneOpen) {
+  //     onPresentChartDisclaimerRef.current()
+  //   }
+  // }, [onPresentChartDisclaimerRef, hasAcceptedChart, isChartPaneOpen])
 
   useEffect(() => {
 
@@ -74,7 +74,6 @@ const Predictions = () => {
       //@ts-ignore
       const { currentEpoch, interval, buffer } = staticPredictionsData
       const latestRound = marketData.rounds.find((round) => round.epoch === currentEpoch)
-
       // Fetch data on current unclaimed bets
       //@ts-ignore
       dispatch(fetchCurrentBets({ account, roundIds: marketData.rounds.map((round) => round.id) }))
@@ -83,11 +82,12 @@ const Predictions = () => {
         dispatch(setPredictionStatus(PredictionStatus.PAUSED))
       } else if (latestRound && latestRound.epoch === currentEpoch) {
         const currentRoundStartBlock = Number(latestRound.startBlock1)
+        const currentRoundStartTime = Number(latestRound.startAt)
         const futureRounds = []
         const halfInterval = (interval + buffer) / 2
 
         for (let i = 1; i <= FUTURE_ROUND_COUNT; i++) {
-          futureRounds.push(makeFutureRoundResponse(currentEpoch + i, (currentRoundStartBlock + halfInterval) * i))
+          futureRounds.push(makeFutureRoundResponse(currentEpoch + i, (currentRoundStartTime + halfInterval) * i))
         }
 
         const roundData = makeRoundData([...marketData.rounds, ...futureRounds.map(transformRoundResponse)])

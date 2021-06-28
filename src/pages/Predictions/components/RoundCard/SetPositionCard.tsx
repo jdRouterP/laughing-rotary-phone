@@ -173,11 +173,11 @@ const SetPositionCard: React.FC<SetPositionCardProps> = ({ position, togglePosit
     const hasSufficientBalance = JSBI.greaterThan(bnValue, BIG_INT_ZERO) && JSBI.lessThanOrEqual(bnValue, maxBalance.raw)
 
     if (!hasSufficientBalance) {
-      setErrorMessage({ key: 'Insufficient BNB balance' })
+      setErrorMessage({ key: 'Insufficient MATIC balance' })
     } else if (JSBI.greaterThan(bnValue, BIG_INT_ZERO) && JSBI.lessThan(bnValue, minBetAmountBalance.raw)) {
       setErrorMessage({
         key: 'A minimum amount of %num% %token% is required',
-        data: { num: minBetAmountBalance, token: 'BNB' },
+        data: { num: minBetAmountBalance, token: 'MATIC' },
       })
     } else {
       setErrorMessage(null)
@@ -207,7 +207,7 @@ const SetPositionCard: React.FC<SetPositionCardProps> = ({ position, togglePosit
           <Flex alignItems="center">
             <BinanceIcon mr="4px  " />
             <Text bold textTransform="uppercase">
-              BNB
+              MATIC
             </Text>
           </Flex>
         </Flex>

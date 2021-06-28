@@ -16,7 +16,7 @@ import { Bet, PredictionStatus } from 'state/prediction/types'
 import { useBetCanClaim, useGetCurrentEpoch, useGetPredictionsStatus } from 'state/hook'
 import { getRoundResult, Result } from 'state/prediction/hooks'
 import { useTranslation } from 'react-i18next'
-import { formatBnb, getPayout } from '../../helpers'
+import { formatToken, getPayout } from '../../helpers'
 import CollectWinningsButton from '../CollectWinningsButton'
 import ReclaimPositionButton from '../ReclaimPositionButton'
 import BetDetails from './BetDetails'
@@ -108,7 +108,7 @@ const HistoricalBet: React.FC<BetProps> = ({ bet }) => {
           {t('Your Result')}
         </Text>
         <Text bold color={resultTextColor} lineHeight={1}>
-          {roundResult === Result.CANCELED ? t('Canceled') : `${resultTextPrefix}${formatBnb(payout)}`}
+          {roundResult === Result.CANCELED ? t('Canceled') : `${resultTextPrefix}${formatToken(payout)}`}
         </Text>
       </>
     )

@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next'
 import { getEtherscanLink } from 'utils'
 import { useGetCurrentEpoch, useGetLastOraclePrice } from 'state/hook'
 import { Bet, BetPosition } from 'state/prediction/types'
-import { formatBnb, getMultiplier, getPayout } from 'pages/Predictions/helpers'
+import { formatToken, getMultiplier, getPayout } from 'pages/Predictions/helpers'
 import { getRoundResult, Result } from 'state/prediction/hooks'
 import PnlChart from './PnlChart'
 import SummaryRow from './SummaryRow'
@@ -111,14 +111,14 @@ const PnlTab: React.FC<PnlTabProps> = ({ hasBetHistory, bets }: PnlTabProps) => 
   const { t } = useTranslation()
   const { account, chainId } = useWeb3React()
   const currentEpoch = useGetCurrentEpoch()
-  // const bnbBusdPrice = usePriceBnbBusd()
-  const bnbBusdPrice = useGetLastOraclePrice();
+  // const tokenusdPrice = usePriceTokenBusd()
+  const tokenusdPrice = useGetLastOraclePrice();
   const summary = getPnlSummary(bets, currentEpoch)
   const netResultAmount = summary.won.payout - summary.lost.amount
   const netResultIsPositive = netResultAmount > 0
   const avgPositionEntered = summary.entered.amount / summary.entered.rounds
-  const avgBnbWonPerRound = netResultAmount / summary.entered.rounds
-  const avgBnbWonIsPositive = avgBnbWonPerRound > 0
+  const avgTokenWonPerRound = netResultAmount / summary.entered.rounds
+  const avgTokenWonIsPositive = avgTokenWonPerRound > 0
 
   // Guard in case user has only lost rounds
   const hasBestRound = summary.won.bestRound.payout !== 0
@@ -135,10 +135,10 @@ const PnlTab: React.FC<PnlTabProps> = ({ hasBetHistory, bets }: PnlTabProps) => 
             {t('Net results')}
           </Text>
           <Text bold fontSize="24px" lineHeight="1" color={netResultIsPositive ? 'success' : 'failure'}>
-            {`${netResultIsPositive ? '+' : ''}${formatBnb(netResultAmount)} BNB`}
+            {`${netResultIsPositive ? '+' : ''}${formatToken(netResultAmount)} MATIC`}
           </Text>
           <Text small color="textSubtle">
-            {`~$${formatBnb(bnbBusdPrice * (netResultAmount))}`}
+            {`~$${formatToken(tokenusdPrice * (netResultAmount))}`}
           </Text>
         </Flex>
       </Flex>
@@ -146,11 +146,11 @@ const PnlTab: React.FC<PnlTabProps> = ({ hasBetHistory, bets }: PnlTabProps) => 
         <Text mt="24px" bold color="textSubtle">
           {t('Average return / round')}
         </Text>
-        <Text bold color={avgBnbWonIsPositive ? 'success' : 'failure'}>
-          {`${avgBnbWonIsPositive ? '+' : ''}${formatBnb(avgBnbWonPerRound)} BNB`}
+        <Text bold color={avgTokenWonIsPositive ? 'success' : 'failure'}>
+          {`${avgTokenWonIsPositive ? '+' : ''}${formatToken(avgTokenWonPerRound)} MATIC`}
         </Text>
         <Text small color="textSubtle">
-          {`~$${formatBnb(bnbBusdPrice * (avgBnbWonPerRound))}`}
+          {`~$${formatToken(tokenusdPrice * (avgTokenWonPerRound))}`}
         </Text>
 
         {hasBestRound && (
@@ -159,13 +159,13 @@ const PnlTab: React.FC<PnlTabProps> = ({ hasBetHistory, bets }: PnlTabProps) => 
               {t('Best round: #%roundId%', { roundId: summary.won.bestRound.id })}
             </Text>
             <Flex alignItems="flex-end">
-              <Text bold color="success">{`+${formatBnb(summary.won.bestRound.payout)} BNB`}</Text>
+              <Text bold color="success">{`+${formatToken(summary.won.bestRound.payout)} MATIC`}</Text>
               <Text ml="4px" small color="textSubtle">
                 ({summary.won.bestRound.multiplier.toFixed(2)}x)
               </Text>
             </Flex>
             <Text small color="textSubtle">
-              {`~$${formatBnb(bnbBusdPrice * (summary.won.bestRound.payout))}`}
+              {`~$${formatToken(tokenusdPrice * (summary.won.bestRound.payout))}`}
             </Text>
           </>
         )}
@@ -173,16 +173,16 @@ const PnlTab: React.FC<PnlTabProps> = ({ hasBetHistory, bets }: PnlTabProps) => 
         <Text mt="16px" bold color="textSubtle">
           {t('Average position entered / round')}
         </Text>
-        <Text bold>{`${formatBnb(avgPositionEntered)} BNB`}</Text>
+        <Text bold>{`${formatToken(avgPositionEntered)} MATIC`}</Text>
         <Text small color="textSubtle">
-          {`~$${formatBnb(bnbBusdPrice * (avgPositionEntered))}`}
+          {`~$${formatToken(tokenusdPrice * (avgPositionEntered))}`}
         </Text>
 
         <Divider />
 
-        <SummaryRow type="won" summary={summary} bnbBusdPrice={bnbBusdPrice} />
-        <SummaryRow type="lost" summary={summary} bnbBusdPrice={bnbBusdPrice} />
-        <SummaryRow type="entered" summary={summary} bnbBusdPrice={bnbBusdPrice} />
+        <SummaryRow type="won" summary={summary} tokenusdPrice={tokenusdPrice} />
+        <SummaryRow type="lost" summary={summary} tokenusdPrice={tokenusdPrice} />
+        <SummaryRow type="entered" summary={summary} tokenusdPrice={tokenusdPrice} />
 
         <Flex justifyContent="center" mt="24px">
           {chainId && <Link href={`${getEtherscanLink(chainId, account, "address")}#internaltx`} mb="16px" external>

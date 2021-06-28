@@ -152,7 +152,7 @@ const LiveCard = (props: Props) => {
                             Prize Pool:
                         </span>
                         <span>
-                            36.630 BNB
+                            36.630 MATIC
                         </span>
                     </PrizePool>
                 </Content>
