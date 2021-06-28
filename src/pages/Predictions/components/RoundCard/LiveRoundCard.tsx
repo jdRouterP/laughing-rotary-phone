@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import { useCountUp } from 'react-countup'
-import { CardBody, Flex, PlayCircleOutlineIcon, Skeleton, Text, TooltipText, useTooltip } from '@pancakeswap/uikit'
+import { CardBody, Flex, PlayCircleOutlineIcon, Skeleton, Text, useTooltip } from '@pancakeswap/uikit'
 import { useTranslation } from 'react-i18next'
 import { Round, BetPosition } from 'state/prediction/types'
 import { useGetinterval, useGetLastOraclePrice } from 'state/hook'
@@ -15,7 +15,7 @@ import CardHeader from './CardHeader'
 import CanceledRoundCard from './CanceledRoundCard'
 import CalculatingCard from './CalculatingCard'
 import useCurrentBlockTimestamp from 'hooks/useCurrentBlockTimestamp'
-
+import { MouseoverTooltip } from 'components/Tooltip'
 interface LiveRoundCardProps {
   round: Round
   betAmount?: number
@@ -50,6 +50,7 @@ const LiveRoundCard: React.FC<LiveRoundCardProps> = ({
   const price = useGetLastOraclePrice()
   const isBull = price > lockPrice;
   const priceColor = isBull ? 'success' : 'failure'
+  console.log(priceColor)
   const estimatedEndTime = lockAt + totalInterval
   const priceDifference = price - lockPrice
   const { countUp, update } = useCountUp({
@@ -63,7 +64,9 @@ const LiveRoundCard: React.FC<LiveRoundCardProps> = ({
   })
 
   useEffect(() => {
-    update(price)
+    let isMounted = true;
+    if (isMounted) update(price)
+    return () => { isMounted = false };
   }, [price, update])
 
   if (round.failed) {
@@ -98,9 +101,9 @@ const LiveRoundCard: React.FC<LiveRoundCardProps> = ({
             </Text>
             <Flex alignItems="center" justifyContent="space-between" mb="16px" height="36px">
               <div ref={targetRef}>
-                <TooltipText bold color={priceColor} fontSize="24px" style={{ minHeight: '36px' }}>
+                <MouseoverTooltip text={'Last price from Chainlink Oracle'}>
                   {price > 0 ? `$${countUp}` : <Skeleton height="36px" width="94px" />}
-                </TooltipText>
+                </MouseoverTooltip>
               </div>
               <PositionTag betPosition={isBull ? BetPosition.BULL : BetPosition.BEAR}>
                 {formatUsd(priceDifference)}

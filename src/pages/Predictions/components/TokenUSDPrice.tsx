@@ -38,7 +38,9 @@ const TokenUSDPrice: React.FC = () => {
     })
 
     useEffect(() => {
-        update(price)
+        let isMounted = true;
+        if (isMounted) update(price)
+        return () => { isMounted = false };
     }, [price, update])
 
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import {
   ArrowBackIcon,
   CardBody,
@@ -29,6 +29,7 @@ import { useTransactionAdder } from 'state/transactions/hooks'
 import { useActiveWeb3React } from 'hooks'
 import { ChainId, JSBI, TokenAmount, WETH } from '@uniswap/sdk'
 import { BIG_INT_ZERO } from '../../../../constants'
+import { useWalletModalToggle } from 'state/application/hooks'
 
 
 interface SetPositionCardProps {
@@ -52,7 +53,8 @@ interface ErrorMessageType {
 const dust = JSBI.BigInt("10000000000000000"); //TODO
 const percentShortcuts = [10, 25, 50, 75]
 
-const getButtonProps = (value: JSBI, balance: TokenAmount, minBetAmountBalance: TokenAmount) => {
+const getButtonProps = (account: string | null | undefined, value: JSBI, balance: TokenAmount, minBetAmountBalance: TokenAmount) => {
+  if (!account) return { key: 'Unlock your Wallet', disabled: false }
   const balanceBn = balance.raw;
   const hasSufficientBalance = () => {
     if (JSBI.greaterThan(value, BIG_INT_ZERO)) {
@@ -77,7 +79,7 @@ const SetPositionCard: React.FC<SetPositionCardProps> = ({ position, togglePosit
   const addTransaction = useTransactionAdder()
   const { swiper } = useSwiper()
   const { account, chainId } = useActiveWeb3React()
-  const [errorMessage, setErrorMessage] = useState<ErrorMessageType | null>(null)
+  const [errorMessage,] = useState<ErrorMessageType | null>(null)
   let balance = useTokenBalance(account ?? undefined, WETH[chainId ?? 137])
 
   const minBetAmountBalance = useGetMinBetAmount()
@@ -143,46 +145,51 @@ const SetPositionCard: React.FC<SetPositionCardProps> = ({ position, togglePosit
     swiper.attachEvents()
   }
 
-  const { key, disabled } = getButtonProps(valueAsBn, maxBalance, minBetAmountBalance)
+  const { key, disabled } = getButtonProps(account, valueAsBn, maxBalance, minBetAmountBalance)
+  const toggleWalletModal = useWalletModalToggle()
 
   const handleEnterPosition = () => {
-    const betMethod = position === BetPosition.BULL ? 'betBull' : 'betBear'
-    const decimalValue = getDecimalAmount(WETH[chainId ?? 137], valueAsBn)
-    setIsPendingTx(true);
-    predictionsContract?.[betMethod](decimalValue, { gasLimit: 350000 })
-      .then(async (response: TransactionResponse) => {
-        addTransaction(response, {
-          summary: `Winnings collected!`
+    if (!account) {
+      toggleWalletModal()
+    } else {
+      const betMethod = position === BetPosition.BULL ? 'betBull' : 'betBear'
+      const decimalValue = getDecimalAmount(WETH[chainId ?? 137], valueAsBn)
+      setIsPendingTx(true);
+      predictionsContract?.[betMethod](decimalValue, { gasLimit: 350000 })
+        .then(async (response: TransactionResponse) => {
+          addTransaction(response, {
+            summary: `Placed Bet!`
+          })
+          setIsPendingTx(false)
+          if (onSuccess) {
+            onSuccess(chainId ?? 137, decimalValue.toSignificant(6), response.hash)
+          }
         })
-        setIsPendingTx(false)
-        if (onSuccess) {
-          onSuccess(chainId ?? 137, decimalValue.toSignificant(6), response.hash)
-        }
-      })
-      .catch((error: any) => {
-        setIsPendingTx(false)
-        console.error(error)
-      })
+        .catch((error: any) => {
+          setIsPendingTx(false)
+          console.error(error)
+        })
+    }
 
   }
 
-  // Warnings
-  useEffect(() => {
-    const bnValue = JSBI.BigInt(value);
-    // const hasSufficientBalance = bnValue.gt(0) && bnValue.lte(maxBalance)
-    const hasSufficientBalance = JSBI.greaterThan(bnValue, BIG_INT_ZERO) && JSBI.lessThanOrEqual(bnValue, maxBalance.raw)
+  // // Warnings
+  // useEffect(() => {
+  //   const bnValue = JSBI.BigInt(value);
+  //   // const hasSufficientBalance = bnValue.gt(0) && bnValue.lte(maxBalance)
+  //   const hasSufficientBalance = JSBI.greaterThan(bnValue, BIG_INT_ZERO) && JSBI.lessThanOrEqual(bnValue, maxBalance.raw)
 
-    if (!hasSufficientBalance) {
-      setErrorMessage({ key: 'Insufficient MATIC balance' })
-    } else if (JSBI.greaterThan(bnValue, BIG_INT_ZERO) && JSBI.lessThan(bnValue, minBetAmountBalance.raw)) {
-      setErrorMessage({
-        key: 'A minimum amount of %num% %token% is required',
-        data: { num: minBetAmountBalance, token: 'MATIC' },
-      })
-    } else {
-      setErrorMessage(null)
-    }
-  }, [value, maxBalance, minBetAmountBalance, setErrorMessage])
+  //   if (!hasSufficientBalance) {
+  //     setErrorMessage({ key: 'Insufficient MATIC balance' })
+  //   } else if (JSBI.greaterThan(bnValue, BIG_INT_ZERO) && JSBI.lessThan(bnValue, minBetAmountBalance.raw)) {
+  //     setErrorMessage({
+  //       key: 'A minimum amount of %num% %token% is required',
+  //       data: { num: minBetAmountBalance, token: 'MATIC' },
+  //     })
+  //   } else {
+  //     setErrorMessage(null)
+  //   }
+  // }, [value, maxBalance, minBetAmountBalance, setErrorMessage])
 
   return (
     <Card onMouseOver={handleMouseOver} onMouseOut={handleMouseOut}>
@@ -267,19 +274,17 @@ const SetPositionCard: React.FC<SetPositionCardProps> = ({ position, togglePosit
           </Button>
         </Flex>
         <Box mb="8px">
-          {account ? (
+          {
             <Button
               width="100%"
-              disabled={!account || disabled}
+              disabled={disabled}
               onClick={handleEnterPosition}
               isLoading={isPendingTx}
               endIcon={isPendingTx ? <AutoRenewIcon color="currentColor" spin /> : null}
             >
               {t(key)}
             </Button>
-          ) : (
-            <div>Unlock</div>
-          )}
+          }
         </Box>
         <Text as="p" fontSize="12px" lineHeight={1} color="textSubtle">
           {t('You won’t be able to remove or change your position once you enter it.')}

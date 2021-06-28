@@ -111,7 +111,7 @@ const Predictions = () => {
     if (initialBlock > 0) {
       fetchInitialData()
     }
-  }, [initialBlock, dispatch, account])
+  }, [initialBlock, dispatch, _staticPredictionsData, account])
 
   usePollBlockNumber()
   usePollRoundData()
