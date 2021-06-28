@@ -6,6 +6,7 @@ import { BigNumber } from '@ethersproject/bignumber'
 import IUniswapV2Router02ABI from "../constants/abis/uniswap-v2-router-02.json";
 import { ChainId, JSBI, Percent, Token, CurrencyAmount, Currency, ROUTER_ADDRESS } from '@dfyn/sdk'
 import { TokenAddressMap } from '../state/lists/hooks'
+import { PREDICTION_ADDRESS } from '../constants'
 
 
 // returns the checksummed address if the address is valid, otherwise returns false
@@ -174,6 +175,9 @@ export function getRouterAddress(chainId?: ChainId) {
 // account is optional
 export function getRouterContract(chainId: number, library: Web3Provider, account?: string): Contract {
   return getContract(getRouterAddress(chainId), IUniswapV2Router02ABI, library, account)
+}
+export function getPredictionContract(_: number, library: Web3Provider, account?: string): Contract {
+  return getContract(PREDICTION_ADDRESS, IUniswapV2Router02ABI, library, account)
 }
 
 export function escapeRegExp(string: string): string {
