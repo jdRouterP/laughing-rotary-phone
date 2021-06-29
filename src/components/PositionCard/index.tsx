@@ -343,7 +343,7 @@ export default function FullPositionCard({ pair, border, stakedBalance, stakingI
                 padding="8px"
                 borderRadius="8px"
                 as={Link}
-                to={`/${stakingInfo ? stakingInfo.type.url : "flora-farms"}/${currencyId(currency0, chainId)}/${currencyId(currency1, chainId)}/${stakingInfo.version}`}
+                to={`/${stakingInfo ? stakingInfo.type.url : "flora-farms"}/${currencyId(currency0, chainId)}/${currencyId(currency1, chainId)}${stakingInfo.version ? `/${stakingInfo.version}` : ''}`}
                 width="100%"
               >
                 {`Manage Liquidity in ${stakingInfo ? stakingInfo.type.typeOf : "flora-farms"}`}

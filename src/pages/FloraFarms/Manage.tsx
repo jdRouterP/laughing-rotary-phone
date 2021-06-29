@@ -359,7 +359,7 @@ export default function Manage({
             <AutoColumn gap="sm">
               <RowBetween>
                 <div>
-                  <TYPE.black>Your unclaimed DFYN</TYPE.black>
+                  <TYPE.black>{`Your unclaimed ${stakingInfo ? stakingInfo?.rewardToken.symbol : "DFYN"}`}</TYPE.black>
                 </div>
                 {stakingInfo?.earnedAmount && JSBI.notEqual(BIG_INT_ZERO, stakingInfo?.earnedAmount?.raw) && (<>
                   <div hidden={stakingInfo?.ableToClaim}>
