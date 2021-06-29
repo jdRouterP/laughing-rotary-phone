@@ -155,7 +155,7 @@ export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) 
                 ? stakingInfo.active
                   ? `${stakingInfo.totalRewardRate
                     ?.multiply(BIG_INT_SECONDS_IN_DAY)
-                    ?.toFixed(0, { groupSeparator: ',' })} DFYN / day`
+                    ?.toFixed(0, { groupSeparator: ',' })} ${stakingInfo ? stakingInfo?.rewardToken.symbol : "DFYN"} / day`
                   : '0 DFYN / day'
                 : '-'}
             </TYPE.white>
@@ -186,7 +186,7 @@ export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) 
                 ? stakingInfo.active
                   ? `${stakingInfo.rewardRate
                     ?.multiply(BIG_INT_SECONDS_IN_DAY)
-                    ?.toSignificant(4, { groupSeparator: ',' })} DFYN / day`
+                    ?.toSignificant(4, { groupSeparator: ',' })} ${stakingInfo ? stakingInfo?.rewardToken.symbol : "DFYN"} / day`
                   : '0 DFYN / day'
                 : '-'}
             </TYPE.black>
