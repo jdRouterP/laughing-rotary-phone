@@ -211,7 +211,7 @@ export default function Manage({
                     ?.multiply(BIG_INT_SECONDS_IN_DAY)
                     ?.toFixed(0, { groupSeparator: ',' }) ?? '-'
                   : '0'}
-                {' DFYN / day'}
+                {` ${stakingInfo ? stakingInfo?.rewardToken.symbol : ""} / day`}
               </TYPE.body>
             </AutoColumn> :
               <AutoColumn gap="sm">
@@ -364,7 +364,7 @@ export default function Manage({
                 {stakingInfo?.earnedAmount && JSBI.notEqual(BIG_INT_ZERO, stakingInfo?.earnedAmount?.raw) && (<>
                   <div hidden={stakingInfo?.ableToClaim}>
                     {/* <TYPE.black>{<Countdown showMessage={false} exactEnd={stakingInfo?.unlockAt} startTime={Math.floor((stakingInfo?.periodFinish?.getTime() || 0 )/1000)} />}</TYPE.black> */}
-                    <TYPE.black>{<Countdown showMessage={false} exactEnd={stakingInfo?.unlockAt}  />}</TYPE.black>
+                    <TYPE.black>{<Countdown showMessage={false} exactEnd={stakingInfo?.unlockAt} />}</TYPE.black>
                   </div>
                   {stakingInfo?.ableToClaim && <ButtonPrimary
                     padding="8px"
@@ -408,7 +408,7 @@ export default function Manage({
                       ?.multiply(BIG_INT_SECONDS_IN_DAY)
                       ?.toSignificant(4, { groupSeparator: ',' }) ?? '-'
                     : '0'}
-                  {' DFYN / day'}
+                  {` ${stakingInfo ? stakingInfo?.rewardToken.symbol : ""} / day`}
                 </TYPE.black>
               </RowBetween>
             </AutoColumn>
@@ -418,7 +418,7 @@ export default function Manage({
           <span role="img" aria-label="wizard-icon" style={{ marginRight: '8px' }}>
             ⭐️
           </span>
-          {`You can claim 25% of your DFYN token rewards after the farming program ends, and the remaining will be released 25% every other two months!`}
+          {`You can claim 25% of your ${stakingInfo ? stakingInfo?.rewardToken.symbol : "DFYN"} token rewards after the farming program ends, and the remaining will be released 25% every other two months!`}
         </TYPE.main>
 
         {!showAddLiquidityButton && (

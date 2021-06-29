@@ -18,7 +18,7 @@ const ContentWrapper = styled(AutoColumn)`
 `
 
 interface StakingModalProps {
-  isOpen: boolean  
+  isOpen: boolean
   onDismiss: () => void
   stakingInfo: StakingInfo
 }
@@ -46,7 +46,7 @@ export default function ClaimRewardModal({ isOpen, onDismiss, stakingInfo }: Sta
         .getReward({ gasLimit: 350000 })
         .then((response: TransactionResponse) => {
           addTransaction(response, {
-            summary: `Claim accumulated DFYN rewards`
+            summary: `Claim accumulated ${stakingInfo ? stakingInfo?.rewardToken.symbol : "DFYN"} rewards`
           })
           setHash(response.hash)
         })
@@ -82,7 +82,7 @@ export default function ClaimRewardModal({ isOpen, onDismiss, stakingInfo }: Sta
               </TYPE.body> : <TYPE.body fontWeight={600} fontSize={36}>
                 {'25%'}
               </TYPE.body>}
-              <TYPE.body>Unclaimed DFYN</TYPE.body>
+              <TYPE.body>{`Unclaimed ${stakingInfo ? stakingInfo?.rewardToken.symbol : "DFYN"}`}</TYPE.body>
             </AutoColumn>
           )}
           <TYPE.subHeader style={{ textAlign: 'center' }}>
@@ -96,7 +96,7 @@ export default function ClaimRewardModal({ isOpen, onDismiss, stakingInfo }: Sta
       {attempting && !hash && (
         <LoadingView onDismiss={wrappedOnDismiss}>
           <AutoColumn gap="12px" justify={'center'}>
-            <TYPE.body fontSize={20}>Claiming DFYN</TYPE.body>
+            <TYPE.body fontSize={20}>{`Claiming ${stakingInfo ? stakingInfo?.rewardToken.symbol : "DFYN"}`}</TYPE.body>
           </AutoColumn>
         </LoadingView>
       )}
@@ -104,7 +104,7 @@ export default function ClaimRewardModal({ isOpen, onDismiss, stakingInfo }: Sta
         <SubmittedView onDismiss={wrappedOnDismiss} hash={hash}>
           <AutoColumn gap="12px" justify={'center'}>
             <TYPE.largeHeader>Transaction Submitted</TYPE.largeHeader>
-            <TYPE.body fontSize={20}>Claimed DFYN!</TYPE.body>
+            <TYPE.body fontSize={20}>{`Claimed ${stakingInfo ? stakingInfo?.rewardToken.symbol : "DFYN"}!`}</TYPE.body>
           </AutoColumn>
         </SubmittedView>
       )}

@@ -94,11 +94,11 @@ export default function UnstakingModal({ isOpen, onDismiss, stakingInfo }: Staki
               </TYPE.body> : <TYPE.body fontWeight={600} fontSize={36}>
                 {'25%'}
               </TYPE.body>}
-              <TYPE.body>Unclaimed DFYN</TYPE.body>
+              <TYPE.body>{`Unclaimed ${stakingInfo ? stakingInfo?.rewardToken.symbol : "DFYN"}`}</TYPE.body>
             </AutoColumn>
           )}
           <TYPE.subHeader style={{ textAlign: 'center' }}>
-            When you withdraw, your vested DFYN are claimed (if claimable) and your liquidity is removed from the farming pool.
+            {`When you withdraw, your vested  ${stakingInfo ? stakingInfo?.rewardToken.symbol : "DFYN"} are claimed (if claimable) and your liquidity is removed from the farming pool.`}
           </TYPE.subHeader>
           <ButtonError disabled={!!error} error={!!error && !!stakingInfo?.stakedAmount} onClick={onWithdraw}>
             {error ?? 'Withdraw'}
@@ -109,7 +109,7 @@ export default function UnstakingModal({ isOpen, onDismiss, stakingInfo }: Staki
         <LoadingView onDismiss={wrappedOndismiss}>
           <AutoColumn gap="12px" justify={'center'}>
             <TYPE.body fontSize={20}>Withdrawing {stakingInfo?.stakedAmount?.toSignificant(4)} DFYN-LP</TYPE.body>
-            {!claimable && <TYPE.body fontSize={20}>Claiming DFYN</TYPE.body>}
+            {!claimable && <TYPE.body fontSize={20}>{`Claiming ${stakingInfo ? stakingInfo?.rewardToken.symbol : "DFYN"}`}</TYPE.body>}
           </AutoColumn>
         </LoadingView>
       )}
@@ -118,7 +118,7 @@ export default function UnstakingModal({ isOpen, onDismiss, stakingInfo }: Staki
           <AutoColumn gap="12px" justify={'center'}>
             <TYPE.largeHeader>Transaction Submitted</TYPE.largeHeader>
             <TYPE.body fontSize={20}>Withdrew LP Tokens!</TYPE.body>
-            {!claimable && <TYPE.body fontSize={20}>Claimed DFYN!</TYPE.body>}
+            {!claimable && <TYPE.body fontSize={20}>{`Claimed ${stakingInfo ? stakingInfo?.rewardToken.symbol : "DFYN"}!`}</TYPE.body>}
           </AutoColumn>
         </SubmittedView>
       )}

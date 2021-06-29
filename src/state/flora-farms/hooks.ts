@@ -2,7 +2,7 @@
 import { ChainId, CurrencyAmount, JSBI, Token, TokenAmount, Pair } from '@dfyn/sdk'
 import { useMemo } from 'react'
 import { BigNumber } from 'ethers'
-import { ROUTE, UNI, ETHER, USDC, DFYN, WBTC, USDT, DAI, WMATIC, UNI_TOKEN, AAVE, LUNA, UST, LINK, CRV, QUICK } from '../../constants'
+import { ROUTE, UNI, ETHER, USDC, DFYN, WBTC, USDT, DAI, WMATIC, UNI_TOKEN, AAVE, LUNA, UST, LINK, CRV, QUICK, MATICPAD, MIMATIC } from '../../constants'
 import { STAKING_REWARDS_FLORA_FARMS_INTERFACE } from '../../constants/abis/staking-rewards-flora-farms'
 import { useActiveWeb3React } from '../../hooks'
 import { NEVER_RELOAD, useMultipleContractSingleData } from '../multicall/hooks'
@@ -19,12 +19,28 @@ export const STAKING_REWARDS_INFO: {
   [chainId in ChainId]?: {
     tokens: [Token, Token]
     baseToken?: Token
+    rewardToken?: Token
     startTime?: number
     stakingRewardAddress: string
     version: string
   }[]
 } = {
   [ChainId.MATIC]: [
+    {
+      tokens: [MATICPAD, ETHER],
+      baseToken: ETHER,
+      startTime: 1624980600,
+      rewardToken: MATICPAD,
+      stakingRewardAddress: '0x9Eabb8DcBFc062E3fD445E4028D617C0b6F3eaf1',
+      version: 'v2'
+    },
+    {
+      tokens: [DFYN, MIMATIC],
+      baseToken: DFYN,
+      startTime: 1624980600,
+      stakingRewardAddress: '0x98D7c004C54C47b7e65320Bd679CB897Aae6a6D6',
+      version: 'v2'
+    },
     {
       tokens: [DFYN, USDC],
       baseToken: USDC,
@@ -261,6 +277,7 @@ export interface StakingInfo {
   type: TypeOfpools
   userVestingInfo: UserVestingInfo
   tokens: [Token, Token]
+  rewardToken: Token
   // the amount of token currently staked, or undefined if no account
   stakedAmount: TokenAmount
   // the amount of reward token earned by the active account, or undefined if no account
@@ -513,6 +530,7 @@ export function useStakingInfo(pairToFilterBy?: Pair | null, version: string = '
           baseToken: info[index].baseToken,
           version: info[index].version,
           startTime: info[index].startTime ?? 0,
+          rewardToken: info[index].rewardToken ?? DFYN,
           tokens: info[index].tokens,
           userVestingInfo: { hasSetConfig: userVestingInfoState?.result?.[0].hasSetConfig, hasOptForVesting: userVestingInfoState?.result?.[0].hasOptForVesting },
           periodFinish: periodFinishMs > 0 ? new Date(periodFinishMs) : undefined,
