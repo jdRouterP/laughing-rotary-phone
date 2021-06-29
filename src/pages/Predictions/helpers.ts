@@ -1,5 +1,5 @@
 
-import { JSBI } from '@uniswap/sdk'
+import { JSBI } from '@dfyn/sdk'
 import { Bet, BetPosition } from 'state/prediction/types'
 import { formatNumber } from 'utils/formatBalance'
 import getTimePeriods from 'utils/getTimePeriods'

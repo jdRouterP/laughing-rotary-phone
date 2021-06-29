@@ -11,7 +11,7 @@ import {
     makeRoundData,
 } from './hooks'
 import { BIG_INT_ZERO } from '../../constants'
-import { JSBI } from '@uniswap/sdk'
+import { JSBI } from '@dfyn/sdk'
 import { BetResponse } from './queries'
 
 const initialState: PredictionsState = {

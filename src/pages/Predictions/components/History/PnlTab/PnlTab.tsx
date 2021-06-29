@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { useWeb3React } from '@web3-react/core'
 import { Box, Flex, Heading, Text, Button, Link, OpenNewIcon } from '@pancakeswap/uikit'
 import { useTranslation } from 'react-i18next'
-import { getEtherscanLink } from 'utils'
+import { getExplorerLink } from 'utils'
 import { useGetCurrentEpoch, useGetLastOraclePrice } from 'state/hook'
 import { Bet, BetPosition } from 'state/prediction/types'
 import { formatToken, getMultiplier, getPayout } from 'pages/Predictions/helpers'
@@ -184,7 +184,7 @@ const PnlTab: React.FC<PnlTabProps> = ({ hasBetHistory, bets }: PnlTabProps) => 
         <SummaryRow type="entered" summary={summary} tokenusdPrice={tokenusdPrice} />
 
         <Flex justifyContent="center" mt="24px">
-          {(chainId && account) && <Link href={`${getEtherscanLink(chainId, account, "address")}#internaltx`} mb="16px" external>
+          {(chainId && account) && <Link href={`${getExplorerLink(chainId, account, "address")}#internaltx`} mb="16px" external>
             <Button mt="8px" width="100%">
               {t('View Reclaimed & Won')}
               <OpenNewIcon color="white" ml="4px" />

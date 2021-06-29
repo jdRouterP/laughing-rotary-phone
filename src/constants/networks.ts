@@ -95,6 +95,7 @@ export const HEADER_ACCESS = {
     vault: [ChainId.MATIC],
     charts: [ChainId.MATIC],
     farms: [ChainId.MATIC],
+    prediction: [ChainId.MATIC],
     gaslessMode: [ChainId.MATIC]
 }
 

@@ -12,8 +12,7 @@ import { RoundResultBox, PrizePoolRow } from '../RoundResult'
 import MultiplierArrow from './MultiplierArrow'
 import Card from './Card'
 import CardHeader from './CardHeader'
-import SetPositionCard from './SetPositionCard'
-import { ChainId, JSBI, TokenAmount, WETH } from '@uniswap/sdk'
+import PositionModal from './PositionModal'
 import useCurrentBlockTimestamp from 'hooks/useCurrentBlockTimestamp'
 
 interface OpenRoundCardProps {
@@ -94,16 +93,16 @@ const OpenRoundCard: React.FC<OpenRoundCardProps> = ({
     }))
   }
 
-  const handleSuccess = async (chainId: ChainId, decimalValue: JSBI | number | string, hash: string) => {
+  const handleSuccess = async (decimalValue: string, hash: string) => {
     // Optimistically set the user bet so we see the entered position immediately.
     if (!!!account) return
-    let decimalValueBN: JSBI;
-    if (!(decimalValue instanceof JSBI)) {
-      decimalValueBN = JSBI.BigInt(decimalValue);
-    }
-    else {
-      decimalValueBN = decimalValue;
-    }
+    // let decimalValueBN: JSBI;
+    // if (!(decimalValue instanceof JSBI)) {
+    //   decimalValueBN = JSBI.BigInt(decimalValue);
+    // }
+    // else {
+    //   decimalValueBN = decimalValue;
+    // }
     dispatch(
       markPositionAsEntered({
         account,
@@ -112,7 +111,7 @@ const OpenRoundCard: React.FC<OpenRoundCardProps> = ({
           hash,
           round,
           position,
-          amount: parseFloat(new TokenAmount(WETH[chainId ?? 137], decimalValueBN).toSignificant(6)),
+          amount: parseFloat(decimalValue),
           claimed: false,
           claimedHash: null,
         },
@@ -187,8 +186,9 @@ const OpenRoundCard: React.FC<OpenRoundCardProps> = ({
           />
         </CardBody>
       </Card>
-      <SetPositionCard
-        onBack={handleBack}
+      <PositionModal
+        isOpen={isSettingPosition}
+        onDismiss={handleBack}
         onSuccess={handleSuccess}
         position={position}
         togglePosition={togglePosition}

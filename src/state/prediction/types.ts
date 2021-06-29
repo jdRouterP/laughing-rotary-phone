@@ -1,6 +1,6 @@
 // Predictions
 
-import { JSBI } from "@uniswap/sdk";
+import { JSBI } from "@dfyn/sdk";
 
 export enum BetPosition {
     BULL = 'Bull',

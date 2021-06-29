@@ -9,14 +9,14 @@ import styled from 'styled-components'
 import { Bet, BetPosition } from 'state/prediction/types'
 import { fetchBet } from 'state/prediction/reducer'
 import { Result } from 'state/prediction/hooks'
-import { getEtherscanLink } from 'utils'
+import { getExplorerLink } from 'utils'
 import useIsRefundable from '../../hooks/useIsRefundable'
 import { formatToken, getPayout } from '../../helpers'
 import CollectWinningsButton from '../CollectWinningsButton'
 import PositionTag from '../PositionTag'
 import ReclaimPositionButton from '../ReclaimPositionButton'
 import useUSDCPrice from 'utils/useUSDCPrice'
-import { WETH } from '@uniswap/sdk'
+import { WETH } from '@dfyn/sdk'
 interface BetResultProps {
   bet: Bet
   result: Result
@@ -121,7 +121,7 @@ const BetResult: React.FC<BetResultProps> = ({ bet, result }) => {
         )}
         {bet.claimed && (
           <Flex justifyContent="center">
-            <LinkExternal href={getEtherscanLink(chainId, bet.claimedHash, "transaction")} mb="16px">
+            <LinkExternal href={getExplorerLink(chainId, bet.claimedHash, "transaction")} mb="16px">
               {t('View on BscScan')}
             </LinkExternal>
           </Flex>

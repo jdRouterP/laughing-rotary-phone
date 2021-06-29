@@ -400,6 +400,9 @@ export default function Header() {
           >
             {t('pool')}
           </StyledNavLink>
+          {chainId && HEADER_ACCESS.vault.includes(chainId) && <StyledNavLink id={`vault-nav-link`} to={'/prediction'}>
+            Prediction
+          </StyledNavLink>}
           {chainId && HEADER_ACCESS.vault.includes(chainId) && <StyledNavLink id={`vault-nav-link`} to={'/vault'}>
             Vault
           </StyledNavLink>}

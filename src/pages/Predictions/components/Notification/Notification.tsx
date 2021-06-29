@@ -27,22 +27,19 @@ const CardWrapper = styled.div`
   width: 320px;
 `
 
-const BunnyDecoration = styled.div`
-  position: absolute;
-  top: -130px;
-  left: 0px;
-  text-align: center;
-  width: 100%;
-  z-index: 5;
-`
+// const BunnyDecoration = styled.div`
+//   position: absolute;
+//   top: -130px;
+//   left: 0px;
+//   text-align: center;
+//   width: 100%;
+//   z-index: 5;
+// `
 
 const Notification: React.FC<NotificationProps> = ({ title, children }) => {
   return (
     <Wrapper>
       <CardWrapper>
-        <BunnyDecoration>
-          <img src="/images/decorations/hiccup-bunny.png" alt="bunny decoration" height="121px" width="130px" />
-        </BunnyDecoration>
         <Card>
           <CardBody>
             <Heading mb="24px">{title}</Heading>

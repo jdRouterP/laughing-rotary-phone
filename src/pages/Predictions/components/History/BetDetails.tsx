@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { Bet } from 'state/prediction/types'
 import { useTranslation } from 'react-i18next'
-import { getEtherscanLink } from 'utils'
+import { getExplorerLink } from 'utils'
 import { Flex, Text, Link, Heading } from '@pancakeswap/uikit'
 import { Result } from 'state/prediction/hooks'
 import { getMultiplier } from '../../helpers'
@@ -44,13 +44,13 @@ const BetDetails: React.FC<BetDetailsProps> = ({ bet, result }) => {
       </RoundResult>
       <Flex alignItems="center" justifyContent="space-between" mb="8px">
         <Text>{t('Opening Block')}</Text>
-        {chainId && <Link href={getEtherscanLink(chainId, bet.round.lockBlock1, "block")} external>
+        {chainId && <Link href={getExplorerLink(chainId, bet.round.lockBlock1.toString(), "block")} external>
           {bet.round.lockBlock1}
         </Link>}
       </Flex>
       <Flex alignItems="center" justifyContent="space-between">
         <Text>{t('Closing Block')}</Text>
-        {chainId && <Link href={getEtherscanLink(chainId, bet.round.endBlock1, "block")} external>
+        {chainId && <Link href={getExplorerLink(chainId, bet.round.endBlock1.toString(), "block")} external>
           {bet.round.endBlock1}
         </Link>}
       </Flex>

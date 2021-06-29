@@ -5,7 +5,7 @@ import { orderBy } from 'lodash'
 import { getCanClaim } from './prediction/hooks'
 import { useActiveWeb3React } from 'hooks'
 import { setBlock } from './block'
-import { TokenAmount, WETH } from '@uniswap/sdk'
+import { Currency, CurrencyAmount } from '@dfyn/sdk'
 
 // Predictions
 export const useIsHistoryPaneOpen = () => {
@@ -76,7 +76,7 @@ export const useGetCurrentRoundTime = () => {
 export const useGetMinBetAmount = () => {
     const minBetAmount = useSelector((state: AppState) => state.predictions.minBetAmount)
     const { chainId } = useActiveWeb3React()
-    return useMemo(() => new TokenAmount(WETH[chainId ?? 137], minBetAmount), [minBetAmount])
+    return useMemo(() => new CurrencyAmount(Currency.getNativeCurrency(chainId ?? 137), minBetAmount), [minBetAmount])
 }
 
 export const useGetIsFetchingHistory = () => {

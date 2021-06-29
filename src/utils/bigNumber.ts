@@ -1,4 +1,4 @@
-import { JSBI } from '@uniswap/sdk'
+import { JSBI } from '@dfyn/sdk'
 
 export const BIG_INT_ZERO = JSBI.BigInt(0)
 export const BIG_INT_ONE = JSBI.BigInt(1)

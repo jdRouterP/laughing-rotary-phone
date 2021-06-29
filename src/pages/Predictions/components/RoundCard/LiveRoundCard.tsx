@@ -49,8 +49,7 @@ const LiveRoundCard: React.FC<LiveRoundCardProps> = ({
   const totalInterval = useGetinterval()
   const price = useGetLastOraclePrice()
   const isBull = price > lockPrice;
-  const priceColor = isBull ? 'success' : 'failure'
-  console.log(priceColor)
+  // const priceColor = isBull ? 'success' : 'failure'
   const estimatedEndTime = lockAt + totalInterval
   const priceDifference = price - lockPrice
   const { countUp, update } = useCountUp({

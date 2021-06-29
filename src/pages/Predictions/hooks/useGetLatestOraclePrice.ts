@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useChainlinkOracleContract } from 'hooks/useContract'
 import useLastUpdated from 'hooks/useLastUpdated'
 import { CHAINLINK_ADDRESS, MATIC_USD } from '../../../constants'
-import { JSBI, TokenAmount } from '@uniswap/sdk'
+import { JSBI, TokenAmount } from '@dfyn/sdk'
 
 const useGetLatestOraclePrice = () => {
   const [price, setPrice] = useState('');

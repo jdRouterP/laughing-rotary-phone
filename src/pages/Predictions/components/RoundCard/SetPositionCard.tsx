@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import {
   ArrowBackIcon,
   CardBody,
@@ -9,8 +9,7 @@ import {
   Button,
   BinanceIcon,
   Text,
-  BalanceInput,
-  Slider,
+  // Slider,
   Box,
   AutoRenewIcon,
 } from '@pancakeswap/uikit'
@@ -18,7 +17,7 @@ import { TransactionResponse } from '@ethersproject/providers'
 import { useGetMinBetAmount } from 'state/hook'
 import { useTranslation } from 'react-i18next'
 import { usePredictionContract } from 'hooks/useContract'
-import { useTokenBalance } from 'state/wallet/hooks'
+import { useCurrencyBalance } from 'state/wallet/hooks'
 import { BetPosition } from 'state/prediction/types'
 import { getDecimalAmount } from 'utils/formatBalance'
 import PositionTag from '../PositionTag'
@@ -27,9 +26,12 @@ import FlexRow from '../FlexRow'
 import Card from './Card'
 import { useTransactionAdder } from 'state/transactions/hooks'
 import { useActiveWeb3React } from 'hooks'
-import { ChainId, JSBI, TokenAmount, WETH } from '@uniswap/sdk'
+import { ChainId, Currency, CurrencyAmount, JSBI } from '@dfyn/sdk'
 import { BIG_INT_ZERO } from '../../../../constants'
 import { useWalletModalToggle } from 'state/application/hooks'
+import { maxAmountSpend } from 'utils/maxAmountSpend'
+import CurrencyInputPanel from '../../../../components/CurrencyInputPanel'
+import useDerivedBettingInfo from 'pages/Predictions/hooks/useDerivedBettingInfo'
 
 
 interface SetPositionCardProps {
@@ -51,9 +53,9 @@ interface ErrorMessageType {
 
 // const dust = new BigNumber(0.01).times(BIG_TEN.pow(18))
 const dust = JSBI.BigInt("10000000000000000"); //TODO
-const percentShortcuts = [10, 25, 50, 75]
+// const percentShortcuts = [10, 25, 50, 75]
 
-const getButtonProps = (account: string | null | undefined, value: JSBI, balance: TokenAmount, minBetAmountBalance: TokenAmount) => {
+const getButtonProps = (account: string | null | undefined, value: JSBI, balance: CurrencyAmount, minBetAmountBalance: CurrencyAmount) => {
   if (!account) return { key: 'Unlock your Wallet', disabled: false }
   const balanceBn = balance.raw;
   const hasSufficientBalance = () => {
@@ -80,7 +82,7 @@ const SetPositionCard: React.FC<SetPositionCardProps> = ({ position, togglePosit
   const { swiper } = useSwiper()
   const { account, chainId } = useActiveWeb3React()
   const [errorMessage,] = useState<ErrorMessageType | null>(null)
-  let balance = useTokenBalance(account ?? undefined, WETH[chainId ?? 137])
+  let balance = useCurrencyBalance(account ?? undefined, Currency.getNativeCurrency(chainId ?? 137))
 
   const minBetAmountBalance = useGetMinBetAmount()
   const { t } = useTranslation()
@@ -92,38 +94,52 @@ const SetPositionCard: React.FC<SetPositionCardProps> = ({ position, togglePosit
 
   const maxBalance = useMemo(() => {
     if (balance === undefined) {
-      return new TokenAmount(WETH[chainId ?? 137], BIG_INT_ZERO);
+      return new CurrencyAmount(Currency.getNativeCurrency(chainId ?? 137), BIG_INT_ZERO);
     }
-    let dustToken = new TokenAmount(WETH[chainId ?? 137], dust);
+    let dustToken = new CurrencyAmount(Currency.getNativeCurrency(chainId ?? 137), dust);
     return balance.greaterThan(dust) ? balance.subtract(dustToken) : balance
   }, [balance, chainId])
 
-  const valueAsBn = JSBI.BigInt(value);
+  const { parsedAmount } = useDerivedBettingInfo(value, Currency.getNativeCurrency(chainId ?? 137), balance, minBetAmountBalance)
+  const valueAsBn = parsedAmount ?? new CurrencyAmount(Currency.getNativeCurrency(chainId ?? 137), BIG_INT_ZERO);
 
-  const showFieldWarning = account && JSBI.greaterThan(valueAsBn, BIG_INT_ZERO) && errorMessage !== null
+  const showFieldWarning = account && JSBI.greaterThan(valueAsBn.raw, BIG_INT_ZERO) && errorMessage !== null
 
-  const [percent, setPercent] = useState(0)
+  const [, setPercent] = useState(0)
 
-  const handleInputChange = (input: string) => {
-    if (input) {
-      // const percentage = Math.floor(new BigNumber(input).dividedBy(maxBalance).multipliedBy(100).toNumber())
-      const percentage = Math.floor(JSBI.toNumber(JSBI.multiply(JSBI.divide(JSBI.BigInt(input), maxBalance.raw), JSBI.BigInt(100))));
-      setPercent(Math.min(percentage, 100))
-    } else {
-      setPercent(0)
-    }
-    setValue(input)
-  }
+  // const handleInputChange = (input: string) => {
+  //   if (input) {
+  //     // const percentage = Math.floor(new BigNumber(input).dividedBy(maxBalance).multipliedBy(100).toNumber())
+  //     const percentage = Math.floor(JSBI.toNumber(JSBI.multiply(JSBI.divide(JSBI.BigInt(input), maxBalance.raw), JSBI.BigInt(100))));
+  //     setPercent(Math.min(percentage, 100))
+  //   } else {
+  //     setPercent(0)
+  //   }
+  //   debugger
+  //   setValue(input)
+  // }
 
-  const handlePercentChange = (sliderPercent: number) => {
-    if (sliderPercent > 0) {
-      const percentageOfStakingMax = maxBalance.divide(JSBI.BigInt(100)).multiply(JSBI.BigInt(sliderPercent));
-      setValue(percentageOfStakingMax.toSignificant(6))
-    } else {
-      setValue('')
-    }
-    setPercent(sliderPercent)
-  }
+  const onUserInput = useCallback((typedValue: string) => {
+    setValue(typedValue)
+  }, [])
+  // used for max input button
+  const maxAmountInput = maxAmountSpend(maxBalance, chainId);
+  const atMaxAmount = Boolean(maxAmountInput && balance?.equalTo(maxAmountInput))
+  const handleMax = useCallback(() => {
+    maxAmountInput && onUserInput(maxAmountInput.toExact())
+  }, [maxAmountInput, onUserInput])
+
+
+
+  // const handlePercentChange = (sliderPercent: number) => {
+  //   if (sliderPercent > 0) {
+  //     const percentageOfStakingMax = maxBalance.divide(JSBI.BigInt(100)).multiply(JSBI.BigInt(sliderPercent));
+  //     setValue(percentageOfStakingMax.toSignificant(6))
+  //   } else {
+  //     setValue('')
+  //   }
+  //   setPercent(sliderPercent)
+  // }
 
   // Clear value
   const handleGoBack = () => {
@@ -145,7 +161,7 @@ const SetPositionCard: React.FC<SetPositionCardProps> = ({ position, togglePosit
     swiper.attachEvents()
   }
 
-  const { key, disabled } = getButtonProps(account, valueAsBn, maxBalance, minBetAmountBalance)
+  const { key, disabled } = getButtonProps(account, valueAsBn.raw, maxBalance, minBetAmountBalance)
   const toggleWalletModal = useWalletModalToggle()
 
   const handleEnterPosition = () => {
@@ -153,7 +169,7 @@ const SetPositionCard: React.FC<SetPositionCardProps> = ({ position, togglePosit
       toggleWalletModal()
     } else {
       const betMethod = position === BetPosition.BULL ? 'betBull' : 'betBear'
-      const decimalValue = getDecimalAmount(WETH[chainId ?? 137], valueAsBn)
+      const decimalValue = getDecimalAmount(Currency.getNativeCurrency(chainId ?? 137), valueAsBn.raw)
       setIsPendingTx(true);
       predictionsContract?.[betMethod](decimalValue, { gasLimit: 350000 })
         .then(async (response: TransactionResponse) => {
@@ -173,23 +189,6 @@ const SetPositionCard: React.FC<SetPositionCardProps> = ({ position, togglePosit
 
   }
 
-  // // Warnings
-  // useEffect(() => {
-  //   const bnValue = JSBI.BigInt(value);
-  //   // const hasSufficientBalance = bnValue.gt(0) && bnValue.lte(maxBalance)
-  //   const hasSufficientBalance = JSBI.greaterThan(bnValue, BIG_INT_ZERO) && JSBI.lessThanOrEqual(bnValue, maxBalance.raw)
-
-  //   if (!hasSufficientBalance) {
-  //     setErrorMessage({ key: 'Insufficient MATIC balance' })
-  //   } else if (JSBI.greaterThan(bnValue, BIG_INT_ZERO) && JSBI.lessThan(bnValue, minBetAmountBalance.raw)) {
-  //     setErrorMessage({
-  //       key: 'A minimum amount of %num% %token% is required',
-  //       data: { num: minBetAmountBalance, token: 'MATIC' },
-  //     })
-  //   } else {
-  //     setErrorMessage(null)
-  //   }
-  // }, [value, maxBalance, minBetAmountBalance, setErrorMessage])
 
   return (
     <Card onMouseOver={handleMouseOver} onMouseOut={handleMouseOut}>
@@ -218,61 +217,35 @@ const SetPositionCard: React.FC<SetPositionCardProps> = ({ position, togglePosit
             </Text>
           </Flex>
         </Flex>
-        <BalanceInput
+        {/* <BalanceInput
           value={value}
           onUserInput={handleInputChange}
           //@ts-ignore
           isWarning={showFieldWarning}
           inputProps={{ disabled: !account || isPendingTx }}
+        /> */}
+        <CurrencyInputPanel
+          value={value}
+          onUserInput={onUserInput}
+          onMax={handleMax}
+          showMaxButton={!atMaxAmount}
+          currency={Currency.getNativeCurrency(chainId ?? 137)}
+          label={''}
+          disableCurrencySelect={true}
+          customBalanceText={'Available to bet: '}
+          id="bet-token"
         />
         {showFieldWarning && (
           <Text color="failure" fontSize="12px" mt="4px" textAlign="right">
             {t(errorMessage?.key, errorMessage?.data)}
           </Text>
         )}
-        <Text textAlign="right" mb="16px" color="textSubtle" fontSize="12px" style={{ height: '18px' }}>
-          {account && t('Balance: %balance%', { balance: balanceDisplay })}
-        </Text>
-        <Slider
-          name="balance"
-          min={0}
-          max={100}
-          value={percent}
-          onValueChanged={handlePercentChange}
-          valueLabel={account ? `${percent}%` : ''}
-          step={0.1}
-          disabled={!account || isPendingTx}
-          mb="4px"
-          className={!account || isPendingTx ? '' : 'swiper-no-swiping'}
-        />
-        <Flex alignItems="center" justifyContent="space-between" mb="16px">
-          {percentShortcuts.map((percentShortcut) => {
-            const handleClick = () => {
-              handlePercentChange(percentShortcut)
-            }
+        {
+          account && <Text textAlign="right" mb="16px" color="textSubtle" fontSize="12px" style={{ height: '18px' }}>
+            {balanceDisplay}
+          </Text>
+        }
 
-            return (
-              <Button
-                key={percentShortcut}
-                scale="xs"
-                variant="tertiary"
-                onClick={handleClick}
-                disabled={!account || isPendingTx}
-                style={{ flex: 1 }}
-              >
-                {`${percentShortcut}%`}
-              </Button>
-            )
-          })}
-          <Button
-            scale="xs"
-            variant="tertiary"
-            onClick={() => handlePercentChange(100)}
-            disabled={!account || isPendingTx}
-          >
-            {t('Max')}
-          </Button>
-        </Flex>
         <Box mb="8px">
           {
             <Button
