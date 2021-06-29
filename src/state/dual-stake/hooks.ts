@@ -26,7 +26,7 @@ export const STAKING_REWARDS_INFO: {
   [ChainId.MATIC]: [
     {
       tokens: [XUSD, DFYN],
-      rewardTokens: [XDO, DFYN],
+      rewardTokens: [DFYN, XDO],
       baseToken: DFYN,
       start: 1624980600000,
       stakingRewardAddress: '0xc6Cface612849C1D378Fbfe8Bdf49D01bbf569Bb'
@@ -346,6 +346,7 @@ export function useTotalDualFarmUniEarned(): TokenAmount | undefined {
         (accumulator, stakingInfo) => {
           const index = stakingInfo?.rewardAddresses.indexOf(DFYN)
           const amount = index === 0 ? stakingInfo?.earnedAmount : stakingInfo.earnedAmountTwo
+          debugger
           return accumulator.add(amount)
         },
         new TokenAmount(DFYN, '0')

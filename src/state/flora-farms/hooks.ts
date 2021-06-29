@@ -588,7 +588,13 @@ export function useTotalFloraUniEarned(): TokenAmount | undefined {
     if (!uni) return undefined
     return (
       stakingInfos?.reduce(
-        (accumulator, stakingInfo) => accumulator.add(stakingInfo.earnedAmount),
+        (accumulator, stakingInfo) => {
+          if (stakingInfo.rewardToken !== MATICPAD) {
+
+            return accumulator.add(stakingInfo.earnedAmount)
+          }
+          return accumulator
+        },
         new TokenAmount(uni, '0')
       ) ?? new TokenAmount(uni, '0')
     )
