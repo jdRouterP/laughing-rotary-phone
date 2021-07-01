@@ -50,6 +50,7 @@ export function useSwapActionHandlers(): {
 
   const onSwitchTokens = useCallback(() => {
     dispatch(switchCurrencies())
+    
   }, [dispatch])
 
   const onUserInput = useCallback(
@@ -319,10 +320,12 @@ export function useDefaultsFromURLSearch():
         recipient: parsed.recipient
       })
     )
-
+    console.log("I am hooks****");
+    console.log(result);
+    
     setResult({ inputCurrencyId: parsed[Field.INPUT].currencyId, outputCurrencyId: parsed[Field.OUTPUT].currencyId })
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, chainId])
-
+  }, [dispatch, chainId, parsedQs])
+  
   return result
 }
