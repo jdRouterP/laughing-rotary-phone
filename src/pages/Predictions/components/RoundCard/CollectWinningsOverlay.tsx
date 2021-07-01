@@ -6,6 +6,8 @@ import { Flex, TrophyGoldIcon } from '@pancakeswap/uikit'
 import { useBetCanClaim } from 'state/hook'
 import { useTranslation } from 'react-i18next'
 import CollectWinningsButton from '../CollectWinningsButton'
+import { ButtonWinning } from 'components/Button'
+import { Button } from 'theme'
 
 interface CollectWinningsOverlayProps {
   roundId: string
@@ -48,12 +50,12 @@ const CollectWinningsOverlay: React.FC<CollectWinningsOverlayProps> = ({
   }
 
   return (
-    <Wrapper alignItems="center" p="16px" isBottom={isBottom} {...props}>
-      <TrophyGoldIcon width="64px" style={{ flex: 'none' }} mr="8px" />
-      <CollectWinningsButton payout={payout} roundId={roundId} epoch={epoch} hasClaimed={false} width="100%">
-        {t('Collect Winnings')}
-      </CollectWinningsButton>
-    </Wrapper>
+
+    // <TrophyGoldIcon width="64px" style={{ flex: 'none' }} mr="8px" />
+    <ButtonWinning payout={payout} roundId={roundId} epoch={epoch} hasClaimed={false} width="100%">
+      {t('Collect Winnings')}
+    </ButtonWinning>
+
   )
 }
 

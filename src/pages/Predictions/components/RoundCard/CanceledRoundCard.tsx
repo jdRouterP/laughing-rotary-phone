@@ -7,19 +7,38 @@ import ReclaimPositionButton from '../ReclaimPositionButton'
 import useIsRefundable from '../../hooks/useIsRefundable'
 import CardHeader from './CardHeader'
 import styled from 'styled-components'
+import { AutoColumn } from 'components/Column'
+import { CardBGImage, CardNoise } from 'components/earn/styled'
 
 interface CanceledRoundCardProps {
   round: Round
 }
 
-const Wrapper = styled.div`
-    margin: 0 20px;
+const Wrapper = styled(AutoColumn) <{ showBackground: boolean; bgColor: any }>`
+  border-radius: 12px;
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  opacity: ${({ showBackground }) => (showBackground ? '1' : '1')};
+  background: ${({ theme, bgColor, showBackground }) =>
+    `radial-gradient(91.85% 100% at 1.84% 0%, ${bgColor} 0%, ${showBackground ? theme.black : theme.bg5} 100%) `};
+  color: ${({ theme, showBackground }) => (showBackground ? theme.white : theme.text1)} !important;
+
+  ${({ showBackground }) =>
+    showBackground &&
+    `  box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.01), 0px 4px 8px rgba(0, 0, 0, 0.04), 0px 16px 24px rgba(0, 0, 0, 0.04),
+    0px 24px 32px rgba(0, 0, 0, 0.01);`}
+
+    opacity: 0.7;
+    transition: opacity 300ms;
+  
+    &:hover {
+      opacity: 1;
+    }
 `
 
 const ContentWrapper = styled.div`
-    width: 280px;
-    height: 280px;
-    border: 1px solid red;
+    height: 320px;
     border-radius: 0 0 12px 12px;
     display: flex;
     flex-direction: column;
@@ -29,24 +48,13 @@ const ContentWrapper = styled.div`
 const Content = styled.div`
     width: 250px;
     height: 120px;
-    border: 1px solid pink;
+    border: 3px solid white;
     border-radius: 12px;
     padding: 20px 15px;
     display:grid;
     place-items: center;
     margin: 20px 0;
 `
-
-const Payout = styled.div`
-    display: grid;
-    place-items: center;
-`
-
-const PayoutLabel = styled.div`
-    font-size: 20px;
-    font-weight: bold;
-`
-
 const EntryTitle = styled.div`
     font-size: 16px;
     font-weight: bold;
@@ -70,7 +78,9 @@ const CanceledRoundCard: React.FC<CanceledRoundCardProps> = ({ round }) => {
 
 
   return (
-    <Wrapper>
+    <Wrapper showBackground={false} bgColor={'grey'}>
+      <CardBGImage desaturate />
+      <CardNoise />
       <CardHeader
         status="canceled"
         icon={<BlockIcon mr="4px" width="21px" />}
@@ -79,25 +89,15 @@ const CanceledRoundCard: React.FC<CanceledRoundCardProps> = ({ round }) => {
         blockTime={estimatedEndTime}
       />
       <ContentWrapper>
-        <Payout>
-          <PayoutLabel>
-            UP
-          </PayoutLabel>
-        </Payout>
         <Content>
           <EntryTitle>
             {t('Round Canceled')}
           </EntryTitle>
           {isRefundable && <ReclaimPositionButton epoch={epoch} onSuccess={handleSuccess} width="100%" my="8px" />}
-          <LinkExternal href="https://docs.pancakeswap.finance/products/prediction" external>
+          <LinkExternal href="https://docs.dfyn.network/" external>
             {t('Learn More')}
           </LinkExternal>
         </Content>
-        <Payout>
-          <PayoutLabel>
-            DOWN
-          </PayoutLabel>
-        </Payout>
       </ContentWrapper>
     </Wrapper>
   )

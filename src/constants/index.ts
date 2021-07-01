@@ -7,7 +7,7 @@ import tokenABI from "./abis/token.json"
 import { fortmatic, injected, portis, walletconnect, walletlink } from '../connectors'
 
 export const ROUTER_ADDRESS = '0xA102072A4C07F06EC3B4900FDC4C7B80b6c57429'
-export const PREDICTION_ADDRESS = '0xa78cd3A250fa22b48A2872b3a9e6134E93b6de17'
+export const PREDICTION_ADDRESS = '0x57771588C764Bda6ede3eF5D28Ff652DCf403578'
 
 export const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000'
 

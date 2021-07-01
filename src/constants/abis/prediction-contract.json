@@ -18,11 +18,6 @@
                     "type": "address"
                 },
                 {
-                    "internalType": "address",
-                    "name": "_rewardToken",
-                    "type": "address"
-                },
-                {
                     "internalType": "uint256",
                     "name": "_interval",
                     "type": "uint256"
@@ -277,6 +272,19 @@
             "anonymous": false,
             "inputs": [
                 {
+                    "indexed": false,
+                    "internalType": "uint256",
+                    "name": "epoch",
+                    "type": "uint256"
+                }
+            ],
+            "name": "Reset",
+            "type": "event"
+        },
+        {
+            "anonymous": false,
+            "inputs": [
+                {
                     "indexed": true,
                     "internalType": "uint256",
                     "name": "epoch",
@@ -376,29 +384,17 @@
             "type": "function"
         },
         {
-            "inputs": [
-                {
-                    "internalType": "uint256",
-                    "name": "amount",
-                    "type": "uint256"
-                }
-            ],
+            "inputs": [],
             "name": "betBear",
             "outputs": [],
-            "stateMutability": "nonpayable",
+            "stateMutability": "payable",
             "type": "function"
         },
         {
-            "inputs": [
-                {
-                    "internalType": "uint256",
-                    "name": "amount",
-                    "type": "uint256"
-                }
-            ],
+            "inputs": [],
             "name": "betBull",
             "outputs": [],
-            "stateMutability": "nonpayable",
+            "stateMutability": "payable",
             "type": "function"
         },
         {
@@ -566,6 +562,94 @@
             "type": "function"
         },
         {
+            "inputs": [],
+            "name": "isRefundable",
+            "outputs": [
+                {
+                    "internalType": "bool",
+                    "name": "",
+                    "type": "bool"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [],
+            "name": "lastRound",
+            "outputs": [
+                {
+                    "components": [
+                        {
+                            "internalType": "uint256",
+                            "name": "epoch",
+                            "type": "uint256"
+                        },
+                        {
+                            "internalType": "uint256",
+                            "name": "startTime",
+                            "type": "uint256"
+                        },
+                        {
+                            "internalType": "uint256",
+                            "name": "lockTime",
+                            "type": "uint256"
+                        },
+                        {
+                            "internalType": "uint256",
+                            "name": "endTime",
+                            "type": "uint256"
+                        },
+                        {
+                            "internalType": "int256",
+                            "name": "lockPrice",
+                            "type": "int256"
+                        },
+                        {
+                            "internalType": "int256",
+                            "name": "closePrice",
+                            "type": "int256"
+                        },
+                        {
+                            "internalType": "uint256",
+                            "name": "totalAmount",
+                            "type": "uint256"
+                        },
+                        {
+                            "internalType": "uint256",
+                            "name": "bullAmount",
+                            "type": "uint256"
+                        },
+                        {
+                            "internalType": "uint256",
+                            "name": "bearAmount",
+                            "type": "uint256"
+                        },
+                        {
+                            "internalType": "uint256",
+                            "name": "rewardBaseCalAmount",
+                            "type": "uint256"
+                        },
+                        {
+                            "internalType": "uint256",
+                            "name": "rewardAmount",
+                            "type": "uint256"
+                        },
+                        {
+                            "internalType": "bool",
+                            "name": "oracleCalled",
+                            "type": "bool"
+                        }
+                    ],
+                    "internalType": "struct DfynPricePrediction.Round",
+                    "name": "round",
+                    "type": "tuple"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
             "inputs": [
                 {
                     "internalType": "uint256",
@@ -717,25 +801,19 @@
         },
         {
             "inputs": [],
+            "name": "reset",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [],
             "name": "rewardRate",
             "outputs": [
                 {
                     "internalType": "uint256",
                     "name": "",
                     "type": "uint256"
-                }
-            ],
-            "stateMutability": "view",
-            "type": "function"
-        },
-        {
-            "inputs": [],
-            "name": "rewardToken",
-            "outputs": [
-                {
-                    "internalType": "contract IERC20",
-                    "name": "",
-                    "type": "address"
                 }
             ],
             "stateMutability": "view",

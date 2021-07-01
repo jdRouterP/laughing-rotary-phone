@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { CheckmarkCircleIcon, Tag, useTooltip } from '@pancakeswap/uikit'
+import { useTooltip } from '@pancakeswap/uikit'
 import { useTranslation } from 'react-i18next'
 import { formatToken } from '../../helpers'
 
@@ -8,11 +8,12 @@ interface EnteredTagProps {
   amount?: number
 }
 
-const StyledEnteredTag = styled(Tag).attrs({
-  variant: 'secondary',
-  startIcon: <CheckmarkCircleIcon width="18px" />,
-})`
-  font-weight: bold;
+const StyledEnteredTag = styled.div`
+background-color: #272822;
+color: #f8f8f2;
+border-radius: 0.2rem;
+padding: 4px 5px 5px;
+white-space: nowrap;
   text-transform: uppercase;
 `
 

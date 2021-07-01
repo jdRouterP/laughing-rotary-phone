@@ -4,9 +4,9 @@ import React, { useState, useCallback, useMemo } from 'react'
 import Modal from 'components/Modal'
 import { AutoColumn } from 'components/Column'
 import styled from 'styled-components'
-import { RowBetween } from 'components/Row'
+import { RowBetween, RowFlat } from 'components/Row'
 import { TYPE, CloseIcon } from '../../../../theme'
-import { ButtonError } from 'components/Button'
+import { ButtonError, ButtonLight } from 'components/Button'
 import PositionTag from '../PositionTag'
 import CurrencyInputPanel from 'components/CurrencyInputPanel'
 import { Currency, CurrencyAmount, JSBI } from '@dfyn/sdk'
@@ -103,7 +103,7 @@ export default function StakingModal({ isOpen, position, togglePosition, onDismi
       setAttempting(true)
       const betMethod = position === BetPosition.BULL ? 'betBull' : 'betBear'
       console.log("bet ", parsedAmount.raw.toString(16), parsedAmount.toSignificant(3));
-      predictionsContract?.[betMethod](`0x${parsedAmount.raw.toString(16)}`, { gasLimit: 450000 })
+      predictionsContract?.[betMethod]({ value: `0x${parsedAmount.raw.toString(16)}`, gasLimit: 450000 })
         .then(async (response: TransactionResponse) => {
           addTransaction(response, {
             summary: `Placed Bet!`
@@ -130,7 +130,12 @@ export default function StakingModal({ isOpen, position, togglePosition, onDismi
       {!attempting && !hash && (
         <ContentWrapper gap="lg">
           <RowBetween>
-            <TYPE.mediumHeader>Set Position</TYPE.mediumHeader>
+            <RowFlat>
+              <TYPE.mediumHeader>Set Position</TYPE.mediumHeader>
+              <PositionTag betPosition={position} onClick={togglePosition}>
+                {position === BetPosition.BULL ? 'BULL' : 'BEAR'}
+              </PositionTag>
+            </RowFlat>
             <CloseIcon onClick={wrappedOnDismiss} />
           </RowBetween>
           <CurrencyInputPanel
@@ -146,16 +151,13 @@ export default function StakingModal({ isOpen, position, togglePosition, onDismi
           />
 
           <RowBetween>
-            <PositionTag betPosition={position} onClick={togglePosition}>
-              {position === BetPosition.BULL ? 'Up' : 'Down'}
-            </PositionTag>
-            <ButtonError
+            {account ? <ButtonError
               disabled={!!error}
               error={!!error && !!parsedAmount}
               onClick={handleEnterPosition}
             >
-              {error ?? 'Bet'}
-            </ButtonError>
+              {error ?? 'Place Bet'}
+            </ButtonError> : <ButtonLight onClick={toggleWalletModal}>Connect Wallet</ButtonLight>}
           </RowBetween>
         </ContentWrapper>
       )}

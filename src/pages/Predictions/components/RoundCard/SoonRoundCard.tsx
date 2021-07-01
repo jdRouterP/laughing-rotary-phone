@@ -7,19 +7,34 @@ import { formatRoundTime } from '../../helpers'
 import useRoundCountdown from '../../hooks/useRoundCountdown'
 import CardHeader from './CardHeader'
 import styled from 'styled-components'
+import { AutoColumn } from 'components/Column'
+import { CardBGImage, CardNoise } from 'components/earn/styled'
 
 interface SoonRoundCardProps {
   round: Round
 }
 
-const Wrapper = styled.div`
-    margin: 0 20px;
+const Wrapper = styled(AutoColumn) <{ showBackground: boolean; bgColor: any }>`
+  border-radius: 12px;
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  opacity: ${({ showBackground }) => (showBackground ? '1' : '1')};
+  background: ${({ theme, bgColor, showBackground }) =>
+    `radial-gradient(91.85% 100% at 1.84% 0%, ${bgColor} 0%, ${showBackground ? theme.black : theme.bg5} 100%) `};
+  color: ${({ theme, showBackground }) => (showBackground ? theme.white : theme.text1)} !important;
+
+  ${({ showBackground }) =>
+    showBackground &&
+    `  box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.01), 0px 4px 8px rgba(0, 0, 0, 0.04), 0px 16px 24px rgba(0, 0, 0, 0.04),
+    0px 24px 32px rgba(0, 0, 0, 0.01);`}
+
+    
+
 `
 
 const ContentWrapper = styled.div`
-    width: 280px;
-    height: 280px;
-    border: 1px solid red;
+    height: 320px;
     border-radius: 0 0 12px 12px;
     display: flex;
     flex-direction: column;
@@ -29,22 +44,12 @@ const ContentWrapper = styled.div`
 const Content = styled.div`
     width: 250px;
     height: 120px;
-    border: 1px solid pink;
+    border: 3px solid white;
     border-radius: 12px;
     padding: 20px 15px;
     display:grid;
     place-items: center;
     margin: 20px 0;
-`
-
-const Payout = styled.div`
-    display: grid;
-    place-items: center;
-`
-
-const PayoutLabel = styled.div`
-    font-size: 20px;
-    font-weight: bold;
 `
 
 const EntryTitle = styled.div`
@@ -65,20 +70,17 @@ const SoonRoundCard: React.FC<SoonRoundCardProps> = ({ round }) => {
   const countdown = formatRoundTime(seconds)
 
   return (
-    <Wrapper>
+    <Wrapper showBackground={false} bgColor={"#2989A5"}>
+      <CardBGImage desaturate />
+      <CardNoise />
       <CardHeader
-        status="soon"
+        status="upcoming"
         icon={<WaitIcon mr="4px" width="21px" />}
         title={t('Later')}
         epoch={round.epoch}
         blockTime={estimatedEndTime}
       />
       <ContentWrapper>
-        <Payout>
-          <PayoutLabel>
-            UP
-          </PayoutLabel>
-        </Payout>
         <Content>
           <EntryTitle>
             Entry Starting in
@@ -87,11 +89,6 @@ const SoonRoundCard: React.FC<SoonRoundCardProps> = ({ round }) => {
             {`~${countdown}`}
           </EntryTimer>
         </Content>
-        <Payout>
-          <PayoutLabel>
-            DOWN
-          </PayoutLabel>
-        </Payout>
       </ContentWrapper>
     </Wrapper>
   )

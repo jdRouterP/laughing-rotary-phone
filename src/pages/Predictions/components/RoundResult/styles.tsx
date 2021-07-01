@@ -1,5 +1,5 @@
 import React from 'react'
-import styled, { DefaultTheme } from 'styled-components'
+import styled from 'styled-components'
 import { Box, Flex, FlexProps, Text } from '@pancakeswap/uikit'
 import { formatToken, formatUsd } from 'pages/Predictions/helpers'
 import { useTranslation } from 'react-i18next'
@@ -89,35 +89,35 @@ interface RoundResultBoxProps {
   hasEntered?: boolean
 }
 
-const getBackgroundColor = ({
-  theme,
-  betPosition,
-  isNext,
-  isLive,
-  hasEntered,
-}: RoundResultBoxProps & { theme: DefaultTheme }) => {
-  if (isNext) {
-    return 'linear-gradient(180deg, #53DEE9 0%, #7645D9 100%)'
-  }
+// const getBackgroundColor = ({
+//   theme,
+//   betPosition,
+//   isNext,
+//   isLive,
+//   hasEntered,
+// }: RoundResultBoxProps & { theme: DefaultTheme }) => {
+//   if (isNext) {
+//     return 'linear-gradient(180deg, #53DEE9 0%, #7645D9 100%)'
+//   }
 
-  if (hasEntered || isLive) {
-    return 'pink'
-  }
+//   if (hasEntered || isLive) {
+//     return 'pink'
+//   }
 
-  if (betPosition === BetPosition.BULL) {
-    return 'green'
-  }
+//   if (betPosition === BetPosition.BULL) {
+//     return 'green'
+//   }
 
-  if (betPosition === BetPosition.BEAR) {
-    return 'red'
-  }
+//   if (betPosition === BetPosition.BEAR) {
+//     return 'red'
+//   }
 
-  return 'blue'
-}
+//   return 'blue'
+// }
 
 const Background = styled(Box) <RoundResultBoxProps>`
-  background: ${getBackgroundColor};
   border-radius: 16px;
+  border: 3px solid white;
   padding: 2px;
 `
 
@@ -134,7 +134,7 @@ export const RoundResultBox: React.FC<RoundResultBoxProps> = ({
   ...props
 }) => {
   return (
-    <Background isNext={isNext} hasEntered={hasEntered} isLive={isLive} {...props}>
+    <Background isNext={isNext} hasEntered={true} isLive={isLive} {...props}>
       <StyledRoundResultBox>{children}</StyledRoundResultBox>
     </Background>
   )

@@ -6,7 +6,7 @@ import { RowBetween } from '../Row'
 import { ChevronDown } from 'react-feather'
 import { Button as RebassButton, ButtonProps } from 'rebass/styled-components'
 
-const Base = styled(RebassButton)<{
+const Base = styled(RebassButton) <{
   padding?: string
   width?: string
   borderRadius?: string
@@ -54,9 +54,9 @@ export const ButtonPrimary = styled(Base)`
   }
   &:disabled {
     background-color: ${({ theme, altDisabledStyle, disabled }) =>
-      altDisabledStyle ? (disabled ? theme.bg3 : theme.primary1) : theme.bg3};
+    altDisabledStyle ? (disabled ? theme.bg3 : theme.primary1) : theme.bg3};
     color: ${({ theme, altDisabledStyle, disabled }) =>
-      altDisabledStyle ? (disabled ? theme.text3 : 'white') : theme.text3};
+    altDisabledStyle ? (disabled ? theme.text3 : 'white') : theme.text3};
     cursor: auto;
     box-shadow: none;
     border: 1px solid transparent;
@@ -160,6 +160,26 @@ export const ButtonPink = styled(Base)`
 `
 
 export const ButtonUNIGradient = styled(ButtonPrimary)`
+  color: white;
+  padding: 4px 8px;
+  height: 36px;
+  font-weight: 500;
+  background-color: ${({ theme }) => theme.bg3};
+  background: radial-gradient(174.47% 188.91% at 1.84% 0%, #ff007a 0%, #2172e5 100%), #edeef2;
+  width: fit-content;
+  position: relative;
+  cursor: pointer;
+  border: none;
+  white-space: no-wrap;
+  :hover {
+    opacity: 0.8;
+  }
+  :active {
+    opacity: 0.9;
+  }
+`
+
+export const ButtonWinning = styled(ButtonPrimary)`
   color: white;
   padding: 4px 8px;
   height: 36px;
