@@ -1,4 +1,4 @@
-import { CurrencyAmount, JSBI, Token, Trade } from '@dfyn/sdk'
+import { Currency, CurrencyAmount, JSBI, Token, Trade } from '@dfyn/sdk'
 import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { ArrowDown } from 'react-feather'
 import ReactGA from 'react-ga'
@@ -51,7 +51,7 @@ import { isTradeBetter } from 'utils/trades'
 import { RouteComponentProps } from 'react-router-dom'
 import { getRouterAddress } from 'utils'
 
-export default function Swap({ history }: RouteComponentProps){
+export default function Swap({ history }: RouteComponentProps) {
   const loadedUrlParams = useDefaultsFromURLSearch()
 
   // token warning stuff
@@ -75,8 +75,8 @@ export default function Swap({ history }: RouteComponentProps){
     urlLoadedTokens.filter((token: Token) => {
       return !Boolean(token.address in defaultTokens)
     })
-  
-  
+
+
   const { account, chainId } = useActiveWeb3React()
   const theme = useContext(ThemeContext)
 
@@ -100,7 +100,7 @@ export default function Swap({ history }: RouteComponentProps){
     currencies,
     inputError: swapInputError
   } = useDerivedSwapInfo()
-  
+
   const { wrapType, execute: onWrap, inputError: wrapInputError } = useWrapCallback(
     currencies[Field.INPUT],
     currencies[Field.OUTPUT],
@@ -136,7 +136,7 @@ export default function Swap({ history }: RouteComponentProps){
   const handleTypeInput = useCallback(
     (value: string) => {
       onUserInput(Field.INPUT, value)
-      
+
     },
     [onUserInput]
   )
@@ -289,29 +289,29 @@ export default function Swap({ history }: RouteComponentProps){
   }, [maxAmountInput, onUserInput])
 
   const swapIsUnsupported = useIsTransactionUnsupported(currencies?.INPUT, currencies?.OUTPUT)
-  
+
   console.log("Hello desi-beast");
-  console.log(loadedInputCurrency,"***", loadedOutputCurrency);
-  
-    
-  
+  console.log(loadedInputCurrency, "***", loadedOutputCurrency);
+
+
+
 
   //getting inputURL and outputURL values
-  const [inputURL, setinputURL] = useState(currencies.INPUT instanceof Token ? currencies?.INPUT?.address : currencies?.INPUT?.symbol)
-  const [outputURL, setOutputURL] = useState(currencies.OUTPUT instanceof Token ? currencies?.OUTPUT?.address : currencies?.OUTPUT?.symbol)
+  const [inputURL, setinputURL] = useState(currencies.INPUT instanceof Token ? currencies?.INPUT?.address : currencies?.INPUT?.symbol ?? Currency.getNativeCurrencySymbol(chainId))
+  const [outputURL, setOutputURL] = useState(currencies.OUTPUT instanceof Token ? currencies?.OUTPUT?.address : currencies?.OUTPUT?.symbol ?? "0xC168E40227E4ebD8C1caE80F7a55a4F0e6D66C97")
 
-  
-  useMemo(() => {
-    let varINPUT = currencies.INPUT instanceof Token ? currencies?.INPUT?.address : currencies?.INPUT?.symbol
-    let varOUTPUT = currencies.OUTPUT instanceof Token ? currencies?.OUTPUT?.address : currencies?.OUTPUT?.symbol
-    
-    if(varINPUT !== inputURL){
-      setinputURL(varINPUT)
-    }
-    if(varOUTPUT !== outputURL){
-      setOutputURL(varOUTPUT)
-    }
-  }, [currencies, inputURL, outputURL])
+
+  // useMemo(() => {
+  //   let varINPUT = currencies.INPUT instanceof Token ? currencies?.INPUT?.address : currencies?.INPUT?.symbol
+  //   let varOUTPUT = currencies.OUTPUT instanceof Token ? currencies?.OUTPUT?.address : currencies?.OUTPUT?.symbol
+
+  //   if(varINPUT !== inputURL){
+  //     setinputURL(varINPUT)
+  //   }
+  //   if(varOUTPUT !== outputURL){
+  //     setOutputURL(varOUTPUT)
+  //   }
+  // }, [currencies, inputURL, outputURL])
 
   const handleInputSelect = useCallback(
     inputCurrency => {
@@ -319,8 +319,8 @@ export default function Swap({ history }: RouteComponentProps){
       onCurrencySelection(Field.INPUT, inputCurrency)
 
       //set the value of inputelement
-      // if(inputCurrency.symbol === Currency.getNativeCurrencySymbol(chainId)) setinputURL(inputCurrency.symbol)
-      // else setinputURL(inputCurrency.address)
+      if (inputCurrency.symbol === Currency.getNativeCurrencySymbol(chainId)) setinputURL(inputCurrency.symbol)
+      else setinputURL(inputCurrency.address)
     },
     [onCurrencySelection]
   )
@@ -328,25 +328,25 @@ export default function Swap({ history }: RouteComponentProps){
 
   const handleOutputSelect = useCallback(outputCurrency => {
     onCurrencySelection(Field.OUTPUT, outputCurrency)
-    
+
     //set the value of output element
-    // if (outputCurrency.symbol === Currency.getNativeCurrencySymbol(chainId)) setOutputURL(outputCurrency.symbol)
-    // else setOutputURL(outputCurrency.address)
-  }, 
-  [onCurrencySelection])
+    if (outputCurrency.symbol === Currency.getNativeCurrencySymbol(chainId)) setOutputURL(outputCurrency.symbol)
+    else setOutputURL(outputCurrency.address)
+  },
+    [onCurrencySelection])
 
-  console.log("******URL*********");
-  
-  console.log(inputURL, outputURL);
-  
+  // console.log("******URL*********");
 
-//updation of link
-  useEffect(()=>{
-    if(inputURL && outputURL)
-    history.push(`/swap?inputCurrency=${inputURL}&outputCurrency=${outputURL}`)
+  // console.log(inputURL, outputURL);
+
+
+  //updation of link
+  useEffect(() => {
+    if (inputURL && outputURL)
+      history.push(`/swap?inputCurrency=${inputURL}&outputCurrency=${outputURL}`)
   }, [inputURL, outputURL, history])
 
-  
+
 
   return (
     <>
