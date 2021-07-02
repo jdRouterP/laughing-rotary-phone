@@ -175,7 +175,6 @@ export function useDerivedSwapInfo(): {
   }
 
   if (!currencies[Field.INPUT] || !currencies[Field.OUTPUT]) {
-    console.log(currencies[Field.INPUT],"*********", currencies[Field.OUTPUT]);
     inputError = inputError ?? 'Select a token'
   }
 
