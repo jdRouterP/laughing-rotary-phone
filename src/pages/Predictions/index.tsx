@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useWeb3React } from '@web3-react/core'
-import { useMatchBreakpoints } from '@pancakeswap/uikit'
+// import { useMatchBreakpoints } from '@pancakeswap/uikit'
 import { useDispatch } from 'react-redux'
 import { useGetPredictionsStatus, useInitialBlock, usePollBlockNumber } from 'state/hook'
 import {
@@ -20,7 +20,7 @@ import Container from './components/Container'
 import CollectWinningsPopup from './components/CollectWinningsPopup'
 import SwiperProvider from './context/SwiperProvider'
 import Desktop from './Desktop'
-import Mobile from './Mobile'
+// import Mobile from './Mobile'
 // import RiskDisclaimer from './components/RiskDisclaimer'
 // import ChartDisclaimer from './components/ChartDisclaimer'
 
@@ -30,7 +30,7 @@ import { light } from '@pancakeswap/uikit'
 const FUTURE_ROUND_COUNT = 2 // the number of rounds in the future to show
 
 const Predictions = () => {
-  const { isXl } = useMatchBreakpoints()
+  // const { isXl } = useMatchBreakpoints()
   // const [hasAcceptedRisk, setHasAcceptedRisk] = usePersistState(false, {
   //   localStorageKey: 'pancake_predictions_accepted_risk',
   // })
@@ -43,7 +43,7 @@ const Predictions = () => {
   // const isChartPaneOpen = useIsChartPaneOpen()
   const dispatch = useDispatch()
   const initialBlock = useInitialBlock()
-  const isDesktop = isXl
+  // const isDesktop = isXl
   // const handleAcceptRiskSuccess = () => setHasAcceptedRisk(true)
   // const handleAcceptChart = () => setHasAcceptedChart(true)
   // const [onPresentRiskDisclaimer] = useModal(<RiskDisclaimer onSuccess={handleAcceptRiskSuccess} />, false)
@@ -127,7 +127,7 @@ const Predictions = () => {
       <SCThemeProvider theme={light}>
         <SwiperProvider>
           <Container>
-            {isDesktop ? <Desktop /> : <Mobile />}
+            <Desktop />
             <CollectWinningsPopup />
           </Container>
         </SwiperProvider>

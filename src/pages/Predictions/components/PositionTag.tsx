@@ -46,7 +46,7 @@ const PositionTag: React.FC<PositionTagProps> = ({ betPosition, children, ...pro
   const icon = isUpPosition ? <ArrowUpIcon color="green" /> : <ArrowDownIcon color="red" />
 
   return (
-    <Tag bg={isUpPosition ? 'success' : 'failure'} startIcon={icon} {...props}>
+    <Tag bg={isUpPosition ? '#29a329' : '#ff471a'} startIcon={icon} {...props}>
       {children}
     </Tag>
   )

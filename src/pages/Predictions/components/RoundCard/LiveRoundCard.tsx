@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import { useCountUp } from 'react-countup'
-import { Flex, PlayCircleOutlineIcon, Skeleton, Text } from '@pancakeswap/uikit'
+import { Flex, PlayCircleOutlineIcon, Skeleton } from '@pancakeswap/uikit'
 import { useTranslation } from 'react-i18next'
 import { Round, BetPosition } from 'state/prediction/types'
 import { useGetinterval, useGetLastOraclePrice } from 'state/hook'
-import BlockProgress from 'components/BlockProgress'
+// import BlockProgress from 'components/BlockProgress'
 import { formatUsd } from '../../helpers'
 import PositionTag from '../PositionTag'
 import { RoundResultBox, LockPriceRow, PrizePoolRow } from '../RoundResult'
@@ -17,6 +17,7 @@ import useCurrentBlockTimestamp from 'hooks/useCurrentBlockTimestamp'
 import { MouseoverTooltip } from 'components/Tooltip'
 import { AutoColumn } from 'components/Column'
 import { CardBGImage, CardNoise } from 'components/earn/styled'
+import { TYPE } from 'theme'
 
 interface LiveRoundCardProps {
   round: Round
@@ -80,7 +81,7 @@ const LiveRoundCard: React.FC<LiveRoundCardProps> = ({
   const totalInterval = useGetinterval()
   const price = useGetLastOraclePrice()
   const isBull = price > lockPrice;
-  const priceColor = isBull ? 'green' : 'red'
+  const priceColor = isBull ? '#29a329' : '#ff471a'
   const estimatedEndTime = lockAt + totalInterval
   const priceDifference = price - lockPrice
   const { countUp, update } = useCountUp({
@@ -105,7 +106,7 @@ const LiveRoundCard: React.FC<LiveRoundCardProps> = ({
   }
 
   return (
-    <Wrapper showBackground={false} bgColor={priceColor}>
+    <Wrapper showBackground={hasEnteredUp || hasEnteredDown} bgColor={priceColor}>
       <CardBGImage desaturate />
       <CardNoise />
       <CardHeader
@@ -115,9 +116,6 @@ const LiveRoundCard: React.FC<LiveRoundCardProps> = ({
         epoch={round.epoch}
         blockTime={estimatedEndTime}
       />
-      <BlockProgress variant="flat" scale="sm" startBlock={lockAt} endBlock={estimatedEndTime} />
-
-
       <ContentWrapper>
         <MultiplierArrow
           betAmount={betAmount}
@@ -126,12 +124,14 @@ const LiveRoundCard: React.FC<LiveRoundCardProps> = ({
           isActive={isBull}
         />
         <RoundResultBox betPosition={isBull ? BetPosition.BULL : BetPosition.BEAR}>
-          <Text color="textSubtle" fontSize="12px" bold textTransform="uppercase" mb="8px">
-            {t('Last Price')}
-          </Text>
+          <TYPE.white fontSize="12px" mb="8px">
+            {t('LAST PRICE')}
+          </TYPE.white>
           <Flex alignItems="center" justifyContent="space-between" mb="16px" height="36px">
             <MouseoverTooltip text={'Last price from Chainlink Oracle'} placement='bottom'>
-              {price > 0 ? `$${countUp}` : <Skeleton height="36px" width="94px" />}
+              <TYPE.main color={isBull ? '#29a329' : '#ff471a'} fontWeight={500} fontSize="24px">
+                {price > 0 ? `$${countUp}` : <Skeleton height="36px" width="94px" />}
+              </TYPE.main>
             </MouseoverTooltip>
             <PositionTag betPosition={isBull ? BetPosition.BULL : BetPosition.BEAR}>
               {formatUsd(priceDifference)}

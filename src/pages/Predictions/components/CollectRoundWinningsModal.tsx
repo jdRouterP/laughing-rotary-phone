@@ -8,7 +8,6 @@ import {
   InjectedModalProps,
   Button,
   AutoRenewIcon,
-  TrophyGoldIcon,
   Text,
   Flex,
   Heading,
@@ -95,7 +94,7 @@ const CollectRoundWinningsModal: React.FC<CollectRoundWinningsModalProps> = ({
         <ModalCloseButton onDismiss={onDismiss} />
       </ModalHeader>
       <ModalBody p="24px">
-        <TrophyGoldIcon width="96px" mx="auto" mb="24px" />
+        {/* <TrophyGoldIcon width="96px" mx="auto" mb="24px" /> */}
         <Flex alignItems="start" justifyContent="space-between" mb="24px">
           <Text>{t('Collecting')}</Text>
           <Box style={{ textAlign: 'right' }}>

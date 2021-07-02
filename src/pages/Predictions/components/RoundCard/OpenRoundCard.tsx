@@ -76,7 +76,7 @@ const OpenRoundCard: React.FC<OpenRoundCardProps> = ({
   const currentTimestamp = useCurrentBlockTimestamp()
   const { isSettingPosition, position } = state
   const isBufferPhase = currentTimestamp && currentTimestamp.toNumber() >= round.startAt + interval
-  const positionDisplay = position === BetPosition.BULL ? t('Up').toUpperCase() : t('Down').toUpperCase()
+  const positionDisplay = position === BetPosition.BULL ? t('BULL').toUpperCase() : t('BEAR').toUpperCase()
   const { targetRef, tooltipVisible, tooltip } = useTooltip(
     <div style={{ whiteSpace: 'nowrap' }}>{`${formatToken(betAmount)} MATIC`}</div>,
     { placement: 'top' },
@@ -179,20 +179,20 @@ const OpenRoundCard: React.FC<OpenRoundCardProps> = ({
               <PrizePoolRow totalAmount={round.totalAmount} mb="8px" />
               <ButtonError
                 variant="success"
-                width="100%"
+                width="200px"
                 onClick={() => handleSetPosition(BetPosition.BULL)}
                 mb="4px"
                 disabled={!canEnterPosition || isBufferPhase}
               >
-                {t('Enter UP')}
+                {t('Bet BULL')}
               </ButtonError>
               <ButtonError
                 variant="danger"
-                width="100%"
+                width="200px"
                 onClick={() => handleSetPosition(BetPosition.BEAR)}
                 disabled={!canEnterPosition || isBufferPhase}
               >
-                {t('Enter DOWN')}
+                {t('Bet BEAR')}
               </ButtonError>
             </>
           ) : (

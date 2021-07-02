@@ -1,15 +1,17 @@
 
 import React, { useEffect, useRef, useState } from 'react'
 import styled, { css, keyframes } from 'styled-components'
-import { Button, CloseIcon, IconButton, TrophyGoldIcon } from '@pancakeswap/uikit'
+import { CloseIcon, IconButton } from '@pancakeswap/uikit'
 import { CSSTransition } from 'react-transition-group'
-import { useTranslation } from 'react-i18next'
+// import { useTranslation } from 'react-i18next'
 import { getBetHistory } from 'state/prediction/hooks'
 import { useGetPredictionsStatus, useIsHistoryPaneOpen } from 'state/hook'
 import { useDispatch } from 'react-redux'
 import { setHistoryPaneState } from 'state/prediction/reducer'
 import { AutoColumn } from 'components/Column'
 import { useActiveWeb3React } from 'hooks'
+import { ButtonPrimary } from 'components/Button'
+
 
 /**
  * @see https://github.com/animate-css/animate.css/tree/main/source
@@ -108,13 +110,14 @@ background: radial-gradient(76.02% 75.41% at 1.84% 0%, #ff007a 0%, #021d43 100%)
 border-radius: 20px;
 padding: 1.5rem;
 overflow: hidden;
+display: flex;
 position: relative;
 max-width: 360px;
 box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);`
 
 const CollectWinningsPopup = () => {
   const [isOpen, setIsOpen] = useState(false)
-  const { t } = useTranslation()
+  // const { t } = useTranslation()
   const ref = useRef(null)
   const timer = useRef<ReturnType<typeof setTimeout>>()
   const { account } = useActiveWeb3React()
@@ -168,10 +171,10 @@ const CollectWinningsPopup = () => {
     <CSSTransition in={isOpen} unmountOnExit nodeRef={ref} timeout={1000} classNames="popup">
       <Wrapper ref={ref}>
         <Popup>
-          <TrophyGoldIcon width="64px" style={{ flex: 'none' }} mr="8px" />
-          <Button style={{ flex: 1 }} onClick={handleOpenHistory}>
-            {t('Collect Winnings')}
-          </Button>
+
+          <ButtonPrimary onClick={handleOpenHistory}>
+            {'Collect Winnings'}
+          </ButtonPrimary>
           <IconButton variant="text" onClick={handleClick}>
             <CloseIcon color="primary" width="24px" />
           </IconButton>

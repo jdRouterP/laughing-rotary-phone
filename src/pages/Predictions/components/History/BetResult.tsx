@@ -132,7 +132,7 @@ const BetResult: React.FC<BetResultProps> = ({ bet, result }) => {
         <Flex alignItems="center" justifyContent="space-between" mb="16px">
           <Text>{t('Your direction')}</Text>
           <PositionTag betPosition={bet.position}>
-            {bet.position === BetPosition.BULL ? t('Up') : t('Down')}
+            {bet.position === BetPosition.BULL ? t('BULL') : t('BEAR')}
           </PositionTag>
         </Flex>
         <Flex alignItems="center" justifyContent="space-between" mb="16px">

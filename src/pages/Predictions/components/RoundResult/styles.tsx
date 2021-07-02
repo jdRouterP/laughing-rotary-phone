@@ -1,9 +1,10 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Box, Flex, FlexProps, Text } from '@pancakeswap/uikit'
+import { Box, Flex, FlexProps } from '@pancakeswap/uikit'
 import { formatToken, formatUsd } from 'pages/Predictions/helpers'
 import { useTranslation } from 'react-i18next'
 import { BetPosition, Round } from 'state/prediction/types'
+import { TYPE } from 'theme'
 
 // PrizePoolRow
 interface PrizePoolRowProps extends FlexProps {
@@ -32,8 +33,8 @@ export const PrizePoolRow: React.FC<PrizePoolRowProps> = ({ totalAmount, ...prop
 
   return (
     <Row {...props}>
-      <Text bold>{t('Prize Pool')}:</Text>
-      <Text bold>{`${getPrizePoolAmount(totalAmount)} MATIC`}</Text>
+      <TYPE.white fontWeight={500} fontSize="14px">{t('Prize Pool')}:</TYPE.white>
+      <TYPE.white fontWeight={500} fontSize="14px">{`${getPrizePoolAmount(totalAmount)} MATIC`}</TYPE.white>
     </Row>
   )
 }
@@ -51,15 +52,15 @@ export const PayoutRow: React.FC<PayoutRowProps> = ({ positionLabel, multiplier,
 
   return (
     <Row height="18px" {...props}>
-      <Text fontSize="12px" textTransform="uppercase">
+      <TYPE.white fontWeight={500}>
         {positionLabel}:
-      </Text>
+      </TYPE.white>
       <Flex alignItems="center">
-        <Text fontSize="12px" lineHeight="18px" bold>
+        <TYPE.white fontWeight={500} lineHeight="18px">
           {t('%multiplier% Payout', { multiplier: formattedMultiplier })}
-        </Text>
-        <Text mx="4px">|</Text>
-        <Text fontSize="12px" lineHeight="18px">{`${formatToken(amount)} MATIC`}</Text>
+        </TYPE.white>
+        <TYPE.white>|</TYPE.white>
+        <TYPE.white fontWeight={500} fontSize="12px" lineHeight="18px">{`${formatToken(amount)} MATIC`}</TYPE.white>
       </Flex>
     </Row>
   )
@@ -75,8 +76,9 @@ export const LockPriceRow: React.FC<LockPriceRowProps> = ({ lockPrice, ...props 
 
   return (
     <Row {...props}>
-      <Text fontSize="14px">{t('Locked Price')}:</Text>
-      <Text fontSize="14px">{formatUsd(lockPrice)}</Text>
+      <TYPE.white fontWeight={500} fontSize="14px">{t('Locked Price')}:</TYPE.white>
+      {' '}
+      <TYPE.white fontWeight={500} fontSize="14px">{formatUsd(lockPrice)}</TYPE.white>
     </Row>
   )
 }

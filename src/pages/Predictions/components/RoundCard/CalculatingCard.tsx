@@ -88,7 +88,7 @@ const CalculatingCard: React.FC<CalculatingCardProps> = ({ round }) => {
         <ContentWrapper>
           <Payout>
             <PayoutLabel>
-              UP
+              BULL
             </PayoutLabel>
           </Payout>
           {/* <RoundResultBox>
@@ -111,7 +111,7 @@ const CalculatingCard: React.FC<CalculatingCardProps> = ({ round }) => {
           </Content>
           <Payout>
             <PayoutLabel>
-              DOWN
+              BEAR
             </PayoutLabel>
           </Payout>
         </ContentWrapper>

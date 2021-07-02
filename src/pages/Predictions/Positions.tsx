@@ -18,7 +18,7 @@ const StyledSwiper = styled.div`
   }
 
   .swiper-slide {
-    width: 320px;
+    width: 310px;
   }
 `
 

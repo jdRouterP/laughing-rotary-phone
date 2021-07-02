@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { BetPosition } from 'state/prediction/types'
 // import { RoundMultiplierDownArrow, RoundMultiplierUpArrow } from '../../RoundMultiplierArrows'
 import EnteredTag from './EnteredTag'
+import { TYPE } from 'theme'
 
 interface MultiplierArrowProps {
   betAmount?: number
@@ -89,9 +90,9 @@ const MultiplierArrow: React.FC<MultiplierArrowProps> = ({
         {getEnteredTag({ bottom: 0, right: 0 })}
         <Content>
           {!isDisabled && multiplierText}
-          <Text bold fontSize="20px" mb="8px" color={downColor} textTransform="uppercase">
-            {t('Down')}
-          </Text>
+          <TYPE.main fontSize="20px" margin="10px" color={downColor}>
+            {t('BEAR')}
+          </TYPE.main>
         </Content>
 
       </Box>
@@ -102,9 +103,9 @@ const MultiplierArrow: React.FC<MultiplierArrowProps> = ({
     <Box position="relative">
       {getEnteredTag({ top: 0, left: 0 })}
       <Content>
-        <Text bold fontSize="20px" lineHeight="21px" color={upColor} textTransform="uppercase">
-          {t('Up')}
-        </Text>
+        <TYPE.main fontSize="20px" margin="10px" color={upColor}>
+          {t('BULL')}
+        </TYPE.main>
         {!isDisabled && multiplierText}
       </Content>
 

@@ -1,10 +1,11 @@
 import React from 'react'
-import { BoxProps, Flex, Text } from '@pancakeswap/uikit'
+import { BoxProps, Flex } from '@pancakeswap/uikit'
 import { BetPosition, Round } from 'state/prediction/types'
 import { useTranslation } from 'react-i18next'
 import { formatUsd } from '../../helpers'
 import PositionTag from '../PositionTag'
 import { LockPriceRow, PrizePoolRow, RoundResultBox } from './styles'
+import { TYPE } from 'theme'
 
 interface RoundResultProps extends BoxProps {
   round: Round
@@ -19,18 +20,18 @@ const RoundResult: React.FC<RoundResultProps> = ({ round, children, ...props }) 
 
   return (
     <RoundResultBox betPosition={betPosition} {...props}>
-      <Text color="textSubtle" fontSize="12px" bold textTransform="uppercase" mb="8px">
-        {t('Closed Price')}
-      </Text>
+      <TYPE.white fontSize="12px" fontWeight={900} mb="8px">
+        {t('CLOSED PRICE')}
+      </TYPE.white>
       {round.failed ? (
-        <Text bold textTransform="uppercase" color="textDisabled" mb="16px" fontSize="24px">
-          {t('Canceled')}
-        </Text>
+        <TYPE.white fontSize="12px" fontWeight={900} mb="8px">
+          {t('CANCELLED')}
+        </TYPE.white>
       ) : (
         <Flex alignItems="center" justifyContent="space-between" mb="16px">
-          <Text color={isPositionUp ? 'success' : 'failure'} bold fontSize="24px">
+          <TYPE.main color={isPositionUp ? '#29a329' : '#ff471a'} fontWeight={500} fontSize="24px">
             {formatUsd(closePrice)}
-          </Text>
+          </TYPE.main>
           <PositionTag betPosition={betPosition}>{formatUsd(priceDifference)}</PositionTag>
         </Flex>
       )}

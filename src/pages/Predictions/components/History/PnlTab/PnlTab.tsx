@@ -133,7 +133,7 @@ const PnlTab: React.FC<PnlTabProps> = ({ hasBetHistory, bets }: PnlTabProps) => 
           <Text bold color="textSubtle">
             {t('Net results')}
           </Text>
-          <Text bold fontSize="24px" lineHeight="1" color={netResultIsPositive ? 'success' : 'failure'}>
+          <Text bold fontSize="24px" lineHeight="1" color={netResultIsPositive ? '#29a329' : '#ff471a'}>
             {`${netResultIsPositive ? '+' : ''}${formatToken(netResultAmount)} MATIC`}
           </Text>
           <Text small color="textSubtle">
@@ -145,7 +145,7 @@ const PnlTab: React.FC<PnlTabProps> = ({ hasBetHistory, bets }: PnlTabProps) => 
         <Text mt="24px" bold color="textSubtle">
           {t('Average return / round')}
         </Text>
-        <Text bold color={avgTokenWonIsPositive ? 'success' : 'failure'}>
+        <Text bold color={avgTokenWonIsPositive ? '#29a329' : '#ff471a'}>
           {`${avgTokenWonIsPositive ? '+' : ''}${formatToken(avgTokenWonPerRound)} MATIC`}
         </Text>
         <Text small color="textSubtle">
