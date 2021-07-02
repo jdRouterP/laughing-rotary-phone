@@ -142,8 +142,8 @@ export default function Pool() {
 
   const {currencies: swapCurrency} = useDerivedSwapInfo()
 
-  const inputVAR = swapCurrency?.INPUT instanceof Token ? swapCurrency?.INPUT?.address : swapCurrency?.INPUT?.symbol ?? 'MATIC'
-  const outputVAR = swapCurrency?.OUTPUT instanceof Token ? swapCurrency?.OUTPUT?.address : swapCurrency?.OUTPUT?.symbol ?? ''
+  const inputCurrency = swapCurrency?.INPUT instanceof Token ? swapCurrency?.INPUT?.address : swapCurrency?.INPUT?.symbol ?? 'MATIC'
+  const outputCurrency = swapCurrency?.OUTPUT instanceof Token ? swapCurrency?.OUTPUT?.address : swapCurrency?.OUTPUT?.symbol ?? ''
 
   return (
     <>
@@ -184,7 +184,7 @@ export default function Pool() {
                 </TYPE.mediumHeader>
               </HideSmall>
               <ButtonRow>
-                <ResponsiveButtonSecondary as={Link} padding="6px 8px" to={`/create/${inputVAR}/${outputVAR}`}>
+                <ResponsiveButtonSecondary as={Link} padding="6px 8px" to={`/create/${inputCurrency}/${outputCurrency}`}>
                   Create a pair
                 </ResponsiveButtonSecondary>
                 <ResponsiveButtonPrimary
@@ -192,7 +192,7 @@ export default function Pool() {
                   as={Link}
                   padding="6px 8px"
                   borderRadius="12px"
-                  to={`/add/${inputVAR}/${outputVAR}`}
+                  to={`/add/${inputCurrency}/${outputCurrency}`}
                 >
                   <Text fontWeight={500} fontSize={16}>
                     Add Liquidity
