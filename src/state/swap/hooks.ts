@@ -121,7 +121,7 @@ export function useDerivedSwapInfo(): {
   v2Trade: Trade | undefined
   inputError?: string
   v1Trade: Trade | undefined
-} {
+}{
   const { account } = useActiveWeb3React()
 
   const toggledVersion = useToggledVersion()
@@ -175,6 +175,7 @@ export function useDerivedSwapInfo(): {
   }
 
   if (!currencies[Field.INPUT] || !currencies[Field.OUTPUT]) {
+    console.log(currencies[Field.INPUT],"*********", currencies[Field.OUTPUT]);
     inputError = inputError ?? 'Select a token'
   }
 
@@ -320,10 +321,10 @@ export function useDefaultsFromURLSearch():
         recipient: parsed.recipient
       })
     )
-    console.log("I am hooks****");
-    console.log(result);
     
     setResult({ inputCurrencyId: parsed[Field.INPUT].currencyId, outputCurrencyId: parsed[Field.OUTPUT].currencyId })
+
+    
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, chainId, parsedQs])
   

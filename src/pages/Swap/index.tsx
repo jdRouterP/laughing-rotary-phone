@@ -59,6 +59,8 @@ export default function Swap({ history }: RouteComponentProps) {
     useCurrency(loadedUrlParams?.inputCurrencyId),
     useCurrency(loadedUrlParams?.outputCurrencyId)
   ]
+  
+
   const [dismissTokenWarning, setDismissTokenWarning] = useState<boolean>(false)
   const urlLoadedTokens: Token[] = useMemo(
     () => [loadedInputCurrency, loadedOutputCurrency]?.filter((c): c is Token => c instanceof Token) ?? [],
@@ -130,13 +132,14 @@ export default function Swap({ history }: RouteComponentProps) {
     }
 
   const { onSwitchTokens, onCurrencySelection, onUserInput, onChangeRecipient } = useSwapActionHandlers()
+
+  
   const isValid = !swapInputError
   const dependentField: Field = independentField === Field.INPUT ? Field.OUTPUT : Field.INPUT
 
   const handleTypeInput = useCallback(
     (value: string) => {
       onUserInput(Field.INPUT, value)
-
     },
     [onUserInput]
   )
@@ -289,29 +292,11 @@ export default function Swap({ history }: RouteComponentProps) {
   }, [maxAmountInput, onUserInput])
 
   const swapIsUnsupported = useIsTransactionUnsupported(currencies?.INPUT, currencies?.OUTPUT)
-
-  console.log("Hello desi-beast");
-  console.log(loadedInputCurrency, "***", loadedOutputCurrency);
-
-
-
-
+  
   //getting inputURL and outputURL values
   const [inputURL, setinputURL] = useState(currencies.INPUT instanceof Token ? currencies?.INPUT?.address : currencies?.INPUT?.symbol ?? Currency.getNativeCurrencySymbol(chainId))
-  const [outputURL, setOutputURL] = useState(currencies.OUTPUT instanceof Token ? currencies?.OUTPUT?.address : currencies?.OUTPUT?.symbol ?? "0xC168E40227E4ebD8C1caE80F7a55a4F0e6D66C97")
+  const [outputURL, setOutputURL] = useState(currencies.OUTPUT instanceof Token ? currencies?.OUTPUT?.address : currencies?.OUTPUT?.symbol ?? (Currency.getNativeCurrencySymbol(chainId) === "MATIC" ? "0xC168E40227E4ebD8C1caE80F7a55a4F0e6D66C97" : ''))
 
-
-  // useMemo(() => {
-  //   let varINPUT = currencies.INPUT instanceof Token ? currencies?.INPUT?.address : currencies?.INPUT?.symbol
-  //   let varOUTPUT = currencies.OUTPUT instanceof Token ? currencies?.OUTPUT?.address : currencies?.OUTPUT?.symbol
-
-  //   if(varINPUT !== inputURL){
-  //     setinputURL(varINPUT)
-  //   }
-  //   if(varOUTPUT !== outputURL){
-  //     setOutputURL(varOUTPUT)
-  //   }
-  // }, [currencies, inputURL, outputURL])
 
   const handleInputSelect = useCallback(
     inputCurrency => {
@@ -322,7 +307,7 @@ export default function Swap({ history }: RouteComponentProps) {
       if (inputCurrency.symbol === Currency.getNativeCurrencySymbol(chainId)) setinputURL(inputCurrency.symbol)
       else setinputURL(inputCurrency.address)
     },
-    [onCurrencySelection]
+    [onCurrencySelection, chainId]
   )
 
 
@@ -333,20 +318,25 @@ export default function Swap({ history }: RouteComponentProps) {
     if (outputCurrency.symbol === Currency.getNativeCurrencySymbol(chainId)) setOutputURL(outputCurrency.symbol)
     else setOutputURL(outputCurrency.address)
   },
-    [onCurrencySelection])
-
-  // console.log("******URL*********");
-
-  // console.log(inputURL, outputURL);
+    [onCurrencySelection, chainId])
 
 
+  
   //updation of link
   useEffect(() => {
-    if (inputURL && outputURL)
+    if (inputURL && outputURL){
       history.push(`/swap?inputCurrency=${inputURL}&outputCurrency=${outputURL}`)
+
+    }
+      
   }, [inputURL, outputURL, history])
 
 
+  const handleClick = () => {
+    onSwitchTokens()
+    if(outputURL) setinputURL(outputURL)
+    if(inputURL) setOutputURL(inputURL)
+  }
 
   return (
     <>
@@ -393,7 +383,7 @@ export default function Swap({ history }: RouteComponentProps) {
                     size="16"
                     onClick={() => {
                       setApprovalSubmitted(false) // reset 2 step UI for approvals
-                      onSwitchTokens()
+                      handleClick()
                     }}
                     color={currencies[Field.INPUT] && currencies[Field.OUTPUT] ? theme.primary1 : theme.text2}
                   />
