@@ -1,4 +1,4 @@
-import { CurrencyAmount, JSBI, Token, Trade } from '@dfyn/sdk'
+import { Currency, CurrencyAmount, JSBI, Token, Trade } from '@dfyn/sdk'
 import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { ArrowDown } from 'react-feather'
 import ReactGA from 'react-ga'
@@ -59,6 +59,8 @@ export default function Swap({ history }: RouteComponentProps) {
     useCurrency(loadedUrlParams?.inputCurrencyId),
     useCurrency(loadedUrlParams?.outputCurrencyId)
   ]
+  
+
   const [dismissTokenWarning, setDismissTokenWarning] = useState<boolean>(false)
   const urlLoadedTokens: Token[] = useMemo(
     () => [loadedInputCurrency, loadedOutputCurrency]?.filter((c): c is Token => c instanceof Token) ?? [],
@@ -75,6 +77,7 @@ export default function Swap({ history }: RouteComponentProps) {
     urlLoadedTokens.filter((token: Token) => {
       return !Boolean(token.address in defaultTokens)
     })
+
 
   const { account, chainId } = useActiveWeb3React()
   const theme = useContext(ThemeContext)
@@ -129,6 +132,8 @@ export default function Swap({ history }: RouteComponentProps) {
     }
 
   const { onSwitchTokens, onCurrencySelection, onUserInput, onChangeRecipient } = useSwapActionHandlers()
+
+  
   const isValid = !swapInputError
   const dependentField: Field = independentField === Field.INPUT ? Field.OUTPUT : Field.INPUT
 
@@ -282,23 +287,56 @@ export default function Swap({ history }: RouteComponentProps) {
     setSwapState({ tradeToConfirm: trade, swapErrorMessage, txHash, attemptingTxn, showConfirm })
   }, [attemptingTxn, showConfirm, swapErrorMessage, trade, txHash])
 
-  const handleInputSelect = useCallback(
-    inputCurrency => {
-      setApprovalSubmitted(false) // reset 2 step UI for approvals
-      onCurrencySelection(Field.INPUT, inputCurrency)
-    },
-    [onCurrencySelection]
-  )
-
   const handleMaxInput = useCallback(() => {
     maxAmountInput && onUserInput(Field.INPUT, maxAmountInput.toExact())
   }, [maxAmountInput, onUserInput])
 
-  const handleOutputSelect = useCallback(outputCurrency => onCurrencySelection(Field.OUTPUT, outputCurrency), [
-    onCurrencySelection
-  ])
-
   const swapIsUnsupported = useIsTransactionUnsupported(currencies?.INPUT, currencies?.OUTPUT)
+  
+  //getting inputURL and outputURL values
+  const [inputURL, setinputURL] = useState(currencies.INPUT instanceof Token ? currencies?.INPUT?.address : currencies?.INPUT?.symbol ?? Currency.getNativeCurrencySymbol(chainId))
+  const [outputURL, setOutputURL] = useState(currencies.OUTPUT instanceof Token ? currencies?.OUTPUT?.address : currencies?.OUTPUT?.symbol ?? (Currency.getNativeCurrencySymbol(chainId) === "MATIC" ? "0xC168E40227E4ebD8C1caE80F7a55a4F0e6D66C97" : ''))
+
+
+  const handleInputSelect = useCallback(
+    inputCurrency => {
+      setApprovalSubmitted(false) // reset 2 step UI for approvals
+      onCurrencySelection(Field.INPUT, inputCurrency)
+
+      //set the value of inputelement
+      if (inputCurrency.symbol === Currency.getNativeCurrencySymbol(chainId)) setinputURL(inputCurrency.symbol)
+      else setinputURL(inputCurrency.address)
+    },
+    [onCurrencySelection, chainId]
+  )
+
+
+  const handleOutputSelect = useCallback(outputCurrency => {
+    onCurrencySelection(Field.OUTPUT, outputCurrency)
+
+    //set the value of output element
+    if (outputCurrency.symbol === Currency.getNativeCurrencySymbol(chainId)) setOutputURL(outputCurrency.symbol)
+    else setOutputURL(outputCurrency.address)
+  },
+    [onCurrencySelection, chainId])
+
+
+  
+  //updation of link
+  useEffect(() => {
+    if (inputURL && outputURL){
+      history.push(`/swap?inputCurrency=${inputURL}&outputCurrency=${outputURL}`)
+
+    }
+      
+  }, [inputURL, outputURL, history])
+
+
+  const handleClick = () => {
+    onSwitchTokens()
+    if(outputURL) setinputURL(outputURL)
+    if(inputURL) setOutputURL(inputURL)
+  }
 
   return (
     <>
@@ -345,7 +383,7 @@ export default function Swap({ history }: RouteComponentProps) {
                     size="16"
                     onClick={() => {
                       setApprovalSubmitted(false) // reset 2 step UI for approvals
-                      onSwitchTokens()
+                      handleClick()
                     }}
                     color={currencies[Field.INPUT] && currencies[Field.OUTPUT] ? theme.primary1 : theme.text2}
                   />
