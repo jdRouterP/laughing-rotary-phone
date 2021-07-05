@@ -42,6 +42,7 @@ import { useIsTransactionUnsupported } from 'hooks/Trades'
 import UnsupportedCurrencyFooter from 'components/swap/UnsupportedCurrencyFooter'
 import { abi } from '@uniswap/v2-periphery/build/IUniswapV2Router02.json'
 import getBiconomy from 'hooks/getBiconomy'
+// import { useDerivedSwapInfo } from 'state/swap/hooks'
 
 
 
@@ -57,7 +58,9 @@ export default function AddLiquidity({
 
 
   const currencyA = useCurrency(currencyIdA)
-  const currencyB = useCurrency(currencyIdB)
+  const currencyB = useCurrency (currencyIdB)
+
+  
   const oneCurrencyIsWETH = Boolean(
     chainId &&
     ((currencyA && currencyEquals(currencyA, WETH[chainId])) ||

@@ -50,6 +50,7 @@ export function useSwapActionHandlers(): {
 
   const onSwitchTokens = useCallback(() => {
     dispatch(switchCurrencies())
+    
   }, [dispatch])
 
   const onUserInput = useCallback(
@@ -120,7 +121,7 @@ export function useDerivedSwapInfo(): {
   v2Trade: Trade | undefined
   inputError?: string
   v1Trade: Trade | undefined
-} {
+}{
   const { account } = useActiveWeb3React()
 
   const toggledVersion = useToggledVersion()
@@ -319,10 +320,12 @@ export function useDefaultsFromURLSearch():
         recipient: parsed.recipient
       })
     )
-
+    
     setResult({ inputCurrencyId: parsed[Field.INPUT].currencyId, outputCurrencyId: parsed[Field.OUTPUT].currencyId })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, chainId])
 
+    
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch, chainId, parsedQs])
+  
   return result
 }
