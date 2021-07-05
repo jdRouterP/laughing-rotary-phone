@@ -112,7 +112,7 @@ export default function Menu() {
             <Book size={14} />
             Docs
           </MenuItem>
-          <MenuItem id="link" href="https://t.me/routerprotocol">
+          <MenuItem id="link" href="https://t.me/Dfyn_HQ">
             <Send size={14} />
             Telegram
           </MenuItem>
