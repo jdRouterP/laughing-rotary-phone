@@ -1,4 +1,4 @@
-import React, { useContext, useMemo } from 'react'
+import React, { useContext, useEffect, useMemo, useState } from 'react'
 import styled, { ThemeContext } from 'styled-components'
 import { Pair, JSBI, Token } from '@dfyn/sdk'
 import { Link } from 'react-router-dom'
@@ -142,8 +142,19 @@ export default function Pool() {
 
   const {currencies: swapCurrency} = useDerivedSwapInfo()
 
-  const inputCurrency = swapCurrency?.INPUT instanceof Token ? swapCurrency?.INPUT?.address : swapCurrency?.INPUT?.symbol ?? 'MATIC'
-  const outputCurrency = swapCurrency?.OUTPUT instanceof Token ? swapCurrency?.OUTPUT?.address : swapCurrency?.OUTPUT?.symbol ?? ''
+  const [inputCurrency, setinputCurrency] = useState(swapCurrency?.INPUT instanceof Token ? swapCurrency?.INPUT?.address : swapCurrency?.INPUT?.symbol ?? 'MATIC')
+  const [outputCurrency, setOutputCurrency] = useState(swapCurrency?.OUTPUT instanceof Token ? swapCurrency?.OUTPUT?.address : swapCurrency?.OUTPUT?.symbol ?? '0xC168E40227E4ebD8C1caE80F7a55a4F0e6D66C97')
+
+  useEffect(()=>{
+    const localInput = sessionStorage.getItem('CurrencyInput')
+    const localOutput = sessionStorage.getItem('CurrencyOutput')
+    if(localInput){
+      setinputCurrency(localInput)
+    }
+    if(localOutput){
+      setOutputCurrency(localOutput)
+    }
+  }, [inputCurrency, outputCurrency])
 
   return (
     <>
