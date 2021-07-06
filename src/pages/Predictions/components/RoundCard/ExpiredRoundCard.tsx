@@ -3,15 +3,15 @@ import styled from 'styled-components'
 import { BlockIcon } from '@pancakeswap/uikit'
 import { useTranslation } from 'react-i18next'
 import { Round, BetPosition } from 'state/prediction/types'
-import { useGetBetByRoundId } from 'state/hook'
+// import { useGetBetByRoundId } from 'state/hook'
 import { RoundResult } from '../RoundResult'
-import { getPayout } from '../../helpers'
+// import { getPayout } from '../../helpers'
 import MultiplierArrow from './MultiplierArrow'
 // import Card from './Card'
 import CardHeader from './CardHeader'
-import CollectWinningsOverlay from './CollectWinningsOverlay'
+// import CollectWinningsOverlay from './CollectWinningsOverlay'
 import CanceledRoundCard from './CanceledRoundCard'
-import { useActiveWeb3React } from 'hooks'
+// import { useActiveWeb3React } from 'hooks'
 import { AutoColumn } from 'components/Column'
 import { CardBGImage, CardNoise } from 'components/earn/styled'
 
@@ -65,11 +65,11 @@ const ExpiredRoundCard: React.FC<ExpiredRoundCardProps> = ({
   bearMultiplier,
 }) => {
   const { t } = useTranslation()
-  const { account } = useActiveWeb3React()
-  const { id, epoch, endBlock, lockPrice, closePrice } = round
+  // const { account } = useActiveWeb3React()
+  const { endBlock, lockPrice, closePrice } = round
   const betPosition = closePrice > lockPrice ? BetPosition.BULL : BetPosition.BEAR
-  const bet = useGetBetByRoundId(account, round.id)
-  const payout = getPayout(bet)
+  // const bet = useGetBetByRoundId(account, round.id)
+  // const payout = getPayout(bet)
 
   if (round.failed) {
     return <CanceledRoundCard round={round} />
@@ -95,6 +95,7 @@ const ExpiredRoundCard: React.FC<ExpiredRoundCardProps> = ({
         />
 
         <RoundResult round={round} />
+
         <MultiplierArrow
           betAmount={betAmount}
           multiplier={bearMultiplier}
@@ -103,8 +104,8 @@ const ExpiredRoundCard: React.FC<ExpiredRoundCardProps> = ({
           hasEntered={hasEnteredDown}
         />
       </ContentWrapper>
-      <CollectWinningsOverlay roundId={id} epoch={epoch} payout={payout} isBottom={hasEnteredDown} />
-    </Wrapper >
+      {/* <CollectWinningsOverlay roundId={id} epoch={epoch} payout={payout} isBottom={hasEnteredDown} /> */}
+    </Wrapper>
   )
 }
 

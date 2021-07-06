@@ -1,7 +1,7 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Text } from '@pancakeswap/uikit'
 import { SVG, WonSlice, LostSlice, Wrapper, Info } from './PnlChartStyles'
+import { TYPE } from 'theme'
 
 /**
  * Bare minimum chart that doesn't require any external dependencies
@@ -28,15 +28,15 @@ const PnlChart: React.FC<PnlChartProps> = ({ lost, won }) => {
         <WonSlice r="54" cx="64" cy="64" length={paintWon} offset={paintLost} />
       </SVG>
       <Info>
-        <Text small lineHeight="1">
+        <TYPE.white lineHeight="1">
           {t('Won')}
-        </Text>
-        <Text bold fontSize="20px" lineHeight="1">
+        </TYPE.white>
+        <TYPE.white fontSize="20px" lineHeight="1">
           {won}/{won + lost}
-        </Text>
-        <Text small lineHeight="1" color="textSubtle">
+        </TYPE.white>
+        <TYPE.subHeader>
           {percentageWon}%
-        </Text>
+        </TYPE.subHeader>
       </Info>
     </Wrapper>
   )

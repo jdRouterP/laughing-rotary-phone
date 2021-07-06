@@ -76,7 +76,8 @@ const OpenRoundCard: React.FC<OpenRoundCardProps> = ({
   const currentTimestamp = useCurrentBlockTimestamp()
   const { isSettingPosition, position } = state
   const isBufferPhase = currentTimestamp && currentTimestamp.toNumber() >= round.startAt + interval
-  const positionDisplay = position === BetPosition.BULL ? t('BULL').toUpperCase() : t('BEAR').toUpperCase()
+  const positionDisplay = hasEnteredUp ? t('BULL').toUpperCase() : t('BEAR').toUpperCase()
+
   const { targetRef, tooltipVisible, tooltip } = useTooltip(
     <div style={{ whiteSpace: 'nowrap' }}>{`${formatToken(betAmount)} MATIC`}</div>,
     { placement: 'top' },

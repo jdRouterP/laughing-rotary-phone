@@ -66,6 +66,7 @@ const SoonRoundCard: React.FC<SoonRoundCardProps> = ({ round }) => {
   const interval = useGetTotalinterval()
   const currentEpoch = useGetCurrentEpoch()
   const estimatedEndTime = round.startAt + interval
+
   const seconds = useRoundCountdown(round.epoch - currentEpoch + 1)
   const countdown = formatRoundTime(seconds)
 

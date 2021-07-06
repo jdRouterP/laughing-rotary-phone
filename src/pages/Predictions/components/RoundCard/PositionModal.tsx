@@ -164,8 +164,8 @@ export default function StakingModal({ isOpen, position, togglePosition, onDismi
       {attempting && !hash && (
         <LoadingView onDismiss={wrappedOnDismiss}>
           <AutoColumn gap="12px" justify={'center'}>
-            <TYPE.largeHeader>Depositing DFYN Tokens</TYPE.largeHeader>
-            <TYPE.body fontSize={20}>{parsedAmount?.toSignificant(4)} DFYN</TYPE.body>
+            <TYPE.largeHeader>Depositing MATIC</TYPE.largeHeader>
+            <TYPE.body fontSize={20}>{parsedAmount?.toSignificant(4)} MATIC</TYPE.body>
           </AutoColumn>
         </LoadingView>
       )}
@@ -173,7 +173,7 @@ export default function StakingModal({ isOpen, position, togglePosition, onDismi
         <SubmittedView onDismiss={wrappedOnDismiss} hash={hash}>
           <AutoColumn gap="12px" justify={'center'}>
             <TYPE.largeHeader>Transaction Submitted</TYPE.largeHeader>
-            <TYPE.body fontSize={20}>Deposited {parsedAmount?.toSignificant(4)} DFYN</TYPE.body>
+            <TYPE.body fontSize={20}>Deposited {parsedAmount?.toSignificant(4)} MATIC</TYPE.body>
           </AutoColumn>
         </SubmittedView>
       )}

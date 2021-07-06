@@ -48,7 +48,7 @@ const Notification: React.FC<NotificationProps> = ({ title, children }) => {
           </CardBody>
         </Card>
       </CardWrapper>
-    </Wrapper >
+    </Wrapper>
   )
 }
 

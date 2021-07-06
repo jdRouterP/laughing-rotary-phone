@@ -133,7 +133,7 @@ export const usePollBlockNumber = () => {
         const interval = setInterval(async () => {
             const blockNumber = await library?.getBlockNumber() ?? 0;
             dispatch(setBlock(blockNumber))
-        }, 5000)
+        }, 6000)
 
         return () => clearInterval(interval)
     }, [dispatch, library])

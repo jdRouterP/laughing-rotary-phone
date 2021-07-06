@@ -16,7 +16,6 @@ const useTimeCountdown = (time: number) => {
       console.log(currentBlock, currentTime, time);
       if (time > currentTime) {
         setSecondsRemaining((time - currentTime))
-        console.log(secondsRemaining)
         // Clear previous interval
         if (timer.current) {
           clearInterval(timer.current)
@@ -43,7 +42,7 @@ const useTimeCountdown = (time: number) => {
         clearInterval(timer.current)
       }
     }
-  }, [setSecondsRemaining, time, timer, secondsRemaining, library])
+  }, [setSecondsRemaining, time, timer, library])
 
   return secondsRemaining
 }

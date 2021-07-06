@@ -39,6 +39,7 @@ const Wrapper = styled(AutoColumn) <{ showBackground: boolean; bgColor: any }>`
 
 const ContentWrapper = styled.div`
     height: 320px;
+    z-index: 1;
     border-radius: 0 0 12px 12px;
     display: flex;
     flex-direction: column;
