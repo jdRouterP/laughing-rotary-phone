@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import { Flex, Text } from '@pancakeswap/uikit'
+import { Flex } from '@pancakeswap/uikit'
 import { useWeb3React } from '@web3-react/core'
 import styled from 'styled-components'
 import { useTranslation } from 'react-i18next'
-import { fetchHistory } from 'state/prediction/reducer'
+import { fetchHistory, setHistoryPaneState } from 'state/prediction/reducer'
 import { getUnclaimedWinningBets } from 'state/prediction/hooks'
 import { HistoryFilter } from 'state/prediction/types'
 import { useDispatch } from 'react-redux'
@@ -17,13 +17,15 @@ import {
 import { Header, HistoryTabs } from './components/History'
 import RoundsTab from './components/History/RoundsTab'
 import PnlTab from './components/History/PnlTab/PnlTab'
+import Modal from 'components/Modal'
+import { TYPE } from 'theme'
 
-const StyledHistory = styled.div`
-  background-color: 'white'
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-`
+// const StyledHistory = styled.div`
+//   background-color: 'white'
+//   display: flex;
+//   flex-direction: column;
+//   height: 100%;
+// `
 
 const BetWrapper = styled.div`
   flex: 1;
@@ -51,7 +53,7 @@ const History = () => {
   const historyFilter = useGetHistoryFilter()
   const currentEpoch = useGetCurrentEpoch()
   const { t } = useTranslation()
-  const bets = useGetHistoryByAccount(account)
+  const bets = useGetHistoryByAccount(account) ?? []
   const [activeTab, setActiveTab] = useState(HistoryTabs.ROUNDS)
 
   useEffect(() => {
@@ -63,11 +65,9 @@ const History = () => {
   // Currently the api cannot filter by unclaimed AND won so we do it here
   // when the user has selected Uncollected only include positions they won
   const results = historyFilter === HistoryFilter.UNCOLLECTED ? getUnclaimedWinningBets(bets) : bets
-
   const hasBetHistory = results && results.length > 0
 
   let activeTabComponent = null
-
   switch (activeTab) {
     case HistoryTabs.PNL:
       activeTabComponent = <PnlTab hasBetHistory={hasBetHistory} bets={results} />
@@ -81,23 +81,26 @@ const History = () => {
   if (!account) {
     activeTabComponent = (
       <Flex justifyContent="center" alignItems="center" flexDirection="column" mt="32px">
-        <Text mt="8px">{t('Connect your wallet to view your prediction history')}</Text>
+        <TYPE.white mt="8px">{t('Connect your wallet to view your prediction history')}</TYPE.white>
       </Flex>
     )
   }
+  const handleClick = () => {
+    dispatch(setHistoryPaneState(!isHistoryPaneOpen))
+  }
   return (
-    <StyledHistory>
+    <Modal flexdirection='column' isOpen={isHistoryPaneOpen} onDismiss={handleClick}>
       <Header activeTab={activeTab} setActiveTab={setActiveTab} />
       <BetWrapper>
         {isFetchingHistory ? (
           <SpinnerWrapper>
-            <Text>Loading...</Text>
+            <TYPE.white>Loading...</TYPE.white>
           </SpinnerWrapper>
         ) : (
           activeTabComponent
         )}
       </BetWrapper>
-    </StyledHistory>
+    </Modal>
   )
 }
 

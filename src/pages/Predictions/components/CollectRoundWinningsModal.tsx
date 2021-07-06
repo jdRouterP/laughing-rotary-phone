@@ -6,11 +6,7 @@ import {
   ModalTitle,
   ModalHeader,
   InjectedModalProps,
-  Button,
-  AutoRenewIcon,
-  Text,
   Flex,
-  Heading,
   Box,
   ModalCloseButton,
 } from '@pancakeswap/uikit'
@@ -22,6 +18,8 @@ import { useTranslation } from 'react-i18next'
 import { usePredictionContract } from 'hooks/useContract'
 import { formatToken } from '../helpers'
 import { useTransactionAdder } from 'state/transactions/hooks'
+import { TYPE } from 'theme'
+import { ButtonPrimary } from 'components/Button'
 
 interface CollectRoundWinningsModalProps extends InjectedModalProps {
   payout: number
@@ -34,14 +32,6 @@ const Modal = styled(ModalContainer)`
   overflow: visible;
 `
 
-const BunnyDecoration = styled.div`
-  position: absolute;
-  top: -116px; // line up bunny at the top of the modal
-  left: 0px;
-  text-align: center;
-  width: 100%;
-`
-
 const CollectRoundWinningsModal: React.FC<CollectRoundWinningsModalProps> = ({
   payout,
   roundId,
@@ -49,7 +39,7 @@ const CollectRoundWinningsModal: React.FC<CollectRoundWinningsModalProps> = ({
   onDismiss,
   onSuccess,
 }) => {
-  const [isPendingTx, setIsPendingTx] = useState(false)
+  const [, setIsPendingTx] = useState(false)
   const { account } = useWeb3React()
   const addTransaction = useTransactionAdder()
   const { t } = useTranslation()
@@ -84,35 +74,29 @@ const CollectRoundWinningsModal: React.FC<CollectRoundWinningsModalProps> = ({
 
   return (
     <Modal minWidth="288px" position="relative" mt="124px">
-      <BunnyDecoration>
-        <img src="/images/decorations/prize-bunny.png" alt="bunny decoration" height="124px" width="168px" />
-      </BunnyDecoration>
       <ModalHeader>
         <ModalTitle>
-          <Heading>{t('Collect Winnings')}</Heading>
+          <TYPE.mediumHeader>{t('Collect Winnings')}</TYPE.mediumHeader>
         </ModalTitle>
         <ModalCloseButton onDismiss={onDismiss} />
       </ModalHeader>
       <ModalBody p="24px">
         {/* <TrophyGoldIcon width="96px" mx="auto" mb="24px" /> */}
         <Flex alignItems="start" justifyContent="space-between" mb="24px">
-          <Text>{t('Collecting')}</Text>
+          <TYPE.white>{t('Collecting')}</TYPE.white>
           <Box style={{ textAlign: 'right' }}>
-            <Text>{`${formatToken(payout)} MATIC`}</Text>
+            <TYPE.white>{`${formatToken(payout)} MATIC`}</TYPE.white>
             {/* <Text fontSize="12px" color="textSubtle">
               {`~$${formatToken(tokenusdPrice.times(payout).toNumber())}`}
             </Text> */}
           </Box>
         </Flex>
-        <Button
+        <ButtonPrimary
           width="100%"
-          mb="8px"
           onClick={handleClick}
-          isLoading={isPendingTx}
-          endIcon={isPendingTx ? <AutoRenewIcon spin color="currentColor" /> : null}
         >
           {t('Confirm')}
-        </Button>
+        </ButtonPrimary>
       </ModalBody>
     </Modal>
   )

@@ -19,12 +19,12 @@ export interface Round {
     id: string
     epoch: number
     failed?: boolean
-    startBlock1: number
+    startBlock: number
     startAt: number
     lockAt: number
-    lockBlock1: number
+    lockBlock: number
     lockPrice: number
-    endBlock1: number
+    endBlock: number
     closePrice: number
     totalBets: number
     totalAmount: number

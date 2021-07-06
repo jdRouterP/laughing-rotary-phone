@@ -76,7 +76,7 @@ export const useGetCurrentRoundTime = () => {
 export const useGetMinBetAmount = () => {
     const minBetAmount = useSelector((state: AppState) => state.predictions.minBetAmount)
     const { chainId } = useActiveWeb3React()
-    return useMemo(() => new CurrencyAmount(Currency.getNativeCurrency(chainId ?? 137), minBetAmount), [minBetAmount])
+    return useMemo(() => new CurrencyAmount(Currency.getNativeCurrency(chainId ?? 137), minBetAmount), [minBetAmount, chainId])
 }
 
 export const useGetIsFetchingHistory = () => {
@@ -90,6 +90,7 @@ export const useGetHistory = () => {
 export const useGetHistoryByAccount = (account: string | null | undefined) => {
     const bets = useGetHistory()
     if (!account) return [];
+    // debugger
     return bets ? bets[account] : []
 }
 
@@ -132,8 +133,8 @@ export const usePollBlockNumber = () => {
         const interval = setInterval(async () => {
             const blockNumber = await library?.getBlockNumber() ?? 0;
             dispatch(setBlock(blockNumber))
-        }, 6000)
+        }, 5000)
 
         return () => clearInterval(interval)
-    }, [dispatch])
+    }, [dispatch, library])
 }

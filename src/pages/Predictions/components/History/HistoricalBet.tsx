@@ -1,4 +1,3 @@
-//@ts-nocheck
 import React, { useState } from 'react'
 import { useWeb3React } from '@web3-react/core'
 import {
@@ -8,7 +7,6 @@ import {
   Flex,
   IconButton,
   PlayCircleOutlineIcon,
-  Text,
   WaitIcon,
 } from '@pancakeswap/uikit'
 import styled from 'styled-components'
@@ -20,6 +18,7 @@ import { formatToken, getPayout } from '../../helpers'
 import CollectWinningsButton from '../CollectWinningsButton'
 import ReclaimPositionButton from '../ReclaimPositionButton'
 import BetDetails from './BetDetails'
+import { TYPE } from 'theme'
 
 interface BetProps {
   bet: Bet
@@ -74,7 +73,7 @@ const HistoricalBet: React.FC<BetProps> = ({ bet }) => {
   const resultTextPrefix = getRoundPrefix(roundResult)
   const isOpenRound = round.epoch === currentEpoch
   const isLiveRound = status === PredictionStatus.LIVE && round.epoch === currentEpoch - 1
-  const canClaim = useBetCanClaim(account, bet.round.id)
+  const canClaim = useBetCanClaim(account ?? '', bet.round.id)
 
   // Winners get the payout, otherwise the claim what they put it if it was canceled
   const payout = roundResult === Result.WIN ? getPayout(bet) : amount
@@ -84,9 +83,9 @@ const HistoricalBet: React.FC<BetProps> = ({ bet }) => {
       return (
         <Flex alignItems="center">
           <WaitIcon color="primary" mr="6px" width="24px" />
-          <Text color="primary" bold>
+          <TYPE.white color="primary" fontWeight={500}>
             {t('Starting Soon')}
-          </Text>
+          </TYPE.white>
         </Flex>
       )
     }
@@ -95,21 +94,21 @@ const HistoricalBet: React.FC<BetProps> = ({ bet }) => {
       return (
         <Flex alignItems="center">
           <PlayCircleOutlineIcon color="secondary" mr="6px" width="24px" />
-          <Text color="secondary" bold>
+          <TYPE.white color="secondary" fontWeight={500}>
             {t('Live Now')}
-          </Text>
+          </TYPE.white>
         </Flex>
       )
     }
 
     return (
       <>
-        <Text fontSize="12px" color="textSubtle">
+        <TYPE.white fontSize="12px" color="textSubtle">
           {t('Your Result')}
-        </Text>
-        <Text bold color={resultTextColor} lineHeight={1}>
+        </TYPE.white>
+        <TYPE.white fontWeight={500} color={resultTextColor} lineHeight={1}>
           {roundResult === Result.CANCELED ? t('Canceled') : `${resultTextPrefix}${formatToken(payout)}`}
-        </Text>
+        </TYPE.white>
       </>
     )
   }
@@ -118,14 +117,14 @@ const HistoricalBet: React.FC<BetProps> = ({ bet }) => {
     <>
       <StyledBet onClick={toggleOpen} role="button">
         <Box width="48px">
-          <Text textAlign="center">
-            <Text fontSize="12px" color="textSubtle">
+          <TYPE.white textAlign="center">
+            <TYPE.white fontSize="12px" color="textSubtle">
               {t('Round')}
-            </Text>
-            <Text bold lineHeight={1}>
+            </TYPE.white>
+            <TYPE.white fontWeight={500} lineHeight={1}>
               {round.epoch.toLocaleString()}
-            </Text>
-          </Text>
+            </TYPE.white>
+          </TYPE.white>
         </Box>
         <YourResult px="24px">{renderBetLabel()}</YourResult>
         {roundResult === Result.WIN && canClaim && (

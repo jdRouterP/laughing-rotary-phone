@@ -90,9 +90,9 @@ const MultiplierArrow: React.FC<MultiplierArrowProps> = ({
         {getEnteredTag({ bottom: 0, right: 0 })}
         <Content>
           {!isDisabled && multiplierText}
-          <TYPE.main fontSize="20px" margin="10px" color={downColor}>
+          <TYPE.white fontSize="20px" margin="10px" color={downColor}>
             {t('BEAR')}
-          </TYPE.main>
+          </TYPE.white>
         </Content>
 
       </Box>
@@ -103,9 +103,9 @@ const MultiplierArrow: React.FC<MultiplierArrowProps> = ({
     <Box position="relative">
       {getEnteredTag({ top: 0, left: 0 })}
       <Content>
-        <TYPE.main fontSize="20px" margin="10px" color={upColor}>
+        <TYPE.white fontSize="20px" margin="10px" color={upColor}>
           {t('BULL')}
-        </TYPE.main>
+        </TYPE.white>
         {!isDisabled && multiplierText}
       </Content>
 

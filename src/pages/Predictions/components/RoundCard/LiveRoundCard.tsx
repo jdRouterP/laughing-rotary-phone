@@ -129,9 +129,9 @@ const LiveRoundCard: React.FC<LiveRoundCardProps> = ({
           </TYPE.white>
           <Flex alignItems="center" justifyContent="space-between" mb="16px" height="36px">
             <MouseoverTooltip text={'Last price from Chainlink Oracle'} placement='bottom'>
-              <TYPE.main color={isBull ? '#29a329' : '#ff471a'} fontWeight={500} fontSize="24px">
+              <TYPE.white color={isBull ? '#29a329' : '#ff471a'} fontWeight={500} fontSize="24px">
                 {price > 0 ? `$${countUp}` : <Skeleton height="36px" width="94px" />}
-              </TYPE.main>
+              </TYPE.white>
             </MouseoverTooltip>
             <PositionTag betPosition={isBull ? BetPosition.BULL : BetPosition.BEAR}>
               {formatUsd(priceDifference)}

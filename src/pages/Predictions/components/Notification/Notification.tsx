@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Card, CardBody, Heading } from '@pancakeswap/uikit'
+import { Card, CardBody } from '@pancakeswap/uikit'
+import { TYPE } from 'theme'
 
 interface NotificationProps {
   title: string
@@ -42,12 +43,12 @@ const Notification: React.FC<NotificationProps> = ({ title, children }) => {
       <CardWrapper>
         <Card>
           <CardBody>
-            <Heading mb="24px">{title}</Heading>
+            <TYPE.mediumHeader mb="24px">{title}</TYPE.mediumHeader>
             {children}
           </CardBody>
         </Card>
       </CardWrapper>
-    </Wrapper>
+    </Wrapper >
   )
 }
 

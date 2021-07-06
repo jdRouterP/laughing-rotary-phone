@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
 import { useWeb3React } from '@web3-react/core'
-import { PlayCircleOutlineIcon, useTooltip, ArrowUpIcon, ArrowDownIcon } from '@pancakeswap/uikit'
+import { PlayCircleOutlineIcon, useTooltip } from '@pancakeswap/uikit'
 import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
 import { BetPosition, Round } from 'state/prediction/types'
@@ -155,10 +155,10 @@ const OpenRoundCard: React.FC<OpenRoundCardProps> = ({
     //   }),
     // )
   }
-  //@ts-ignore
-  const getPositionEnteredIcon = () => {
-    return position === BetPosition.BULL ? <ArrowUpIcon color="currentColor" /> : <ArrowDownIcon color="currentColor" />
-  }
+
+  // const getPositionEnteredIcon = () => {
+  //   return position === BetPosition.BULL ? <ArrowUpIcon color="currentColor" /> : <ArrowDownIcon color="currentColor" />
+  // }
 
   return (
     <Wrapper showBackground={false} bgColor={'blue'} >

@@ -1,6 +1,13 @@
 import React from 'react'
-import { Button, ButtonProps, useModal } from '@pancakeswap/uikit'
-import CollectRoundWinningsModal from './CollectRoundWinningsModal'
+import { ButtonProps } from '@pancakeswap/uikit'
+import { ButtonPrimary } from 'components/Button'
+import { useActiveWeb3React } from 'hooks'
+import { usePredictionContract } from 'hooks/useContract'
+import { useDispatch } from 'react-redux'
+import { useTransactionAdder } from 'state/transactions/hooks'
+import { TransactionResponse } from '@ethersproject/providers'
+import { markBetAsCollected } from 'state/prediction/reducer'
+import { useWalletModalToggle } from 'state/application/hooks'
 
 interface CollectWinningsButtonProps extends ButtonProps {
   payout: number
@@ -17,17 +24,55 @@ const CollectWinningsButton: React.FC<CollectWinningsButtonProps> = ({
   hasClaimed,
   onSuccess,
   children,
-  ...props
 }) => {
-  const [onPresentCollectWinningsModal] = useModal(
-    <CollectRoundWinningsModal payout={payout} roundId={roundId} epoch={epoch} onSuccess={onSuccess} />,
-    false,
-  )
+  // const [onPresentCollectWinningsModal] = useModal(
+  //   <CollectRoundWinningsModal payout={payout} roundId={roundId} epoch={epoch} onSuccess={onSuccess} />,
+  //   false,
+  // )
+  const { account } = useActiveWeb3React()
+  const predictionsContract = usePredictionContract()
+  const addTransaction = useTransactionAdder()
+  const dispatch = useDispatch()
+
+  // const [attempting, setAttempting] = useState<boolean>(false)
+  // const [hash, setHash] = useState<string | undefined>()
+  // const wrappedOnDismiss = useCallback(() => {
+  //   setHash(undefined)
+  //   setAttempting(false)
+  //   onDismiss()
+  // }, [onDismiss])
+  const toggleWalletModal = useWalletModalToggle()
+
+  const handleClick = async () => {
+
+    if (!account) {
+      toggleWalletModal()
+    } else if (predictionsContract) {
+      // setAttempting(true)
+      await predictionsContract
+        .claim(epoch, { gasLimit: 350000 })
+        .then(async (response: TransactionResponse) => {
+          dispatch(markBetAsCollected({ account, roundId }))
+          addTransaction(response, {
+            summary: `Winnings collected!`
+          })
+          if (onSuccess) {
+            await onSuccess()
+          }
+          // setAttempting(false)
+        })
+        .catch((error: any) => {
+          // setAttempting(false)
+          // onDismiss && onDismiss()
+          console.error(error)
+        })
+    }
+  }
 
   return (
-    <Button onClick={onPresentCollectWinningsModal} disabled={hasClaimed} {...props}>
+    <ButtonPrimary onClick={handleClick} disabled={hasClaimed}>
       {children}
-    </Button>
+    </ButtonPrimary>
   )
 }
 

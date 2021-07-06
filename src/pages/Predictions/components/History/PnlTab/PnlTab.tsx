@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { useWeb3React } from '@web3-react/core'
-import { Box, Flex, Heading, Text, Button, Link, OpenNewIcon } from '@pancakeswap/uikit'
+import { Box, Flex, Button, Link, OpenNewIcon } from '@pancakeswap/uikit'
 import { useTranslation } from 'react-i18next'
 import { getExplorerLink } from 'utils'
 import { useGetCurrentEpoch, useGetLastOraclePrice } from 'state/hook'
@@ -10,6 +10,7 @@ import { formatToken, getMultiplier, getPayout } from 'pages/Predictions/helpers
 import { getRoundResult, Result } from 'state/prediction/hooks'
 import PnlChart from './PnlChart'
 import SummaryRow from './SummaryRow'
+import { TYPE } from 'theme'
 
 interface PnlTabProps {
   hasBetHistory: boolean
@@ -64,6 +65,9 @@ const initialPnlSummary: PnlSummary = {
 }
 
 const getPnlSummary = (bets: Bet[], currentEpoch: number): PnlSummary => {
+  if (bets === undefined) {
+    bets = []
+  }
   return bets.reduce((summary: PnlSummary, bet) => {
     const roundResult = getRoundResult(bet, currentEpoch)
     if (roundResult === Result.WIN) {
@@ -124,58 +128,59 @@ const PnlTab: React.FC<PnlTabProps> = ({ hasBetHistory, bets }: PnlTabProps) => 
 
   return hasBetHistory ? (
     <Box p="16px">
-      <Text bold fontSize="24px" color="secondary" pb="24px">
+      <TYPE.white
+        fontSize="24px" color="secondary" pb="24px">
         {t('Your history')}
-      </Text>
+      </TYPE.white>
       <Flex>
         <PnlChart lost={summary.lost.rounds} won={summary.won.rounds} />
         <Flex flexDirection="column" justifyContent="center" pl="24px">
-          <Text bold color="textSubtle">
+          <TYPE.white color="textSubtle">
             {t('Net results')}
-          </Text>
-          <Text bold fontSize="24px" lineHeight="1" color={netResultIsPositive ? '#29a329' : '#ff471a'}>
+          </TYPE.white>
+          <TYPE.white fontSize="24px" lineHeight="1" color={netResultIsPositive ? '#29a329' : '#ff471a'}>
             {`${netResultIsPositive ? '+' : ''}${formatToken(netResultAmount)} MATIC`}
-          </Text>
-          <Text small color="textSubtle">
+          </TYPE.white>
+          <TYPE.white color="textSubtle">
             {`~$${formatToken(tokenusdPrice * (netResultAmount))}`}
-          </Text>
+          </TYPE.white>
         </Flex>
       </Flex>
       <Box pl="8px">
-        <Text mt="24px" bold color="textSubtle">
+        <TYPE.white mt="24px" color="textSubtle">
           {t('Average return / round')}
-        </Text>
-        <Text bold color={avgTokenWonIsPositive ? '#29a329' : '#ff471a'}>
+        </TYPE.white>
+        <TYPE.white color={avgTokenWonIsPositive ? '#29a329' : '#ff471a'}>
           {`${avgTokenWonIsPositive ? '+' : ''}${formatToken(avgTokenWonPerRound)} MATIC`}
-        </Text>
-        <Text small color="textSubtle">
+        </TYPE.white>
+        <TYPE.white color="textSubtle">
           {`~$${formatToken(tokenusdPrice * (avgTokenWonPerRound))}`}
-        </Text>
+        </TYPE.white>
 
         {hasBestRound && (
           <>
-            <Text mt="16px" bold color="textSubtle">
+            <TYPE.white mt="16px" color="textSubtle">
               {t('Best round: #%roundId%', { roundId: summary.won.bestRound.id })}
-            </Text>
+            </TYPE.white>
             <Flex alignItems="flex-end">
-              <Text bold color="success">{`+${formatToken(summary.won.bestRound.payout)} MATIC`}</Text>
-              <Text ml="4px" small color="textSubtle">
+              <TYPE.white color="success">{`+${formatToken(summary.won.bestRound.payout)} MATIC`}</TYPE.white>
+              <TYPE.white ml="4px" color="textSubtle">
                 ({summary.won.bestRound.multiplier.toFixed(2)}x)
-              </Text>
+              </TYPE.white>
             </Flex>
-            <Text small color="textSubtle">
+            <TYPE.white color="textSubtle">
               {`~$${formatToken(tokenusdPrice * (summary.won.bestRound.payout))}`}
-            </Text>
+            </TYPE.white>
           </>
         )}
 
-        <Text mt="16px" bold color="textSubtle">
+        <TYPE.white mt="16px" color="textSubtle">
           {t('Average position entered / round')}
-        </Text>
-        <Text bold>{`${formatToken(avgPositionEntered)} MATIC`}</Text>
-        <Text small color="textSubtle">
+        </TYPE.white>
+        <TYPE.white>{`${formatToken(avgPositionEntered)} MATIC`}</TYPE.white>
+        <TYPE.white color="textSubtle">
           {`~$${formatToken(tokenusdPrice * (avgPositionEntered))}`}
-        </Text>
+        </TYPE.white>
 
         <Divider />
 
@@ -195,14 +200,14 @@ const PnlTab: React.FC<PnlTabProps> = ({ hasBetHistory, bets }: PnlTabProps) => 
     </Box>
   ) : (
     <Box p="24px">
-      <Heading size="lg" textAlign="center" mb="8px">
+      <TYPE.mediumHeader size="lg" textAlign="center" mb="8px">
         {t('No prediction history available')}
-      </Heading>
-      <Text as="p" textAlign="center">
+      </TYPE.mediumHeader>
+      <TYPE.white as="p" textAlign="center">
         {t(
           'If you are sure you should see history here, make sure you’re connected to the correct wallet and try again.',
         )}
-      </Text>
+      </TYPE.white>
     </Box>
   )
 }

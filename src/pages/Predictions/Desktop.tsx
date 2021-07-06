@@ -1,13 +1,14 @@
-//@ts-nocheck
-import React, { useRef } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 // import {  Button } from '@pancakeswap/uikit'
 import { useGetPredictionsStatus, useIsHistoryPaneOpen } from 'state/hook'
 import { PredictionStatus } from 'state/prediction/types'
 // import TradingView from './components/TradingView'
 import { ErrorNotification, PauseNotification } from './components/Notification'
-import History from 'pages/PredictionMarket/components/History'
+// import History from 'pages/PredictionMarket/components/History'
+// import History from 'pages/Predictions/components/History'
 import Positions from './Positions'
+import History from './History'
 
 
 // const ExpandChartButton = styled(Button)`
@@ -44,12 +45,12 @@ const SplitWrapper = styled.div`
 //   position: relative;
 // `
 
-const HistoryPane = styled.div<{ isHistoryPaneOpen: boolean }>`
-  flex: none;
-  overflow: hidden;
-  transition: width 200ms ease-in-out;
-  width: ${({ isHistoryPaneOpen }) => (isHistoryPaneOpen ? '384px' : 0)};
-`
+// const HistoryPane = styled.div<{ isHistoryPaneOpen: boolean }>`
+//   flex: none;
+//   overflow: hidden;
+//   transition: width 200ms ease-in-out;
+//   width: ${({ isHistoryPaneOpen }) => (isHistoryPaneOpen ? '384px' : 0)};
+// `
 
 const StyledDesktop = styled.div`
   display: flex;
@@ -95,7 +96,7 @@ const PositionPane = styled.div`
 // `
 
 const Desktop: React.FC = () => {
-  const splitWrapperRef = useRef<HTMLDivElement>()
+  // const splitWrapperRef = useRef<HTMLDivElement>()
   // const chartRef = useRef<HTMLDivElement>()
   // const gutterRef = useRef<HTMLDivElement>()
   const isHistoryPaneOpen = useIsHistoryPaneOpen()
@@ -119,7 +120,7 @@ const Desktop: React.FC = () => {
   return (
     <>
       <StyledDesktop>
-        <SplitWrapper ref={splitWrapperRef}>
+        <SplitWrapper>
           <PositionPane>
             {status === PredictionStatus.ERROR && <ErrorNotification />}
             {status === PredictionStatus.PAUSED && <PauseNotification />}

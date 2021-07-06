@@ -9,11 +9,11 @@ import {
   Checkbox,
   ModalHeader,
   ModalTitle,
-  Heading,
   Box,
 } from '@pancakeswap/uikit'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
+import { TYPE } from 'theme'
 
 interface RiskDisclaimerProps extends InjectedModalProps {
   onSuccess: () => void
@@ -47,14 +47,14 @@ const RiskDisclaimer: React.FC<RiskDisclaimerProps> = ({ onSuccess, onDismiss }:
     <ModalContainer title={t('Welcome!')} minWidth="320px">
       <GradientModalHeader>
         <ModalTitle>
-          <Heading scale="lg">{t('Welcome!')}</Heading>
+          <TYPE.mediumHeader>{t('Welcome!')}</TYPE.mediumHeader>
         </ModalTitle>
       </GradientModalHeader>
       <ModalBody p="24px" maxWidth="400px">
         <Box maxHeight="300px" overflowY="auto">
-          <Heading as="h3" mb="24px">
+          <TYPE.subHeader as="h3" mb="24px">
             {t('This Product is in beta.')}
-          </Heading>
+          </TYPE.subHeader>
 
           <Text as="p" color="textSubtle" mb="24px">
             {t('Once you enter a position, you cannot cancel or adjust it.')}

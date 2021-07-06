@@ -1,14 +1,9 @@
-//@ts-nocheck
 import React from 'react'
 import { useWeb3React } from '@web3-react/core'
 import {
-  ArrowForwardIcon,
   Box,
-  Button,
   Radio,
   Flex,
-  Heading,
-  Text,
   ButtonMenu,
   ButtonMenuItem,
 } from '@pancakeswap/uikit'
@@ -18,6 +13,7 @@ import { setHistoryFilter, setHistoryPaneState, fetchHistory } from 'state/predi
 import { useGetHistoryFilter, useGetIsFetchingHistory } from 'state/hook'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
+import { TYPE, CloseIcon } from 'theme'
 
 const Filter = styled.label`
   align-items: center;
@@ -76,8 +72,8 @@ const Header: React.FC<HeaderProps> = ({ activeTab, setActiveTab }) => {
   }
 
   const handleChange = (newFilter: HistoryFilter) => async () => {
-    if (newFilter !== historyFilter) {
-      await dispatch(fetchHistory({ account, claimed: getClaimParam(newFilter) }))
+    if (newFilter !== historyFilter && account) {
+      dispatch(fetchHistory({ account, claimed: getClaimParam(newFilter) }))
       dispatch(setHistoryFilter(newFilter))
     }
   }
@@ -90,12 +86,10 @@ const Header: React.FC<HeaderProps> = ({ activeTab, setActiveTab }) => {
   return (
     <StyledHeader>
       <Flex alignItems="center" justifyContent="space-between" mb="16px">
-        <Heading as="h3" size="md">
+        <TYPE.mediumHeader>
           {t('History')}
-        </Heading>
-        <Button onClick={handleClick} variant="text" endIcon={<ArrowForwardIcon color="primary" />} px="0">
-          {t('Close')}
-        </Button>
+        </TYPE.mediumHeader>
+        <CloseIcon onClick={handleClick} />
       </Flex>
       <ButtonMenuContainer>
         <ButtonMenu activeIndex={activeTab} scale="sm" variant="subtle" onItemClick={switchTab}>
@@ -105,9 +99,9 @@ const Header: React.FC<HeaderProps> = ({ activeTab, setActiveTab }) => {
       </ButtonMenuContainer>
       {activeTab === HistoryTabs.ROUNDS && (
         <>
-          <Text color="textSubtle" fontSize="12px" mb="8px">
+          <TYPE.white color="textSubtle" fontSize="12px" mb="8px">
             {t('Filter')}
-          </Text>
+          </TYPE.white>
           <Flex alignItems="center">
             <Filter>
               <Radio
@@ -116,7 +110,7 @@ const Header: React.FC<HeaderProps> = ({ activeTab, setActiveTab }) => {
                 disabled={isFetchingHistory || !account}
                 onChange={handleChange(HistoryFilter.ALL)}
               />
-              <Text ml="4px">{t('All')}</Text>
+              <TYPE.white ml="4px">{t('All')}</TYPE.white>
             </Filter>
             <Filter>
               <Radio
@@ -125,7 +119,7 @@ const Header: React.FC<HeaderProps> = ({ activeTab, setActiveTab }) => {
                 disabled={isFetchingHistory || !account}
                 onChange={handleChange(HistoryFilter.COLLECTED)}
               />
-              <Text ml="4px">{t('Collected')}</Text>
+              <TYPE.white ml="4px">{t('Collected')}</TYPE.white>
             </Filter>
             <Filter>
               <Radio
@@ -134,7 +128,7 @@ const Header: React.FC<HeaderProps> = ({ activeTab, setActiveTab }) => {
                 disabled={isFetchingHistory || !account}
                 onChange={handleChange(HistoryFilter.UNCOLLECTED)}
               />
-              <Text ml="4px">{t('Uncollected')}</Text>
+              <TYPE.white ml="4px">{t('Uncollected')}</TYPE.white>
             </Filter>
           </Flex>
         </>

@@ -66,7 +66,7 @@ const ExpiredRoundCard: React.FC<ExpiredRoundCardProps> = ({
 }) => {
   const { t } = useTranslation()
   const { account } = useActiveWeb3React()
-  const { id, epoch, endBlock1, lockPrice, closePrice } = round
+  const { id, epoch, endBlock, lockPrice, closePrice } = round
   const betPosition = closePrice > lockPrice ? BetPosition.BULL : BetPosition.BEAR
   const bet = useGetBetByRoundId(account, round.id)
   const payout = getPayout(bet)
@@ -83,7 +83,7 @@ const ExpiredRoundCard: React.FC<ExpiredRoundCardProps> = ({
         status="expired"
         icon={<BlockIcon mr="4px" width="21px" color="textDisabled" />}
         title={t('Expired')}
-        blockTime={endBlock1}
+        blockTime={endBlock}
         epoch={round.epoch}
       />
       <ContentWrapper>
@@ -104,7 +104,7 @@ const ExpiredRoundCard: React.FC<ExpiredRoundCardProps> = ({
         />
       </ContentWrapper>
       <CollectWinningsOverlay roundId={id} epoch={epoch} payout={payout} isBottom={hasEnteredDown} />
-    </Wrapper>
+    </Wrapper >
   )
 }
 

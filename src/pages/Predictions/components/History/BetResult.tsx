@@ -1,7 +1,6 @@
-//@ts-nocheck
 import React from 'react'
 import { useWeb3React } from '@web3-react/core'
-import { Box, Flex, Heading, Text, PrizeIcon, BlockIcon, LinkExternal } from '@pancakeswap/uikit'
+import { Box, Flex, PrizeIcon, BlockIcon, LinkExternal } from '@pancakeswap/uikit'
 import { useDispatch } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { useBetCanClaim } from 'state/hook'
@@ -15,8 +14,7 @@ import { formatToken, getPayout } from '../../helpers'
 import CollectWinningsButton from '../CollectWinningsButton'
 import PositionTag from '../PositionTag'
 import ReclaimPositionButton from '../ReclaimPositionButton'
-import useUSDCPrice from 'utils/useUSDCPrice'
-import { WETH } from '@dfyn/sdk'
+import { TYPE } from 'theme'
 interface BetResultProps {
   bet: Bet
   result: Result
@@ -91,17 +89,18 @@ const BetResult: React.FC<BetResultProps> = ({ bet, result }) => {
   }
 
   const handleSuccess = async () => {
-    await dispatch(fetchBet({ account, id: bet.id }))
+    if (account && bet.id)
+      dispatch(fetchBet({ account, id: bet.id }))
   }
 
   return (
     <>
       <Flex alignItems="center" justifyContent="space-between" mb="8px">
-        <Heading>{t('Your History')}</Heading>
+        <TYPE.mediumHeader>{t('Your History')}</TYPE.mediumHeader>
         <Flex alignItems="center">
-          <Heading as="h3" color={getHeaderColor()} textTransform="uppercase" bold mr="4px">
+          <TYPE.mediumHeader as="h3" color={getHeaderColor()} mr="4px">
             {getHeaderText()}
-          </Heading>
+          </TYPE.mediumHeader>
           {getHeaderIcon()}
         </Flex>
       </Flex>
@@ -121,32 +120,32 @@ const BetResult: React.FC<BetResultProps> = ({ bet, result }) => {
         )}
         {bet.claimed && (
           <Flex justifyContent="center">
-            <LinkExternal href={getExplorerLink(chainId, bet.claimedHash, "transaction")} mb="16px">
-              {t('View on BscScan')}
-            </LinkExternal>
+            {chainId && bet.claimedHash && <LinkExternal href={getExplorerLink(chainId, bet.claimedHash, "transaction")} mb="16px">
+              {t('View on Explorer')}
+            </LinkExternal>}
           </Flex>
         )}
         {result === Result.CANCELED && isRefundable && (
           <ReclaimPositionButton epoch={bet.round.epoch} width="100%" mb="16px" />
         )}
         <Flex alignItems="center" justifyContent="space-between" mb="16px">
-          <Text>{t('Your direction')}</Text>
+          <TYPE.white>{t('Your direction')}</TYPE.white>
           <PositionTag betPosition={bet.position}>
             {bet.position === BetPosition.BULL ? t('BULL') : t('BEAR')}
           </PositionTag>
         </Flex>
         <Flex alignItems="center" justifyContent="space-between" mb="16px">
-          <Text>{t('Your position')}</Text>
-          <Text>{`${formatToken(bet.amount)} MATIC`}</Text>
+          <TYPE.white>{t('Your position')}</TYPE.white>
+          <TYPE.white>{`${formatToken(bet.amount)} MATIC`}</TYPE.white>
         </Flex>
         <Flex alignItems="start" justifyContent="space-between">
-          <Text bold>{t('Your Result')}</Text>
+          <TYPE.white>{t('Your Result')}</TYPE.white>
           <Box style={{ textAlign: 'right' }}>
-            <Text bold color={getResultColor()}>{`${result === Result.LOSE ? '-' : '+'}${formatToken(payout)} MATIC`}</Text>
-            <Text fontSize="12px" color="textSubtle">
+            <TYPE.white color={getResultColor()}>{`${result === Result.LOSE ? '-' : '+'}${formatToken(payout)} MATIC`}</TYPE.white>
+            <TYPE.white fontSize="12px" color="textSubtle">
               {/* 
               {`~$${formatToken(tokenusdPrice.times(payout).toNumber())}`} */}
-            </Text>
+            </TYPE.white>
           </Box>
         </Flex>
       </StyledBetResult>

@@ -1,6 +1,6 @@
 //@ts-nocheck
 import { request, gql } from 'graphql-request'
-import { GRAPH_API_PREDICTION, PREDICTION_ADDRESS } from '../../constants'
+import { GRAPH_API_PREDICTION } from '../../constants'
 import { Bet, BetPosition, Market, PredictionStatus, Round, RoundData } from './types'
 
 import {
@@ -184,6 +184,7 @@ export const getUnclaimedWinningBets = (bets: Bet[]): Bet[] => {
  */
 export const useStaticPredictionsData = async () => {
   const contract = usePredictionContract();
+  if (!contract) return;
 
   try {
     const currentEpoch = await contract.currentEpoch();

@@ -37,7 +37,7 @@ export default function ProgressBar({ totalTime }: Props) {
         return () => {
             clearInterval(timer);
         };
-    }, []);
+    }, [totalTime]);
 
     return (
         <div className={classes.root}>

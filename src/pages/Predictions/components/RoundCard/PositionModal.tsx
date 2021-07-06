@@ -63,7 +63,7 @@ export default function StakingModal({ isOpen, position, togglePosition, onDismi
     }
     let dustToken = new CurrencyAmount(Currency.getNativeCurrency(chainId ?? 137), dust);
     return balance.greaterThan(dust) ? balance.subtract(dustToken) : balance
-  }, [balance, chainId])
+  }, [balance, dust, chainId])
 
   // track and parse user input
 

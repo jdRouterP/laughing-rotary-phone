@@ -29,9 +29,9 @@ const RoundResult: React.FC<RoundResultProps> = ({ round, children, ...props }) 
         </TYPE.white>
       ) : (
         <Flex alignItems="center" justifyContent="space-between" mb="16px">
-          <TYPE.main color={isPositionUp ? '#29a329' : '#ff471a'} fontWeight={500} fontSize="24px">
+          <TYPE.white color={isPositionUp ? '#29a329' : '#ff471a'} fontWeight={500} fontSize="24px">
             {formatUsd(closePrice)}
-          </TYPE.main>
+          </TYPE.white>
           <PositionTag betPosition={betPosition}>{formatUsd(priceDifference)}</PositionTag>
         </Flex>
       )}

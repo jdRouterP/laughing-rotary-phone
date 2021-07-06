@@ -1,9 +1,10 @@
 import React, { ReactNode, useState } from 'react'
-import { AutoRenewIcon, Button, ButtonProps } from '@pancakeswap/uikit'
+import { ButtonProps } from '@pancakeswap/uikit'
 import { useTranslation } from 'react-i18next'
 import { usePredictionContract } from 'hooks/useContract'
 import { useTransactionAdder } from 'state/transactions/hooks'
 import { TransactionResponse } from '@ethersproject/providers'
+import { ButtonPrimary } from 'components/Button'
 
 interface ReclaimPositionButtonProps extends ButtonProps {
   epoch: number
@@ -12,7 +13,7 @@ interface ReclaimPositionButtonProps extends ButtonProps {
 }
 
 const ReclaimPositionButton: React.FC<ReclaimPositionButtonProps> = ({ epoch, onSuccess, children, ...props }) => {
-  const [isPendingTx, setIsPendingTx] = useState(false)
+  const [, setIsPendingTx] = useState(false)
   const { t } = useTranslation()
   const addTransaction = useTransactionAdder()
   const predictionsContract = usePredictionContract()
@@ -39,14 +40,10 @@ const ReclaimPositionButton: React.FC<ReclaimPositionButtonProps> = ({ epoch, on
   }
 
   return (
-    <Button
-      onClick={handleReclaim}
-      isLoading={isPendingTx}
-      endIcon={isPendingTx ? <AutoRenewIcon spin color="white" /> : null}
-      {...props}
-    >
+    <ButtonPrimary
+      onClick={handleReclaim}>
       {children || t('Reclaim Position')}
-    </Button>
+    </ButtonPrimary>
   )
 }
 

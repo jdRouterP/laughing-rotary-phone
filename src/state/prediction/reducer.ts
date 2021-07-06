@@ -12,7 +12,7 @@ import {
 } from './hooks'
 import { BIG_INT_ZERO } from '../../constants'
 import { JSBI } from '@dfyn/sdk'
-import { BetResponse } from './queries'
+// import { BetResponse } from './queries'
 
 const initialState: PredictionsState = {
     status: PredictionStatus.INITIAL,
@@ -81,12 +81,11 @@ export const fetchCurrentBets = createAsyncThunk<
 export const fetchHistory = createAsyncThunk<{ account: string; bets: Bet[] }, { account: string; claimed?: boolean }>(
     'predictions/fetchHistory',
     async ({ account, claimed }) => {
-        let response: BetResponse[] = [];
-        if (claimed !== undefined)
-            response = await getBetHistory({
-                user: account.toLowerCase(),
-                claimed,
-            })
+        const response = await getBetHistory({
+            user: account.toLowerCase(),
+            //@ts-ignore
+            claimed,
+        })
         const bets = response.map(transformBetResponse)
 
         return { account, bets }
@@ -125,14 +124,14 @@ export const predictionsSlice = createSlice({
                 // Add new round
                 const newestRound = maxBy(rounds, 'epoch') as Round
                 const futureRound = transformRoundResponse(
-                    makeFutureRoundResponse(newestRound.epoch + 2, newestRound.startBlock1 + state.interval),
+                    makeFutureRoundResponse(newestRound.epoch + 2, newestRound.startBlock + state.interval),
                 )
 
                 newRoundData[futureRound.id] = futureRound
             }
 
             state.currentEpoch = incomingCurrentRound?.epoch ?? 0
-            state.currentRoundStartBlockNumber = incomingCurrentRound?.startBlock1 ?? 0
+            state.currentRoundStartBlockNumber = incomingCurrentRound?.startBlock ?? 0
             state.currentRoundStartTime = incomingCurrentRound?.startAt ?? 0
             state.status = market.paused ? PredictionStatus.PAUSED : PredictionStatus.LIVE
             state.rounds = { ...state.rounds, ...newRoundData }

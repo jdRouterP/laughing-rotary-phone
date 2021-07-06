@@ -81,7 +81,7 @@ const Predictions = () => {
       if (marketData.market.paused) {
         dispatch(setPredictionStatus(PredictionStatus.PAUSED))
       } else if (latestRound && latestRound.epoch === currentEpoch) {
-        const currentRoundStartBlock = Number(latestRound.startBlock1)
+        const currentRoundStartBlock = Number(latestRound.startBlock)
         const currentRoundStartTime = Number(latestRound.startAt)
         const futureRounds = []
         const halfInterval = (interval + buffer) / 2

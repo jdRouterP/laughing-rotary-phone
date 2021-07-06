@@ -43,7 +43,7 @@ const useTimeCountdown = (time: number) => {
         clearInterval(timer.current)
       }
     }
-  }, [setSecondsRemaining, time, timer])
+  }, [setSecondsRemaining, time, timer, secondsRemaining, library])
 
   return secondsRemaining
 }
