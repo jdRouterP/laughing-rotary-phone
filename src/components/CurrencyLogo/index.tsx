@@ -320,6 +320,23 @@ export const getTokenLogoURL = (address: string) => {
   if (address?.toLowerCase() === '0x0bd820ad2d7ab7305b5c9538ba824c9b9beb0561'.toLowerCase()) {
     uri = 'https://raw.githubusercontent.com/RoyaleFinanceV1/royale-contracts/master/royale.png'
   }
+  if (address?.toLowerCase() === '0x3BfcE6D6F0d3D3f1326d86abdbe2845b4740Dc2E'.toLowerCase()) {
+    uri = 'https://maticpad.com/images/MaticPadLogoicon32x32.png'
+  }
+
+  if (address?.toLowerCase() === '0x3Dc7B06dD0B1f08ef9AcBbD2564f8605b4868EEA'.toLowerCase()) {
+    uri = 'https://app.fluidy.fi/logo-xdo_origin.png'
+  }
+  if (address?.toLowerCase() === '0xa3fa99a148fa48d14ed51d610c367c61876997f1'.toLowerCase()) {
+    uri = 'https://app.mai.finance/static/media/mimatic-red.1ccf3be7.png'
+  }
+  if (address?.toLowerCase() === '0x3A3e7650f8B9f667dA98F236010fBf44Ee4B2975'.toLowerCase()) {
+    uri = 'https://app.fluidy.fi/logo-xusd_origin.png'
+  }
+  if (address?.toLowerCase() === '0xF6F85b3f9fd581C2eE717c404F7684486F057F95'.toLowerCase()) {
+    uri = 'https://raw.githubusercontent.com/nordfinance/nord-assets/master/logo.png'
+  }
+
 
 
 

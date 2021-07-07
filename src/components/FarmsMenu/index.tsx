@@ -98,7 +98,7 @@ const MenuFlyout = styled.span`
   right: 0rem;
   z-index: 100;
 
-  ${({ theme }) => theme.mediaWidth.upToMedium`
+  ${({ theme }) => theme.mediaWidth.upToLarge`
     left: -8.25rem;
   `};
 `
@@ -130,9 +130,9 @@ export default function FarmsMenu() {
   return (
     // https://github.com/DefinitelyTyped/DefinitelyTyped/issues/30451
     <StyledMenu ref={node as any}>
-      
+
       <StyledMenuButton onClick={toggle}>
-        <span role="img" aria-label="FARMS">⚡FARMS</span> 
+        <span role="img" aria-label="FARMS">⚡FARMS</span>
       </StyledMenuButton>
 
       {open && (

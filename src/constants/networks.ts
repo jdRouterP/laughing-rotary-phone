@@ -25,7 +25,7 @@ export const NETWORK_LABEL: { [chainId in ChainId]?: string } = {
     [ChainId.GÖRLI]: 'Görli',
     [ChainId.KOVAN]: 'Kovan',
     [ChainId.MATIC]: 'Polygon',
-    [ChainId.OKEX]: 'OKEx',
+    [ChainId.OKEX]: 'OKExChain',
 }
 
 export const RPC = {
@@ -80,7 +80,7 @@ export const SUPPORTED_NETWORKS: {
     },
     [ChainId.OKEX]: {
         chainId: '0x42',
-        chainName: 'OKEx',
+        chainName: 'OKExChain',
         nativeCurrency: {
             name: 'OKEx Token',
             symbol: 'OKT',

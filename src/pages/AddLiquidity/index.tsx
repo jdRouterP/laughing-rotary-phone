@@ -42,6 +42,7 @@ import { useIsTransactionUnsupported } from 'hooks/Trades'
 import UnsupportedCurrencyFooter from 'components/swap/UnsupportedCurrencyFooter'
 import { abi } from '@uniswap/v2-periphery/build/IUniswapV2Router02.json'
 import getBiconomy from 'hooks/getBiconomy'
+// import { useDerivedSwapInfo } from 'state/swap/hooks'
 
 
 
@@ -57,7 +58,9 @@ export default function AddLiquidity({
 
 
   const currencyA = useCurrency(currencyIdA)
-  const currencyB = useCurrency(currencyIdB)
+  const currencyB = useCurrency (currencyIdB)
+
+  
   const oneCurrencyIsWETH = Boolean(
     chainId &&
     ((currencyA && currencyEquals(currencyA, WETH[chainId])) ||
@@ -360,14 +363,19 @@ export default function AddLiquidity({
 
   const pendingText = `Supplying ${parsedAmounts[Field.CURRENCY_A]?.toSignificant(6)} ${currencies[Field.CURRENCY_A]?.symbol
     } and ${parsedAmounts[Field.CURRENCY_B]?.toSignificant(6)} ${currencies[Field.CURRENCY_B]?.symbol}`
+    
 
   const handleCurrencyASelect = useCallback(
     (currencyA: Currency) => {
       const newCurrencyIdA = currencyId(currencyA, chainId)
       if (newCurrencyIdA === currencyIdB) {
         history.push(`/add/${currencyIdB}/${currencyIdA}`)
+        if(currencyIdB) sessionStorage.setItem('CurrencyInput', currencyIdB)
+        if(currencyIdA) sessionStorage.setItem('CurrencyOutput', currencyIdA)
       } else {
         history.push(`/add/${newCurrencyIdA}/${currencyIdB}`)
+        sessionStorage.setItem('CurrencyInput', newCurrencyIdA)
+        if(currencyIdB) sessionStorage.setItem('CurrencyOutput', currencyIdB)
       }
     },
     [currencyIdB, history, currencyIdA, chainId]
@@ -378,11 +386,16 @@ export default function AddLiquidity({
       if (currencyIdA === newCurrencyIdB) {
         if (currencyIdB) {
           history.push(`/add/${currencyIdB}/${newCurrencyIdB}`)
+          if(currencyIdB) sessionStorage.setItem('CurrencyInput', currencyIdB)
+          sessionStorage.setItem('CurrencyOutput', newCurrencyIdB)
         } else {
           history.push(`/add/${newCurrencyIdB}`)
         }
       } else {
-        history.push(`/add/${currencyIdA ? currencyIdA : Currency.getNativeCurrencySymbol(chainId)}/${newCurrencyIdB}`)
+        const inputCurrency = currencyIdA ? currencyIdA : Currency.getNativeCurrencySymbol(chainId)
+        history.push(`/add/${inputCurrency}/${newCurrencyIdB}`)
+        if(inputCurrency) sessionStorage.setItem('CurrencyInput', inputCurrency)
+        sessionStorage.setItem('CurrencyOutput', newCurrencyIdB)
       }
     },
     [currencyIdA, history, currencyIdB, chainId]

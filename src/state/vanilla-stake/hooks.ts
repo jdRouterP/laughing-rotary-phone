@@ -1,6 +1,6 @@
 import { ChainId, CurrencyAmount, JSBI, Token, TokenAmount, Pair } from '@dfyn/sdk'
 import { useMemo } from 'react'
-import { UNI, USDC, DFYN, FISH, UFT, ANY, AGA, AGAr } from '../../constants'
+import { UNI, USDC, DFYN, FISH, UFT, ANY, AGA, AGAr, NORD } from '../../constants'
 import { STAKING_REWARDS_BASIC_FARMS_INTERFACE } from '../../constants/abis/staking-rewards-basic-farms'
 import { useActiveWeb3React } from '../../hooks'
 import { NEVER_RELOAD, useMultipleContractSingleData } from '../multicall/hooks'
@@ -22,6 +22,12 @@ export const STAKING_REWARDS_INFO: {
   }[]
 } = {
   [ChainId.MATIC]: [
+    {
+      tokens: [DFYN, NORD],
+      baseToken: DFYN,
+      startTime: 1624980600,
+      stakingRewardAddress: '0x2d7c3E61430E4CF4DC091C61df03eaAB6d67cd26'
+    },
     {
       tokens: [DFYN, AGA],
       baseToken: DFYN,

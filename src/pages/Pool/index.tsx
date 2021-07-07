@@ -1,6 +1,6 @@
-import React, { useContext, useMemo } from 'react'
+import React, { useContext, useEffect, useMemo, useState } from 'react'
 import styled, { ThemeContext } from 'styled-components'
-import { Pair, JSBI, Currency } from '@dfyn/sdk'
+import { Pair, JSBI, Token } from '@dfyn/sdk'
 import { Link } from 'react-router-dom'
 import { SwapPoolTabs } from '../../components/NavigationTabs'
 
@@ -24,6 +24,7 @@ import { useStakingInfo as useDualStakingInfo } from '../../state/dual-stake/hoo
 import { useStakingInfo as usePreStakingInfo } from '../../state/stake/hooks'
 import { useStakingInfo as useVanillaStakingInfo } from '../../state/vanilla-stake/hooks'
 import { BIG_INT_ZERO } from '../../constants'
+import { useDerivedSwapInfo } from 'state/swap/hooks'
 
 const PageWrapper = styled(AutoColumn)`
   max-width: 640px;
@@ -79,7 +80,7 @@ const EmptyProposals = styled.div`
 
 export default function Pool() {
   const theme = useContext(ThemeContext)
-  const { account, chainId } = useActiveWeb3React()
+  const { account} = useActiveWeb3React()
 
   // fetch the user's balances of all tracked V2 LP tokens
   const trackedTokenPairs = useTrackedTokenPairs()
@@ -139,6 +140,22 @@ export default function Pool() {
     )
   })
 
+  const {currencies: swapCurrency} = useDerivedSwapInfo()
+
+  const [inputCurrency, setinputCurrency] = useState(swapCurrency?.INPUT instanceof Token ? swapCurrency?.INPUT?.address : swapCurrency?.INPUT?.symbol ?? 'MATIC')
+  const [outputCurrency, setOutputCurrency] = useState(swapCurrency?.OUTPUT instanceof Token ? swapCurrency?.OUTPUT?.address : swapCurrency?.OUTPUT?.symbol ?? '0xC168E40227E4ebD8C1caE80F7a55a4F0e6D66C97')
+
+  useEffect(()=>{
+    const localInput = sessionStorage.getItem('CurrencyInput')
+    const localOutput = sessionStorage.getItem('CurrencyOutput')
+    if(localInput){
+      setinputCurrency(localInput)
+    }
+    if(localOutput){
+      setOutputCurrency(localOutput)
+    }
+  }, [inputCurrency, outputCurrency])
+
   return (
     <>
       <PageWrapper>
@@ -178,7 +195,7 @@ export default function Pool() {
                 </TYPE.mediumHeader>
               </HideSmall>
               <ButtonRow>
-                <ResponsiveButtonSecondary as={Link} padding="6px 8px" to={`/create/${Currency.getNativeCurrency(chainId).symbol}`}>
+                <ResponsiveButtonSecondary as={Link} padding="6px 8px" to={`/create/${inputCurrency}/${outputCurrency}`}>
                   Create a pair
                 </ResponsiveButtonSecondary>
                 <ResponsiveButtonPrimary
@@ -186,7 +203,7 @@ export default function Pool() {
                   as={Link}
                   padding="6px 8px"
                   borderRadius="12px"
-                  to={`/add/${Currency.getNativeCurrency(chainId).symbol}`}
+                  to={`/add/${inputCurrency}/${outputCurrency}`}
                 >
                   <Text fontWeight={500} fontSize={16}>
                     Add Liquidity
