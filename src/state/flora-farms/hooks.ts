@@ -27,6 +27,27 @@ export const STAKING_REWARDS_INFO: {
 } = {
   [ChainId.MATIC]: [
     {
+      tokens: [UST, USDT],
+      baseToken: USDT,
+      startTime: 1625758200,
+      stakingRewardAddress: '0x35A3a9DF5F0E2dFf08FBA3ece64Ea5faeD7D3b18',
+      version: 'v2'
+    },
+    {
+      tokens: [DFYN, WMATIC],
+      baseToken: DFYN,
+      startTime: 1625758200,
+      stakingRewardAddress: '0x8555b37C21F78F0B73d905b9c2923EB3A3efe7bc',
+      version: 'v2'
+    },
+    {
+      tokens: [LUNA, DFYN],
+      baseToken: DFYN,
+      startTime: 1625758200,
+      stakingRewardAddress: '0xF2BaEc3ECA845A6762863C6159b223E871f5ceAe',
+      version: 'v2'
+    },
+    {
       tokens: [MATICPAD, ETHER],
       baseToken: ETHER,
       startTime: 1624980600,

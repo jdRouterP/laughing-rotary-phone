@@ -56,6 +56,10 @@ export const CRV = new Token(ChainId.MATIC, '0x172370d5cd63279efa6d502dab2917193
 export const LINK = new Token(ChainId.MATIC, '0x53e0bca35ec356bd5dddfebbd1fc0fd03fabad39', 18, 'LINK', 'Chain Link')
 export const MATICPAD = new Token(ChainId.MATIC, '0x3BfcE6D6F0d3D3f1326d86abdbe2845b4740Dc2E', 18, 'MATPAD', 'MATICPAD')
 
+export const COSMIC = new Token(ChainId.MATIC, '0xa5Eb60CA85898f8b26e18fF7c7E43623ccbA772C', 18, 'COSMIC', 'Cosmicswap')
+export const BIFI = new Token(ChainId.MATIC, '0xfbdd194376de19a88118e84e279b977f165d01b8', 18, 'BIFI', 'beefy.finance')
+export const FRM = new Token(ChainId.MATIC, '0xd99baFe5031cC8B345cb2e8c80135991F12D7130', 18, 'FRM', 'Ferrum network token')
+
 export const EZ = new Token(ChainId.MATIC, '0x34C1b299A74588D6Abdc1b85A53345A48428a521', 18, 'EZ', 'EASY V2')
 export const UFARM = new Token(ChainId.MATIC, '0xa7305ae84519ff8be02484cda45834c4e7d13dd6', 18, 'UFARM', 'Unifarm Token')
 export const NWC = new Token(ChainId.MATIC, '0x968F6f898a6Df937fC1859b323aC2F14643e3fED', 18, 'NWC', 'Newscrypto')

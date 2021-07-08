@@ -1,6 +1,6 @@
 import { ChainId, CurrencyAmount, JSBI, Token, TokenAmount, Pair } from '@dfyn/sdk'
 import { useMemo } from 'react'
-import { UNI, USDC, DFYN, FISH, UFT, ANY, AGA, AGAr, NORD } from '../../constants'
+import { UNI, USDC, DFYN, FISH, UFT, ANY, AGA, AGAr, NORD, BIFI, COSMIC } from '../../constants'
 import { STAKING_REWARDS_BASIC_FARMS_INTERFACE } from '../../constants/abis/staking-rewards-basic-farms'
 import { useActiveWeb3React } from '../../hooks'
 import { NEVER_RELOAD, useMultipleContractSingleData } from '../multicall/hooks'
@@ -17,11 +17,24 @@ export const STAKING_REWARDS_INFO: {
   [chainId in ChainId]?: {
     tokens: [Token, Token]
     baseToken?: Token
+    rewardToken?: Token
     startTime: number
     stakingRewardAddress: string
   }[]
 } = {
   [ChainId.MATIC]: [
+    {
+      tokens: [DFYN, BIFI],
+      baseToken: DFYN,
+      startTime: 1625758200,
+      stakingRewardAddress: '0xECe1b93A70A0429Db6cF4580C325F831FBB16d52'
+    },
+    {
+      tokens: [DFYN, COSMIC],
+      baseToken: DFYN,
+      startTime: 1625758200,
+      stakingRewardAddress: '0xccEFB3926E9e2f77d4ce4E661f8D720f379817eD'
+    },
     {
       tokens: [DFYN, NORD],
       baseToken: DFYN,
@@ -76,6 +89,7 @@ export interface StakingInfo {
   // the tokens involved in this pair
   baseToken: any
   startTime: number
+  rewardToken: Token
   type: TypeOfpools
   tokens: [Token, Token]
   // the amount of token currently staked, or undefined if no account
@@ -228,6 +242,7 @@ export function useStakingInfo(pairToFilterBy?: Pair | null): StakingInfo[] {
           baseToken: info[index].baseToken,
           startTime: info[index].startTime ?? 0,
           tokens: info[index].tokens,
+          rewardToken: info[index].rewardToken ?? DFYN,
           periodFinish: periodFinishMs > 0 ? new Date(periodFinishMs) : undefined,
           earnedAmount: new TokenAmount(uni, JSBI.BigInt(earnedAmountState?.result?.[0] ?? 0)),
           rewardRate: individualRewardRate,
