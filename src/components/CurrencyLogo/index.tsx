@@ -318,6 +318,13 @@ export const getTokenLogoURL = (address: string) => {
     uri = 'https://etherscan.io/token/images/terra-ust_32.png'
   }
 
+  if (address?.toLowerCase() === '0xaaa5b9e6c589642f98a1cda99b9d024b8407285a'.toLowerCase()) {
+    uri = 'https://polygonscan.com/token/images/titan_32.png'
+  }
+  if (address?.toLowerCase() === '0x4a81f8796e0c6ad4877a51c86693b0de8093f2ef'.toLowerCase()) {
+    uri = 'https://cdn.discordapp.com/attachments/794129085387374592/862637810138087434/5.png'
+  }
+
   if (address?.toLowerCase() === '0x033d942a6b495c4071083f4cde1f17e986fe856c'.toLowerCase()) {
     uri = '	https://i.imgur.com/jP16jUZ.png'
   }
