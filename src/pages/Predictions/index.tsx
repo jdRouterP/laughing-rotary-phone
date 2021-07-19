@@ -71,8 +71,9 @@ const Predictions = () => {
 
     const fetchInitialData = async () => {
       const [staticPredictionsData, marketData] = await Promise.all([_staticPredictionsData, getMarketData()])
-      //@ts-ignore
-      const { currentEpoch, interval, buffer } = staticPredictionsData
+      if (staticPredictionsData === undefined || marketData === undefined) return;
+
+      const { currentEpoch, interval, buffer } = staticPredictionsData;
       const latestRound = marketData.rounds.find((round) => round.epoch === currentEpoch)
       // Fetch data on current unclaimed bets
       //@ts-ignore
