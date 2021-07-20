@@ -6,7 +6,7 @@ import { useGetTotalinterval } from 'state/hook'
 import CardHeader from './CardHeader'
 import styled from 'styled-components'
 import { AutoColumn } from 'components/Column'
-import { CardBGImage, CardNoise } from 'components/earn/styled'
+// import { CardBGImage, CardNoise } from 'components/earn/styled'
 
 interface CalculatingCardProps {
   round: Round
@@ -18,8 +18,11 @@ const Wrapper = styled(AutoColumn) <{ showBackground: boolean; bgColor: any }>`
   overflow: hidden;
   position: relative;
   opacity: ${({ showBackground }) => (showBackground ? '1' : '1')};
-  background: ${({ theme, bgColor, showBackground }) =>
-    `radial-gradient(91.85% 100% at 1.84% 0%, ${bgColor} 0%, ${showBackground ? theme.black : theme.bg5} 100%) `};
+  background: linear-gradient(180deg, #2D3646 0%, #2C2F35 216.76%);
+  border: 1px solid #575A68;
+  box-sizing: border-box;
+  box-shadow: 0px 0px 24px rgba(0, 0, 0, 0.1);
+  border-radius: 15px;
   color: ${({ theme, showBackground }) => (showBackground ? theme.white : theme.text1)} !important;
 
   ${({ showBackground }) =>
@@ -36,7 +39,6 @@ const Wrapper = styled(AutoColumn) <{ showBackground: boolean; bgColor: any }>`
 `
 
 const ContentWrapper = styled.div`
-    height: 320px;
     border-radius: 0 0 12px 12px;
     display: flex;
     flex-direction: column;
@@ -45,10 +47,10 @@ const ContentWrapper = styled.div`
 `
 const Content = styled.div`
     width: 250px;
-    height: 120px;
-    border: 3px solid white;
-    border-radius: 12px;
-    padding: 20px 15px;
+    border: 1px solid #575A68;
+    box-sizing: border-box;
+    border-radius: 10px;
+    padding: 50px;
     display:grid;
     place-items: center;
     margin: 20px 0;
@@ -76,8 +78,8 @@ const CalculatingCard: React.FC<CalculatingCardProps> = ({ round }) => {
   return (
     <>
       <Wrapper showBackground={false} bgColor={'grey'}>
-        <CardBGImage desaturate />
-        <CardNoise />
+        {/* <CardBGImage desaturate />
+        <CardNoise /> */}
         <CardHeader
           status="calculating"
           icon={<WaitIcon mr="4px" width="21px" />}

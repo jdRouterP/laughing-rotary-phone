@@ -66,7 +66,8 @@ const ContentWrapper = styled.div`
 const Content = styled.div`
     width: 250px;
     border: 1px solid #575A68;
-    border-radius: 12px;
+    box-sizing: border-box;
+    border-radius: 10px;
     padding: 50px;
     display:grid;
     place-items: center;
@@ -106,7 +107,7 @@ const CanceledRoundCard: React.FC<CanceledRoundCardProps> = ({ round }) => {
       />
       <ContentWrapper>
         <CardHeaderBlock>
-          <h2>BULL</h2>
+          <h3 style={{fontWeight: "normal"}}>BULL</h3>
         </CardHeaderBlock>
         <Content>
           <EntryTitle>
@@ -118,7 +119,7 @@ const CanceledRoundCard: React.FC<CanceledRoundCardProps> = ({ round }) => {
           </LinkExternal>
         </Content>
         <CardFooterBlock>
-          <h2>BEAR</h2>
+          <h3 style={{fontWeight: "normal"}}>BEAR</h3>
         </CardFooterBlock>
       </ContentWrapper>
     </Wrapper>

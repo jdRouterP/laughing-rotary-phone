@@ -131,7 +131,7 @@ const Background = styled(Box) <RoundResultBoxProps>`
 
 const StyledRoundResultBox = styled.div`
   border-radius: 14px;
-  padding: 26px;
+  padding: 20px 30px;
 `
 
 export const RoundResultBox: React.FC<RoundResultBoxProps> = ({
