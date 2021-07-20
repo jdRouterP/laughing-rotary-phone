@@ -75,6 +75,7 @@ const Content = styled.div`
 const EntryTitle = styled.div`
     font-size: 16px;
     font-weight: bold;
+    color: "white"
 `
 
 const CanceledRoundCard: React.FC<CanceledRoundCardProps> = ({ round }) => {
@@ -107,7 +108,7 @@ const CanceledRoundCard: React.FC<CanceledRoundCardProps> = ({ round }) => {
       />
       <ContentWrapper>
         <CardHeaderBlock>
-          <h3 style={{fontWeight: "normal"}}>BULL</h3>
+          <h3 style={{fontWeight: "normal", color: "white"}}>BULL</h3>
         </CardHeaderBlock>
         <Content>
           <EntryTitle>
@@ -119,7 +120,7 @@ const CanceledRoundCard: React.FC<CanceledRoundCardProps> = ({ round }) => {
           </LinkExternal>
         </Content>
         <CardFooterBlock>
-          <h3 style={{fontWeight: "normal"}}>BEAR</h3>
+          <h3 style={{fontWeight: "normal", color: "white"}}>BEAR</h3>
         </CardFooterBlock>
       </ContentWrapper>
     </Wrapper>

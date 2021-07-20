@@ -12,6 +12,22 @@ interface CalculatingCardProps {
   round: Round
 }
 
+
+const CardHeaderBlock = styled.div`
+  text-align: center;
+  margin-top: 23px;
+  width: 206px;
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2));
+  border-radius: 10px 10px 0px 0px; 
+`
+const CardFooterBlock = styled.div`
+  text-align: center; 
+  margin-bottom: 23px;
+  width: 206px;
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2));
+  border-radius: 0px 0px 10px 10px;
+`
+
 const Wrapper = styled(AutoColumn) <{ showBackground: boolean; bgColor: any }>`
   border-radius: 12px;
   width: 100%;
@@ -46,25 +62,15 @@ const ContentWrapper = styled.div`
     justify-content: center;
 `
 const Content = styled.div`
-    width: 250px;
-    border: 1px solid #575A68;
-    box-sizing: border-box;
-    border-radius: 10px;
-    padding: 50px;
-    display:grid;
-    place-items: center;
-    margin: 20px 0;
+  width: 250px;
+  border: 1px solid #575A68;
+  box-sizing: border-box;
+  border-radius: 10px;
+  padding: 50px;
+  display:grid;
+  place-items: center;
 `
 
-const Payout = styled.div`
-    display: grid;
-    place-items: center;
-`
-
-const PayoutLabel = styled.div`
-    font-size: 20px;
-    font-weight: bold;
-`
 
 const CalculatingCard: React.FC<CalculatingCardProps> = ({ round }) => {
   const { t } = useTranslation()
@@ -88,11 +94,9 @@ const CalculatingCard: React.FC<CalculatingCardProps> = ({ round }) => {
           blockTime={estimatedEndTime}
         />
         <ContentWrapper>
-          <Payout>
-            <PayoutLabel>
-              BULL
-            </PayoutLabel>
-          </Payout>
+          <CardHeaderBlock>
+            <h3 style={{fontWeight: "normal", color: "white"}}>BULL</h3>
+          </CardHeaderBlock>
           {/* <RoundResultBox>
             <Flex alignItems="center" justifyContent="center" flexDirection="column">
               <Text>Loading..</Text>
@@ -104,18 +108,16 @@ const CalculatingCard: React.FC<CalculatingCardProps> = ({ round }) => {
           </RoundResultBox> */}
           <Content>
             <Flex alignItems="center" justifyContent="center" flexDirection="column">
-              <Text>Loading..</Text>
+              <Text style={{color: "white"}}>Loading..</Text>
               <Flex mt="8px" ref={targetRef}>
-                <TooltipText>{t('Calculating')}</TooltipText>
+                <TooltipText style={{color: "white"}}>{t('Calculating')}</TooltipText>
                 <InfoIcon ml="4px" />
               </Flex>
             </Flex>
           </Content>
-          <Payout>
-            <PayoutLabel>
-              BEAR
-            </PayoutLabel>
-          </Payout>
+          <CardFooterBlock>
+            <h3 style={{fontWeight: "normal", color: "white"}}>BEAR</h3>
+          </CardFooterBlock>
         </ContentWrapper>
       </Wrapper>
       {tooltipVisible && tooltip}

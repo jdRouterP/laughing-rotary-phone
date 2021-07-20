@@ -98,8 +98,6 @@ const Predictions = () => {
             historyFilter: HistoryFilter.ALL,
             currentRoundStartBlockNumber: currentRoundStartBlock,
             rounds: roundData,
-            history: {},
-            bets: {},
           }),
         )
       } else {

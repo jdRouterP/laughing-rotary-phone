@@ -46,7 +46,7 @@ const getTextColorByStatus = (status: Status, fallback: FallbackColor) => {
     case 'canceled':
       return 'white'
     case 'calculating':
-      return 'text'
+      return 'white'
     default:
       return fallback
   }
