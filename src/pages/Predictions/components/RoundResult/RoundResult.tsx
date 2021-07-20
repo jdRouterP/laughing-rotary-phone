@@ -19,7 +19,7 @@ const RoundResult: React.FC<RoundResultProps> = ({ round, children, ...props }) 
   const priceDifference = closePrice - lockPrice
 
   return (
-    <RoundResultBox betPosition={betPosition} {...props}>
+    <RoundResultBox round={round} betPosition={betPosition} {...props}>
       <TYPE.white fontSize="12px" fontWeight={900} mb="8px">
         {t('CLOSED PRICE')}
       </TYPE.white>

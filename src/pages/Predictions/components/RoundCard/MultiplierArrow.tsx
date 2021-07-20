@@ -61,7 +61,7 @@ const MultiplierArrow: React.FC<MultiplierArrowProps> = ({
   // const textColor = getTextColor()(isActive, isDisabled)
   const multiplierText = (
     <Box>
-      <Flex justifyContent="center" height="14px">
+      <Flex justifyContent="center">
         <Text fontSize="14px" color={"white"} bold lineHeight="14x">
           {multiplier !== undefined ? `${multiplier.toLocaleString(undefined, { maximumFractionDigits: 2 })}x` : '-'}
         </Text>
@@ -93,7 +93,6 @@ const MultiplierArrow: React.FC<MultiplierArrowProps> = ({
             {t('BEAR')}
           </TYPE.white>
         </Content>
-
       </Box>
     )
   }

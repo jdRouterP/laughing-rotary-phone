@@ -38,12 +38,13 @@ const getTextColorByStatus = (status: Status, fallback: FallbackColor) => {
     case 'expired':
       return '#e6e6e6'
     case 'next':
-      return 'white'
+      return 'deeppink'
     case 'live':
       return 'white'
     case 'upcoming':
       return 'white'
     case 'canceled':
+      return 'white'
     case 'calculating':
       return 'text'
     default:
@@ -87,7 +88,7 @@ const CardHeader: React.FC<CardHeaderProps> = ({ status, title, epoch, icon }) =
     <>
       <StyledCardHeader status={status}>
         <Round>
-          <Text fontSize={isLive ? '14px' : '12px'} color={roundIDColor} textAlign="center">
+          <Text fontSize={isLive ? '18px' : '16px'} color={roundIDColor} textAlign="center">
             {`Round: ${epoch}`}
           </Text>
         </Round>

@@ -16,7 +16,7 @@ import CalculatingCard from './CalculatingCard'
 import useCurrentBlockTimestamp from 'hooks/useCurrentBlockTimestamp'
 import { MouseoverTooltip } from 'components/Tooltip'
 import { AutoColumn } from 'components/Column'
-import { CardBGImage, CardNoise } from 'components/earn/styled'
+// import { CardBGImage, CardNoise } from 'components/earn/styled'
 import { TYPE } from 'theme'
 
 interface LiveRoundCardProps {
@@ -29,6 +29,24 @@ interface LiveRoundCardProps {
 }
 
 
+const CardHeaderBlock = styled.div<{ isPositionUp: boolean}>`
+  opacity: 0.5;
+  margin-top: 23px;
+  width: 206px;
+  padding-top: 30px;
+  padding-bottom: 41px;
+  background: ${({isPositionUp}) => isPositionUp ? '#29a329' : 'linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2));'};
+  border-radius: 10px 10px 0px 0px; 
+`
+const CardFooterBlock = styled.div<{isPositionUp: boolean}>`
+  opacity: 0.5;
+  margin-bottom: 23px;
+  width: 206px;
+  padding-top: 37px;
+  padding-bottom: 30px;
+  background: ${({isPositionUp}) => isPositionUp ? 'linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2))' : '#ff471a'};
+  border-radius: 0px 0px 10px 10px;
+`
 
 // const GradientBorder = styled.div`
 //   background: linear-gradient(180deg, #53dee9 0%, #7645d9 100%);
@@ -45,9 +63,11 @@ const Wrapper = styled(AutoColumn) <{ showBackground: boolean; bgColor: any }>`
   width: 100%;
   overflow: hidden;
   position: relative;
+  background: linear-gradient(180deg, #2D3646 0%, #2C2F35 100%);
+  /* Shadow */
+  box-shadow: 0px 0px 34px rgba(0, 0, 0, 0.15);
+  border-radius: 15px;
   opacity: ${({ showBackground }) => (showBackground ? '1' : '1')};
-  background: ${({ theme, bgColor, showBackground }) =>
-    `radial-gradient(91.85% 100% at 1.84% 0%, ${bgColor} 0%, ${showBackground ? theme.black : theme.bg5} 100%) `};
   color: ${({ theme, showBackground }) => (showBackground ? theme.white : theme.text1)} !important;
 
   ${({ showBackground }) =>
@@ -58,7 +78,6 @@ const Wrapper = styled(AutoColumn) <{ showBackground: boolean; bgColor: any }>`
 `
 
 const ContentWrapper = styled.div`
-    height: 320px;
     border-radius: 0 0 12px 12px;
     display: flex;
     flex-direction: column;
@@ -107,8 +126,8 @@ const LiveRoundCard: React.FC<LiveRoundCardProps> = ({
 
   return (
     <Wrapper showBackground={hasEnteredUp || hasEnteredDown} bgColor={priceColor}>
-      <CardBGImage desaturate />
-      <CardNoise />
+      {/* <CardBGImage desaturate />
+      <CardNoise /> */}
       <CardHeader
         status="live"
         icon={<PlayCircleOutlineIcon mr="4px" width="24px" color="secondary" />}
@@ -117,29 +136,32 @@ const LiveRoundCard: React.FC<LiveRoundCardProps> = ({
         blockTime={estimatedEndTime}
       />
       <ContentWrapper>
+      <CardHeaderBlock isPositionUp={isBull}>
         <MultiplierArrow
           betAmount={betAmount}
           multiplier={bullMultiplier}
           hasEntered={hasEnteredUp}
           isActive={isBull}
         />
-        <RoundResultBox betPosition={isBull ? BetPosition.BULL : BetPosition.BEAR}>
-          <TYPE.white fontSize="12px" mb="8px">
-            {t('LAST PRICE')}
-          </TYPE.white>
-          <Flex alignItems="center" justifyContent="space-between" mb="16px" height="36px">
-            <MouseoverTooltip text={'Last price from Chainlink Oracle'} placement='bottom'>
-              <TYPE.white color={isBull ? '#29a329' : '#ff471a'} fontWeight={500} fontSize="24px">
-                {price > 0 ? `$${countUp}` : <Skeleton height="36px" width="94px" />}
-              </TYPE.white>
-            </MouseoverTooltip>
-            <PositionTag betPosition={isBull ? BetPosition.BULL : BetPosition.BEAR}>
-              {formatUsd(priceDifference)}
-            </PositionTag>
-          </Flex>
-          {lockPrice && <LockPriceRow lockPrice={lockPrice} />}
-          <PrizePoolRow totalAmount={totalAmount} />
-        </RoundResultBox>
+      </CardHeaderBlock>
+      <RoundResultBox round={round} betPosition={isBull ? BetPosition.BULL : BetPosition.BEAR}>
+        <TYPE.white fontSize="12px" mb="8px">
+          {t('LAST PRICE')}
+        </TYPE.white>
+        <Flex alignItems="center" justifyContent="space-between" mb="16px" height="36px">
+          <MouseoverTooltip text={'Last price from Chainlink Oracle'} placement='bottom'>
+            <TYPE.white color={isBull ? '#29a329' : '#ff471a'} fontWeight={500} fontSize="24px">
+              {price > 0 ? `$${countUp}` : <Skeleton height="36px" width="94px" />}
+            </TYPE.white>
+          </MouseoverTooltip>
+          <PositionTag betPosition={isBull ? BetPosition.BULL : BetPosition.BEAR}>
+            {formatUsd(priceDifference)}
+          </PositionTag>
+        </Flex>
+        {lockPrice && <LockPriceRow lockPrice={lockPrice} />}
+        <PrizePoolRow totalAmount={totalAmount} />
+      </RoundResultBox>
+      <CardFooterBlock isPositionUp={isBull}>
         <MultiplierArrow
           betAmount={betAmount}
           multiplier={bearMultiplier}
@@ -147,6 +169,8 @@ const LiveRoundCard: React.FC<LiveRoundCardProps> = ({
           hasEntered={hasEnteredDown}
           isActive={!isBull}
         />
+      </CardFooterBlock>
+        
       </ContentWrapper>
 
     </Wrapper>

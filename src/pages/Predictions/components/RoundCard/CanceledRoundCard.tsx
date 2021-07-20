@@ -8,20 +8,38 @@ import useIsRefundable from '../../hooks/useIsRefundable'
 import CardHeader from './CardHeader'
 import styled from 'styled-components'
 import { AutoColumn } from 'components/Column'
-import { CardBGImage, CardNoise } from 'components/earn/styled'
+// import { CardBGImage, CardNoise } from 'components/earn/styled'
 
 interface CanceledRoundCardProps {
   round: Round
 }
+
+const CardHeaderBlock = styled.div`
+  text-align: center;
+  margin-top: 23px;
+  width: 206px;
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2));
+  border-radius: 10px 10px 0px 0px; 
+`
+const CardFooterBlock = styled.div`
+  text-align: center; 
+  margin-bottom: 23px;
+  width: 206px;
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2));
+  border-radius: 0px 0px 10px 10px;
+`
 
 const Wrapper = styled(AutoColumn) <{ showBackground: boolean; bgColor: any }>`
   border-radius: 12px;
   width: 100%;
   overflow: hidden;
   position: relative;
+  background: linear-gradient(180deg, #2D3646 0%, #2C2F35 216.76%);
+  border: 1px solid #575A68;
+  box-sizing: border-box;
+  box-shadow: 0px 0px 24px rgba(0, 0, 0, 0.1);
+  order-radius: 15px;
   opacity: ${({ showBackground }) => (showBackground ? '1' : '1')};
-  background: ${({ theme, bgColor, showBackground }) =>
-    `radial-gradient(91.85% 100% at 1.84% 0%, ${bgColor} 0%, ${showBackground ? theme.black : theme.bg5} 100%) `};
   color: ${({ theme, showBackground }) => (showBackground ? theme.white : theme.text1)} !important;
 
   ${({ showBackground }) =>
@@ -38,7 +56,6 @@ const Wrapper = styled(AutoColumn) <{ showBackground: boolean; bgColor: any }>`
 `
 
 const ContentWrapper = styled.div`
-    height: 320px;
     z-index: 1;
     border-radius: 0 0 12px 12px;
     display: flex;
@@ -48,13 +65,11 @@ const ContentWrapper = styled.div`
 `
 const Content = styled.div`
     width: 250px;
-    height: 120px;
-    border: 3px solid white;
+    border: 1px solid #575A68;
     border-radius: 12px;
-    padding: 20px 15px;
+    padding: 50px;
     display:grid;
     place-items: center;
-    margin: 20px 0;
 `
 const EntryTitle = styled.div`
     font-size: 16px;
@@ -80,8 +95,8 @@ const CanceledRoundCard: React.FC<CanceledRoundCardProps> = ({ round }) => {
 
   return (
     <Wrapper showBackground={false} bgColor={'grey'}>
-      <CardBGImage desaturate />
-      <CardNoise />
+      {/* <CardBGImage desaturate /> */}
+      {/* <CardNoise /> */}
       <CardHeader
         status="canceled"
         icon={<BlockIcon mr="4px" width="21px" />}
@@ -90,6 +105,9 @@ const CanceledRoundCard: React.FC<CanceledRoundCardProps> = ({ round }) => {
         blockTime={estimatedEndTime}
       />
       <ContentWrapper>
+        <CardHeaderBlock>
+          <h2>BULL</h2>
+        </CardHeaderBlock>
         <Content>
           <EntryTitle>
             {t('Round Canceled')}
@@ -99,6 +117,9 @@ const CanceledRoundCard: React.FC<CanceledRoundCardProps> = ({ round }) => {
             {t('Learn More')}
           </LinkExternal>
         </Content>
+        <CardFooterBlock>
+          <h2>BEAR</h2>
+        </CardFooterBlock>
       </ContentWrapper>
     </Wrapper>
   )

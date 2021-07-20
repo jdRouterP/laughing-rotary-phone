@@ -13,9 +13,9 @@ import MultiplierArrow from './MultiplierArrow'
 import CardHeader from './CardHeader'
 import PositionModal from './PositionModal'
 import useCurrentBlockTimestamp from 'hooks/useCurrentBlockTimestamp'
-import { CardBGImage, CardNoise } from 'components/earn/styled'
+// import { CardBGImage, CardNoise } from 'components/earn/styled'
 import { AutoColumn } from 'components/Column'
-import { ButtonError } from 'components/Button'
+import { ButtonBull, ButtonBear, ButtonError } from 'components/Button'
 
 interface OpenRoundCardProps {
   round: Round
@@ -32,14 +32,35 @@ interface State {
 }
 
 
+
+const CardHeaderBlock = styled.div`
+  margin-top: 23px;
+  width: 206px;
+  padding-top: 30px;
+  padding-bottom: 41px;
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2));
+  border-radius: 10px 10px 0px 0px; 
+`
+const CardFooterBlock = styled.div`
+  margin-bottom: 23px;
+  width: 206px;
+  padding-top: 37px;
+  padding-bottom: 30px;
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2));
+  border-radius: 0px 0px 10px 10px;
+`
+
+
 const Wrapper = styled(AutoColumn) <{ showBackground: boolean; bgColor: any }>`
   border-radius: 12px;
   width: 100%;
   overflow: hidden;
   position: relative;
-  opacity: ${({ showBackground }) => (showBackground ? '1' : '1')};
-  background: ${({ theme, bgColor, showBackground }) =>
-    `radial-gradient(91.85% 100% at 1.84% 0%, ${bgColor} 0%, ${showBackground ? theme.black : theme.bg5} 100%) `};
+  background: linear-gradient(180deg, #2D3646 0%, #2C2F35 216.76%);
+  border: 1px solid #575A68;
+  box-sizing: border-box;
+  box-shadow: 0px 0px 24px rgb(0 0 0 / 10%);
+  border-radius: 15px;
   color: ${({ theme, showBackground }) => (showBackground ? theme.white : theme.text1)} !important;
   transition: z-index 600ms;
   ${({ showBackground }) =>
@@ -49,12 +70,12 @@ const Wrapper = styled(AutoColumn) <{ showBackground: boolean; bgColor: any }>`
 `
 
 const ContentWrapper = styled.div`
-    height: 320px;
+    // height: 320px;
     border-radius: 0 0 12px 12px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-evenly;
+    // justify-content: space-evenly;
 `
 
 const OpenRoundCard: React.FC<OpenRoundCardProps> = ({
@@ -163,22 +184,25 @@ const OpenRoundCard: React.FC<OpenRoundCardProps> = ({
 
   return (
     <Wrapper showBackground={false} bgColor={'blue'} >
-      <CardBGImage desaturate />
-      <CardNoise />
+      {/* <CardBGImage desaturate />
+      <CardNoise /> */}
       <CardHeader
-        status="next"
-        epoch={round.epoch}
-        blockTime={estimatedLockTime}
-        icon={<PlayCircleOutlineIcon color="white" mr="4px" width="21px" />}
-        title={t('Next')}
-      />
+          status="next"
+          epoch={round.epoch}
+          blockTime={estimatedLockTime}
+          icon={<PlayCircleOutlineIcon color="white" mr="4px" width="21px" />}
+          title={t('Next')}
+        />
       <ContentWrapper>
-        <MultiplierArrow betAmount={betAmount} multiplier={bullMultiplier} hasEntered={hasEnteredUp} />
-        <RoundResultBox isNext={canEnterPosition} isLive={!canEnterPosition}>
+        <CardHeaderBlock>
+          <MultiplierArrow betAmount={betAmount} multiplier={bullMultiplier} hasEntered={hasEnteredUp} />
+        </CardHeaderBlock>
+        <RoundResultBox round={round} isNext={canEnterPosition} isLive={!canEnterPosition}>
           {canEnterPosition ? (
             <>
               <PrizePoolRow totalAmount={round.totalAmount} mb="8px" />
-              <ButtonError
+              <ButtonBull
+                padding="10px"
                 variant="success"
                 width="200px"
                 onClick={() => handleSetPosition(BetPosition.BULL)}
@@ -186,15 +210,16 @@ const OpenRoundCard: React.FC<OpenRoundCardProps> = ({
                 disabled={!canEnterPosition || isBufferPhase}
               >
                 {t('Bet BULL')}
-              </ButtonError>
-              <ButtonError
+              </ButtonBull>
+              <ButtonBear
+                padding="10px"
                 variant="danger"
                 width="200px"
                 onClick={() => handleSetPosition(BetPosition.BEAR)}
                 disabled={!canEnterPosition || isBufferPhase}
               >
                 {t('Bet BEAR')}
-              </ButtonError>
+              </ButtonBear>
             </>
           ) : (
             <>
@@ -208,12 +233,14 @@ const OpenRoundCard: React.FC<OpenRoundCardProps> = ({
             </>
           )}
         </RoundResultBox>
-        <MultiplierArrow
-          betAmount={betAmount}
-          multiplier={bearMultiplier}
-          betPosition={BetPosition.BEAR}
-          hasEntered={hasEnteredDown}
-        />
+        <CardFooterBlock>
+          <MultiplierArrow
+            betAmount={betAmount}
+            multiplier={bearMultiplier}
+            betPosition={BetPosition.BEAR}
+            hasEntered={hasEnteredDown}
+          />
+        </CardFooterBlock>
       </ContentWrapper>
 
       <PositionModal

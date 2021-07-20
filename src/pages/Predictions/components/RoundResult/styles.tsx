@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next'
 import { BetPosition, Round } from 'state/prediction/types'
 import { TYPE } from 'theme'
 import { RowBetween } from 'components/Row'
+import { BoxProps } from 'rebass'
 
 // PrizePoolRow
 interface PrizePoolRowProps extends FlexProps {
@@ -34,9 +35,9 @@ export const PrizePoolRow: React.FC<PrizePoolRowProps> = ({ totalAmount, ...prop
 
   return (
     <RowBetween>
-      <TYPE.white fontWeight={500} fontSize="14px">{t('Prize Pool')}:</TYPE.white>
+      <TYPE.white marginBottom={"11px"} fontWeight={600} fontSize="16px">{t('Prize Pool')}:</TYPE.white>
       {' '}
-      <TYPE.white fontWeight={500} fontSize="14px">{`${getPrizePoolAmount(totalAmount)} MATIC`}</TYPE.white>
+      <TYPE.white marginBottom={"11px"} fontWeight={600} fontSize="16px">{`${getPrizePoolAmount(totalAmount)} MATIC`}</TYPE.white>
     </RowBetween>
   )
 }
@@ -86,8 +87,10 @@ export const LockPriceRow: React.FC<LockPriceRowProps> = ({ lockPrice, ...props 
 }
 
 // RoundResultBox
-interface RoundResultBoxProps {
+interface RoundResultBoxProps extends BoxProps{
+  round: Round
   betPosition?: BetPosition
+  isPositionUp?: boolean
   isNext?: boolean
   isLive?: boolean
   hasEntered?: boolean
@@ -121,24 +124,31 @@ interface RoundResultBoxProps {
 
 const Background = styled(Box) <RoundResultBoxProps>`
   border-radius: 16px;
-  border: 3px solid white;
+  border: 1px solid ${({isPositionUp}) => isPositionUp ? '#29a329' : '#ff471a'};
+  // border-image-source: linear-gradient(90deg, #DD3679 100%, #665BBA 100%);
   padding: 2px;
 `
 
 const StyledRoundResultBox = styled.div`
   border-radius: 14px;
-  padding: 16px;
+  padding: 26px;
 `
 
 export const RoundResultBox: React.FC<RoundResultBoxProps> = ({
+  round,
   isNext = false,
   hasEntered = false,
   isLive = false,
   children,
   ...props
 }) => {
+  const { lockPrice, closePrice } = round
+  const betPosition = closePrice > lockPrice ? BetPosition.BULL : BetPosition.BEAR
+  const isPositionUp = betPosition === BetPosition.BULL
+  
+  
   return (
-    <Background isNext={isNext} hasEntered={true} isLive={isLive} {...props}>
+    <Background isPositionUp={isPositionUp} isNext={isNext} hasEntered={true} isLive={isLive} {...props}>
       <StyledRoundResultBox>{children}</StyledRoundResultBox>
     </Background>
   )
