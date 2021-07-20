@@ -1,9 +1,9 @@
 import React from 'react'
-import { Button, Text } from '@pancakeswap/uikit'
 import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
 import { setHistoryPaneState } from 'state/prediction/reducer'
 import Notification from './Notification'
+import { Button, TYPE } from 'theme'
 
 const ErrorNotification = () => {
   const { t } = useTranslation()
@@ -14,10 +14,10 @@ const ErrorNotification = () => {
   }
   return (
     <Notification title={t('Error')}>
-      <Text as="p" mb="24px">
+      <TYPE.body mb='10px'>
         {t('This page can’t be displayed right now due to an error. Please check back soon.')}
-      </Text>
-      <Button variant="primary" width="100%" onClick={handleOpenHistory}>
+      </TYPE.body>
+      <Button onClick={handleOpenHistory}>
         {t('Show History')}
       </Button>
     </Notification>

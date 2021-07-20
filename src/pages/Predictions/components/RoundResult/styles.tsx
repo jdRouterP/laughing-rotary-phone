@@ -87,7 +87,7 @@ export const LockPriceRow: React.FC<LockPriceRowProps> = ({ lockPrice, ...props 
 }
 
 // RoundResultBox
-interface RoundResultBoxProps extends BoxProps{
+interface RoundResultBoxProps extends BoxProps {
   round: Round
   betPosition?: BetPosition
   isPositionUp?: boolean
@@ -124,7 +124,7 @@ interface RoundResultBoxProps extends BoxProps{
 
 const Background = styled(Box) <RoundResultBoxProps>`
   border-radius: 16px;
-  border: 1px solid ${({isPositionUp}) => isPositionUp ? '#29a329' : '#ff471a'};
+  border: 1px solid ${({ isPositionUp }) => isPositionUp ? '#29a329' : '#ff471a'};
   // border-image-source: linear-gradient(90deg, #DD3679 100%, #665BBA 100%);
   padding: 2px;
 `
@@ -139,16 +139,17 @@ export const RoundResultBox: React.FC<RoundResultBoxProps> = ({
   isNext = false,
   hasEntered = false,
   isLive = false,
+  betPosition,
   children,
   ...props
 }) => {
-  const { lockPrice, closePrice } = round
-  const betPosition = closePrice > lockPrice ? BetPosition.BULL : BetPosition.BEAR
+  // const { lockPrice, closePrice } = round
+  // const betPosition = closePrice > lockPrice ? BetPosition.BULL : BetPosition.BEAR
   const isPositionUp = betPosition === BetPosition.BULL
-  
-  
+
+
   return (
-    <Background isPositionUp={isPositionUp} isNext={isNext} hasEntered={true} isLive={isLive} {...props}>
+    <Background isPositionUp={isPositionUp} isNext={isNext} hasEntered={hasEntered} isLive={isLive} {...props}>
       <StyledRoundResultBox>{children}</StyledRoundResultBox>
     </Background>
   )

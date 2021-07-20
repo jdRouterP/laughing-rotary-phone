@@ -187,12 +187,12 @@ const OpenRoundCard: React.FC<OpenRoundCardProps> = ({
       {/* <CardBGImage desaturate />
       <CardNoise /> */}
       <CardHeader
-          status="next"
-          epoch={round.epoch}
-          blockTime={estimatedLockTime}
-          icon={<PlayCircleOutlineIcon color="white" mr="4px" width="21px" />}
-          title={t('Next')}
-        />
+        status="next"
+        epoch={round.epoch}
+        blockTime={estimatedLockTime}
+        icon={<PlayCircleOutlineIcon color="white" mr="4px" width="21px" />}
+        title={t('Next')}
+      />
       <ContentWrapper>
         <CardHeaderBlock>
           <MultiplierArrow betAmount={betAmount} multiplier={bullMultiplier} hasEntered={hasEnteredUp} />

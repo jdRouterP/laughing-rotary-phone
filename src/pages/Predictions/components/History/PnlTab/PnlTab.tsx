@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { useWeb3React } from '@web3-react/core'
-import { Box, Flex, Button, Link, OpenNewIcon } from '@pancakeswap/uikit'
+import { Box, Flex, Link, OpenNewIcon } from '@pancakeswap/uikit'
 import { useTranslation } from 'react-i18next'
 import { getExplorerLink } from 'utils'
 import { useGetCurrentEpoch, useGetLastOraclePrice } from 'state/hook'
@@ -11,6 +11,7 @@ import { getRoundResult, Result } from 'state/prediction/hooks'
 import PnlChart from './PnlChart'
 import SummaryRow from './SummaryRow'
 import { TYPE } from 'theme'
+import { ButtonPrimary } from 'components/Button'
 
 interface PnlTabProps {
   hasBetHistory: boolean
@@ -190,10 +191,10 @@ const PnlTab: React.FC<PnlTabProps> = ({ hasBetHistory, bets }: PnlTabProps) => 
 
         <Flex justifyContent="center" mt="24px">
           {(chainId && account) && <Link href={`${getExplorerLink(chainId, account, "address")}#internaltx`} mb="16px" external>
-            <Button mt="8px" width="100%">
+            <ButtonPrimary mt="8px" width="100%">
               {t('View Reclaimed & Won')}
               <OpenNewIcon color="white" ml="4px" />
-            </Button>
+            </ButtonPrimary>
           </Link>}
         </Flex>
       </Box>

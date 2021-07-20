@@ -1,53 +1,25 @@
 import React from 'react'
-import styled from 'styled-components'
-import { Card, CardBody } from '@pancakeswap/uikit'
 import { TYPE } from 'theme'
+import styled from 'styled-components'
+
 
 interface NotificationProps {
   title: string
 }
 
-// const BunnyDecoration = styled.div`
-//   position: absolute;
-//   top: -130px; // line up bunny at the top of the modal
-//   left: 0px;
-//   text-align: center;
-//   width: 100%;
-// `
-
 const Wrapper = styled.div`
-  align-items: center;
-  display: flex;
-  flex: 1;
-  height: 100%;
-  justify-content: center;
+  max-width: 460px;
+  width: 100%;
+  border: 1px solid;
+  padding: 20px 20px;
+    border-radius: 10px;
 `
-
-const CardWrapper = styled.div`
-  position: relative;
-  width: 320px;
-`
-
-// const BunnyDecoration = styled.div`
-//   position: absolute;
-//   top: -130px;
-//   left: 0px;
-//   text-align: center;
-//   width: 100%;
-//   z-index: 5;
-// `
 
 const Notification: React.FC<NotificationProps> = ({ title, children }) => {
   return (
     <Wrapper>
-      <CardWrapper>
-        <Card>
-          <CardBody>
-            <TYPE.mediumHeader mb="24px">{title}</TYPE.mediumHeader>
-            {children}
-          </CardBody>
-        </Card>
-      </CardWrapper>
+      <TYPE.mediumHeader mb='20px' style={{ fontSize: "26px" }}>{title}</TYPE.mediumHeader>
+      {children}
     </Wrapper>
   )
 }

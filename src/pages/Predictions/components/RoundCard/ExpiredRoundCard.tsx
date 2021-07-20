@@ -25,26 +25,26 @@ interface ExpiredRoundCardProps {
 }
 
 
-const CardHeaderBlock = styled.div<{ isPositionUp: boolean}>`
+const CardHeaderBlock = styled.div<{ isPositionUp: boolean }>`
   opacity: 0.5;
   margin-top: 23px;
   width: 206px;
   padding-top: 30px;
   padding-bottom: 41px;
-  background: ${({isPositionUp}) => isPositionUp ? '#29a329' : 'linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2));'};
+  background: ${({ isPositionUp }) => isPositionUp ? '#29a329' : 'linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2));'};
   border-radius: 10px 10px 0px 0px; 
 `
-const CardFooterBlock = styled.div<{isPositionUp: boolean}>`
+const CardFooterBlock = styled.div<{ isPositionUp: boolean }>`
   opacity: 0.5;
   margin-bottom: 23px;
   width: 206px;
   padding-top: 37px;
   padding-bottom: 30px;
-  background: ${({isPositionUp}) => isPositionUp ? 'linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2))' : '#ff471a'};
+  background: ${({ isPositionUp }) => isPositionUp ? 'linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2))' : '#ff471a'};
   border-radius: 0px 0px 10px 10px;
 `
 
-const Wrapper = styled(AutoColumn) <{ showBackground: boolean; bgColor: any }>`
+const Wrapper = styled(AutoColumn) <{ showBackground: boolean }>`
   border-radius: 12px;
   width: 100%;
   overflow: hidden;
@@ -98,16 +98,16 @@ const ExpiredRoundCard: React.FC<ExpiredRoundCardProps> = ({
   }
 
   return (
-    <Wrapper showBackground={false} bgColor={'yellow'}>
+    <Wrapper showBackground={false}>
       {/* <CardBGImage desaturate />
       <CardNoise /> */}
-        <CardHeader
-          status="expired"
-          icon={<BlockIcon mr="4px" width="21px" color="textDisabled" />}
-          title={t('Expired')}
-          blockTime={endBlock}
-          epoch={round.epoch}
-        />
+      <CardHeader
+        status="expired"
+        icon={<BlockIcon mr="4px" width="21px" color="textDisabled" />}
+        title={t('Expired')}
+        blockTime={endBlock}
+        epoch={round.epoch}
+      />
       <ContentWrapper>
         <CardHeaderBlock isPositionUp={isPositionUp}>
           <MultiplierArrow
@@ -117,7 +117,7 @@ const ExpiredRoundCard: React.FC<ExpiredRoundCardProps> = ({
             hasEntered={hasEnteredUp}
           />
         </CardHeaderBlock>
-        
+
         <RoundResult round={round} />
 
         <CardFooterBlock isPositionUp={isPositionUp}>
@@ -129,7 +129,7 @@ const ExpiredRoundCard: React.FC<ExpiredRoundCardProps> = ({
             hasEntered={hasEnteredDown}
           />
         </CardFooterBlock>
-        
+
       </ContentWrapper>
       {/* <CollectWinningsOverlay roundId={id} epoch={epoch} payout={payout} isBottom={hasEnteredDown} /> */}
     </Wrapper>

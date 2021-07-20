@@ -16,18 +16,14 @@ const PauseNotification = () => {
   return (
     <Notification title={t('Markets Paused')}>
       <div>
-        <TYPE.subHeader style={{ textAlign: 'center' }}>
+        <TYPE.body mb='10px' style={{ textAlign: 'start' }}>
           Prediction markets have been paused due to an error.
-        </TYPE.subHeader>
-        <TYPE.small style={{ textAlign: 'center' }}>
-          All open positions have been cancelled.
-        </TYPE.small>
-        <TYPE.small style={{ textAlign: 'center' }}>
-          You can reclaim any funds entered into existing positions via the History tab on this page.
-        </TYPE.small>
-
+        </TYPE.body>
+        <TYPE.italic style={{ textAlign: 'start' }}>
+          All open positions have been cancelled. You can reclaim any funds entered into existing positions via the History tab on this page.
+        </TYPE.italic>
       </div>
-      <Button onClick={handleOpenHistory}>
+      <Button onClick={handleOpenHistory} style={{ marginTop: '15px' }}>
         {t('Show History')}
       </Button>
     </Notification>

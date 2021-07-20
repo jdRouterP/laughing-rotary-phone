@@ -29,22 +29,22 @@ interface LiveRoundCardProps {
 }
 
 
-const CardHeaderBlock = styled.div<{ isPositionUp: boolean}>`
-  opacity: 0.5;
+const CardHeaderBlock = styled.div<{ isPositionUp: boolean }>`
+
   margin-top: 23px;
   width: 206px;
   padding-top: 30px;
   padding-bottom: 41px;
-  background: ${({isPositionUp}) => isPositionUp ? '#29a329' : 'linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2));'};
+  background: ${({ isPositionUp }) => isPositionUp ? '#29a329' : 'linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2));'};
   border-radius: 10px 10px 0px 0px; 
 `
-const CardFooterBlock = styled.div<{isPositionUp: boolean}>`
-  opacity: 0.5;
+const CardFooterBlock = styled.div<{ isPositionUp: boolean }>`
+
   margin-bottom: 23px;
   width: 206px;
   padding-top: 37px;
   padding-bottom: 30px;
-  background: ${({isPositionUp}) => isPositionUp ? 'linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2))' : '#ff471a'};
+  background: ${({ isPositionUp }) => isPositionUp ? 'linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2))' : '#ff471a'};
   border-radius: 0px 0px 10px 10px;
 `
 
@@ -136,41 +136,41 @@ const LiveRoundCard: React.FC<LiveRoundCardProps> = ({
         blockTime={estimatedEndTime}
       />
       <ContentWrapper>
-      <CardHeaderBlock isPositionUp={isBull}>
-        <MultiplierArrow
-          betAmount={betAmount}
-          multiplier={bullMultiplier}
-          hasEntered={hasEnteredUp}
-          isActive={isBull}
-        />
-      </CardHeaderBlock>
-      <RoundResultBox round={round} betPosition={isBull ? BetPosition.BULL : BetPosition.BEAR}>
-        <TYPE.white fontSize="12px" mb="8px">
-          {t('LAST PRICE')}
-        </TYPE.white>
-        <Flex alignItems="center" justifyContent="space-between" mb="16px" height="36px">
-          <MouseoverTooltip text={'Last price from Chainlink Oracle'} placement='bottom'>
-            <TYPE.white color={isBull ? '#29a329' : '#ff471a'} fontWeight={500} fontSize="24px">
-              {price > 0 ? `$${countUp}` : <Skeleton height="36px" width="94px" />}
-            </TYPE.white>
-          </MouseoverTooltip>
-          <PositionTag betPosition={isBull ? BetPosition.BULL : BetPosition.BEAR}>
-            {formatUsd(priceDifference)}
-          </PositionTag>
-        </Flex>
-        {lockPrice && <LockPriceRow lockPrice={lockPrice} />}
-        <PrizePoolRow totalAmount={totalAmount} />
-      </RoundResultBox>
-      <CardFooterBlock isPositionUp={isBull}>
-        <MultiplierArrow
-          betAmount={betAmount}
-          multiplier={bearMultiplier}
-          betPosition={BetPosition.BEAR}
-          hasEntered={hasEnteredDown}
-          isActive={!isBull}
-        />
-      </CardFooterBlock>
-        
+        <CardHeaderBlock isPositionUp={isBull}>
+          <MultiplierArrow
+            betAmount={betAmount}
+            multiplier={bullMultiplier}
+            hasEntered={hasEnteredUp}
+            isActive={isBull}
+          />
+        </CardHeaderBlock>
+        <RoundResultBox round={round} betPosition={isBull ? BetPosition.BULL : BetPosition.BEAR}>
+          <TYPE.white fontSize="12px" mb="8px">
+            {t('LAST PRICE')}
+          </TYPE.white>
+          <Flex alignItems="center" justifyContent="space-between" mb="16px" height="36px">
+            <MouseoverTooltip text={'Last price from Chainlink Oracle'} placement='bottom'>
+              <TYPE.white color={isBull ? '#29a329' : '#ff471a'} fontWeight={500} fontSize="24px">
+                {price > 0 ? `$${countUp}` : <Skeleton height="36px" width="94px" />}
+              </TYPE.white>
+            </MouseoverTooltip>
+            <PositionTag betPosition={isBull ? BetPosition.BULL : BetPosition.BEAR}>
+              {formatUsd(priceDifference)}
+            </PositionTag>
+          </Flex>
+          {lockPrice && <LockPriceRow lockPrice={lockPrice} />}
+          <PrizePoolRow totalAmount={totalAmount} />
+        </RoundResultBox>
+        <CardFooterBlock isPositionUp={isBull}>
+          <MultiplierArrow
+            betAmount={betAmount}
+            multiplier={bearMultiplier}
+            betPosition={BetPosition.BEAR}
+            hasEntered={hasEnteredDown}
+            isActive={!isBull}
+          />
+        </CardFooterBlock>
+
       </ContentWrapper>
 
     </Wrapper>
