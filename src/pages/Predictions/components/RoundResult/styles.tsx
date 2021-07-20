@@ -35,9 +35,9 @@ export const PrizePoolRow: React.FC<PrizePoolRowProps> = ({ totalAmount, ...prop
 
   return (
     <RowBetween>
-      <TYPE.white marginBottom={"11px"} fontWeight={600} fontSize="16px">{t('Prize Pool')}:</TYPE.white>
+      <TYPE.white marginTop={"5px"} fontWeight={600} fontSize="15px">{t('Prize Pool')}:</TYPE.white>
       {' '}
-      <TYPE.white marginBottom={"11px"} fontWeight={600} fontSize="16px">{`${getPrizePoolAmount(totalAmount)} MATIC`}</TYPE.white>
+      <TYPE.white marginTop={"5px"} fontWeight={600} fontSize="15px">{`${getPrizePoolAmount(totalAmount)} MATIC`}</TYPE.white>
     </RowBetween>
   )
 }

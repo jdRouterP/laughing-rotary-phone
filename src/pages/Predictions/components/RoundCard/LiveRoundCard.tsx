@@ -145,7 +145,7 @@ const LiveRoundCard: React.FC<LiveRoundCardProps> = ({
           />
         </CardHeaderBlock>
         <RoundResultBox round={round} betPosition={isBull ? BetPosition.BULL : BetPosition.BEAR}>
-          <TYPE.white fontSize="12px" mb="8px">
+          <TYPE.white fontSize="14px" mb="8px" fontWeight="600">
             {t('LAST PRICE')}
           </TYPE.white>
           <Flex alignItems="center" justifyContent="space-between" mb="16px" height="36px">

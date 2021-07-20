@@ -21,6 +21,7 @@ const Row = styled(Box)<{
 
 export const RowBetween = styled(Row)`
   justify-content: space-between;
+  margin-bottom: 10px;
 `
 
 export const RowFlat = styled.div`

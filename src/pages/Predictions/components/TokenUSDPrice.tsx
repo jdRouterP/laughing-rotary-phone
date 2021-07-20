@@ -24,7 +24,7 @@ const TradingPair = styled.div`
 
 const CurrentPrice = styled.div`
     font-size: 12px;
-    margin-top: 1px;
+    margin-top: 5px;
 `
 
 const TokenUSDPrice: React.FC = () => {

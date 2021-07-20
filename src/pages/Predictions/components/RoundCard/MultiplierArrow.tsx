@@ -33,19 +33,19 @@ const Content = styled.div`
 //   z-index: 10;
 // `
 
-const getTextColor =
-  (fallback = 'textSubtle') =>
-    (isActive: boolean, isDisabled: boolean) => {
-      if (isDisabled) {
-        return 'textDisabled'
-      }
+// const getTextColor =
+//   (fallback = 'textSubtle') =>
+//     (isActive: boolean, isDisabled: boolean) => {
+//       if (isDisabled) {
+//         return 'textDisabled'
+//       }
 
-      if (isActive) {
-        return 'white'
-      }
+//       if (isActive) {
+//         return 'white'
+//       }
 
-      return fallback
-    }
+//       return fallback
+//     }
 
 const MultiplierArrow: React.FC<MultiplierArrowProps> = ({
   betAmount,
@@ -56,8 +56,8 @@ const MultiplierArrow: React.FC<MultiplierArrowProps> = ({
   isActive = false,
 }) => {
   const { t } = useTranslation()
-  const upColor = getTextColor('success')(isActive, isDisabled)
-  const downColor = getTextColor('failure')(isActive, isDisabled)
+  // const upColor = getTextColor('success')(isActive, isDisabled)
+  // const downColor = getTextColor('failure')(isActive, isDisabled)
   // const textColor = getTextColor()(isActive, isDisabled)
   const multiplierText = (
     <Box>
@@ -89,7 +89,7 @@ const MultiplierArrow: React.FC<MultiplierArrowProps> = ({
       <Box position="relative">
         <Content>
           {!isDisabled && multiplierText}
-          <TYPE.white fontSize="20px" margin="10px" color={downColor}>
+          <TYPE.white fontSize="20px" margin="10px" color={"white"}>
             {t('BEAR')}
           </TYPE.white>
         </Content>
@@ -100,7 +100,7 @@ const MultiplierArrow: React.FC<MultiplierArrowProps> = ({
   return (
     <Box position="relative">
       <Content>
-        <TYPE.white fontSize="20px" margin="10px" color={upColor}>
+        <TYPE.white fontSize="20px" margin="10px" color={"white"}>
           {t('BULL')}
         </TYPE.white>
         {!isDisabled && multiplierText}

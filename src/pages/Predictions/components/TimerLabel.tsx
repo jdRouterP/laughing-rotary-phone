@@ -9,13 +9,22 @@ interface TimerLabelProps {
     unit: 'm' | 'h' | 'd'
 }
 
+const Closing = styled.div`
+    display: flex;
+    justify-content: space-between;
+    margin-top: 5px;
+`
+
 const Wrapper = styled.div`
     display: grid;
     place-items: center;
-    background: ${({ theme }) => theme.bg4};
     padding: 10px 4px;
     border-radius: 15px;
-    width: 120px;
+    max-width: 252px;
+    width: 100%;
+    border: 1px solid #575A68;
+    box-sizing: border-box;
+    border-radius: 10px;
 `
 const Timer = styled.div`
     display: flex;
@@ -25,12 +34,12 @@ const Timer = styled.div`
 const CurrentTime = styled.div`
     font-size: 20px;
     font-weight: bold;
-    margin-right: 15px;
+    margin-right: 8px;
 `
 
 const TotalTime = styled.div`
     font-size: 12px;
-    margin-top: 1px;
+    margin-top: 2px;
 `
 
 const TimerLabel: React.FC<TimerLabelProps> = ({ interval, unit }: TimerLabelProps) => {
@@ -40,12 +49,16 @@ const TimerLabel: React.FC<TimerLabelProps> = ({ interval, unit }: TimerLabelPro
     return (
         <Wrapper>
             <Timer>
-                <CurrentTime>
-                    {seconds === 0 ? t('Closing') : countdown}
-                </CurrentTime>
-                <TotalTime>
-                    {`${interval}${t(unit)}`}
-                </TotalTime>
+                <h1 style={{color: "white", fontSize: "24px", fontWeight: "normal", textAlign: "center"}}>Closing:</h1>
+                <Closing>
+                    <CurrentTime>
+                        {seconds === 0 ? t('Closing') : countdown}
+                    </CurrentTime>
+                    <TotalTime>
+                        {`${interval}${t(unit)}`}
+                    </TotalTime>
+                </Closing>
+                    
             </Timer>
         </Wrapper>
     )

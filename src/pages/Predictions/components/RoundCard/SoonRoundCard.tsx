@@ -72,10 +72,12 @@ const Content = styled.div`
 const EntryTitle = styled.div`
     font-size: 16px;
     font-weight: bold;
+    color: white;
 `
 const EntryTimer = styled.div`
     font-size: 30px;
     font-weight: bold;
+    color: white;
 `
 
 const SoonRoundCard: React.FC<SoonRoundCardProps> = ({ round }) => {
@@ -100,7 +102,7 @@ const SoonRoundCard: React.FC<SoonRoundCardProps> = ({ round }) => {
       />
       <ContentWrapper>
         <CardHeaderBlock>
-          <h3 style={{fontWeight: "normal"}}>BULL</h3>
+          <h3 style={{fontWeight: "normal", color: "white"}}>BULL</h3>
         </CardHeaderBlock>
         <Content>
           <EntryTitle>
@@ -111,7 +113,7 @@ const SoonRoundCard: React.FC<SoonRoundCardProps> = ({ round }) => {
           </EntryTimer>
         </Content>
         <CardFooterBlock>
-          <h3 style={{fontWeight: "normal"}}>BEAR</h3>
+          <h3 style={{fontWeight: "normal", color: "white"}}>BEAR</h3>
         </CardFooterBlock>
       </ContentWrapper>
     </Wrapper>
