@@ -12,6 +12,8 @@ export interface Colors {
   text3: Color
   text4: Color
   text5: Color
+  //border
+  text6: Color
 
   // backgrounds / greys
   bg1: Color
@@ -22,6 +24,7 @@ export interface Colors {
   bg6: Color
   bg7: Color
   bg8: Color
+  bg9: Color
 
   modalBG: Color
   advancedBG: Color

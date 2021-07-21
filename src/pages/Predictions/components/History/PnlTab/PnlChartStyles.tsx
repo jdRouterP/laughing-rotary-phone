@@ -33,11 +33,11 @@ const DefaultSlice = styled.circle<SliceProps>`
 `
 
 export const LostSlice = styled(DefaultSlice)`
-  stroke: #ed4b9e;
+  stroke: #EB5757;
 `
 
 export const WonSlice = styled(DefaultSlice)`
-  stroke: #31d0aa;
+  stroke: #27AE60;
 `
 
 export const Wrapper = styled.div`

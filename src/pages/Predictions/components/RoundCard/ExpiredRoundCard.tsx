@@ -49,7 +49,7 @@ const Wrapper = styled(AutoColumn) <{ showBackground: boolean }>`
   width: 100%;
   overflow: hidden;
   position: relative;
-  background: linear-gradient(180deg, #2D3646 0%, #2C2F35 216.76%);
+  background: ${({theme}) => theme.bg9};
   opacity: 0.7;
   box-shadow: 0px 0px 24px rgba(0, 0, 0, 0.1);
   border-radius: 15px;
