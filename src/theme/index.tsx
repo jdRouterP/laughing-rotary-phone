@@ -46,6 +46,8 @@ export function colors(darkMode: boolean): Colors {
     text3: darkMode ? '#6C7284' : '#888D9B',
     text4: darkMode ? '#565A69' : '#C3C5CB',
     text5: darkMode ? '#2C2F36' : '#EDEEF2',
+    //border
+    text6: darkMode ? '#575A68' : 'rgba(0,0,0,0.1)',
 
     // backgrounds / greys
     bg1: darkMode ? '#212429' : '#FFFFFF',
@@ -56,6 +58,8 @@ export function colors(darkMode: boolean): Colors {
     bg6: darkMode ? 'linear-gradient(180deg, #2D3646 0%, #2C2F35 100%)' : 'radial-gradient(50% 50% at 50% 50%, rgba(255, 0, 122, 0.1) 0%, rgba(255, 255, 255, 0) 100%)',
     bg7: darkMode ? '#2F303C' : 'rgba(47, 48, 60, 0.05)',
     bg8: darkMode ? '#1E2124' : '#FFFFFF',
+    //card background
+    bg9: darkMode ? 'linear-gradient(180deg, #2D3646 0%, #2C2F35 216.76%)' : '#FFFFFF',
 
     //specialty colors
     modalBG: darkMode ? 'rgba(0,0,0,.425)' : 'rgba(0,0,0,0.3)',

@@ -13,23 +13,23 @@ interface TimerLabelProps {
 const Closing = styled.div`
     display: flex;
     justify-content: space-between;
-    margin-top: 5px;
+    margin-top: 20px;
 `
 
 const Wrapper = styled.div`
     display: grid;
     place-items: center;
-    padding: 10px 4px;
-    border-radius: 15px;
     max-width: 252px;
     width: 100%;
-    border: 1px solid #575A68;
     box-sizing: border-box;
     border-radius: 10px;
+    border: 1px solid ${({ theme }) => theme.text6};
 `
 const Timer = styled.div`
     display: flex;
     align-items: flex-start;
+    border-radius: 10px;
+    padding: 0px 10px;
 `
 
 const CurrentTime = styled.div`
@@ -40,7 +40,7 @@ const CurrentTime = styled.div`
 
 const TotalTime = styled.div`
     font-size: 12px;
-    margin-top: 2px;
+    margin-top: 7px;
 `
 
 const TimerLabel: React.FC<TimerLabelProps> = ({ interval, unit }: TimerLabelProps) => {
@@ -53,7 +53,7 @@ const TimerLabel: React.FC<TimerLabelProps> = ({ interval, unit }: TimerLabelPro
                 <TYPE.largeHeader style={{ fontWeight: "normal", textAlign: "center" }}>Closing:</TYPE.largeHeader>
                 <Closing>
                     <CurrentTime>
-                        {seconds === 0 ? t('Closing') : countdown}
+                        {seconds === 0 ? t('Waiting..') : countdown}
                     </CurrentTime>
                     <TotalTime>
                         {`${interval}${t(unit)}`}

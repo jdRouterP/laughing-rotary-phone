@@ -20,17 +20,20 @@ const Wrapper = styled.div`
 const PriceFeed = styled.div`
     display: flex;
     align-items: flex-start;
+    background: ${({ theme }) => theme.bg4};
+    border-radius: 10px;
+    padding: 13px 13px;
 `
 
 const TradingPair = styled.div`
-    font-size: 20px;
-    font-weight: bold;
+    font-size: 24px;
+    font-weight: 600;
     margin-right: 10px;
 `
 
 const CurrentPrice = styled.div`
     font-size: 12px;
-    margin-top: 5px;
+    margin-top: 7px;
 `
 
 const TokenUSDPrice: React.FC = () => {
