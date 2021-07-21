@@ -34,7 +34,7 @@ const Wrapper = styled(AutoColumn) <{ showBackground: boolean; bgColor: any }>`
   overflow: hidden;
   position: relative;
   opacity: ${({ showBackground }) => (showBackground ? '1' : '1')};
-  background: linear-gradient(180deg, #2D3646 0%, #2C2F35 216.76%);
+  background: ${({ theme }) => theme.bg9};
   border: 1px solid #575A68;
   box-sizing: border-box;
   box-shadow: 0px 0px 24px rgba(0, 0, 0, 0.1);
@@ -95,7 +95,7 @@ const CalculatingCard: React.FC<CalculatingCardProps> = ({ round }) => {
         />
         <ContentWrapper>
           <CardHeaderBlock>
-            <h3 style={{fontWeight: "normal", color: "white"}}>BULL</h3>
+            <h3 style={{ fontWeight: "normal", color: "white" }}>BULL</h3>
           </CardHeaderBlock>
           {/* <RoundResultBox>
             <Flex alignItems="center" justifyContent="center" flexDirection="column">
@@ -108,15 +108,15 @@ const CalculatingCard: React.FC<CalculatingCardProps> = ({ round }) => {
           </RoundResultBox> */}
           <Content>
             <Flex alignItems="center" justifyContent="center" flexDirection="column">
-              <Text style={{color: "white"}}>Loading..</Text>
+              <Text style={{ color: "white" }}>Loading..</Text>
               <Flex mt="8px" ref={targetRef}>
-                <TooltipText style={{color: "white"}}>{t('Calculating')}</TooltipText>
+                <TooltipText style={{ color: "white" }}>{t('Calculating')}</TooltipText>
                 <InfoIcon ml="4px" />
               </Flex>
             </Flex>
           </Content>
           <CardFooterBlock>
-            <h3 style={{fontWeight: "normal", color: "white"}}>BEAR</h3>
+            <h3 style={{ fontWeight: "normal", color: "white" }}>BEAR</h3>
           </CardFooterBlock>
         </ContentWrapper>
       </Wrapper>

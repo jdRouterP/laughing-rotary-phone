@@ -7,7 +7,6 @@ const Wrapper = styled.div`
     display: grid;
     place-items: center;
     position: relative;
-
     border: none;
     background-color: transparent;
     margin: 0;
@@ -20,7 +19,6 @@ const Wrapper = styled.div`
 const PriceFeed = styled.div`
     display: flex;
     align-items: flex-start;
-    background: ${({ theme }) => theme.bg4};
     border-radius: 10px;
     padding: 13px 13px;
 `

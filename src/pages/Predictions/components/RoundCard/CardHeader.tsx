@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react'
-import { Flex, Text } from '@pancakeswap/uikit'
+import { Flex } from '@pancakeswap/uikit'
 import styled from 'styled-components'
-import { Break } from 'components/earn/styled'
+import { TYPE } from 'theme'
 
 type Status = 'expired' | 'live' | 'next' | 'upcoming' | 'canceled' | 'calculating'
 
@@ -13,59 +13,13 @@ interface CardHeaderProps {
   icon?: ReactElement
 }
 
-// const getBackgroundColor = (theme: DefaultTheme, status: Status) => {
-//   switch (status) {
-//     case 'calculating':
-//       return 'blue'
-//     case 'live':
-//       return 'transparent'
-//     case 'canceled':
-//       return 'pink'
-//     case 'next':
-//       return 'blue'
-//     case 'upcoming':
-//       return '#1C738C'
-//     case 'expired':
-//     default:
-//       return 'yellow'
-//   }
-// }
+const Break = styled.div`
+  width: 100%;
+  background-color: ${({ theme }) => theme.text4};
+  height: 1px;
+`
 
-type FallbackColor = 'text' | 'textSubtle'
 
-const getTextColorByStatus = (status: Status, fallback: FallbackColor) => {
-  switch (status) {
-    case 'expired':
-      return '#e6e6e6'
-    case 'next':
-      return 'deeppink'
-    case 'live':
-      return 'white'
-    case 'upcoming':
-      return 'white'
-    case 'canceled':
-      return 'white'
-    case 'calculating':
-      return 'white'
-    default:
-      return fallback
-  }
-}
-
-const getRoundIDColorByStatus = (status: Status, fallback: FallbackColor) => {
-  switch (status) {
-    case 'expired':
-      return '#4d4d4d'
-    case 'next':
-    case 'live':
-    case 'upcoming':
-    case 'canceled':
-    case 'calculating':
-      return 'white'
-    default:
-      return fallback
-  }
-}
 
 const StyledCardHeader = styled.div<{ status: Status }>`
   align-items: center;
@@ -80,23 +34,21 @@ const Round = styled.div`
 `
 
 const CardHeader: React.FC<CardHeaderProps> = ({ status, title, epoch, icon }) => {
-  const textColor = getTextColorByStatus(status, 'text')
-  const roundIDColor = getRoundIDColorByStatus(status, 'text')
   const isLive = status === 'live'
 
   return (
     <>
       <StyledCardHeader status={status}>
         <Round>
-          <Text fontSize={isLive ? '18px' : '16px'} color={roundIDColor} textAlign="center">
+          <TYPE.main fontSize={isLive ? '18px' : '16px'} textAlign="center">
             {`Round: ${epoch}`}
-          </Text>
+          </TYPE.main>
         </Round>
         <Flex alignItems="center">
           {icon}
-          <Text color={textColor} bold={isLive} textTransform={isLive ? 'uppercase' : 'capitalize'} lineHeight="21px">
+          <TYPE.main color={'text4'} lineHeight="21px">
             {title}
-          </Text>
+          </TYPE.main>
         </Flex>
       </StyledCardHeader>
       <Break />

@@ -35,9 +35,9 @@ export const PrizePoolRow: React.FC<PrizePoolRowProps> = ({ totalAmount, ...prop
 
   return (
     <RowBetween>
-      <TYPE.white marginTop={"5px"} fontWeight={600} fontSize="15px">{t('Prize Pool')}:</TYPE.white>
+      <TYPE.main marginTop={"5px"} fontWeight={600} fontSize="15px">{t('Prize Pool')}:</TYPE.main>
       {' '}
-      <TYPE.white marginTop={"5px"} fontWeight={600} fontSize="15px">{`${getPrizePoolAmount(totalAmount)} MATIC`}</TYPE.white>
+      <TYPE.main marginTop={"5px"} fontWeight={600} fontSize="15px">{`${getPrizePoolAmount(totalAmount)} MATIC`}</TYPE.main>
     </RowBetween>
   )
 }
@@ -55,15 +55,15 @@ export const PayoutRow: React.FC<PayoutRowProps> = ({ positionLabel, multiplier,
 
   return (
     <Row height="18px" {...props}>
-      <TYPE.white fontWeight={500}>
+      <TYPE.main fontWeight={500}>
         {positionLabel}:
-      </TYPE.white>
+      </TYPE.main>
       <Flex alignItems="center">
-        <TYPE.white fontWeight={500} lineHeight="18px">
+        <TYPE.main fontWeight={500} lineHeight="18px">
           {`${formattedMultiplier} Payout`}
-        </TYPE.white>
-        {/* <TYPE.white>|</TYPE.white> */}
-        {/* <TYPE.white fontWeight={500} fontSize="12px" lineHeight="18px">{`${formatToken(amount)} MATIC`}</TYPE.white> */}
+        </TYPE.main>
+        {/* <TYPE.main>|</TYPE.main> */}
+        {/* <TYPE.main fontWeight={500} fontSize="12px" lineHeight="18px">{`${formatToken(amount)} MATIC`}</TYPE.main> */}
       </Flex>
     </Row>
   )
@@ -79,9 +79,9 @@ export const LockPriceRow: React.FC<LockPriceRowProps> = ({ lockPrice, ...props 
 
   return (
     <Row {...props}>
-      <TYPE.white fontWeight={500} fontSize="14px">{t('Locked Price')}:</TYPE.white>
+      <TYPE.main fontWeight={500} fontSize="14px">{t('Locked Price')}:</TYPE.main>
       {' '}
-      <TYPE.white fontWeight={500} fontSize="14px">{formatUsd(lockPrice)}</TYPE.white>
+      <TYPE.main fontWeight={500} fontSize="14px">{formatUsd(lockPrice)}</TYPE.main>
     </Row>
   )
 }

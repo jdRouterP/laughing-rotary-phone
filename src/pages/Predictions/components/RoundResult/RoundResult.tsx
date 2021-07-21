@@ -20,18 +20,18 @@ const RoundResult: React.FC<RoundResultProps> = ({ round, children, ...props }) 
 
   return (
     <RoundResultBox round={round} betPosition={betPosition} {...props}>
-      <TYPE.white fontSize="14px" fontWeight={600} mb="8px">
+      <TYPE.main fontSize="14px" fontWeight={600} mb="8px">
         {t('CLOSED PRICE')}
-      </TYPE.white>
+      </TYPE.main>
       {round.failed ? (
-        <TYPE.white fontSize="14px" fontWeight={600} mb="8px">
+        <TYPE.main fontSize="14px" fontWeight={600} mb="8px">
           {t('CANCELLED')}
-        </TYPE.white>
+        </TYPE.main>
       ) : (
         <Flex alignItems="center" justifyContent="space-between" mb="16px">
-          <TYPE.white color={isPositionUp ? '#29a329' : '#ff471a'} fontWeight={500} fontSize="24px">
+          <TYPE.main color={isPositionUp ? '#29a329' : '#ff471a'} fontWeight={500} fontSize="24px">
             {formatUsd(closePrice)}
-          </TYPE.white>
+          </TYPE.main>
           <PositionTag betPosition={betPosition}>{formatUsd(priceDifference)}</PositionTag>
         </Flex>
       )}

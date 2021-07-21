@@ -59,7 +59,7 @@ export function colors(darkMode: boolean): Colors {
     bg7: darkMode ? '#2F303C' : 'rgba(47, 48, 60, 0.05)',
     bg8: darkMode ? '#1E2124' : '#FFFFFF',
     //card background
-    bg9: darkMode ? 'linear-gradient(180deg, #2D3646 0%, #2C2F35 216.76%)' : '#FFFFFF',
+    bg9: darkMode ? 'linear-gradient(180deg, #2D3646 0%, #2C2F35 216.76%)' : '#FDEAF1',
 
     //specialty colors
     modalBG: darkMode ? 'rgba(0,0,0,.425)' : 'rgba(0,0,0,0.3)',

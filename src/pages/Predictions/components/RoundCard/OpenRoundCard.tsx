@@ -57,7 +57,7 @@ const Wrapper = styled(AutoColumn) <{ showBackground: boolean; bgColor: any }>`
   width: 100%;
   overflow: hidden;
   position: relative;
-  background: linear-gradient(180deg, #2D3646 0%, #2C2F35 216.76%);
+  background: ${({ theme }) => theme.bg9};
   border: 1px solid #575A68;
   box-sizing: border-box;
   box-shadow: 0px 0px 24px rgb(0 0 0 / 10%);
@@ -191,7 +191,7 @@ const OpenRoundCard: React.FC<OpenRoundCardProps> = ({
         status="next"
         epoch={round.epoch}
         blockTime={estimatedLockTime}
-        icon={<PlayCircleOutlineIcon color="white" mr="4px" width="21px" />}
+        icon={<PlayCircleOutlineIcon color="#2989A5" mr="4px" width="21px" />}
         title={t('Next')}
       />
       <ContentWrapper>

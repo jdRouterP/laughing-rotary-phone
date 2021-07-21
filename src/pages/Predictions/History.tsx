@@ -30,7 +30,7 @@ import { TYPE } from 'theme'
 const BetWrapper = styled.div`
   margin: 0px auto;
   width: 90%;
-  // background-color: ${({theme}) => theme.bg7};
+  // background-color: ${({ theme }) => theme.bg7};
   border-radius: 10px;
   flex: 1;
   height: 100%;
@@ -93,7 +93,7 @@ const History = () => {
     dispatch(setHistoryPaneState(!isHistoryPaneOpen))
   }
   return (
-    <Modal flexdirection='column' isOpen={isHistoryPaneOpen} onDismiss={handleClick}>
+    <Modal flexdirection='column' minHeight={70} isOpen={isHistoryPaneOpen} onDismiss={handleClick}>
       <Header activeTab={activeTab} setActiveTab={setActiveTab} />
       <BetWrapper>
         {isFetchingHistory ? (

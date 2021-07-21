@@ -49,7 +49,7 @@ const Wrapper = styled(AutoColumn) <{ showBackground: boolean }>`
   width: 100%;
   overflow: hidden;
   position: relative;
-  background: ${({theme}) => theme.bg9};
+  background: ${({ theme }) => theme.bg9};
   opacity: 0.7;
   box-shadow: 0px 0px 24px rgba(0, 0, 0, 0.1);
   border-radius: 15px;
@@ -103,7 +103,7 @@ const ExpiredRoundCard: React.FC<ExpiredRoundCardProps> = ({
       <CardNoise /> */}
       <CardHeader
         status="expired"
-        icon={<BlockIcon mr="4px" width="21px" color="textDisabled" />}
+        icon={<BlockIcon mr="4px" width="21px" color="#CED0D9" />}
         title={t('Expired')}
         blockTime={endBlock}
         epoch={round.epoch}

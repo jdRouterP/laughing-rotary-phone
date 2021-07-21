@@ -63,7 +63,7 @@ const Wrapper = styled(AutoColumn) <{ showBackground: boolean; bgColor: any }>`
   width: 100%;
   overflow: hidden;
   position: relative;
-  background: linear-gradient(180deg, #2D3646 0%, #2C2F35 100%);
+  background: ${({ theme }) => theme.bg9};
   /* Shadow */
   box-shadow: 0px 0px 34px rgba(0, 0, 0, 0.15);
   border-radius: 15px;
@@ -130,7 +130,7 @@ const LiveRoundCard: React.FC<LiveRoundCardProps> = ({
       <CardNoise /> */}
       <CardHeader
         status="live"
-        icon={<PlayCircleOutlineIcon mr="4px" width="24px" color="secondary" />}
+        icon={<PlayCircleOutlineIcon mr="4px" width="24px" color="green" />}
         title={t('Live')}
         epoch={round.epoch}
         blockTime={estimatedEndTime}
@@ -145,14 +145,14 @@ const LiveRoundCard: React.FC<LiveRoundCardProps> = ({
           />
         </CardHeaderBlock>
         <RoundResultBox round={round} betPosition={isBull ? BetPosition.BULL : BetPosition.BEAR}>
-          <TYPE.white fontSize="14px" mb="8px" fontWeight="600">
+          <TYPE.main fontSize="14px" mb="8px" fontWeight="600">
             {t('LAST PRICE')}
-          </TYPE.white>
+          </TYPE.main>
           <Flex alignItems="center" justifyContent="space-between" mb="16px" height="36px">
             <MouseoverTooltip text={'Last price from Chainlink Oracle'} placement='bottom'>
-              <TYPE.white color={isBull ? '#29a329' : '#ff471a'} fontWeight={500} fontSize="24px">
+              <TYPE.main color={isBull ? '#29a329' : '#ff471a'} fontWeight={500} fontSize="24px">
                 {price > 0 ? `$${countUp}` : <Skeleton height="36px" width="94px" />}
-              </TYPE.white>
+              </TYPE.main>
             </MouseoverTooltip>
             <PositionTag betPosition={isBull ? BetPosition.BULL : BetPosition.BEAR}>
               {formatUsd(priceDifference)}

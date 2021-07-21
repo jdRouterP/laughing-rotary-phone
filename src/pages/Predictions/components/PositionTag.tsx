@@ -31,9 +31,9 @@ export const Tag: React.FC<TagProps> = ({ bg = 'success', startIcon, children, o
       {...props}
     >
       {icon}
-      <TYPE.white ml="4px">
+      <TYPE.main ml="4px">
         {children}
-      </TYPE.white>
+      </TYPE.main>
     </StyledTag>
   )
 }

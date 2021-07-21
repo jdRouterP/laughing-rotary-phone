@@ -34,7 +34,7 @@ const Wrapper = styled(AutoColumn) <{ showBackground: boolean; bgColor: any }>`
   width: 100%;
   overflow: hidden;
   position: relative;
-  background: linear-gradient(180deg, #2D3646 0%, #2C2F35 216.76%);
+  background: ${({ theme }) => theme.bg9};
   border: 1px solid #575A68;
   box-sizing: border-box;
   box-shadow: 0px 0px 24px rgba(0, 0, 0, 0.1);
@@ -101,14 +101,14 @@ const CanceledRoundCard: React.FC<CanceledRoundCardProps> = ({ round }) => {
       {/* <CardNoise /> */}
       <CardHeader
         status="canceled"
-        icon={<BlockIcon mr="4px" width="21px" />}
+        icon={<BlockIcon mr="4px" width="21px" color='#CED0D9' />}
         title={t('Canceled')}
         epoch={round.epoch}
         blockTime={estimatedEndTime}
       />
       <ContentWrapper>
         <CardHeaderBlock>
-          <h3 style={{fontWeight: "normal", color: "white"}}>BULL</h3>
+          <h3 style={{ fontWeight: "normal", color: "text2" }}>BULL</h3>
         </CardHeaderBlock>
         <Content>
           <EntryTitle>
@@ -120,7 +120,7 @@ const CanceledRoundCard: React.FC<CanceledRoundCardProps> = ({ round }) => {
           </LinkExternal>
         </Content>
         <CardFooterBlock>
-          <h3 style={{fontWeight: "normal", color: "white"}}>BEAR</h3>
+          <h3 style={{ fontWeight: "normal", color: "text2" }}>BEAR</h3>
         </CardFooterBlock>
       </ContentWrapper>
     </Wrapper>

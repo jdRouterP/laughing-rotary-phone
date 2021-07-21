@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Box, Flex, Text } from '@pancakeswap/uikit'
+import { Box, Flex } from '@pancakeswap/uikit'
 import { useTranslation } from 'react-i18next'
 import { BetPosition } from 'state/prediction/types'
 // import { RoundMultiplierDownArrow, RoundMultiplierUpArrow } from '../../RoundMultiplierArrows'
@@ -62,12 +62,12 @@ const MultiplierArrow: React.FC<MultiplierArrowProps> = ({
   const multiplierText = (
     <Box>
       <Flex justifyContent="center">
-        <Text fontSize="14px" color={"white"} bold lineHeight="14x">
+        <TYPE.main color={'text1'} fontSize="14px" lineHeight="14x">
           {multiplier !== undefined ? `${multiplier.toLocaleString(undefined, { maximumFractionDigits: 2 })}x` : '-'}
-        </Text>
-        <Text fontSize="14px" color={"white"} lineHeight="14x" ml="4px">
+        </TYPE.main>
+        <TYPE.main color={'text1'} fontSize="14px" lineHeight="14x" ml="4px">
           {t('Payout')}
-        </Text>
+        </TYPE.main>
       </Flex>
     </Box>
   )
@@ -89,9 +89,9 @@ const MultiplierArrow: React.FC<MultiplierArrowProps> = ({
       <Box position="relative">
         <Content>
           {!isDisabled && multiplierText}
-          <TYPE.white fontSize="20px" margin="10px" color={"white"}>
+          <TYPE.main color={'text1'} fontSize="20px" margin="10px">
             {t('BEAR')}
-          </TYPE.white>
+          </TYPE.main>
         </Content>
       </Box>
     )
@@ -100,9 +100,9 @@ const MultiplierArrow: React.FC<MultiplierArrowProps> = ({
   return (
     <Box position="relative">
       <Content>
-        <TYPE.white fontSize="20px" margin="10px" color={"white"}>
+        <TYPE.main color={'text1'} fontSize="20px" margin="10px">
           {t('BULL')}
-        </TYPE.white>
+        </TYPE.main>
         {!isDisabled && multiplierText}
       </Content>
 
