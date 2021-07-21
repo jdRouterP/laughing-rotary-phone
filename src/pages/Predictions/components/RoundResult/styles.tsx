@@ -124,7 +124,7 @@ interface RoundResultBoxProps extends BoxProps {
 
 const Background = styled(Box) <RoundResultBoxProps>`
   border-radius: 16px;
-  border: 1px solid ${({ isPositionUp }) => isPositionUp ? '#29a329' : '#ff471a'};
+  border: 1px solid ${({ isPositionUp, isNext }) => isNext ? "#DD3679" : isPositionUp ? '#29a329' : '#ff471a'};
   // border-image-source: linear-gradient(90deg, #DD3679 100%, #665BBA 100%);
   padding: 2px;
 `
