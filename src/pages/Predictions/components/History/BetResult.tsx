@@ -24,7 +24,7 @@ const StyledBetResult = styled(Box)`
 
   border-radius: 16px;
   margin-bottom: 24px;
-  padding: 16px;
+  padding: 11px;
 `
 
 const BetResult: React.FC<BetResultProps> = ({ bet, result }) => {
@@ -95,7 +95,7 @@ const BetResult: React.FC<BetResultProps> = ({ bet, result }) => {
 
   return (
     <>
-      <Flex alignItems="center" justifyContent="space-between" mb="8px">
+      <Flex alignItems="center" justifyContent="space-between" mb="8px" ml="5px">
         <TYPE.mediumHeader>{t('Your History')}</TYPE.mediumHeader>
         <Flex alignItems="center">
           <TYPE.mediumHeader as="h3" color={getHeaderColor()} mr="4px">
@@ -128,7 +128,7 @@ const BetResult: React.FC<BetResultProps> = ({ bet, result }) => {
         {result === Result.CANCELED && isRefundable && (
           <ReclaimPositionButton epoch={bet.round.epoch} width="100%" mb="16px" />
         )}
-        <Flex alignItems="center" justifyContent="space-between" mb="16px">
+        <Flex alignItems="center" justifyContent="space-between" mb="10px">
           <TYPE.white>{t('Your direction')}</TYPE.white>
           <PositionTag betPosition={bet.position}>
             {bet.position === BetPosition.BULL ? t('BULL') : t('BEAR')}

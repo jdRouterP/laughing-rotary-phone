@@ -17,8 +17,9 @@ interface BetDetailsProps {
 }
 
 const StyledBetDetails = styled.div`
-
-  padding: 24px;
+  border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+  border-radius: 0px 0px 30px 30px;
+  padding: 20px;
 `
 
 const BetDetails: React.FC<BetDetailsProps> = ({ bet, result }) => {
@@ -37,7 +38,7 @@ const BetDetails: React.FC<BetDetailsProps> = ({ bet, result }) => {
         </TYPE.white>
       )}
       {result !== Result.LIVE && <BetResult bet={bet} result={result} />}
-      <TYPE.mediumHeader mb="8px">{t('Round History')}</TYPE.mediumHeader>
+      <TYPE.mediumHeader mb="10px" ml="5px">{t('Round History')}</TYPE.mediumHeader>
       <RoundResult round={bet.round} mb="24px">
         <PayoutRow positionLabel={t('BULL')} multiplier={bullMultiplier} amount={bullAmount} />
         <PayoutRow positionLabel={t('BEAR')} multiplier={bearMultiplier} amount={bearAmount} />
