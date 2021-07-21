@@ -105,8 +105,8 @@ const HistoricalBet: React.FC<BetProps> = ({ bet }) => {
       return (
         <Flex alignItems="center">
           <PlayCircleOutlineIcon color="secondary" mr="6px" width="24px" />
-          <TYPE.white color="secondary" fontWeight={500}>
-            {t('Live Now')}
+          <TYPE.white fontWeight={500}>
+            {'Live Now'}
           </TYPE.white>
         </Flex>
       )
@@ -128,14 +128,14 @@ const HistoricalBet: React.FC<BetProps> = ({ bet }) => {
     <>
       <StyledBet onClick={toggleOpen} role="button">
         <Box width="48px">
-          <TYPE.white textAlign="center">
-            <TYPE.white fontSize="12px" mb="2px" color="textSubtle">
-              {t('Round')}
-            </TYPE.white>
-            <TYPE.white fontWeight={500} lineHeight={1}>
-              {round.epoch.toLocaleString()}
-            </TYPE.white>
+
+          <TYPE.white fontSize="12px" mb="2px">
+            {'Round'}
           </TYPE.white>
+          <TYPE.white fontWeight={500} lineHeight={1}>
+            {round.epoch.toLocaleString()}
+          </TYPE.white>
+
         </Box>
         <YourResult pl="50px" >{renderBetLabel()}</YourResult>
         {roundResult === Result.WIN && canClaim && (

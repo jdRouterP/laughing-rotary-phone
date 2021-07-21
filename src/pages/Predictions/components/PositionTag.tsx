@@ -1,8 +1,9 @@
 //@ts-nocheck
 import React, { ReactNode } from 'react'
 import styled from 'styled-components'
-import { ArrowUpIcon, ArrowDownIcon, Flex, FlexProps, Text } from '@pancakeswap/uikit'
+import { ArrowUpIcon, ArrowDownIcon, Flex, FlexProps } from '@pancakeswap/uikit'
 import { BetPosition } from 'state/prediction/types'
+import { TYPE } from 'theme'
 
 interface TagProps extends FlexProps {
   bg?: string
@@ -30,9 +31,9 @@ export const Tag: React.FC<TagProps> = ({ bg = 'success', startIcon, children, o
       {...props}
     >
       {icon}
-      <Text textTransform="uppercase" color="white" ml="4px">
+      <TYPE.white ml="4px">
         {children}
-      </Text>
+      </TYPE.white>
     </StyledTag>
   )
 }

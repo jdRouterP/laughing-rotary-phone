@@ -62,8 +62,8 @@ export const PayoutRow: React.FC<PayoutRowProps> = ({ positionLabel, multiplier,
         <TYPE.white fontWeight={500} lineHeight="18px">
           {`${formattedMultiplier} Payout`}
         </TYPE.white>
-        <TYPE.white>|</TYPE.white>
-        <TYPE.white fontWeight={500} fontSize="12px" lineHeight="18px">{`${formatToken(amount)} MATIC`}</TYPE.white>
+        {/* <TYPE.white>|</TYPE.white> */}
+        {/* <TYPE.white fontWeight={500} fontSize="12px" lineHeight="18px">{`${formatToken(amount)} MATIC`}</TYPE.white> */}
       </Flex>
     </Row>
   )

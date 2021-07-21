@@ -1,9 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
-import { useWeb3React } from '@web3-react/core'
-import { Box, Flex, Link, OpenNewIcon } from '@pancakeswap/uikit'
+// import { useWeb3React } from '@web3-react/core'
+import { Box, Flex } from '@pancakeswap/uikit'
 import { useTranslation } from 'react-i18next'
-import { getExplorerLink } from 'utils'
 import { useGetCurrentEpoch, useGetLastOraclePrice } from 'state/hook'
 import { Bet, BetPosition } from 'state/prediction/types'
 import { formatToken, getMultiplier, getPayout } from 'pages/Predictions/helpers'
@@ -11,7 +10,6 @@ import { getRoundResult, Result } from 'state/prediction/hooks'
 import PnlChart from './PnlChart'
 import SummaryRow from './SummaryRow'
 import { TYPE } from 'theme'
-import { ButtonPrimary } from 'components/Button'
 
 interface PnlTabProps {
   hasBetHistory: boolean
@@ -113,7 +111,7 @@ const getPnlSummary = (bets: Bet[], currentEpoch: number): PnlSummary => {
 
 const PnlTab: React.FC<PnlTabProps> = ({ hasBetHistory, bets }: PnlTabProps) => {
   const { t } = useTranslation()
-  const { account, chainId } = useWeb3React()
+  // const { account, chainId } = useWeb3React()
   const currentEpoch = useGetCurrentEpoch()
   // const tokenusdPrice = usePriceTokenBusd()
   const tokenusdPrice = useGetLastOraclePrice();
@@ -129,8 +127,8 @@ const PnlTab: React.FC<PnlTabProps> = ({ hasBetHistory, bets }: PnlTabProps) => 
 
   return hasBetHistory ? (
     <Box p="16px">
-      <TYPE.white
-        fontSize="24px" color="secondary" pb="24px">
+      <TYPE.white color='textSubtle'
+        fontSize="24px" pb="24px">
         {t('Your history')}
       </TYPE.white>
       <Flex>
@@ -189,14 +187,16 @@ const PnlTab: React.FC<PnlTabProps> = ({ hasBetHistory, bets }: PnlTabProps) => 
         <SummaryRow type="lost" summary={summary} tokenusdPrice={tokenusdPrice} />
         <SummaryRow type="entered" summary={summary} tokenusdPrice={tokenusdPrice} />
 
-        <Flex justifyContent="center" mt="24px">
+        {/* <Flex justifyContent="center" mt="24px">
           {(chainId && account) && <Link href={`${getExplorerLink(chainId, account, "address")}#internaltx`} mb="16px" external>
             <ButtonPrimary mt="8px" width="100%">
-              {t('View Reclaimed & Won')}
-              <OpenNewIcon color="white" ml="4px" />
+              <ExternalLink>
+                {t('View Reclaimed & Won')}
+                <ExternalLinkIcon color="white" ml="4px" />
+              </ExternalLink>
             </ButtonPrimary>
           </Link>}
-        </Flex>
+        </Flex> */}
       </Box>
     </Box>
   ) : (

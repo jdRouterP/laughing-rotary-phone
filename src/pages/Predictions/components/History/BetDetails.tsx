@@ -3,7 +3,6 @@ import styled from 'styled-components'
 import { Bet } from 'state/prediction/types'
 import { useTranslation } from 'react-i18next'
 // import { getExplorerLink } from 'utils'
-import { Flex } from '@pancakeswap/uikit'
 import { Result } from 'state/prediction/hooks'
 import { getMultiplier } from '../../helpers'
 import { PayoutRow, RoundResult } from '../RoundResult'
@@ -39,22 +38,22 @@ const BetDetails: React.FC<BetDetailsProps> = ({ bet, result }) => {
       )}
       {result !== Result.LIVE && <BetResult bet={bet} result={result} />}
       <TYPE.mediumHeader mb="10px" ml="5px">{t('Round History')}</TYPE.mediumHeader>
-      <RoundResult round={bet.round} mb="24px">
-        <PayoutRow positionLabel={t('BULL')} multiplier={bullMultiplier} amount={bullAmount} />
-        <PayoutRow positionLabel={t('BEAR')} multiplier={bearMultiplier} amount={bearAmount} />
-      </RoundResult>
-      <Flex alignItems="center" justifyContent="space-between" mb="8px">
+      <TYPE.white color=''>
+        <RoundResult round={bet.round} mb="24px">
+          <PayoutRow positionLabel={t('BULL')} multiplier={bullMultiplier} amount={bullAmount} />
+          <PayoutRow positionLabel={t('BEAR')} multiplier={bearMultiplier} amount={bearAmount} />
+        </RoundResult>
+      </TYPE.white>
+      {/* <Flex alignItems="center" justifyContent="space-between" mb="8px">
         <TYPE.white>{t('Opening Block')}</TYPE.white>
         <TYPE.white>{bet.round.lockBlock}</TYPE.white>
-        {/* {chainId && <Link href={getExplorerLink(chainId, bet.round.lockBlock.toString(), "block")} external>
-        </Link>} */}
       </Flex>
       <Flex alignItems="center" justifyContent="space-between">
         <TYPE.white>{t('Closing Block')}</TYPE.white>
 
         <TYPE.white>{bet.round.endBlock}</TYPE.white>
-        {/* No prediction history available */}
-      </Flex>
+      
+      </Flex> */}
     </StyledBetDetails>
   )
 }

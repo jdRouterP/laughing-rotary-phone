@@ -3,10 +3,11 @@ import styled from 'styled-components'
 import { useTranslation } from 'react-i18next'
 import { formatRoundTime } from '../helpers'
 import useRoundCountdown from '../hooks/useRoundCountdown'
+import { TYPE } from 'theme'
 
 interface TimerLabelProps {
     interval: string
-    unit: 'm' | 'h' | 'd'
+    unit: 'min' | 'hour' | 'day'
 }
 
 const Closing = styled.div`
@@ -49,7 +50,7 @@ const TimerLabel: React.FC<TimerLabelProps> = ({ interval, unit }: TimerLabelPro
     return (
         <Wrapper>
             <Timer>
-                <h1 style={{color: "white", fontSize: "24px", fontWeight: "normal", textAlign: "center"}}>Closing:</h1>
+                <TYPE.largeHeader style={{ fontWeight: "normal", textAlign: "center" }}>Closing:</TYPE.largeHeader>
                 <Closing>
                     <CurrentTime>
                         {seconds === 0 ? t('Closing') : countdown}
@@ -58,7 +59,7 @@ const TimerLabel: React.FC<TimerLabelProps> = ({ interval, unit }: TimerLabelPro
                         {`${interval}${t(unit)}`}
                     </TotalTime>
                 </Closing>
-                    
+
             </Timer>
         </Wrapper>
     )

@@ -1,12 +1,13 @@
+
 import React, { useState } from 'react'
 import styled from 'styled-components'
 import { useWeb3React } from '@web3-react/core'
 import { PlayCircleOutlineIcon, useTooltip } from '@pancakeswap/uikit'
 import { useTranslation } from 'react-i18next'
-import { useDispatch } from 'react-redux'
+// import { useDispatch } from 'react-redux'
 import { BetPosition, Round } from 'state/prediction/types'
 import { useGetinterval } from 'state/hook'
-import { markPositionAsEntered } from 'state/prediction/reducer'
+// import { markPositionAsEntered } from 'state/prediction/reducer'
 import { formatToken } from '../../helpers'
 import { RoundResultBox, PrizePoolRow } from '../RoundResult'
 import MultiplierArrow from './MultiplierArrow'
@@ -93,7 +94,7 @@ const OpenRoundCard: React.FC<OpenRoundCardProps> = ({
   const { t } = useTranslation()
   const interval = useGetinterval()
   const { account } = useWeb3React()
-  const dispatch = useDispatch()
+  // const dispatch = useDispatch()
   const currentTimestamp = useCurrentBlockTimestamp()
   const { isSettingPosition, position } = state
   const isBufferPhase = currentTimestamp && currentTimestamp.toNumber() >= round.startAt + interval
@@ -153,20 +154,20 @@ const OpenRoundCard: React.FC<OpenRoundCardProps> = ({
     // else {
     //   decimalValueBN = decimalValue;
     // }
-    dispatch(
-      markPositionAsEntered({
-        account,
-        roundId: round.id,
-        bet: {
-          hash,
-          round,
-          position,
-          amount: parseFloat(decimalValue),
-          claimed: false,
-          claimedHash: null,
-        },
-      }),
-    )
+    // dispatch(
+    //   markPositionAsEntered({
+    //     account,
+    //     roundId: round.id,
+    //     bet: {
+    //       hash,
+    //       round,
+    //       position,
+    //       amount: parseFloat(decimalValue),
+    //       claimed: false,
+    //       claimedHash: null,
+    //     },
+    //   }),
+    // )
 
     handleBack()
 
@@ -197,7 +198,7 @@ const OpenRoundCard: React.FC<OpenRoundCardProps> = ({
         <CardHeaderBlock>
           <MultiplierArrow betAmount={betAmount} multiplier={bullMultiplier} hasEntered={hasEnteredUp} />
         </CardHeaderBlock>
-        <RoundResultBox round={round} isNext={canEnterPosition} isLive={!canEnterPosition}>
+        <RoundResultBox round={round} isNext={true} isLive={!canEnterPosition}>
           {canEnterPosition ? (
             <>
               <PrizePoolRow totalAmount={round.totalAmount} mb="8px" />

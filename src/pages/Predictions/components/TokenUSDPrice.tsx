@@ -6,10 +6,16 @@ import { useGetLastOraclePrice } from 'state/hook'
 const Wrapper = styled.div`
     display: grid;
     place-items: center;
-    background: ${({ theme }) => theme.bg4};
-    padding: 10px 4px;
-    border-radius: 15px;
-    width: 220px;
+    position: relative;
+
+    border: none;
+    background-color: transparent;
+    margin: 0;
+    padding: 0;
+    background-color: ${({ theme }) => theme.bg3};
+    margin-left: 8px;
+    padding: 0.15rem 0.5rem;
+    border-radius: 0.5rem;
 `
 const PriceFeed = styled.div`
     display: flex;

@@ -48,7 +48,7 @@ interface SetPositionModalProps {
   onSuccess: (decimalValue: string, hash: string) => Promise<void>
 }
 
-export default function StakingModal({ isOpen, position, togglePosition, onDismiss, onSuccess }: SetPositionModalProps) {
+export default function PositionModal({ isOpen, position, togglePosition, onDismiss, onSuccess }: SetPositionModalProps) {
 
   const [typedValue, setTypedValue] = useState('')
   const { account, chainId } = useActiveWeb3React()
