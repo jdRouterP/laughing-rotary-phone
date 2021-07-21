@@ -127,59 +127,59 @@ const PnlTab: React.FC<PnlTabProps> = ({ hasBetHistory, bets }: PnlTabProps) => 
 
   return hasBetHistory ? (
     <Box p="16px">
-      <TYPE.white color='textSubtle'
+      <TYPE.main
         fontSize="24px" pb="24px">
         {t('Your history')}
-      </TYPE.white>
+      </TYPE.main>
       <Flex>
         <PnlChart lost={summary.lost.rounds} won={summary.won.rounds} />
         <Flex flexDirection="column" justifyContent="center" pl="24px">
-          <TYPE.white color="textSubtle" fontSize="18px" marginLeft="2px">
+          <TYPE.main color="textSubtle" fontSize="18px" marginLeft="2px">
             {t('Net results')}
-          </TYPE.white>
-          <TYPE.white fontSize="24px" marginTop="11px" lineHeight="1" color={netResultIsPositive ? '#29a329' : '#ff471a'}>
+          </TYPE.main>
+          <TYPE.main fontSize="24px" marginTop="11px" lineHeight="1" color={netResultIsPositive ? '#29a329' : '#ff471a'}>
             {`${netResultIsPositive ? '+' : ''}${formatToken(netResultAmount)} MATIC`}
-          </TYPE.white>
-          <TYPE.white color="textSubtle" marginTop="5px">
+          </TYPE.main>
+          <TYPE.main color="textSubtle" marginTop="5px">
             {`~$${formatToken(tokenusdPrice * (netResultAmount))}`}
-          </TYPE.white>
+          </TYPE.main>
         </Flex>
       </Flex>
       <Box pl="8px">
-        <TYPE.white mt="24px" mb="11px" fontWeight="normal" color="textSubtle">
+        <TYPE.main mt="24px" mb="11px" fontWeight="normal" color="textSubtle">
           {t('Average return / round')}
-        </TYPE.white>
-        <TYPE.white color={avgTokenWonIsPositive ? '#29a329' : '#ff471a'}>
+        </TYPE.main>
+        <TYPE.main color={avgTokenWonIsPositive ? '#29a329' : '#ff471a'}>
           {`${avgTokenWonIsPositive ? '+' : ''}${formatToken(avgTokenWonPerRound)} MATIC`}
-        </TYPE.white>
-        <TYPE.white color="textSubtle" fontSize="14px">
+        </TYPE.main>
+        <TYPE.main color="textSubtle" fontSize="14px">
           {`~$${formatToken(tokenusdPrice * (avgTokenWonPerRound))}`}
-        </TYPE.white>
+        </TYPE.main>
 
         {hasBestRound && (
           <>
-            <TYPE.white mt="16px" color="textSubtle">
+            <TYPE.main mt="16px" color="textSubtle">
               {t('Best round: #%roundId%', { roundId: summary.won.bestRound.id })}
-            </TYPE.white>
+            </TYPE.main>
             <Flex alignItems="flex-end">
-              <TYPE.white color="success">{`+${formatToken(summary.won.bestRound.payout)} MATIC`}</TYPE.white>
-              <TYPE.white ml="4px" color="textSubtle">
+              <TYPE.main color="success">{`+${formatToken(summary.won.bestRound.payout)} MATIC`}</TYPE.main>
+              <TYPE.main ml="4px" color="textSubtle">
                 ({summary.won.bestRound.multiplier.toFixed(2)}x)
-              </TYPE.white>
+              </TYPE.main>
             </Flex>
-            <TYPE.white color="textSubtle">
+            <TYPE.main color="textSubtle">
               {`~$${formatToken(tokenusdPrice * (summary.won.bestRound.payout))}`}
-            </TYPE.white>
+            </TYPE.main>
           </>
         )}
 
-        <TYPE.white mt="16px" mb="11px" fontWeight="normal" color="textSubtle">
+        <TYPE.main mt="16px" mb="11px" fontWeight="normal" color="textSubtle">
           {t('Average position entered / round')}
-        </TYPE.white>
-        <TYPE.white fontSize="16px">{`${formatToken(avgPositionEntered)} MATIC`}</TYPE.white>
-        <TYPE.white color="textSubtle" fontSize="14px">
+        </TYPE.main>
+        <TYPE.main fontSize="16px">{`${formatToken(avgPositionEntered)} MATIC`}</TYPE.main>
+        <TYPE.main color="textSubtle" fontSize="14px">
           {`~$${formatToken(tokenusdPrice * (avgPositionEntered))}`}
-        </TYPE.white>
+        </TYPE.main>
 
         <Divider />
 
@@ -204,11 +204,11 @@ const PnlTab: React.FC<PnlTabProps> = ({ hasBetHistory, bets }: PnlTabProps) => 
       <TYPE.mediumHeader size="lg" textAlign="center" mb="8px">
         {t('No prediction history available')}
       </TYPE.mediumHeader>
-      <TYPE.white as="p" textAlign="center">
+      <TYPE.main as="p" textAlign="center">
         {t(
           'If you are sure you should see history here, make sure you’re connected to the correct wallet and try again.',
         )}
-      </TYPE.white>
+      </TYPE.main>
     </Box>
   )
 }

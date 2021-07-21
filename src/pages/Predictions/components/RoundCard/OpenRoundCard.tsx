@@ -191,7 +191,7 @@ const OpenRoundCard: React.FC<OpenRoundCardProps> = ({
         status="next"
         epoch={round.epoch}
         blockTime={estimatedLockTime}
-        icon={<PlayCircleOutlineIcon color="#2989A5" mr="4px" width="21px" />}
+        icon={<PlayCircleOutlineIcon color="#DD3679" mr="4px" width="21px" />}
         title={t('Next')}
       />
       <ContentWrapper>

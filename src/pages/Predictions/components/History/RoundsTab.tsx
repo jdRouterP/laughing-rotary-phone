@@ -24,11 +24,11 @@ const RoundsTab: React.FC<RoundsTabProps> = ({ hasBetHistory, bets }) => {
       <TYPE.largeHeader textAlign="center" >
         {t('No prediction history available')}
       </TYPE.largeHeader>
-      <TYPE.white as="p" textAlign="center">
+      <TYPE.main as="p" textAlign="center">
         {t(
           'If you are sure you should see history here, make sure you’re connected to the correct wallet and try again.',
         )}
-      </TYPE.white>
+      </TYPE.main>
     </div>
   )
 }

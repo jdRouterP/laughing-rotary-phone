@@ -83,9 +83,9 @@ const CollectRoundWinningsModal: React.FC<CollectRoundWinningsModalProps> = ({
       <ModalBody p="24px">
         {/* <TrophyGoldIcon width="96px" mx="auto" mb="24px" /> */}
         <Flex alignItems="start" justifyContent="space-between" mb="24px">
-          <TYPE.white>{t('Collecting')}</TYPE.white>
+          <TYPE.main>{t('Collecting')}</TYPE.main>
           <Box style={{ textAlign: 'right' }}>
-            <TYPE.white>{`${formatToken(payout)} MATIC`}</TYPE.white>
+            <TYPE.main>{`${formatToken(payout)} MATIC`}</TYPE.main>
             {/* <Text fontSize="12px" color="textSubtle">
               {`~$${formatToken(tokenusdPrice.times(payout).toNumber())}`}
             </Text> */}

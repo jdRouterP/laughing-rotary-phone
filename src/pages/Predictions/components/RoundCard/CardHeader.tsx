@@ -19,7 +19,59 @@ const Break = styled.div`
   height: 1px;
 `
 
+// const getBackgroundColor = (theme: DefaultTheme, status: Status) => {
+//   switch (status) {
+//     case 'calculating':
+//       return 'blue'
+//     case 'live':
+//       return 'transparent'
+//     case 'canceled':
+//       return 'pink'
+//     case 'next':
+//       return 'blue'
+//     case 'upcoming':
+//       return '#1C738C'
+//     case 'expired':
+//     default:
+//       return 'yellow'
+//   }
+// }
 
+type FallbackColor = 'text4'
+
+const getTextColorByStatus = (status: Status, fallback: FallbackColor) => {
+  switch (status) {
+    case 'expired':
+      return 'text4'
+    case 'next':
+      return '#DD3679'
+    case 'live':
+      return '#29a329'
+    case 'upcoming':
+      return 'text4'
+    case 'canceled':
+      return 'text4'
+    case 'calculating':
+      return 'text4'
+    default:
+      return fallback
+  }
+}
+
+// const getRoundIDColorByStatus = (status: Status, fallback: FallbackColor) => {
+//   switch (status) {
+//     case 'expired':
+//       return '#4d4d4d'
+//     case 'next':
+//     case 'live':
+//     case 'upcoming':
+//     case 'canceled':
+//     case 'calculating':
+//       return 'white'
+//     default:
+//       return fallback
+//   }
+// }
 
 const StyledCardHeader = styled.div<{ status: Status }>`
   align-items: center;
@@ -34,6 +86,8 @@ const Round = styled.div`
 `
 
 const CardHeader: React.FC<CardHeaderProps> = ({ status, title, epoch, icon }) => {
+  const textColor = getTextColorByStatus(status, 'text4')
+  // const roundIDColor = getRoundIDColorByStatus(status, 'text')
   const isLive = status === 'live'
 
   return (
@@ -46,7 +100,7 @@ const CardHeader: React.FC<CardHeaderProps> = ({ status, title, epoch, icon }) =
         </Round>
         <Flex alignItems="center">
           {icon}
-          <TYPE.main color={'text4'} lineHeight="21px">
+          <TYPE.main color={textColor} lineHeight="21px">
             {title}
           </TYPE.main>
         </Flex>

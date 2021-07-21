@@ -1,5 +1,5 @@
 import React from 'react'
-import { Flex, Text } from '@pancakeswap/uikit'
+import { Flex } from '@pancakeswap/uikit'
 import { formatToken } from 'pages/Predictions/helpers'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -7,13 +7,13 @@ import { TYPE } from 'theme'
 
 type SummaryType = 'won' | 'lost' | 'entered'
 
-const BoxStyle = styled.div<{color : string}>`
+const BoxStyle = styled.div<{ color: string }>`
   padding: 12px 12px;
   margin-bottom: 12px;
   width:100%;
   max-width: 320px;
   border-radius: 10px;
-  background: ${({color}) => color === "#27AE60" ? 'linear-gradient(0deg, rgba(39, 174, 96, 0.1), rgba(39, 174, 96, 0.1))' : color === "#EB5757" ? 'linear-gradient(0deg, rgba(235, 87, 87, 0.1), rgba(235, 87, 87, 0.1))' : 'rgba(47, 48, 60, 0.1)'};
+  background: ${({ color }) => color === "#27AE60" ? 'linear-gradient(0deg, rgba(39, 174, 96, 0.1), rgba(39, 174, 96, 0.1))' : color === "#EB5757" ? 'linear-gradient(0deg, rgba(235, 87, 87, 0.1), rgba(235, 87, 87, 0.1))' : 'rgba(47, 48, 60, 0.1)'};
   
 `
 
@@ -46,34 +46,34 @@ const SummaryRow: React.FC<SummaryRowProps> = ({ type, summary, tokenusdPrice })
   const displayAmount = type === 'won' ? summary[type].payout : amount
 
   console.log("color", color);
-  
+
 
   return (
     <>
       <BoxStyle color={color}>
-        <Text bold color="textSubtle">
+        <TYPE.main>
           {t(typeTranslationKey)}
-        </Text>
+        </TYPE.main>
         <Flex>
           <Flex flex="2" flexDirection="column">
-            <TYPE.white fontSize="20px" color={color}>
+            <TYPE.main fontSize="20px" color={color}>
               {rounds} {t('Rounds').toLocaleLowerCase()}
-            </TYPE.white>
-            <Text fontSize="12px" color="textSubtle">
+            </TYPE.main>
+            <TYPE.main fontSize="12px">
               {type === 'entered' ? t('Total').toLocaleLowerCase() : `${roundsInPercents}%`}
-            </Text>
+            </TYPE.main>
           </Flex>
           <Flex flex="3" flexDirection="column">
-            <Text bold fontSize="20px" color={color}>
+            <TYPE.main fontSize="20px" color={color}>
               {`${summaryTypeSigns[type]}${formatToken(displayAmount)} MATIC`}
-            </Text>
-            <Text fontSize="12px" color="textSubtle">
+            </TYPE.main>
+            <TYPE.main fontSize="12px">
               {`~$${formatToken(tokenusdPrice * displayAmount)}`}
-            </Text>
+            </TYPE.main>
           </Flex>
         </Flex>
       </BoxStyle>
-        
+
     </>
   )
 }

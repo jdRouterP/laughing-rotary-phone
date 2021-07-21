@@ -130,7 +130,7 @@ const LiveRoundCard: React.FC<LiveRoundCardProps> = ({
       <CardNoise /> */}
       <CardHeader
         status="live"
-        icon={<PlayCircleOutlineIcon mr="4px" width="24px" color="green" />}
+        icon={<PlayCircleOutlineIcon mr="4px" width="24px" color="#29a329" />}
         title={t('Live')}
         epoch={round.epoch}
         blockTime={estimatedEndTime}

@@ -94,9 +94,9 @@ const HistoricalBet: React.FC<BetProps> = ({ bet }) => {
       return (
         <Flex alignItems="center">
           <WaitIcon color="primary" mr="6px" width="24px" />
-          <TYPE.white color="primary" fontWeight={500}>
+          <TYPE.main color="primary" fontWeight={500}>
             {t('Starting Soon')}
-          </TYPE.white>
+          </TYPE.main>
         </Flex>
       )
     }
@@ -105,21 +105,21 @@ const HistoricalBet: React.FC<BetProps> = ({ bet }) => {
       return (
         <Flex alignItems="center">
           <PlayCircleOutlineIcon color="secondary" mr="6px" width="24px" />
-          <TYPE.white fontWeight={500}>
+          <TYPE.main fontWeight={500}>
             {'Live Now'}
-          </TYPE.white>
+          </TYPE.main>
         </Flex>
       )
     }
 
     return (
       <>
-        <TYPE.white fontSize="12px" mb="2px" color="textSubtle">
+        <TYPE.main fontSize="12px" mb="2px" color="textSubtle">
           {t('Your Result')}
-        </TYPE.white>
-        <TYPE.white fontWeight={500} color={resultTextColor} lineHeight={1}>
+        </TYPE.main>
+        <TYPE.main fontWeight={500} color={resultTextColor} lineHeight={1}>
           {roundResult === Result.CANCELED ? t('Canceled') : `${resultTextPrefix}${formatToken(payout)}`}
-        </TYPE.white>
+        </TYPE.main>
       </>
     )
   }
@@ -129,12 +129,12 @@ const HistoricalBet: React.FC<BetProps> = ({ bet }) => {
       <StyledBet onClick={toggleOpen} role="button">
         <Box width="48px">
 
-          <TYPE.white fontSize="12px" mb="2px">
+          <TYPE.main fontSize="12px" mb="2px">
             {'Round'}
-          </TYPE.white>
-          <TYPE.white fontWeight={500} lineHeight={1}>
+          </TYPE.main>
+          <TYPE.main fontWeight={500} lineHeight={1}>
             {round.epoch.toLocaleString()}
-          </TYPE.white>
+          </TYPE.main>
 
         </Box>
         <YourResult pl="50px" >{renderBetLabel()}</YourResult>

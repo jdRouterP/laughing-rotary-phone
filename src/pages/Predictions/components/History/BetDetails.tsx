@@ -30,28 +30,28 @@ const BetDetails: React.FC<BetDetailsProps> = ({ bet, result }) => {
   return (
     <StyledBetDetails>
       {result === Result.CANCELED && (
-        <TYPE.white as="p" color="failure" mb="24px">
+        <TYPE.main as="p" color="failure" mb="24px">
           {t(
             'This round was automatically canceled due to an error. If you entered a position, please reclaim your funds below.',
           )}
-        </TYPE.white>
+        </TYPE.main>
       )}
       {result !== Result.LIVE && <BetResult bet={bet} result={result} />}
       <TYPE.mediumHeader mb="10px" ml="5px">{t('Round History')}</TYPE.mediumHeader>
-      <TYPE.white color=''>
+      <TYPE.main color=''>
         <RoundResult round={bet.round} mb="24px">
           <PayoutRow positionLabel={t('BULL')} multiplier={bullMultiplier} amount={bullAmount} />
           <PayoutRow positionLabel={t('BEAR')} multiplier={bearMultiplier} amount={bearAmount} />
         </RoundResult>
-      </TYPE.white>
+      </TYPE.main>
       {/* <Flex alignItems="center" justifyContent="space-between" mb="8px">
-        <TYPE.white>{t('Opening Block')}</TYPE.white>
-        <TYPE.white>{bet.round.lockBlock}</TYPE.white>
+        <TYPE.main>{t('Opening Block')}</TYPE.main>
+        <TYPE.main>{bet.round.lockBlock}</TYPE.main>
       </Flex>
       <Flex alignItems="center" justifyContent="space-between">
-        <TYPE.white>{t('Closing Block')}</TYPE.white>
+        <TYPE.main>{t('Closing Block')}</TYPE.main>
 
-        <TYPE.white>{bet.round.endBlock}</TYPE.white>
+        <TYPE.main>{bet.round.endBlock}</TYPE.main>
       
       </Flex> */}
     </StyledBetDetails>

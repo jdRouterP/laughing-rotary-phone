@@ -129,23 +129,23 @@ const BetResult: React.FC<BetResultProps> = ({ bet, result }) => {
           <ReclaimPositionButton epoch={bet.round.epoch} width="100%" mb="16px" />
         )}
         <Flex alignItems="center" justifyContent="space-between" mb="10px">
-          <TYPE.white color='textSubtle'>{t('Your direction')}</TYPE.white>
+          <TYPE.main >{t('Your direction')}</TYPE.main>
           <PositionTag betPosition={bet.position}>
             {bet.position === BetPosition.BULL ? t('BULL') : t('BEAR')}
           </PositionTag>
         </Flex>
         <Flex alignItems="center" justifyContent="space-between" mb="16px">
-          <TYPE.white color='textSubtle'>{t('Your position')}</TYPE.white>
-          <TYPE.white color='textSubtle'>{`${formatToken(bet.amount)} MATIC`}</TYPE.white>
+          <TYPE.main >{t('Your position')}</TYPE.main>
+          <TYPE.main >{`${formatToken(bet.amount)} MATIC`}</TYPE.main>
         </Flex>
         <Flex alignItems="start" justifyContent="space-between">
-          <TYPE.white color='textSubtle'>{t('Your Result')}</TYPE.white>
+          <TYPE.main >{t('Your Result')}</TYPE.main>
           <Box style={{ textAlign: 'right' }}>
-            <TYPE.white color={getResultColor()}>{`${result === Result.LOSE ? '-' : '+'}${formatToken(payout)} MATIC`}</TYPE.white>
-            <TYPE.white fontSize="12px" color="textSubtle">
+            <TYPE.main color={getResultColor()}>{`${result === Result.LOSE ? '-' : '+'}${formatToken(payout)} MATIC`}</TYPE.main>
+            <TYPE.main fontSize="12px" color="textSubtle">
               {/* 
               {`~$${formatToken(tokenusdPrice.times(payout).toNumber())}`} */}
-            </TYPE.white>
+            </TYPE.main>
           </Box>
         </Flex>
       </StyledBetResult>

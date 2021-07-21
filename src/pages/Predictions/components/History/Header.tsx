@@ -100,9 +100,9 @@ const Header: React.FC<HeaderProps> = ({ activeTab, setActiveTab }) => {
       </ButtonMenuContainer>
       {activeTab === HistoryTabs.ROUNDS && (
         <>
-          <TYPE.white color="textSubtle" fontSize="16px" mb="10px">
+          <TYPE.main color="textSubtle" fontSize="16px" mb="10px">
             {t('Filter')}
-          </TYPE.white>
+          </TYPE.main>
           <Flex alignItems="center">
             <Filter>
               <Radio
@@ -111,7 +111,7 @@ const Header: React.FC<HeaderProps> = ({ activeTab, setActiveTab }) => {
                 disabled={isFetchingHistory || !account}
                 onChange={handleChange(HistoryFilter.ALL)}
               />
-              <TYPE.white color="textSubtle" ml="4px">{t('All')}</TYPE.white>
+              <TYPE.main color="textSubtle" ml="4px">{t('All')}</TYPE.main>
             </Filter>
             <Filter>
               <Radio
@@ -120,7 +120,7 @@ const Header: React.FC<HeaderProps> = ({ activeTab, setActiveTab }) => {
                 disabled={isFetchingHistory || !account}
                 onChange={handleChange(HistoryFilter.COLLECTED)}
               />
-              <TYPE.white color="textSubtle" ml="4px">{t('Collected')}</TYPE.white>
+              <TYPE.main color="textSubtle" ml="4px">{t('Collected')}</TYPE.main>
             </Filter>
             <Filter>
               <Radio
@@ -129,7 +129,7 @@ const Header: React.FC<HeaderProps> = ({ activeTab, setActiveTab }) => {
                 disabled={isFetchingHistory || !account}
                 onChange={handleChange(HistoryFilter.UNCOLLECTED)}
               />
-              <TYPE.white color="textSubtle" ml="4px">{t('Uncollected')}</TYPE.white>
+              <TYPE.main color="textSubtle" ml="4px">{t('Uncollected')}</TYPE.main>
             </Filter>
           </Flex>
         </>

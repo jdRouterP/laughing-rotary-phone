@@ -18,7 +18,7 @@ const CIRCUMFERENCE = 339.292
 
 const PnlChart: React.FC<PnlChartProps> = ({ lost, won }) => {
   const { t } = useTranslation()
-  const percentageWon = ((won * 100) / (lost + won)).toFixed(2)
+  const percentageWon = lost + won ? ((won * 100) / (lost + won)).toFixed(2) : '0'
   const paintLost = (lost / (won + lost)) * CIRCUMFERENCE
   const paintWon = CIRCUMFERENCE - paintLost
   return (
@@ -28,14 +28,14 @@ const PnlChart: React.FC<PnlChartProps> = ({ lost, won }) => {
         <WonSlice r="54" cx="64" cy="64" length={paintWon} offset={paintLost} />
       </SVG>
       <Info>
-        <TYPE.white lineHeight="1">
+        <TYPE.main lineHeight="1">
           {t('Won')}
-        </TYPE.white>
-        <TYPE.white fontSize="20px" lineHeight="1">
+        </TYPE.main>
+        <TYPE.main fontSize="20px" lineHeight="1">
           {won}/{won + lost}
-        </TYPE.white>
+        </TYPE.main>
         <TYPE.subHeader>
-          {percentageWon}%
+          {percentageWon ? percentageWon : '-'}%
         </TYPE.subHeader>
       </Info>
     </Wrapper>

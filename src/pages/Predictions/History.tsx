@@ -85,7 +85,7 @@ const History = () => {
   if (!account) {
     activeTabComponent = (
       <Flex justifyContent="center" alignItems="center" flexDirection="column" mt="32px">
-        <TYPE.white mt="8px">{t('Connect your wallet to view your prediction history')}</TYPE.white>
+        <TYPE.main mt="8px">{t('Connect your wallet to view your prediction history')}</TYPE.main>
       </Flex>
     )
   }
@@ -98,7 +98,7 @@ const History = () => {
       <BetWrapper>
         {isFetchingHistory ? (
           <SpinnerWrapper>
-            <TYPE.white>Loading...</TYPE.white>
+            <TYPE.main>Loading...</TYPE.main>
           </SpinnerWrapper>
         ) : (
           activeTabComponent
