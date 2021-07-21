@@ -28,13 +28,13 @@ const PnlChart: React.FC<PnlChartProps> = ({ lost, won }) => {
         <WonSlice r="54" cx="64" cy="64" length={paintWon} offset={paintLost} />
       </SVG>
       <Info>
-        <TYPE.white lineHeight="1">
+        <TYPE.white mb="6px" lineHeight="1">
           {t('Won')}
         </TYPE.white>
-        <TYPE.white fontSize="20px" lineHeight="1">
+        <TYPE.white mb="5px" fontSize="17px" lineHeight="1">
           {won}/{won + lost}
         </TYPE.white>
-        <TYPE.subHeader>
+        <TYPE.subHeader fontSize="13px">
           {percentageWon}%
         </TYPE.subHeader>
       </Info>

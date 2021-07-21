@@ -41,6 +41,8 @@ const ReclaimPositionButton: React.FC<ReclaimPositionButtonProps> = ({ epoch, on
 
   return (
     <ButtonPrimary
+      padding={"12px"}
+      width={"30%"}
       onClick={handleReclaim}>
       {children || t('Reclaim Position')}
     </ButtonPrimary>

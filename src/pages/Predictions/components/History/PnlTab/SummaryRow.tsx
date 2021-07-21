@@ -13,7 +13,7 @@ const BoxStyle = styled.div<{color : string}>`
   width:100%;
   max-width: 320px;
   border-radius: 10px;
-  background: ${({color}) => color === "#27AE60" ? 'linear-gradient(0deg, rgba(39, 174, 96, 0.1), rgba(39, 174, 96, 0.1))' : color === "#EB5757" ? 'linear-gradient(0deg, rgba(235, 87, 87, 0.1), rgba(235, 87, 87, 0.1))' : 'rgba(47, 48, 60, 0.1)'};
+  background: ${({color}) => color === "#27AE60" ? 'linear-gradient(0deg, rgba(39, 174, 96, 0.1), rgba(39, 174, 96, 0.1))' : color === "#EB5757" ? 'linear-gradient(0deg, rgba(235, 87, 87, 0.1), rgba(235, 87, 87, 0.1))' : 'rgb(94 96 116 / 10%)'};
   
 `
 

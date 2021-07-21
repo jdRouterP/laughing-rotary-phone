@@ -137,7 +137,7 @@ const PnlTab: React.FC<PnlTabProps> = ({ hasBetHistory, bets }: PnlTabProps) => 
           <TYPE.white color="textSubtle" fontSize="18px" marginLeft="2px">
             {t('Net results')}
           </TYPE.white>
-          <TYPE.white fontSize="24px" marginTop="11px" lineHeight="1" color={netResultIsPositive ? '#29a329' : '#ff471a'}>
+          <TYPE.white fontSize="17px" marginTop="11px" lineHeight="1" color={netResultIsPositive ? '#29a329' : '#ff471a'}>
             {`${netResultIsPositive ? '+' : ''}${formatToken(netResultAmount)} MATIC`}
           </TYPE.white>
           <TYPE.white color="textSubtle" marginTop="5px">
@@ -145,11 +145,11 @@ const PnlTab: React.FC<PnlTabProps> = ({ hasBetHistory, bets }: PnlTabProps) => 
           </TYPE.white>
         </Flex>
       </Flex>
-      <Box pl="8px">
-        <TYPE.white mt="24px" mb="11px" fontWeight="normal" color="textSubtle">
+      <Box>
+        <TYPE.white mt="54px" mb="11px" fontWeight="600" color="textSubtle">
           {t('Average return / round')}
         </TYPE.white>
-        <TYPE.white color={avgTokenWonIsPositive ? '#29a329' : '#ff471a'}>
+        <TYPE.white fontSize="15px" color={avgTokenWonIsPositive ? '#29a329' : '#ff471a'}>
           {`${avgTokenWonIsPositive ? '+' : ''}${formatToken(avgTokenWonPerRound)} MATIC`}
         </TYPE.white>
         <TYPE.white color="textSubtle" fontSize="14px">
@@ -173,10 +173,10 @@ const PnlTab: React.FC<PnlTabProps> = ({ hasBetHistory, bets }: PnlTabProps) => 
           </>
         )}
 
-        <TYPE.white mt="16px" mb="11px" fontWeight="normal" color="textSubtle">
+        <TYPE.white mt="30px" mb="11px" fontWeight="600" color="textSubtle">
           {t('Average position entered / round')}
         </TYPE.white>
-        <TYPE.white fontSize="16px">{`${formatToken(avgPositionEntered)} MATIC`}</TYPE.white>
+        <TYPE.white fontSize="15px">{`${formatToken(avgPositionEntered)} MATIC`}</TYPE.white>
         <TYPE.white color="textSubtle" fontSize="14px">
           {`~$${formatToken(tokenusdPrice * (avgPositionEntered))}`}
         </TYPE.white>
