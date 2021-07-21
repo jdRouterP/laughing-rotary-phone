@@ -137,7 +137,7 @@ const PnlTab: React.FC<PnlTabProps> = ({ hasBetHistory, bets }: PnlTabProps) => 
           <TYPE.main color="textSubtle" fontSize="18px" marginLeft="2px">
             {t('Net results')}
           </TYPE.main>
-          <TYPE.main fontSize="24px" marginTop="11px" lineHeight="1" color={netResultIsPositive ? '#29a329' : '#ff471a'}>
+          <TYPE.main fontSize="17px" marginTop="11px" lineHeight="1" color={netResultIsPositive ? '#29a329' : '#ff471a'}>
             {`${netResultIsPositive ? '+' : ''}${formatToken(netResultAmount)} MATIC`}
           </TYPE.main>
           <TYPE.main color="textSubtle" marginTop="5px">
@@ -146,7 +146,7 @@ const PnlTab: React.FC<PnlTabProps> = ({ hasBetHistory, bets }: PnlTabProps) => 
         </Flex>
       </Flex>
       <Box pl="8px">
-        <TYPE.main mt="24px" mb="11px" fontWeight="normal" color="textSubtle">
+        <TYPE.main mt="54px" mb="11px" fontWeight="600">
           {t('Average return / round')}
         </TYPE.main>
         <TYPE.main color={avgTokenWonIsPositive ? '#29a329' : '#ff471a'}>
@@ -173,7 +173,7 @@ const PnlTab: React.FC<PnlTabProps> = ({ hasBetHistory, bets }: PnlTabProps) => 
           </>
         )}
 
-        <TYPE.main mt="16px" mb="11px" fontWeight="normal" color="textSubtle">
+        <TYPE.main mt="30px" mb="11px" fontWeight="600" color="textSubtle">
           {t('Average position entered / round')}
         </TYPE.main>
         <TYPE.main fontSize="16px">{`${formatToken(avgPositionEntered)} MATIC`}</TYPE.main>

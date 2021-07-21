@@ -58,7 +58,7 @@ const Wrapper = styled(AutoColumn) <{ showBackground: boolean; bgColor: any }>`
   overflow: hidden;
   position: relative;
   background: ${({ theme }) => theme.bg9};
-  border: 1px solid #575A68;
+  // border: 1px solid #575A68;
   box-sizing: border-box;
   box-shadow: 0px 0px 24px rgb(0 0 0 / 10%);
   border-radius: 15px;
@@ -201,8 +201,9 @@ const OpenRoundCard: React.FC<OpenRoundCardProps> = ({
         <RoundResultBox round={round} isNext={true} isLive={!canEnterPosition}>
           {canEnterPosition ? (
             <>
-              <PrizePoolRow totalAmount={round.totalAmount} mb="8px" />
+              <PrizePoolRow totalAmount={round.totalAmount} />
               <ButtonBull
+                mt="8px"
                 padding="10px"
                 variant="success"
                 width="200px"
