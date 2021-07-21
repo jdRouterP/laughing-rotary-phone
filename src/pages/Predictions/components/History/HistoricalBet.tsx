@@ -24,6 +24,17 @@ interface BetProps {
   bet: Bet
 }
 
+
+const Line = styled.div`
+  width:100%;
+  margin-left: 16px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+`
+
+const LineStyled = styled.div`
+  max-width: 360px;
+`
+
 const StyledBet = styled(Flex).attrs({ alignItems: 'center', p: '16px' })`
   cursor: pointer;
 `
@@ -103,7 +114,7 @@ const HistoricalBet: React.FC<BetProps> = ({ bet }) => {
 
     return (
       <>
-        <TYPE.white fontSize="12px" color="textSubtle">
+        <TYPE.white fontSize="12px" mb="2px" color="textSubtle">
           {t('Your Result')}
         </TYPE.white>
         <TYPE.white fontWeight={500} color={resultTextColor} lineHeight={1}>
@@ -118,7 +129,7 @@ const HistoricalBet: React.FC<BetProps> = ({ bet }) => {
       <StyledBet onClick={toggleOpen} role="button">
         <Box width="48px">
           <TYPE.white textAlign="center">
-            <TYPE.white fontSize="12px" color="textSubtle">
+            <TYPE.white fontSize="12px" mb="2px" color="textSubtle">
               {t('Round')}
             </TYPE.white>
             <TYPE.white fontWeight={500} lineHeight={1}>
@@ -126,7 +137,7 @@ const HistoricalBet: React.FC<BetProps> = ({ bet }) => {
             </TYPE.white>
           </TYPE.white>
         </Box>
-        <YourResult px="24px">{renderBetLabel()}</YourResult>
+        <YourResult pl="50px" >{renderBetLabel()}</YourResult>
         {roundResult === Result.WIN && canClaim && (
           <CollectWinningsButton
             hasClaimed={!canClaim}
@@ -150,6 +161,9 @@ const HistoricalBet: React.FC<BetProps> = ({ bet }) => {
           </IconButton>
         )}
       </StyledBet>
+      <LineStyled>
+        <Line />
+      </LineStyled>
       {isOpen && <BetDetails bet={bet} result={getRoundResult(bet, currentEpoch)} />}
     </>
   )

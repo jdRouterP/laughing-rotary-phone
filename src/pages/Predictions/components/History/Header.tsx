@@ -24,11 +24,12 @@ const Filter = styled.label`
 
 const StyledHeader = styled(Box)`
   flex: none;
-  padding: 16px;
+  padding: 18px;
 `
 
 const ButtonMenuContainer = styled.div`
   width: 100%;
+  margin-bottom: 15px;
   & > div {
     width: 100%;
   }
@@ -99,7 +100,7 @@ const Header: React.FC<HeaderProps> = ({ activeTab, setActiveTab }) => {
       </ButtonMenuContainer>
       {activeTab === HistoryTabs.ROUNDS && (
         <>
-          <TYPE.white color="textSubtle" fontSize="12px" mb="8px">
+          <TYPE.white color="textSubtle" fontSize="16px" mb="10px">
             {t('Filter')}
           </TYPE.white>
           <Flex alignItems="center">
@@ -110,7 +111,7 @@ const Header: React.FC<HeaderProps> = ({ activeTab, setActiveTab }) => {
                 disabled={isFetchingHistory || !account}
                 onChange={handleChange(HistoryFilter.ALL)}
               />
-              <TYPE.white ml="4px">{t('All')}</TYPE.white>
+              <TYPE.white color="textSubtle" ml="4px">{t('All')}</TYPE.white>
             </Filter>
             <Filter>
               <Radio
@@ -119,7 +120,7 @@ const Header: React.FC<HeaderProps> = ({ activeTab, setActiveTab }) => {
                 disabled={isFetchingHistory || !account}
                 onChange={handleChange(HistoryFilter.COLLECTED)}
               />
-              <TYPE.white ml="4px">{t('Collected')}</TYPE.white>
+              <TYPE.white color="textSubtle" ml="4px">{t('Collected')}</TYPE.white>
             </Filter>
             <Filter>
               <Radio
@@ -128,7 +129,7 @@ const Header: React.FC<HeaderProps> = ({ activeTab, setActiveTab }) => {
                 disabled={isFetchingHistory || !account}
                 onChange={handleChange(HistoryFilter.UNCOLLECTED)}
               />
-              <TYPE.white ml="4px">{t('Uncollected')}</TYPE.white>
+              <TYPE.white color="textSubtle" ml="4px">{t('Uncollected')}</TYPE.white>
             </Filter>
           </Flex>
         </>
