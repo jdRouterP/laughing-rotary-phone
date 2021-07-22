@@ -13,35 +13,37 @@ interface TimerLabelProps {
 const Closing = styled.div`
     display: flex;
     justify-content: space-between;
-    margin-top:5px;
-    margin-left:5px;
+    margin-top:2px;
+    margin-left:14px;
 `
 
 const Wrapper = styled.div`
     display: grid;
     place-items: center;
-    max-width: 252px;
+    max-width: 280px;
     width: 100%;
     box-sizing: border-box;
     border-radius: 10px;
     border: 1px solid ${({ theme }) => theme.text6};
 `
 const Timer = styled.div`
+    width: 100%;
     display: flex;
     align-items: flex-start;
     border-radius: 10px;
-    padding: 0px 10px;
+    padding-left: 16px;
 `
 
 const CurrentTime = styled.div`
-    font-size: 20px;
+    font-size: 24px;
     font-weight: bold;
     margin-right: 8px;
+    color: #dbb84b;
 `
 
 const TotalTime = styled.div`
-    font-size: 12px;
-    margin-top: 7px;
+    font-size: 14px;
+    margin-top: 6px;
 `
 
 const TimerLabel: React.FC<TimerLabelProps> = ({ interval, unit }: TimerLabelProps) => {

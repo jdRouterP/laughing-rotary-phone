@@ -13,6 +13,7 @@ import CardHeader from './CardHeader'
 import CanceledRoundCard from './CanceledRoundCard'
 // import { useActiveWeb3React } from 'hooks'
 import { AutoColumn } from 'components/Column'
+import { useIsDarkMode } from 'state/user/hooks'
 // import { CardBGImage, CardNoise } from 'components/earn/styled'
 
 interface ExpiredRoundCardProps {
@@ -44,8 +45,9 @@ const CardFooterBlock = styled.div<{ isPositionUp: boolean }>`
   border-radius: 0px 0px 10px 10px;
 `
 
-const Wrapper = styled(AutoColumn) <{ showBackground: boolean }>`
+const Wrapper = styled(AutoColumn) <{ showBackground: boolean; darkMode: boolean }>`
   border-radius: 12px;
+  border: ${({darkMode}) => darkMode ? '' : '1px solid #C3C5CB'};
   width: 100%;
   overflow: hidden;
   position: relative;
@@ -77,6 +79,7 @@ const ContentWrapper = styled.div`
 `
 
 
+
 const ExpiredRoundCard: React.FC<ExpiredRoundCardProps> = ({
   round,
   betAmount,
@@ -90,6 +93,7 @@ const ExpiredRoundCard: React.FC<ExpiredRoundCardProps> = ({
   const { endBlock, lockPrice, closePrice } = round
   const betPosition = closePrice > lockPrice ? BetPosition.BULL : BetPosition.BEAR
   const isPositionUp = betPosition === BetPosition.BULL
+  const darkMode = useIsDarkMode()
   // const bet = useGetBetByRoundId(account, round.id)
   // const payout = getPayout(bet)
 
@@ -98,7 +102,7 @@ const ExpiredRoundCard: React.FC<ExpiredRoundCardProps> = ({
   }
 
   return (
-    <Wrapper showBackground={false}>
+    <Wrapper showBackground={false} darkMode={darkMode}>
       {/* <CardBGImage desaturate />
       <CardNoise /> */}
       <CardHeader

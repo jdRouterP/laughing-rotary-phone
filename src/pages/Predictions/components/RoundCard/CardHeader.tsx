@@ -2,6 +2,7 @@ import React, { ReactElement } from 'react'
 import { Flex } from '@pancakeswap/uikit'
 import styled from 'styled-components'
 import { TYPE } from 'theme'
+import { useIsDarkMode } from 'state/user/hooks'
 
 type Status = 'expired' | 'live' | 'next' | 'upcoming' | 'canceled' | 'calculating'
 
@@ -90,11 +91,13 @@ const CardHeader: React.FC<CardHeaderProps> = ({ status, title, epoch, icon }) =
   // const roundIDColor = getRoundIDColorByStatus(status, 'text')
   const isLive = status === 'live'
 
+  const darkMode = useIsDarkMode()
+
   return (
     <>
       <StyledCardHeader status={status}>
         <Round>
-          <TYPE.main fontSize={isLive ? '18px' : '16px'} textAlign="center">
+          <TYPE.main fontSize={isLive ? '18px' : '16px'} textAlign="center" color={darkMode ? '#FFFFFF' : "#d2a826"}>
             {`Round: ${epoch}`}
           </TYPE.main>
         </Round>

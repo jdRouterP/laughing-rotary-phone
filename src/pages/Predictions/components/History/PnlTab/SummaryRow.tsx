@@ -54,7 +54,7 @@ const SummaryRow: React.FC<SummaryRowProps> = ({ type, summary, tokenusdPrice })
         </TYPE.main>
         <Flex>
           <Flex flex="2" flexDirection="column">
-            <TYPE.main fontSize="20px" color={color}>
+            <TYPE.main fontSize="20px" color={color} mb="3px">
               {rounds} {t('Rounds').toLocaleLowerCase()}
             </TYPE.main>
             <TYPE.main fontSize="12px">
@@ -62,7 +62,7 @@ const SummaryRow: React.FC<SummaryRowProps> = ({ type, summary, tokenusdPrice })
             </TYPE.main>
           </Flex>
           <Flex flex="3" flexDirection="column">
-            <TYPE.main fontSize="20px" color={color}>
+            <TYPE.main fontSize="20px" color={color} mb="3px">
               {`${summaryTypeSigns[type]}${formatToken(displayAmount)} MATIC`}
             </TYPE.main>
             <TYPE.main fontSize="12px">

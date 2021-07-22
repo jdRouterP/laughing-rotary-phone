@@ -6,6 +6,7 @@ import { useGetTotalinterval } from 'state/hook'
 import CardHeader from './CardHeader'
 import styled from 'styled-components'
 import { AutoColumn } from 'components/Column'
+import { useIsDarkMode } from 'state/user/hooks'
 import { TYPE } from 'theme'
 // import { CardBGImage, CardNoise } from 'components/earn/styled'
 
@@ -16,7 +17,7 @@ interface CalculatingCardProps {
 
 const CardHeaderBlock = styled.div`
   text-align: center;
-  margin-top: 23px;
+  margin-top: 30px;
   width: 206px;
   background: linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2));
   border-radius: 10px 10px 0px 0px; 
@@ -29,14 +30,15 @@ const CardFooterBlock = styled.div`
   border-radius: 0px 0px 10px 10px;
 `
 
-const Wrapper = styled(AutoColumn) <{ showBackground: boolean; bgColor: any }>`
+const Wrapper = styled(AutoColumn) <{ showBackground: boolean; bgColor: any; darkMode: boolean }>`
   border-radius: 12px;
+  border: ${({ darkMode }) => darkMode ? '' : '1px solid #C3C5CB'};
   width: 100%;
   overflow: hidden;
   position: relative;
   opacity: ${({ showBackground }) => (showBackground ? '1' : '1')};
   background: ${({ theme }) => theme.bg9};
-  border: 1px solid #575A68;
+  // border: 1px solid #575A68;
   box-sizing: border-box;
   box-shadow: 0px 0px 24px rgba(0, 0, 0, 0.1);
   border-radius: 15px;
@@ -67,7 +69,7 @@ const Content = styled.div`
   border: 1px solid #575A68;
   box-sizing: border-box;
   border-radius: 10px;
-  padding: 50px;
+  padding: 56px;
   display:grid;
   place-items: center;
 `
@@ -82,9 +84,11 @@ const CalculatingCard: React.FC<CalculatingCardProps> = ({ round }) => {
     { placement: 'bottom' },
   )
 
+  const darkMode = useIsDarkMode()
+
   return (
     <>
-      <Wrapper showBackground={false} bgColor={'grey'}>
+      <Wrapper showBackground={false} bgColor={'grey'} darkMode={darkMode}>
         {/* <CardBGImage desaturate />
         <CardNoise /> */}
         <CardHeader
@@ -111,8 +115,8 @@ const CalculatingCard: React.FC<CalculatingCardProps> = ({ round }) => {
             <Flex alignItems="center" justifyContent="center" flexDirection="column">
               <TYPE.main style={{ color: "text2" }}>Loading..</TYPE.main>
               <Flex mt="8px" ref={targetRef}>
-                <TYPE.main style={{ color: "text2" }}>{t('Calculating')}</TYPE.main>
-                <InfoIcon ml="4px" color="#CED0D9" />
+                <TYPE.main style={{ color: darkMode ? '#FFFFFF' : "#ff007a" }}>{t('Calculating')}</TYPE.main>
+                <InfoIcon ml="4px" />
               </Flex>
             </Flex>
           </Content>

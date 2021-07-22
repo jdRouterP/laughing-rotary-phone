@@ -7,6 +7,7 @@ import { BetPosition, Round } from 'state/prediction/types'
 import { TYPE } from 'theme'
 import { RowBetween } from 'components/Row'
 import { BoxProps } from 'rebass'
+import { useIsDarkMode } from 'state/user/hooks'
 
 // PrizePoolRow
 interface PrizePoolRowProps extends FlexProps {
@@ -32,10 +33,11 @@ const Row = ({ children, ...props }) => {
 
 export const PrizePoolRow: React.FC<PrizePoolRowProps> = ({ totalAmount, ...props }) => {
   const { t } = useTranslation()
+  const darkMode = useIsDarkMode()
 
   return (
     <RowBetween>
-      <TYPE.main marginTop={"5px"} fontWeight={600} fontSize="15px">{t('Prize Pool')}:</TYPE.main>
+      <TYPE.main marginTop={"5px"} fontWeight={600} fontSize="15px" color={darkMode ? '#FFFFFF' : "#ff007a"}>{t('Prize Pool')}:</TYPE.main>
       {' '}
       <TYPE.main marginTop={"5px"} fontWeight={600} fontSize="15px">{`${getPrizePoolAmount(totalAmount)} MATIC`}</TYPE.main>
     </RowBetween>

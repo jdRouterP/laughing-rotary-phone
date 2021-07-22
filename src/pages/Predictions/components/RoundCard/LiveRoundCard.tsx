@@ -18,6 +18,7 @@ import { MouseoverTooltip } from 'components/Tooltip'
 import { AutoColumn } from 'components/Column'
 // import { CardBGImage, CardNoise } from 'components/earn/styled'
 import { TYPE } from 'theme'
+import { useIsDarkMode } from 'state/user/hooks'
 
 interface LiveRoundCardProps {
   round: Round
@@ -58,7 +59,8 @@ const CardFooterBlock = styled.div<{ isPositionUp: boolean }>`
 //   background: #64d789;
 // `
 
-const Wrapper = styled(AutoColumn) <{ showBackground: boolean; bgColor: any }>`
+const Wrapper = styled(AutoColumn) <{ showBackground: boolean; bgColor: any; darkMode: boolean }>`
+  border: ${({darkMode}) => darkMode ? '' : '1px solid #C3C5CB'};
   border-radius: 12px;
   width: 100%;
   overflow: hidden;
@@ -110,6 +112,8 @@ const LiveRoundCard: React.FC<LiveRoundCardProps> = ({
     decimals: 3,
   })
 
+  const darkMode = useIsDarkMode()
+
   useEffect(() => {
     let isMounted = true;
     if (isMounted) update(price)
@@ -125,7 +129,7 @@ const LiveRoundCard: React.FC<LiveRoundCardProps> = ({
   }
 
   return (
-    <Wrapper showBackground={hasEnteredUp || hasEnteredDown} bgColor={priceColor}>
+    <Wrapper showBackground={hasEnteredUp || hasEnteredDown} bgColor={priceColor} darkMode={darkMode}>
       {/* <CardBGImage desaturate />
       <CardNoise /> */}
       <CardHeader
@@ -145,7 +149,7 @@ const LiveRoundCard: React.FC<LiveRoundCardProps> = ({
           />
         </CardHeaderBlock>
         <RoundResultBox round={round} betPosition={isBull ? BetPosition.BULL : BetPosition.BEAR}>
-          <TYPE.main fontSize="14px" mb="8px" fontWeight="600">
+          <TYPE.main fontSize="14px" mb="8px" fontWeight="600" color={darkMode ? '#FFFFFF' : "#ff007a"}>
             {t('LAST PRICE')}
           </TYPE.main>
           <Flex alignItems="center" justifyContent="space-between" mb="16px" height="36px">
