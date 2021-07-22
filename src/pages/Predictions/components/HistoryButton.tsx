@@ -6,6 +6,18 @@ import { setHistoryPaneState } from 'state/prediction/reducer'
 import { useGetIsFetchingHistory } from 'state/hook'
 import styled from 'styled-components'
 
+
+
+const NotificationIcon = styled.div`
+  position: absolute;
+  top: -2px;
+  right: -10px;
+  padding: 10px 10px;
+  border-radius: 50%;
+  background: red;
+  color: white;
+`
+
 export const StyledMenuButton = styled.button`
   position: relative;
 
@@ -44,6 +56,7 @@ const HistoryButton = () => {
 
   return (
     <StyledMenuButton onClick={handleClick} disabled={!account}>
+      <NotificationIcon />
       {isFetchingHistory ? <AutoRenewIcon spin color="white" /> : <HistoryIcon width="24px" color="white" />}
     </StyledMenuButton>
   )

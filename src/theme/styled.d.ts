@@ -1,3 +1,4 @@
+import { PancakeTheme } from '@pancakeswap/uikit'
 import { FlattenSimpleInterpolation, ThemedCssFunction } from 'styled-components'
 
 export type Color = string
@@ -14,6 +15,9 @@ export interface Colors {
   text5: Color
   //border
   text6: Color
+  //tab text color
+  text7: Color
+  text8: Color
 
   // backgrounds / greys
   bg1: Color
@@ -25,6 +29,7 @@ export interface Colors {
   bg7: Color
   bg8: Color
   bg9: Color
+  bg10: Color
 
   modalBG: Color
   advancedBG: Color
@@ -60,6 +65,8 @@ export interface Grids {
 }
 
 declare module 'styled-components' {
+  /* eslint-disable @typescript-eslint/no-empty-interface */
+  export interface DefaultTheme1 extends PancakeTheme {}
   export interface DefaultTheme extends Colors {
     grids: Grids
 
