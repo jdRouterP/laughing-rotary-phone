@@ -4,8 +4,8 @@ import {
   Box,
   Radio,
   Flex,
-  ButtonMenu,
-  ButtonMenuItem,
+  // ButtonMenu,
+  // ButtonMenuItem,
 } from '@pancakeswap/uikit'
 import { useDispatch } from 'react-redux'
 import { HistoryFilter } from 'state/prediction/types'
@@ -14,6 +14,7 @@ import { useGetHistoryFilter, useGetIsFetchingHistory } from 'state/hook'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 import { TYPE, CloseIcon } from 'theme'
+import { ButtonTab, ButtonTabItem } from 'components/ButtonTab'
 
 const Filter = styled.label`
   align-items: center;
@@ -93,10 +94,10 @@ const Header: React.FC<HeaderProps> = ({ activeTab, setActiveTab }) => {
         <CloseIcon onClick={handleClick} />
       </Flex>
       <ButtonMenuContainer>
-        <ButtonMenu activeIndex={activeTab} scale="sm" variant="subtle" onItemClick={switchTab}>
-          <ButtonMenuItem>{t('Rounds')}</ButtonMenuItem>
-          <ButtonMenuItem>{t('PNL')}</ButtonMenuItem>
-        </ButtonMenu>
+        <ButtonTab activeIndex={activeTab} onItemClick={switchTab}>
+          <ButtonTabItem>{t('Rounds')}</ButtonTabItem>
+          <ButtonTabItem>{t('PNL')}</ButtonTabItem>
+        </ButtonTab>
       </ButtonMenuContainer>
       {activeTab === HistoryTabs.ROUNDS && (
         <>
