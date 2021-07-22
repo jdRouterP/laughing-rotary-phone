@@ -145,7 +145,7 @@ const PnlTab: React.FC<PnlTabProps> = ({ hasBetHistory, bets }: PnlTabProps) => 
           </TYPE.main>
         </Flex>
       </Flex>
-      <Box pl="8px">
+      <Box>
         <TYPE.main mt="54px" mb="11px" fontWeight="600">
           {t('Average return / round')}
         </TYPE.main>

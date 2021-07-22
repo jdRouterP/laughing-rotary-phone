@@ -15,7 +15,7 @@ interface CalculatingCardProps {
 
 const CardHeaderBlock = styled.div`
   text-align: center;
-  margin-top: 23px;
+  margin-top: 30px;
   width: 206px;
   background: linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2));
   border-radius: 10px 10px 0px 0px; 
@@ -35,7 +35,7 @@ const Wrapper = styled(AutoColumn) <{ showBackground: boolean; bgColor: any }>`
   position: relative;
   opacity: ${({ showBackground }) => (showBackground ? '1' : '1')};
   background: ${({ theme }) => theme.bg9};
-  border: 1px solid #575A68;
+  // border: 1px solid #575A68;
   box-sizing: border-box;
   box-shadow: 0px 0px 24px rgba(0, 0, 0, 0.1);
   border-radius: 15px;
@@ -66,7 +66,7 @@ const Content = styled.div`
   border: 1px solid #575A68;
   box-sizing: border-box;
   border-radius: 10px;
-  padding: 50px;
+  padding: 56px;
   display:grid;
   place-items: center;
 `
