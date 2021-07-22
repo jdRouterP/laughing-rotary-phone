@@ -3,6 +3,7 @@ import { InjectedConnector } from '@web3-react/injected-connector'
 import { WalletConnectConnector } from '@web3-react/walletconnect-connector'
 import { WalletLinkConnector } from '@web3-react/walletlink-connector'
 import { PortisConnector } from '@web3-react/portis-connector'
+
 import { ChainId } from '@dfyn/sdk'
 import { FortmaticConnector } from './Fortmatic'
 import { NetworkConnector } from './NetworkConnector'
@@ -11,9 +12,8 @@ import { RPC } from 'constants/networks'
 
 const FORMATIC_KEY = process.env.REACT_APP_FORTMATIC_KEY
 const PORTIS_ID = process.env.REACT_APP_PORTIS_ID
-const WALLETCONNECT_BRIDGE_URL = process.env.REACT_APP_WALLETCONNECT_BRIDGE_URL
 
-export const NETWORK_CHAIN_ID: number = parseInt('137')
+export const NETWORK_CHAIN_ID: number = 137
 
 export const network = new NetworkConnector({
   defaultChainId: 137,
@@ -31,8 +31,8 @@ export const injected = new InjectedConnector({
 
 // mainnet only
 export const walletconnect = new WalletConnectConnector({
-  rpc: { [ChainId.MAINNET]: RPC[ChainId.MAINNET] },
-  bridge: WALLETCONNECT_BRIDGE_URL,
+  rpc: { 137: RPC[ChainId.MATIC] },
+  bridge: "https://bridge.walletconnect.org",
   qrcode: true,
   pollingInterval: 15000
 })
@@ -51,7 +51,7 @@ export const portis = new PortisConnector({
 
 // mainnet only
 export const walletlink = new WalletLinkConnector({
-  url: RPC[ChainId.MAINNET],
+  url: RPC[ChainId.MATIC],
   appName: 'Dfyn',
   appLogoUrl: UNISWAP_LOGO_URL
 })
