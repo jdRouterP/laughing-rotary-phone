@@ -96,7 +96,7 @@ const Header: React.FC<HeaderProps> = ({ activeTab, setActiveTab }) => {
       <ButtonMenuContainer>
         <ButtonTab activeIndex={activeTab} onItemClick={switchTab}>
           <ButtonTabItem width="50%" mr="5px">{t('Rounds')}</ButtonTabItem>
-          <ButtonTabItem width="50%" color="textSubtle">{t('PNL')}</ButtonTabItem>
+          <ButtonTabItem width="50%" color='text8'>{t('PNL')}</ButtonTabItem>
         </ButtonTab>
       </ButtonMenuContainer>
       {activeTab === HistoryTabs.ROUNDS && (

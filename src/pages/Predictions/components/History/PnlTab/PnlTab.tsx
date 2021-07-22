@@ -201,9 +201,9 @@ const PnlTab: React.FC<PnlTabProps> = ({ hasBetHistory, bets }: PnlTabProps) => 
     </Box>
   ) : (
     <Box p="24px">
-      <TYPE.mediumHeader size="lg" textAlign="center" mb="8px">
+      <TYPE.largeHeader textAlign="center">
         {t('No prediction history available')}
-      </TYPE.mediumHeader>
+      </TYPE.largeHeader>
       <TYPE.main as="p" textAlign="center">
         {t(
           'If you are sure you should see history here, make sure you’re connected to the correct wallet and try again.',
