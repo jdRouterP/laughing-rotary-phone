@@ -26,7 +26,7 @@ interface SummaryRowProps {
 const summaryTypeColors = {
   won: '#27AE60',
   lost: '#EB5757',
-  entered: '#FFFFFF',
+  entered: 'text2',
 }
 
 const summaryTypeSigns = {
@@ -44,8 +44,6 @@ const SummaryRow: React.FC<SummaryRowProps> = ({ type, summary, tokenusdPrice })
   const roundsInPercents = ((rounds * 100) / totalRounds).toFixed(2)
   const typeTranslationKey = type.charAt(0).toUpperCase() + type.slice(1)
   const displayAmount = type === 'won' ? summary[type].payout : amount
-
-  console.log("color", color);
 
 
   return (

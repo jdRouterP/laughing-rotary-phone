@@ -45,10 +45,11 @@ interface SetPositionModalProps {
   onDismiss: () => void
   togglePosition: () => void
   position: BetPosition
+  setLoading: (loading: any) => void
   onSuccess: (decimalValue: string, hash: string) => Promise<void>
 }
 
-export default function PositionModal({ isOpen, position, togglePosition, onDismiss, onSuccess }: SetPositionModalProps) {
+export default function PositionModal({ isOpen, position, togglePosition, setLoading, onDismiss, onSuccess }: SetPositionModalProps) {
 
   const [typedValue, setTypedValue] = useState('')
   const { account, chainId } = useActiveWeb3React()
@@ -101,12 +102,16 @@ export default function PositionModal({ isOpen, position, togglePosition, onDism
       toggleWalletModal()
     } else if (predictionsContract && parsedAmount) {
       setAttempting(true)
+      setLoading((prev: any) => ({
+        ...prev,
+        loading: true
+      }))
       const betMethod = position === BetPosition.BULL ? 'betBull' : 'betBear'
       console.log("bet ", parsedAmount.raw.toString(16), parsedAmount.toSignificant(3));
       predictionsContract?.[betMethod]({ value: `0x${parsedAmount.raw.toString(16)}`, gasLimit: 450000 })
         .then(async (response: TransactionResponse) => {
           addTransaction(response, {
-            summary: `Placed Bet!`
+            summary: `Placed ${position} Bet!`
           })
           setAttempting(false)
           if (onSuccess) {
@@ -115,10 +120,18 @@ export default function PositionModal({ isOpen, position, togglePosition, onDism
         })
         .catch((error: any) => {
           setAttempting(false)
+          setLoading((prev: any) => ({
+            ...prev,
+            loading: false
+          }))
           console.error(error)
         })
     } else {
       setAttempting(false)
+      setLoading((prev: any) => ({
+        ...prev,
+        loading: false
+      }))
       throw new Error('Attempting to stake without approval or a signature. Please contact support.')
     }
   }

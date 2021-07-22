@@ -27,7 +27,7 @@ const ButtonMenuItem: PolymorphicComponent<ButtonMenuItemProps, "button"> = ({
             <InactiveButton
                 forwardedAs={as}
                 variant="tertiary"
-                colorKey={"primary2"}
+                colorKey={"primary1"}
                 {...props}
             />
         );

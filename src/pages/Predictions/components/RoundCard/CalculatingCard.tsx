@@ -1,11 +1,12 @@
 import React from 'react'
-import { Flex, WaitIcon, TooltipText, Text, useTooltip, InfoIcon } from '@pancakeswap/uikit'
+import { Flex, WaitIcon, useTooltip, InfoIcon } from '@pancakeswap/uikit'
 import { useTranslation } from 'react-i18next'
 import { Round } from 'state/prediction/types'
 import { useGetTotalinterval } from 'state/hook'
 import CardHeader from './CardHeader'
 import styled from 'styled-components'
 import { AutoColumn } from 'components/Column'
+import { TYPE } from 'theme'
 // import { CardBGImage, CardNoise } from 'components/earn/styled'
 
 interface CalculatingCardProps {
@@ -88,14 +89,14 @@ const CalculatingCard: React.FC<CalculatingCardProps> = ({ round }) => {
         <CardNoise /> */}
         <CardHeader
           status="calculating"
-          icon={<WaitIcon mr="4px" width="21px" />}
+          icon={<WaitIcon mr="4px" width="21px" color="#CED0D9" />}
           title={t('Calculating')}
           epoch={round.epoch}
           blockTime={estimatedEndTime}
         />
         <ContentWrapper>
           <CardHeaderBlock>
-            <h3 style={{ fontWeight: "normal", color: "white" }}>BULL</h3>
+            <h3 style={{ fontWeight: "normal", color: "text2" }}>BULL</h3>
           </CardHeaderBlock>
           {/* <RoundResultBox>
             <Flex alignItems="center" justifyContent="center" flexDirection="column">
@@ -108,15 +109,15 @@ const CalculatingCard: React.FC<CalculatingCardProps> = ({ round }) => {
           </RoundResultBox> */}
           <Content>
             <Flex alignItems="center" justifyContent="center" flexDirection="column">
-              <Text style={{ color: "white" }}>Loading..</Text>
+              <TYPE.main style={{ color: "text2" }}>Loading..</TYPE.main>
               <Flex mt="8px" ref={targetRef}>
-                <TooltipText style={{ color: "white" }}>{t('Calculating')}</TooltipText>
-                <InfoIcon ml="4px" />
+                <TYPE.main style={{ color: "text2" }}>{t('Calculating')}</TYPE.main>
+                <InfoIcon ml="4px" color="#CED0D9" />
               </Flex>
             </Flex>
           </Content>
           <CardFooterBlock>
-            <h3 style={{ fontWeight: "normal", color: "white" }}>BEAR</h3>
+            <h3 style={{ fontWeight: "normal", color: "text2" }}>BEAR</h3>
           </CardFooterBlock>
         </ContentWrapper>
       </Wrapper>

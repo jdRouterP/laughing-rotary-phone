@@ -16,7 +16,9 @@ import PositionModal from './PositionModal'
 import useCurrentBlockTimestamp from 'hooks/useCurrentBlockTimestamp'
 // import { CardBGImage, CardNoise } from 'components/earn/styled'
 import { AutoColumn } from 'components/Column'
-import { ButtonBull, ButtonBear, ButtonError } from 'components/Button'
+import { ButtonBull, ButtonBear } from 'components/Button'
+import { useMemo } from 'react'
+// import usePersistState from 'hooks/usePersistState'
 
 interface OpenRoundCardProps {
   round: Round
@@ -94,6 +96,11 @@ const OpenRoundCard: React.FC<OpenRoundCardProps> = ({
   const { t } = useTranslation()
   const interval = useGetinterval()
   const { account } = useWeb3React()
+  const [loadingState, setLoadingState] = useState({
+    epoch: round.epoch,
+    loading: false
+  })
+  const loading = useMemo(() => { return loadingState.loading }, [loadingState.loading])
   // const dispatch = useDispatch()
   const currentTimestamp = useCurrentBlockTimestamp()
   const { isSettingPosition, position } = state
@@ -168,7 +175,6 @@ const OpenRoundCard: React.FC<OpenRoundCardProps> = ({
     //     },
     //   }),
     // )
-
     handleBack()
 
     // toastSuccess(
@@ -209,7 +215,7 @@ const OpenRoundCard: React.FC<OpenRoundCardProps> = ({
                 width="200px"
                 onClick={() => handleSetPosition(BetPosition.BULL)}
                 mb="4px"
-                disabled={!canEnterPosition || isBufferPhase}
+                disabled={loading || !canEnterPosition || isBufferPhase}
               >
                 {t('Bet BULL')}
               </ButtonBull>
@@ -218,7 +224,7 @@ const OpenRoundCard: React.FC<OpenRoundCardProps> = ({
                 variant="danger"
                 width="200px"
                 onClick={() => handleSetPosition(BetPosition.BEAR)}
-                disabled={!canEnterPosition || isBufferPhase}
+                disabled={loading || !canEnterPosition || isBufferPhase}
               >
                 {t('Bet BEAR')}
               </ButtonBear>
@@ -226,9 +232,9 @@ const OpenRoundCard: React.FC<OpenRoundCardProps> = ({
           ) : (
             <>
               <div ref={targetRef}>
-                <ButtonError disabled width="100%" mb="8px">
+                <ButtonBear disabled width="100%" mb="8px">
                   {`${positionDisplay} Entered`}
-                </ButtonError>
+                </ButtonBear>
               </div>
               <PrizePoolRow totalAmount={round.totalAmount} />
               {tooltipVisible && tooltip}
@@ -250,6 +256,7 @@ const OpenRoundCard: React.FC<OpenRoundCardProps> = ({
         onDismiss={handleBack}
         onSuccess={handleSuccess}
         position={position}
+        setLoading={setLoadingState}
         togglePosition={togglePosition}
       />
     </Wrapper>

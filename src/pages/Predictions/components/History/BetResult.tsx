@@ -111,7 +111,6 @@ const BetResult: React.FC<BetResultProps> = ({ bet, result }) => {
             roundId={bet.round.id}
             epoch={bet.round.epoch}
             hasClaimed={!canClaim}
-            width="100%"
             mb="16px"
             onSuccess={handleSuccess}
           >

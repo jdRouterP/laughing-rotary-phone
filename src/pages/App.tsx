@@ -41,6 +41,7 @@ import { OpenClaimAddressModalAndRedirectToSwap, RedirectPathToSwapOnly, Redirec
 import VotePage from './Vote/VotePage'
 // import PredictionMarket from './PredictionMarket'
 import Predictions from './Predictions'
+import BetaWarning from './Predictions/components/BetaWarning'
 
 const AppWrapper = styled.div`
   display: flex;
@@ -91,6 +92,7 @@ export default function App() {
       <Route component={DarkModeQueryParamReader} />
       <AppWrapper>
         <URLWarning />
+        <BetaWarning />
         <HeaderWrapper>
           <Header />
         </HeaderWrapper>
