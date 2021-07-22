@@ -17,6 +17,7 @@ import useCurrentBlockTimestamp from 'hooks/useCurrentBlockTimestamp'
 // import { CardBGImage, CardNoise } from 'components/earn/styled'
 import { AutoColumn } from 'components/Column'
 import { ButtonBull, ButtonBear, ButtonError } from 'components/Button'
+import { useIsDarkMode } from 'state/user/hooks'
 
 interface OpenRoundCardProps {
   round: Round
@@ -52,8 +53,9 @@ const CardFooterBlock = styled.div`
 `
 
 
-const Wrapper = styled(AutoColumn) <{ showBackground: boolean; bgColor: any }>`
+const Wrapper = styled(AutoColumn) <{ showBackground: boolean; bgColor: any; darkMode: boolean }>`
   border-radius: 12px;
+  border: ${({darkMode}) => darkMode ? '' : '1px solid #C3C5CB'};
   width: 100%;
   overflow: hidden;
   position: relative;
@@ -183,8 +185,10 @@ const OpenRoundCard: React.FC<OpenRoundCardProps> = ({
   //   return position === BetPosition.BULL ? <ArrowUpIcon color="currentColor" /> : <ArrowDownIcon color="currentColor" />
   // }
 
+  const darkMode = useIsDarkMode()
+  
   return (
-    <Wrapper showBackground={false} bgColor={'blue'} >
+    <Wrapper showBackground={false} bgColor={'blue'} darkMode={darkMode}>
       {/* <CardBGImage desaturate />
       <CardNoise /> */}
       <CardHeader

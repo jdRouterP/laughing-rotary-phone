@@ -6,6 +6,7 @@ import { formatUsd } from '../../helpers'
 import PositionTag from '../PositionTag'
 import { LockPriceRow, PrizePoolRow, RoundResultBox } from './styles'
 import { TYPE } from 'theme'
+import { useIsDarkMode } from 'state/user/hooks'
 
 interface RoundResultProps extends BoxProps {
   round: Round
@@ -17,14 +18,15 @@ const RoundResult: React.FC<RoundResultProps> = ({ round, children, ...props }) 
   const isPositionUp = betPosition === BetPosition.BULL
   const { t } = useTranslation()
   const priceDifference = closePrice - lockPrice
+  const darkMode = useIsDarkMode()
 
   return (
     <RoundResultBox round={round} betPosition={betPosition} {...props}>
-      <TYPE.main fontSize="14px" fontWeight={600} mb="8px">
+      <TYPE.main fontSize="14px" fontWeight={600} mb="8px" color={darkMode ? '#FFFFFF' : "#ff007a"}>
         {t('CLOSED PRICE')}
       </TYPE.main>
       {round.failed ? (
-        <TYPE.main fontSize="14px" fontWeight={600} mb="8px">
+        <TYPE.main fontSize="14px" fontWeight={600} mb="8px" color={darkMode ? '#FFFFFF' : "#ff007a"}>
           {t('CANCELLED')}
         </TYPE.main>
       ) : (

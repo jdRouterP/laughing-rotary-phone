@@ -149,7 +149,7 @@ const PnlTab: React.FC<PnlTabProps> = ({ hasBetHistory, bets }: PnlTabProps) => 
         <TYPE.main mt="54px" mb="11px" fontWeight="600">
           {t('Average return / round')}
         </TYPE.main>
-        <TYPE.main color={avgTokenWonIsPositive ? '#29a329' : '#ff471a'}>
+        <TYPE.main color={avgTokenWonIsPositive ? '#29a329' : '#ff471a'} mb="5px">
           {`${avgTokenWonIsPositive ? '+' : ''}${formatToken(avgTokenWonPerRound)} MATIC`}
         </TYPE.main>
         <TYPE.main color="textSubtle" fontSize="14px">
@@ -176,7 +176,7 @@ const PnlTab: React.FC<PnlTabProps> = ({ hasBetHistory, bets }: PnlTabProps) => 
         <TYPE.main mt="30px" mb="11px" fontWeight="600" color="textSubtle">
           {t('Average position entered / round')}
         </TYPE.main>
-        <TYPE.main fontSize="16px">{`${formatToken(avgPositionEntered)} MATIC`}</TYPE.main>
+        <TYPE.main fontSize="16px" mb="5px">{`${formatToken(avgPositionEntered)} MATIC`}</TYPE.main>
         <TYPE.main color="textSubtle" fontSize="14px">
           {`~$${formatToken(tokenusdPrice * (avgPositionEntered))}`}
         </TYPE.main>

@@ -8,6 +8,7 @@ import useIsRefundable from '../../hooks/useIsRefundable'
 import CardHeader from './CardHeader'
 import styled from 'styled-components'
 import { AutoColumn } from 'components/Column'
+import { useIsDarkMode } from 'state/user/hooks'
 // import { CardBGImage, CardNoise } from 'components/earn/styled'
 
 interface CanceledRoundCardProps {
@@ -29,8 +30,9 @@ const CardFooterBlock = styled.div`
   border-radius: 0px 0px 10px 10px;
 `
 
-const Wrapper = styled(AutoColumn) <{ showBackground: boolean; bgColor: any }>`
+const Wrapper = styled(AutoColumn) <{ showBackground: boolean; bgColor: any; darkMode: boolean }>`
   border-radius: 12px;
+  border: ${({darkMode}) => darkMode ? '' : '1px solid #C3C5CB'};
   width: 100%;
   overflow: hidden;
   position: relative;
@@ -75,7 +77,7 @@ const Content = styled.div`
 const EntryTitle = styled.div`
     font-size: 16px;
     font-weight: bold;
-    color: "white"
+    color: 
 `
 
 const CanceledRoundCard: React.FC<CanceledRoundCardProps> = ({ round }) => {
@@ -84,6 +86,8 @@ const CanceledRoundCard: React.FC<CanceledRoundCardProps> = ({ round }) => {
   const { isRefundable, setIsRefundable } = useIsRefundable(round.epoch)
   const { epoch, startAt } = round
   const estimatedEndTime = startAt + interval
+
+  const darkMode = useIsDarkMode()
 
   const handleSuccess = async () => {
     setIsRefundable(false)
@@ -96,7 +100,7 @@ const CanceledRoundCard: React.FC<CanceledRoundCardProps> = ({ round }) => {
 
 
   return (
-    <Wrapper showBackground={false} bgColor={'grey'}>
+    <Wrapper showBackground={false} bgColor={'grey'} darkMode={darkMode}>
       {/* <CardBGImage desaturate /> */}
       {/* <CardNoise /> */}
       <CardHeader
@@ -111,7 +115,7 @@ const CanceledRoundCard: React.FC<CanceledRoundCardProps> = ({ round }) => {
           <h3 style={{ fontWeight: "normal", color: "text2" }}>BULL</h3>
         </CardHeaderBlock>
         <Content>
-          <EntryTitle>
+          <EntryTitle style={{color: darkMode ? '#FFFFFF' : "#ff007a"}}>
             {t('Round Canceled')}
           </EntryTitle>
           {isRefundable && <ReclaimPositionButton epoch={epoch} onSuccess={handleSuccess} width="100%" my="8px" />}

@@ -8,6 +8,7 @@ import useRoundCountdown from '../../hooks/useRoundCountdown'
 import CardHeader from './CardHeader'
 import styled from 'styled-components'
 import { AutoColumn } from 'components/Column'
+import { useIsDarkMode } from 'state/user/hooks'
 // import { CardBGImage, CardNoise } from 'components/earn/styled'
 
 interface SoonRoundCardProps {
@@ -30,8 +31,9 @@ const CardFooterBlock = styled.div`
   border-radius: 0px 0px 10px 10px;
 `
 
-const Wrapper = styled(AutoColumn) <{ showBackground: boolean; bgColor: any }>`
+const Wrapper = styled(AutoColumn) <{ showBackground: boolean; bgColor: any; darkMode: boolean }>`
   border-radius: 12px;
+  border: ${({darkMode}) => darkMode ? '' : '1px solid #C3C5CB'};
   width: 100%;
   overflow: hidden;
   position: relative;
@@ -88,9 +90,10 @@ const SoonRoundCard: React.FC<SoonRoundCardProps> = ({ round }) => {
 
   const seconds = useRoundCountdown(round.epoch - currentEpoch + 1)
   const countdown = formatRoundTime(seconds)
+  const darkMode = useIsDarkMode()
 
   return (
-    <Wrapper showBackground={false} bgColor={"#2989A5"}>
+    <Wrapper showBackground={false} bgColor={"#2989A5"} darkMode={darkMode}>
       {/* <CardBGImage desaturate />
       <CardNoise /> */}
       <CardHeader
@@ -105,7 +108,7 @@ const SoonRoundCard: React.FC<SoonRoundCardProps> = ({ round }) => {
           <h3 style={{ fontWeight: "normal", color: "text2" }}>BULL</h3>
         </CardHeaderBlock>
         <Content>
-          <EntryTitle>
+          <EntryTitle style={{color: darkMode ? '#FFFFFF' : "#ff007a"}}>
             Entry Starting in
           </EntryTitle>
           <EntryTimer>

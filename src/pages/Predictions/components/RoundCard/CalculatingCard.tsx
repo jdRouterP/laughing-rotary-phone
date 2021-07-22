@@ -6,6 +6,7 @@ import { useGetTotalinterval } from 'state/hook'
 import CardHeader from './CardHeader'
 import styled from 'styled-components'
 import { AutoColumn } from 'components/Column'
+import { useIsDarkMode } from 'state/user/hooks'
 // import { CardBGImage, CardNoise } from 'components/earn/styled'
 
 interface CalculatingCardProps {
@@ -28,8 +29,9 @@ const CardFooterBlock = styled.div`
   border-radius: 0px 0px 10px 10px;
 `
 
-const Wrapper = styled(AutoColumn) <{ showBackground: boolean; bgColor: any }>`
+const Wrapper = styled(AutoColumn) <{ showBackground: boolean; bgColor: any; darkMode: boolean }>`
   border-radius: 12px;
+  border: ${({darkMode}) => darkMode ? '' : '1px solid #C3C5CB'};
   width: 100%;
   overflow: hidden;
   position: relative;
@@ -81,9 +83,11 @@ const CalculatingCard: React.FC<CalculatingCardProps> = ({ round }) => {
     { placement: 'bottom' },
   )
 
+  const darkMode = useIsDarkMode()
+
   return (
     <>
-      <Wrapper showBackground={false} bgColor={'grey'}>
+      <Wrapper showBackground={false} bgColor={'grey'} darkMode={darkMode}>
         {/* <CardBGImage desaturate />
         <CardNoise /> */}
         <CardHeader
@@ -110,7 +114,7 @@ const CalculatingCard: React.FC<CalculatingCardProps> = ({ round }) => {
             <Flex alignItems="center" justifyContent="center" flexDirection="column">
               <Text style={{ color: "white" }}>Loading..</Text>
               <Flex mt="8px" ref={targetRef}>
-                <TooltipText style={{ color: "white" }}>{t('Calculating')}</TooltipText>
+                <TooltipText style={{ color: darkMode ? '#FFFFFF' : "#ff007a" }}>{t('Calculating')}</TooltipText>
                 <InfoIcon ml="4px" />
               </Flex>
             </Flex>

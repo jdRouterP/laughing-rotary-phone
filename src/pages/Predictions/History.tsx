@@ -93,7 +93,7 @@ const History = () => {
     dispatch(setHistoryPaneState(!isHistoryPaneOpen))
   }
   return (
-    <Modal flexdirection='column' minHeight={70} isOpen={isHistoryPaneOpen} onDismiss={handleClick}>
+    <Modal flexdirection='column' minHeight={70} maxHeight={70} isOpen={isHistoryPaneOpen} onDismiss={handleClick}>
       <Header activeTab={activeTab} setActiveTab={setActiveTab} />
       <BetWrapper>
         {isFetchingHistory ? (

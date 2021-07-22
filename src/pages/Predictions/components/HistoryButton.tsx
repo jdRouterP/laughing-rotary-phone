@@ -10,9 +10,9 @@ import styled from 'styled-components'
 
 const NotificationIcon = styled.div`
   position: absolute;
-  top: -2px;
-  right: -10px;
-  padding: 10px 10px;
+  top: -0px;
+  right: -3px;
+  padding: 5px 5px;
   border-radius: 50%;
   background: red;
   color: white;
