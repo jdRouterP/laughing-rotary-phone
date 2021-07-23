@@ -15,18 +15,34 @@ const Wrapper = styled.div`
     margin-left: 8px;
     padding: 0.15rem 0.5rem;
     border-radius: 0.5rem;
+    margin-right: 15px;
+    border: 1px solid ${({ theme }) => theme.text6};
+
+    ${({ theme }) => theme.mediaWidth.upToSmall`
+    width: 260px;
+    margin-bottom: 10px;
+    padding: 0px;
+  `};
 `
 const PriceFeed = styled.div`
     display: flex;
     align-items: flex-start;
     border-radius: 10px;
     padding: 13px 13px;
+    ${({ theme }) => theme.mediaWidth.upToSmall`
+        padding: 5px 5px;
+  `};
 `
 
 const TradingPair = styled.div`
     font-size: 24px;
     font-weight: 600;
     margin-right: 10px;
+    ${({ theme }) => theme.mediaWidth.upToSmall`
+    font-size: 20px;
+    font-weight: 500;
+    margin-right: 5px;
+  `};
 `
 
 const CurrentPrice = styled.div`
