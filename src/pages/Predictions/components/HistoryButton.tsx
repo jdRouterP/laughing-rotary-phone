@@ -32,7 +32,7 @@ export const StyledMenuButton = styled.button`
   padding: 0.15rem 0.5rem;
   border-radius: 0.5rem;
 
-  :hover,
+  :hover:not(:disabled),
   :focus {
     cursor: pointer;
     outline: none;

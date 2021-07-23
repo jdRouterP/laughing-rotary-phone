@@ -17,7 +17,6 @@ import PageLoader from 'components/PageLoader'
 import usePollOraclePrice from './hooks/usePollOraclePrice'
 import usePollRoundData from './hooks/usePollRoundData'
 import Container from './components/Container'
-import CollectWinningsPopup from './components/CollectWinningsPopup'
 import SwiperProvider from './context/SwiperProvider'
 import Desktop from './Desktop'
 // import Mobile from './Mobile'
@@ -126,7 +125,6 @@ const Predictions = () => {
         <SwiperProvider>
           <Container>
             <Desktop />
-            <CollectWinningsPopup />
           </Container>
         </SwiperProvider>
       </SCThemeProvider>

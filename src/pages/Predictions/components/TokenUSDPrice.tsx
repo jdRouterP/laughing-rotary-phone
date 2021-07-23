@@ -2,6 +2,8 @@ import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import { useCountUp } from 'react-countup'
 import { useGetLastOraclePrice } from 'state/hook'
+// import CurrencyLogo from 'components/CurrencyLogo'
+// import { WMATIC } from '../../../constants'
 
 const Wrapper = styled.div`
     display: grid;
@@ -54,6 +56,7 @@ const TokenUSDPrice: React.FC = () => {
     return (
         <Wrapper>
             <PriceFeed>
+                {/* <CurrencyLogo size="20px" style={{ marginLeft: '8px' }} currency={} /> */}
                 <TradingPair>
                     MATIC/USD
                 </TradingPair>

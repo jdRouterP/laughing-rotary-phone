@@ -11,11 +11,15 @@ const useGetLatestOraclePrice = () => {
 
   useEffect(() => {
     const fetchPrice = async () => {
-      const response = await chainlinkOracleContract?.latestAnswer()
+      try {
+        const response = await chainlinkOracleContract?.latestAnswer()
+        const tokenAmountUSD = new TokenAmount(MATIC_USD, JSBI.BigInt(response)).toSignificant(6);
+        setPrice(tokenAmountUSD)
+      } catch (error) {
+        console.log(error);
+      }
 
-      const tokenAmountUSD = new TokenAmount(MATIC_USD, JSBI.BigInt(response)).toSignificant(6);
 
-      setPrice(tokenAmountUSD)
     }
 
     fetchPrice()
