@@ -40,6 +40,12 @@ const StyledMenuButton = styled.button`
   svg {
     margin-top: 2px;
   }
+
+  ${({ theme }) => theme.mediaWidth.upToExtraSmall`
+    font-size: 10px;
+    margin-right: 2px;
+    padding: 1px 4px;
+`};
 `
 
 

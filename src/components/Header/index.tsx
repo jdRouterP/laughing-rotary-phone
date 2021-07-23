@@ -147,6 +147,10 @@ const HeaderLinks = styled(Row)`
     padding: 1rem 2rem 1rem 1rem;
     justify-content: flex-end;
 `};
+
+${({ theme }) => theme.mediaWidth.upToExtraSmall`
+  padding: 1rem 0rem 1rem 1rem;
+`};
 `
 
 const AccountElement = styled.div<{ active: boolean }>`
@@ -262,6 +266,10 @@ const StyledNavLink = styled(NavLink).attrs({
   margin: 0 12px;
   font-weight: 500;
 
+  ${({ theme }) => theme.mediaWidth.upToExtraSmall`
+    margin: 0 6px;
+  `};
+
   &.${activeClassName} {
     border-radius: 12px;
     font-weight: 600;
@@ -366,7 +374,7 @@ export default function Header() {
 
   const countUpValue = aggregateBalance?.toFixed(0) ?? '0'
   const countUpValuePrevious = usePrevious(countUpValue) ?? '0'
-
+  
   return (
     <HeaderFrame>
       <ClaimModal />
