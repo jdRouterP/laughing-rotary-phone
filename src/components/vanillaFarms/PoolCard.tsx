@@ -128,7 +128,7 @@ export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) 
           {currency0.symbol}-{currency1.symbol}
         </TYPE.white>
 
-        <StyledInternalLink to={`/eco-farms/${currencyId(currency0, chainId)}/${currencyId(currency1, chainId)}`} style={{ width: '100%' }}>
+        <StyledInternalLink to={`/eco-farms/${currencyId(currency0, chainId)}/${currencyId(currency1, chainId)}/${stakingInfo.version}`} style={{ width: '100%' }}>
           <ButtonPrimary padding="8px" borderRadius="8px">
             {isStaking ? 'Manage' : 'Deposit'}
           </ButtonPrimary>

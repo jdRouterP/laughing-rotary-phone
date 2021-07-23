@@ -21,6 +21,7 @@ export const STAKING_REWARDS_INFO: {
     baseToken?: Token
     start: number
     stakingRewardAddress: string
+    version: string
   }[]
 } = {
   [ChainId.MATIC]: [
@@ -29,84 +30,96 @@ export const STAKING_REWARDS_INFO: {
       rewardTokens: [DFYN, FRM],
       baseToken: DFYN,
       start: 1626183000000,
-      stakingRewardAddress: '0x038CDc7A25FEF0c7b3abD5C2a47071ba202Bbaf6'
+      stakingRewardAddress: '0x038CDc7A25FEF0c7b3abD5C2a47071ba202Bbaf6',
+      version: 'v1'
     },
     {
       tokens: [XUSD, DFYN],
       rewardTokens: [DFYN, XDO],
       baseToken: DFYN,
       start: 1624980600000,
-      stakingRewardAddress: '0xc6Cface612849C1D378Fbfe8Bdf49D01bbf569Bb'
+      stakingRewardAddress: '0xc6Cface612849C1D378Fbfe8Bdf49D01bbf569Bb',
+      version: 'v1'
     },
     {
       tokens: [ROUTE, DFYN],
       rewardTokens: [ROUTE, DFYN],
       baseToken: DFYN,
       start: 1622033000000,
-      stakingRewardAddress: '0xf997c8e2e7e7387C8fd9120280ad9B3db31A5381'
+      stakingRewardAddress: '0xf997c8e2e7e7387C8fd9120280ad9B3db31A5381',
+      version: 'v1'
     },
     {
       tokens: [EZ, DFYN],
       rewardTokens: [DFYN, EZ],
       baseToken: DFYN,
       start: 1624552200000,
-      stakingRewardAddress: '0xA8453cFae7EC47e7099115789258226C5cb75534'
+      stakingRewardAddress: '0xA8453cFae7EC47e7099115789258226C5cb75534',
+      version: 'v1'
     },
     {
       tokens: [UFARM, DFYN],
       rewardTokens: [DFYN, UFARM],
       baseToken: DFYN,
       start: 1624552200000,
-      stakingRewardAddress: '0x7ba448d0b438723fFffDB3b842AA72e6EB7588C5'
+      stakingRewardAddress: '0x7ba448d0b438723fFffDB3b842AA72e6EB7588C5',
+      version: 'v1'
     },
     {
       tokens: [NWC, DFYN],
       rewardTokens: [DFYN, NWC],
       baseToken: DFYN,
       start: 1624552200000,
-      stakingRewardAddress: '0x91174CBa63E8A2A1755ba473820183e4e64a3Dc8'
+      stakingRewardAddress: '0x91174CBa63E8A2A1755ba473820183e4e64a3Dc8',
+      version: 'v1'
     },
     {
       tokens: [mRTK, DFYN],
       rewardTokens: [DFYN, mRTK],
       baseToken: DFYN,
       start: 1624552200000,
-      stakingRewardAddress: '0x5190430648eD5E8879665c36e0CE8Bd76f1449B8'
+      stakingRewardAddress: '0x5190430648eD5E8879665c36e0CE8Bd76f1449B8',
+      version: 'v1'
     },
     {
       tokens: [SX, DFYN],
       rewardTokens: [DFYN, SX],
       baseToken: DFYN,
       start: 1623947400000,
-      stakingRewardAddress: '0x9a9592279B61A875BEc036091D96cc4093B374C0'
+      stakingRewardAddress: '0x9a9592279B61A875BEc036091D96cc4093B374C0',
+      version: 'v1'
     },
     {
       tokens: [BOOTY, DFYN],
       rewardTokens: [DFYN, BOOTY],
       baseToken: DFYN,
       start: 1623762000000,
-      stakingRewardAddress: '0x2980acaa5cBcA993B3868ef54B88CE328bCA06f7'
+      stakingRewardAddress: '0x2980acaa5cBcA993B3868ef54B88CE328bCA06f7',
+      version: 'v1'
     },
     {
       tokens: [ROYA, DFYN],
       rewardTokens: [DFYN, ROYA],
       baseToken: DFYN,
       start: 1623762000000,
-      stakingRewardAddress: '0x32c449fcA14954b3848378c01C5439d525c2f0b2'
+      stakingRewardAddress: '0x32c449fcA14954b3848378c01C5439d525c2f0b2',
+      version: 'v1'
     },
     {
       tokens: [ZEE, DFYN],
       rewardTokens: [DFYN, ZEE],
       baseToken: DFYN,
       start: 1622133000000,
-      stakingRewardAddress: '0xfB75d80e141b91535dA513370D4Dd33D0E19d308'
+      stakingRewardAddress: '0xfB75d80e141b91535dA513370D4Dd33D0E19d308',
+      version: 'v1'
     },
     {
       tokens: [AURORA, DFYN],
       rewardTokens: [DFYN, AURORA],
       baseToken: DFYN,
       start: 1622478600000,
-      stakingRewardAddress: '0x4Dd06f2D7746330C279Fdfa7a75407165eb1D845'
+      stakingRewardAddress: '0x4Dd06f2D7746330C279Fdfa7a75407165eb1D845',
+      version: 'v1'
     }
   ]
 }
@@ -123,6 +136,7 @@ export interface StakingInfo {
   baseToken: any
   tokens: [Token, Token]
   rewardAddresses: [Token, Token]
+  version: string
   // the amount of token currently staked, or undefined if no account
   stakedAmount: TokenAmount
   // the amount of reward token earned by the active account, or undefined if no account
@@ -154,7 +168,7 @@ export interface StakingInfo {
 }
 
 // gets the staking info from the network for the active chain id
-export function useStakingInfo(pairToFilterBy?: Pair | null): StakingInfo[] {
+export function useStakingInfo(pairToFilterBy?: Pair | null, version: string = 'v1'): StakingInfo[] {
   const { chainId, account } = useActiveWeb3React()
   // detect if staking is ended
   const currentBlockTimestamp = useCurrentBlockTimestamp()
@@ -168,10 +182,10 @@ export function useStakingInfo(pairToFilterBy?: Pair | null): StakingInfo[] {
             : pairToFilterBy === null
               ? false
               : pairToFilterBy.involvesToken(stakingRewardInfo.tokens[0]) &&
-              pairToFilterBy.involvesToken(stakingRewardInfo.tokens[1])
+              pairToFilterBy.involvesToken(stakingRewardInfo.tokens[1]) && version === stakingRewardInfo.version
         ) ?? []
         : [],
-    [chainId, pairToFilterBy]
+    [chainId, pairToFilterBy, version]
   )
 
   const uni = chainId ? UNI[chainId] : undefined
@@ -297,6 +311,7 @@ export function useStakingInfo(pairToFilterBy?: Pair | null): StakingInfo[] {
           rewardAddresses,
           stakingRewardAddress: rewardsAddress,
           baseToken: info[index].baseToken,
+          version: info[index].version,
           tokens: info[index].tokens,
           periodFinish: periodFinishMs > 0 ? new Date(periodFinishMs) : undefined,
           earnedAmount: new TokenAmount(rewardTokenOne, JSBI.BigInt(earnedAmountState?.result?.[1][0] ?? 0)),
