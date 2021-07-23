@@ -25,13 +25,24 @@ const Wrapper = styled.div`
     box-sizing: border-box;
     border-radius: 10px;
     border: 1px solid ${({ theme }) => theme.text6};
+
+    ${({ theme }) => theme.mediaWidth.upToSmall`
+        width: 260px;
+        margin-left: 8px;
+  `};
 `
 const Timer = styled.div`
     width: 100%;
     display: flex;
     align-items: flex-start;
     border-radius: 10px;
-    padding-left: 16px;
+    padding: 0px 10px;
+    justify-content: center;
+    
+    ${({ theme }) => theme.mediaWidth.upToSmall`
+        padding-right: 8px;
+        justify-content: center;
+  `};
 `
 
 const CurrentTime = styled.div`
@@ -39,11 +50,20 @@ const CurrentTime = styled.div`
     font-weight: bold;
     margin-right: 8px;
     color: #dbb84b;
+    ${({ theme }) => theme.mediaWidth.upToSmall`
+    font-size: 20px;
+    font-weight: 500;
+    margin-right: 5px;
+  `};
 `
 
 const TotalTime = styled.div`
     font-size: 14px;
     margin-top: 6px;
+    ${({ theme }) => theme.mediaWidth.upToSmall`
+    font-size: 10px;
+    margin-top: 4px;
+  `};
 `
 
 const TimerLabel: React.FC<TimerLabelProps> = ({ interval, unit }: TimerLabelProps) => {

@@ -24,6 +24,9 @@ const StyledSwiper = styled.div`
 
 const MenuWrapper = styled.div`
   margin: 2px 45px;
+  ${({ theme }) => theme.mediaWidth.upToSmall`
+    margin: 2px;
+  `};
 `
 const Positions: React.FC = () => {
   const { setSwiper } = useSwiper()

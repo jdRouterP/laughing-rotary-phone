@@ -21,16 +21,22 @@ const NotificationIcon = styled.div`
 
 export const StyledMenuButton = styled.button`
   position: relative;
-
   border: none;
   background-color: transparent;
-  margin: 0;
-  padding: 0;
   width: 55px;
   background-color: ${({ theme }) => theme.bg3};
   margin-left: 8px;
   padding: 0.15rem 0.5rem;
   border-radius: 0.5rem;
+
+  
+  ${({ theme }) => theme.mediaWidth.upToSmall`
+      position: relative;
+      man-width: 55px;
+      height: 55px;
+      padding: 0px;
+      margin-left: 5px;
+  `};
 
   :hover:not(:disabled),
   :focus {

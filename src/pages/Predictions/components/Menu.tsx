@@ -43,13 +43,30 @@ const Header = styled.div`
     display: flex;
     justify-content: space-between;
     margin-bottom: 30px;
+
+    ${({ theme }) => theme.mediaWidth.upToSmall`
+    margin-bottom: 16px;
+  `};
+`
+
+const StyleItem = styled.div`
+    display: flex;
+    justify-content: space-between;
+    width: 62%;
+    ${({ theme }) => theme.mediaWidth.upToSmall`
+    width: 280px;
+    flex-direction: column;
+    justify-content: space-around;
+  `};
 `
 
 const Menu = () => {
   return (
     <Header>
-      <TokenUSDPrice />
-      <TimerLabel interval="10" unit="min" />
+      <StyleItem>
+        <TokenUSDPrice />
+        <TimerLabel interval="10" unit="min" />
+      </StyleItem>
       <HistoryButton />
     </Header>
   )
