@@ -24,12 +24,6 @@ export const MULTI_STAKING_REWARDS_INFO: {
   [ChainId.MATIC]: [
     {
       vaultName: 'Route 6-month vault',
-      vaultAddress: '0x412A37C9AFF3ca2e2469aC028D2f98aC151313d8',
-      multiplier: 2,
-      startedOn: 1627137000
-    },
-    {
-      vaultName: 'Route 6-month vault',
       vaultAddress: '0x49bDD84209612b4Cb76806aA4EE458e94A12A0A7',
       multiplier: 2,
       startedOn: 1622642031
