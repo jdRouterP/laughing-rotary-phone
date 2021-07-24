@@ -95,6 +95,12 @@ export default function PoolCard({ multiStakingInfo }: { multiStakingInfo: Multi
       <StatContainer>
         {!showDepositButton && <Countdown startTime={multiStakingInfo?.genesis} exactEnd={1622695014} message={"Staking starts in "}></Countdown>}
         <RowBetween>
+          <TYPE.white> Launch Date</TYPE.white>
+          <TYPE.white>
+            {multiStakingInfo && `${new Date(multiStakingInfo.startedOn * 1000).toDateString()}`}
+          </TYPE.white>
+        </RowBetween>
+        <RowBetween>
           <TYPE.white> Total deposited</TYPE.white>
           <TYPE.white>
             {multiStakingInfo && `${multiStakingInfo.totalStakedAmount.toFixed(0, { groupSeparator: ',' })} ROUTE`}

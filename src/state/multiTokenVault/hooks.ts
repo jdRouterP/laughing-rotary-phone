@@ -18,13 +18,15 @@ export const MULTI_STAKING_REWARDS_INFO: {
     vaultName: string
     vaultAddress: string
     multiplier: number
+    startedOn: number
   }[]
 } = {
   [ChainId.MATIC]: [
     {
       vaultName: 'Route 6-month vault',
       vaultAddress: '0x49bDD84209612b4Cb76806aA4EE458e94A12A0A7',
-      multiplier: 2
+      multiplier: 2,
+      startedOn: 1627121944
     },
   ]
 }
@@ -35,6 +37,7 @@ export interface MultiStakingInfo {
   vaultName: string
   genesis: number
   rewardToken: Token
+  startedOn: number
   // the amount of token currently staked, or undefined if no account
   stakedAmount: TokenAmount
   // the amount of reward token earned by the active account, or undefined if no account
@@ -199,6 +202,7 @@ export function useMultiStakingInfo(vaultToFilterBy?: string | null): MultiStaki
           vaultAddress: rewardsAddress,
           vaultName: info[index].vaultName,
           multiplier: info[index].multiplier,
+          startedOn: info[index].startedOn,
           rewardToken: uni,
           periodFinish: periodFinishSeconds > 0 ? periodFinishSeconds : undefined,
           unlockedTokenAmount: new TokenAmount(ROUTE, JSBI.BigInt(earnedAmountState?.result?.unlockedVestedTokenAmount ?? 0)),
