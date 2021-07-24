@@ -21,19 +21,18 @@ export const STAKING_REWARDS_INFO: {
   }[]
 } = {
   [ChainId.MATIC]: [
-    // {
-    //   vaultName: 'DFYN 6-month vault',
-    //   vaultAddress: '0xc5574645F618EE9A3b5d8c4f69b1983D7D226290',
-    //   multiplier: 2,
-    //   startedOn: 1627137000
-    // },
-    // {
-    //   vaultName: 'DFYN 4-month vault',
-    //   vaultAddress: '0x7C5B1B6ec97E9b57B75ea8C6B72C0dDaCCfecB54',
-    //   multiplier: 3,
-    //   startedOn: 1627137000
-    // },
-
+    {
+      vaultName: 'DFYN 6-month vault',
+      vaultAddress: '0xc5574645F618EE9A3b5d8c4f69b1983D7D226290',
+      multiplier: 2,
+      startedOn: 1627137000
+    },
+    {
+      vaultName: 'DFYN 4-month vault',
+      vaultAddress: '0x7C5B1B6ec97E9b57B75ea8C6B72C0dDaCCfecB54',
+      multiplier: 3,
+      startedOn: 1627137000
+    },
     {
       vaultName: 'DFYN 6-month vault',
       vaultAddress: '0x864208438F598d4a857AE4B586FB49b0BA855af9',
