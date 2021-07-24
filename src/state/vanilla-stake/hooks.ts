@@ -1,6 +1,6 @@
 import { ChainId, CurrencyAmount, JSBI, Token, TokenAmount, Pair } from '@dfyn/sdk'
 import { useMemo } from 'react'
-import { UNI, USDC, DFYN, FISH, UFT, ANY, AGA, AGAr, NORD, BIFI, COSMIC, TITAN, ICE } from '../../constants'
+import { UNI, USDC, DFYN, FISH, UFT, ANY, AGA, AGAr, NORD, BIFI, COSMIC, TITAN, ICE, WMATIC, CRV, UNI_TOKEN, AAVE, LINK, LUNA } from '../../constants'
 import { STAKING_REWARDS_BASIC_FARMS_INTERFACE } from '../../constants/abis/staking-rewards-basic-farms'
 import { useActiveWeb3React } from '../../hooks'
 import { NEVER_RELOAD, useMultipleContractSingleData } from '../multicall/hooks'
@@ -25,10 +25,53 @@ export const STAKING_REWARDS_INFO: {
 } = {
   [ChainId.MATIC]: [
     {
+      tokens: [DFYN, WMATIC],
+      baseToken: DFYN,
+      startTime: 1627142400,
+      stakingRewardAddress: '0x971e9e1Cb317cd9f9E0dAdA84965EB741582dDF0',
+      version: 'v2'
+    },
+    {
+      tokens: [DFYN, LUNA],
+      baseToken: DFYN,
+      startTime: 1627142400,
+      stakingRewardAddress: '0x6b975bDb7E815E300c0F4Fa7Ad8833dB61895441',
+      version: 'v2'
+    },
+    {
+      tokens: [DFYN, LINK],
+      baseToken: DFYN,
+      startTime: 1627142400,
+      stakingRewardAddress: '0xd404AC8ec9F79C4eDd4F34340F7C7be28fDccD24',
+      version: 'v2'
+    },
+    {
+      tokens: [DFYN, AAVE],
+      baseToken: DFYN,
+      startTime: 1627142400,
+      stakingRewardAddress: '0x3f354D2ca898b43aA4f5460DF940a7FeFAe140e5',
+      version: 'v2'
+    },
+    {
+      tokens: [DFYN, UNI_TOKEN],
+      baseToken: DFYN,
+      startTime: 1627142400,
+      stakingRewardAddress: '0x4FFfa5713c9fF13a2BF3013cF23810347ca79327',
+      version: 'v2'
+    },
+    {
+      tokens: [DFYN, CRV],
+      baseToken: DFYN,
+      startTime: 1627142400,
+      stakingRewardAddress: '0x098fdadCcde328e6CD1168125e1e7685eEa54342',
+      version: 'v2'
+    },
+
+    {
       tokens: [DFYN, TITAN],
       baseToken: DFYN,
       startTime: 1626183000,
-      stakingRewardAddress: '0xd94aA4f6BAAC53E558140a769B9DA6231bfb335e',
+      stakingRewardAddress: '0x098fdadCcde328e6CD1168125e1e7685eEa54342',
       version: 'v1'
     },
     {

@@ -8,7 +8,7 @@ const DAY = HOUR * 24
 
 export function Countdown({ exactEnd, start }: { exactEnd: Date | undefined, start: Date | undefined }) {
   // get end/beginning times
-  const end = useMemo(() => (exactEnd ? exactEnd.getTime() / 1000 : 0), [
+  const end = useMemo(() => (exactEnd ? Math.floor(exactEnd.getTime() / 1000) : 0), [
     exactEnd
   ])
   const begin = useMemo(() => (start ? start.getTime() / 1000 : 0), [start])
