@@ -285,7 +285,7 @@ export default function Manage({
         <RowBetween style={{ gap: '12px' }}>
           <TYPE.black style={{ margin: 0 }}>
             {stakingInfo.userVestingInfo.hasSetConfig ?
-              stakingInfo.userVestingInfo.hasOptForVesting ? "Your reward will get vested" : `You can claim ${stakingInfo.burnRate}% of reward, rest will be burned!`
+              stakingInfo.userVestingInfo.hasOptForVesting ? "Your reward will get vested" : `You can claim ${100 - parseInt(stakingInfo.burnRate)}% of reward, rest will be burned!`
               : `Your reward will get vested!`}
           </TYPE.black>
           <GaslessModeElement>
