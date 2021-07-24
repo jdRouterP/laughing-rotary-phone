@@ -101,7 +101,7 @@ const BurnConfirmationModal = ({ isOpen, setShowConfirmation, stakingInfo, setVe
                         <Break />
                         <AutoColumn gap="lg" style={{ padding: '0 2rem' }}>
                             <Text fontWeight={500} fontSize={20}>
-                                {`Keep this button on for rewards to be vested in 6 months in 4 tranches. If this button is off you can claim ${stakingInfo.burnRate}% of your rewards when the staking period ends and the rest will be burnt immediately`}
+                                {`Keep this button on for rewards to be vested in 6 months in 4 tranches. If this button is off you can claim ${100 - parseInt(stakingInfo.burnRate)}% of your rewards when the staking period ends and the rest will be burnt immediately`}
                             </Text>
                             <Text fontWeight={600} fontSize={20}>
                                 ONLY USE THIS MODE IF YOU KNOW WHAT YOU ARE DOING.

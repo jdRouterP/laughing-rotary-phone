@@ -71,7 +71,7 @@ export const STAKING_REWARDS_INFO: {
       tokens: [DFYN, TITAN],
       baseToken: DFYN,
       startTime: 1626183000,
-      stakingRewardAddress: '0x098fdadCcde328e6CD1168125e1e7685eEa54342',
+      stakingRewardAddress: '0xd94aA4f6BAAC53E558140a769B9DA6231bfb335e',
       version: 'v1'
     },
     {
