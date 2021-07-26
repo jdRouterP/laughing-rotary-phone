@@ -91,6 +91,12 @@ export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) 
 
       <StatContainer>
         <RowBetween>
+          <TYPE.white> Launch Date</TYPE.white>
+          <TYPE.white>
+            {stakingInfo && `${new Date(stakingInfo.startedOn * 1000).toDateString()}`}
+          </TYPE.white>
+        </RowBetween>
+        <RowBetween>
           <TYPE.white> Total deposited</TYPE.white>
           <TYPE.white>
             {stakingInfo && `${stakingInfo.totalStakedAmount.toFixed(0, { groupSeparator: ',' })} DFYN`}

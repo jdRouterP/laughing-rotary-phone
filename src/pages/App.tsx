@@ -129,8 +129,8 @@ export default function App() {
               <Route exact strict path="/migrate/v1" component={MigrateV1} />
               <Route exact strict path="/migrate/v1/:address" component={MigrateV1Exchange} />
               <Route exact strict path="/dfyn/:currencyIdA/:currencyIdB" component={Manage} />
-              <Route exact strict path="/eco-farms/:currencyIdA/:currencyIdB" component={ManageVanillaFarms} />
-              <Route exact strict path="/dual-farms/:currencyIdA/:currencyIdB" component={ManageDualFarms} />
+              <Route exact strict path="/eco-farms/:currencyIdA/:currencyIdB/:version?" component={ManageVanillaFarms} />
+              <Route exact strict path="/dual-farms/:currencyIdA/:currencyIdB/:version?" component={ManageDualFarms} />
               <Route exact strict path="/popular-farms/:currencyIdA/:currencyIdB/:version?" component={ManageFloraFarms} />
               <Route exact strict path="/vault/:vaultID" component={ManageVault} />
               <Route exact strict path="/multi-vault/:vaultID" component={MultiTokenManage} />

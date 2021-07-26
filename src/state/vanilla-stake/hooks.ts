@@ -1,6 +1,6 @@
 import { ChainId, CurrencyAmount, JSBI, Token, TokenAmount, Pair } from '@dfyn/sdk'
 import { useMemo } from 'react'
-import { UNI, USDC, DFYN, FISH, UFT, ANY, AGA, AGAr, NORD } from '../../constants'
+import { UNI, USDC, DFYN, FISH, UFT, ANY, AGA, AGAr, NORD, BIFI, COSMIC, TITAN, ICE, WMATIC, CRV, UNI_TOKEN, AAVE, LINK, LUNA } from '../../constants'
 import { STAKING_REWARDS_BASIC_FARMS_INTERFACE } from '../../constants/abis/staking-rewards-basic-farms'
 import { useActiveWeb3React } from '../../hooks'
 import { NEVER_RELOAD, useMultipleContractSingleData } from '../multicall/hooks'
@@ -17,52 +17,132 @@ export const STAKING_REWARDS_INFO: {
   [chainId in ChainId]?: {
     tokens: [Token, Token]
     baseToken?: Token
+    rewardToken?: Token
     startTime: number
     stakingRewardAddress: string
+    version: string
   }[]
 } = {
   [ChainId.MATIC]: [
     {
+      tokens: [DFYN, WMATIC],
+      baseToken: DFYN,
+      startTime: 1627142400,
+      stakingRewardAddress: '0x971e9e1Cb317cd9f9E0dAdA84965EB741582dDF0',
+      version: 'v2'
+    },
+    {
+      tokens: [DFYN, LUNA],
+      baseToken: DFYN,
+      startTime: 1627142400,
+      stakingRewardAddress: '0x6b975bDb7E815E300c0F4Fa7Ad8833dB61895441',
+      version: 'v2'
+    },
+    {
+      tokens: [DFYN, LINK],
+      baseToken: DFYN,
+      startTime: 1627142400,
+      stakingRewardAddress: '0xd404AC8ec9F79C4eDd4F34340F7C7be28fDccD24',
+      version: 'v2'
+    },
+    {
+      tokens: [DFYN, AAVE],
+      baseToken: DFYN,
+      startTime: 1627142400,
+      stakingRewardAddress: '0x3f354D2ca898b43aA4f5460DF940a7FeFAe140e5',
+      version: 'v2'
+    },
+    {
+      tokens: [DFYN, UNI_TOKEN],
+      baseToken: DFYN,
+      startTime: 1627142400,
+      stakingRewardAddress: '0x4FFfa5713c9fF13a2BF3013cF23810347ca79327',
+      version: 'v2'
+    },
+    {
+      tokens: [DFYN, CRV],
+      baseToken: DFYN,
+      startTime: 1627142400,
+      stakingRewardAddress: '0x098fdadCcde328e6CD1168125e1e7685eEa54342',
+      version: 'v2'
+    },
+
+    {
+      tokens: [DFYN, TITAN],
+      baseToken: DFYN,
+      startTime: 1626183000,
+      stakingRewardAddress: '0xd94aA4f6BAAC53E558140a769B9DA6231bfb335e',
+      version: 'v1'
+    },
+    {
+      tokens: [DFYN, ICE],
+      baseToken: DFYN,
+      startTime: 1626183000,
+      stakingRewardAddress: '0xD854E7339840F7D1E12B54FD75235eBc0bB6BfAC',
+      version: 'v1'
+    },
+    {
+      tokens: [DFYN, BIFI],
+      baseToken: DFYN,
+      startTime: 1625758200,
+      stakingRewardAddress: '0xECe1b93A70A0429Db6cF4580C325F831FBB16d52',
+      version: 'v1'
+    },
+    {
+      tokens: [DFYN, COSMIC],
+      baseToken: DFYN,
+      startTime: 1625758200,
+      stakingRewardAddress: '0xccEFB3926E9e2f77d4ce4E661f8D720f379817eD',
+      version: 'v1'
+    },
+    {
       tokens: [DFYN, NORD],
       baseToken: DFYN,
       startTime: 1624980600,
-      stakingRewardAddress: '0x2d7c3E61430E4CF4DC091C61df03eaAB6d67cd26'
+      stakingRewardAddress: '0x2d7c3E61430E4CF4DC091C61df03eaAB6d67cd26',
+      version: 'v1'
     },
     {
       tokens: [DFYN, AGA],
       baseToken: DFYN,
       startTime: 1623679200,
-      stakingRewardAddress: '0x250fF0EE7a02d0DaeC193A0Ea76f879B26818732'
+      stakingRewardAddress: '0x250fF0EE7a02d0DaeC193A0Ea76f879B26818732',
+      version: 'v1'
     },
     {
       tokens: [DFYN, AGAr],
       baseToken: DFYN,
       startTime: 1623679200,
-      stakingRewardAddress: '0x6719BD4E5Aed0e25b4cE5FB01d763353103e7258'
+      stakingRewardAddress: '0x6719BD4E5Aed0e25b4cE5FB01d763353103e7258',
+      version: 'v1'
     },
     {
       tokens: [AGA, AGAr],
       baseToken: AGA,
       startTime: 1623679200,
-      stakingRewardAddress: '0xa3d7c12a474a6806df5e0260019eD613bF970c54'
+      stakingRewardAddress: '0xa3d7c12a474a6806df5e0260019eD613bF970c54',
+      version: 'v1'
     },
     {
       tokens: [FISH, DFYN],
       baseToken: DFYN,
       startTime: 1622557800,
-      stakingRewardAddress: '0xfBCE866aF59bEa3b3880330F7DE3b08d7bc26676'
+      stakingRewardAddress: '0xfBCE866aF59bEa3b3880330F7DE3b08d7bc26676',
+      version: 'v1'
     },
     {
       tokens: [ANY, DFYN],
       baseToken: DFYN,
       startTime: 1622651400,
-      stakingRewardAddress: '0xf4822f5e1B01Dc101914C888d88E6d295c6A7FCA'
+      stakingRewardAddress: '0xf4822f5e1B01Dc101914C888d88E6d295c6A7FCA',
+      version: 'v1'
     },
     {
       tokens: [UFT, DFYN],
       baseToken: DFYN,
       startTime: 1622651400,
-      stakingRewardAddress: '0x4cAE3C18b058eBF1EC439f01457348a9dD9CcC53'
+      stakingRewardAddress: '0x4cAE3C18b058eBF1EC439f01457348a9dD9CcC53',
+      version: 'v1'
     },
   ]
 }
@@ -76,8 +156,10 @@ export interface StakingInfo {
   // the tokens involved in this pair
   baseToken: any
   startTime: number
+  rewardToken: Token
   type: TypeOfpools
   tokens: [Token, Token]
+  version: string
   // the amount of token currently staked, or undefined if no account
   stakedAmount: TokenAmount
   // the amount of reward token earned by the active account, or undefined if no account
@@ -104,7 +186,7 @@ export interface StakingInfo {
 }
 
 // gets the staking info from the network for the active chain id
-export function useStakingInfo(pairToFilterBy?: Pair | null): StakingInfo[] {
+export function useStakingInfo(pairToFilterBy?: Pair | null, version: string = 'v1'): StakingInfo[] {
   const { chainId, account } = useActiveWeb3React()
 
   const [, dfynUsdcPair] = usePair(USDC, DFYN);
@@ -121,10 +203,10 @@ export function useStakingInfo(pairToFilterBy?: Pair | null): StakingInfo[] {
             : pairToFilterBy === null
               ? false
               : pairToFilterBy.involvesToken(stakingRewardInfo.tokens[0]) &&
-              pairToFilterBy.involvesToken(stakingRewardInfo.tokens[1])
+              pairToFilterBy.involvesToken(stakingRewardInfo.tokens[1]) && version === stakingRewardInfo.version
         ) ?? []
         : [],
-    [chainId, pairToFilterBy]
+    [chainId, pairToFilterBy, version]
   )
 
   const uni = chainId ? UNI[chainId] : undefined
@@ -226,8 +308,10 @@ export function useStakingInfo(pairToFilterBy?: Pair | null): StakingInfo[] {
           type: { typeOf: 'Ecosystem Farms', url: 'eco-farms' },
           stakingRewardAddress: rewardsAddress,
           baseToken: info[index].baseToken,
+          version: info[index].version,
           startTime: info[index].startTime ?? 0,
           tokens: info[index].tokens,
+          rewardToken: info[index].rewardToken ?? DFYN,
           periodFinish: periodFinishMs > 0 ? new Date(periodFinishMs) : undefined,
           earnedAmount: new TokenAmount(uni, JSBI.BigInt(earnedAmountState?.result?.[0] ?? 0)),
           rewardRate: individualRewardRate,

@@ -253,6 +253,15 @@ export const getTokenLogoURL = (address: string) => {
   if (address?.toLowerCase() === '0xeCf8f2FA183b1C4d2A269BF98A54fCe86C812d3e'.toLowerCase()) {
     uri = 'https://i.imgur.com/Z8V1O7H.png'
   }
+  if (address?.toLowerCase() === '0xfbdd194376de19a88118e84e279b977f165d01b8'.toLowerCase()) {
+    uri = 'https://raw.githubusercontent.com/beefyfinance/beefy-app/prod/src/images/single-assets/BIFI.png'
+  }
+  if (address?.toLowerCase() === '0xa5Eb60CA85898f8b26e18fF7c7E43623ccbA772C'.toLowerCase()) {
+    uri = 'https://s2.coinmarketcap.com/static/img/coins/64x64/10521.png'
+  }
+  if (address?.toLowerCase() === '0xd99baFe5031cC8B345cb2e8c80135991F12D7130'.toLowerCase()) {
+    uri = 'https://etherscan.io/token/images/ferrumnetworktoken_32.png'
+  }
   if (address?.toLowerCase() === '0xd12dc5319808bb31ba95ae5764def2627d5966ce'.toLowerCase()) {
     uri = 'https://piratedice.xyz/booty.png'
   }
@@ -307,6 +316,13 @@ export const getTokenLogoURL = (address: string) => {
 
   if (address?.toLowerCase() === '0x692597b009d13C4049a947CAB2239b7d6517875F'.toLowerCase()) {
     uri = 'https://etherscan.io/token/images/terra-ust_32.png'
+  }
+
+  if (address?.toLowerCase() === '0xaaa5b9e6c589642f98a1cda99b9d024b8407285a'.toLowerCase()) {
+    uri = 'https://polygonscan.com/token/images/titan_32.png'
+  }
+  if (address?.toLowerCase() === '0x4a81f8796e0c6ad4877a51c86693b0de8093f2ef'.toLowerCase()) {
+    uri = 'https://cdn.discordapp.com/attachments/794129085387374592/862637810138087434/5.png'
   }
 
   if (address?.toLowerCase() === '0x033d942a6b495c4071083f4cde1f17e986fe856c'.toLowerCase()) {

@@ -62,6 +62,10 @@ export const CRV = new Token(ChainId.MATIC, '0x172370d5cd63279efa6d502dab2917193
 export const LINK = new Token(ChainId.MATIC, '0x53e0bca35ec356bd5dddfebbd1fc0fd03fabad39', 18, 'LINK', 'Chain Link')
 export const MATICPAD = new Token(ChainId.MATIC, '0x3BfcE6D6F0d3D3f1326d86abdbe2845b4740Dc2E', 18, 'MATPAD', 'MATICPAD')
 
+export const COSMIC = new Token(ChainId.MATIC, '0xa5Eb60CA85898f8b26e18fF7c7E43623ccbA772C', 18, 'COSMIC', 'Cosmicswap')
+export const BIFI = new Token(ChainId.MATIC, '0xfbdd194376de19a88118e84e279b977f165d01b8', 18, 'BIFI', 'beefy.finance')
+export const FRM = new Token(ChainId.MATIC, '0xd99baFe5031cC8B345cb2e8c80135991F12D7130', 18, 'FRM', 'Ferrum network token')
+
 export const EZ = new Token(ChainId.MATIC, '0x34C1b299A74588D6Abdc1b85A53345A48428a521', 18, 'EZ', 'EASY V2')
 export const UFARM = new Token(ChainId.MATIC, '0xa7305ae84519ff8be02484cda45834c4e7d13dd6', 18, 'UFARM', 'Unifarm Token')
 export const NWC = new Token(ChainId.MATIC, '0x968F6f898a6Df937fC1859b323aC2F14643e3fED', 18, 'NWC', 'Newscrypto')
@@ -71,6 +75,8 @@ export const XUSD = new Token(ChainId.MATIC, '0x3A3e7650f8B9f667dA98F236010fBf44
 export const XDO = new Token(ChainId.MATIC, '0x3Dc7B06dD0B1f08ef9AcBbD2564f8605b4868EEA', 18, 'XDO', 'xDollar')
 export const MIMATIC = new Token(ChainId.MATIC, '0xa3fa99a148fa48d14ed51d610c367c61876997f1', 18, 'MIMATIC', 'miMatic')
 
+export const ICE = new Token(ChainId.MATIC, '0x4a81f8796e0c6ad4877a51c86693b0de8093f2ef', 18, 'ICE', 'Iron Finance ICE Token')
+export const TITAN = new Token(ChainId.MATIC, '0xaaa5b9e6c589642f98a1cda99b9d024b8407285a', 18, 'TITAN', 'Titan DAO Finance')
 
 
 //TEST TOKENS
@@ -105,7 +111,7 @@ export const UNI: { [chainId in ChainId]: Token } = {
   [ChainId.OKEX]: new Token(ChainId.OKEX, UNI_ADDRESS, 18, 'DFYN', 'Dfyn'),
 }
 
-export const REWARD_TOKENS: Token[] = [ROUTE, DFYN, ZEE, AURORA, ROYA, BOOTY, SX, EZ, UFARM, NWC, mRTK, XDO]
+export const REWARD_TOKENS: Token[] = [ROUTE, DFYN, ZEE, AURORA, ROYA, BOOTY, SX, EZ, UFARM, NWC, mRTK, XDO, FRM]
 
 export const COMMON_CONTRACT_NAMES: { [address: string]: string } = {
   [UNI_ADDRESS]: 'DFYN',

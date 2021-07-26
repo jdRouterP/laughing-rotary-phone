@@ -95,17 +95,17 @@ const BurnConfirmationModal = ({ isOpen, setShowConfirmation, stakingInfo, setVe
                             <div />
                             <Text fontWeight={500} fontSize={20}>
                                 Are you sure?
-              </Text>
+                            </Text>
                             <StyledCloseIcon onClick={() => setShowConfirmation(false)} />
                         </RowBetween>
                         <Break />
                         <AutoColumn gap="lg" style={{ padding: '0 2rem' }}>
                             <Text fontWeight={500} fontSize={20}>
-                                Keep this button on for rewards to be vested in 6 months in 4 tranches. If this button is off you can claim 50% of your rewards when the staking period ends and the rest will be burnt immediately
-              </Text>
+                                {`Keep this button on for rewards to be vested in 6 months in 4 tranches. If this button is off you can claim ${100 - parseInt(stakingInfo.burnRate)}% of your rewards when the staking period ends and the rest will be burnt immediately`}
+                            </Text>
                             <Text fontWeight={600} fontSize={20}>
                                 ONLY USE THIS MODE IF YOU KNOW WHAT YOU ARE DOING.
-              </Text>
+                            </Text>
                             <ButtonError
                                 error={true}
                                 padding={'12px'}
@@ -131,7 +131,7 @@ const BurnConfirmationModal = ({ isOpen, setShowConfirmation, stakingInfo, setVe
                     <SubmittedView onDismiss={wrappedOnDismiss} hash={hash}>
                         <AutoColumn gap="12px" justify={'center'}>
                             <TYPE.largeHeader>Transaction Submitted</TYPE.largeHeader>
-                            <TYPE.body fontSize={20}>{!vesting ? `Your rewards will get vested` : `Now you'll get 50% of your reward rest will burn`}</TYPE.body>
+                            <TYPE.body fontSize={20}>{!vesting ? `Your rewards will get vested` : `Now you'll get ${stakingInfo.burnRate}% of your reward rest will burn`}</TYPE.body>
                         </AutoColumn>
                     </SubmittedView>
                 )}

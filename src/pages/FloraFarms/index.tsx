@@ -75,7 +75,7 @@ export default function Earn() {
               </RowBetween>
               <RowBetween>
                 <TYPE.white fontSize={14}>
-                  In this farming setup 25% of the DFYN token rewards can be claimed after farming ends. The remaining rewards will be released 25% every 2 months unless the user decides to claim all tokens instantly by agreeing to burn 50% tokens.
+                  In this farming setup 25% of the DFYN token rewards can be claimed after farming ends. The remaining rewards will be released 25% every 2 months unless the user decides to claim all tokens instantly by agreeing to burn tokens.
                 </TYPE.white>
 
 
