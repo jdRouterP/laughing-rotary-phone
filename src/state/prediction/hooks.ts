@@ -134,11 +134,18 @@ export const transformRoundResponse = (roundResponse: RoundResponse): Round => {
 }
 
 export const transformMarketResponse = (marketResponse: MarketResponse): Market => {
-  return {
-    id: marketResponse.id,
-    paused: marketResponse.paused,
-    epoch: Number(marketResponse.epoch.epoch),
-  }
+  if (marketResponse === null) {
+    return {
+      id: '0',
+      paused: true,
+      epoch: 0,
+    }
+  } else
+    return {
+      id: marketResponse.id,
+      paused: marketResponse.paused,
+      epoch: Number(marketResponse.epoch.epoch),
+    }
 }
 
 export const makeRoundData = (rounds: Round[]): RoundData => {

@@ -22,13 +22,13 @@ export const StyledClose = styled(X)`
 `
 
 export default function BetaWarning() {
-    const { pathname } = useLocation();
-    const active = pathname === '/prediction'
-    return (<PhishAlert isActive={active}>
-        <div style={{ display: 'flex' }}>
-            <AlertTriangle style={{ marginRight: 6 }} size={12} /> Prediction Market is in BETA, use at own risk
-        </div>
-    </PhishAlert>)
+  const { pathname } = useLocation();
+  const active = pathname === '/prediction'
+  return (<PhishAlert isActive={active}>
+    <div style={{ display: 'flex' }}>
+      <AlertTriangle style={{ marginRight: 6 }} size={12} /> Prediction Market is in BETA, use at your own risk!
+    </div>
+  </PhishAlert>)
 
 
 }
