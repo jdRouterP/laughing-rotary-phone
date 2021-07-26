@@ -105,7 +105,7 @@ const BetResult: React.FC<BetResultProps> = ({ bet, result }) => {
         </Flex>
       </Flex>
       <StyledBetResult>
-        {result === Result.WIN && !canClaim && (
+        {result === Result.WIN && !canClaim && !bet.claimed && (
           <CollectWinningsButton
             payout={payout}
             roundId={bet.round.id}
@@ -114,7 +114,7 @@ const BetResult: React.FC<BetResultProps> = ({ bet, result }) => {
             mb="16px"
             onSuccess={handleSuccess}
           >
-            {bet.claimed ? t('Already Collected') : t('Collect Winnings')}
+            {t('Collect Winnings')}
           </CollectWinningsButton>
         )}
         {bet.claimed && (
@@ -137,7 +137,7 @@ const BetResult: React.FC<BetResultProps> = ({ bet, result }) => {
           <TYPE.main >{t('Your position')}</TYPE.main>
           <TYPE.main >{`${formatToken(bet.amount)} MATIC`}</TYPE.main>
         </Flex>
-        <Flex alignItems="start" justifyContent="space-between">
+        {result !== Result.LIVE && <Flex alignItems="start" justifyContent="space-between">
           <TYPE.main >{t('Your Result')}</TYPE.main>
           <Box style={{ textAlign: 'right' }}>
             <TYPE.main color={getResultColor()}>{`${result === Result.LOSE ? '-' : '+'}${formatToken(payout)} MATIC`}</TYPE.main>
@@ -146,7 +146,7 @@ const BetResult: React.FC<BetResultProps> = ({ bet, result }) => {
               {`~$${formatToken(tokenusdPrice.times(payout).toNumber())}`} */}
             </TYPE.main>
           </Box>
-        </Flex>
+        </Flex>}
       </StyledBetResult>
     </>
   )

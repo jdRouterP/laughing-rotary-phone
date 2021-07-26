@@ -36,7 +36,7 @@ const BetDetails: React.FC<BetDetailsProps> = ({ bet, result }) => {
           )}
         </TYPE.main>
       )}
-      {result !== Result.LIVE && <BetResult bet={bet} result={result} />}
+      {<BetResult bet={bet} result={result} />}
       <TYPE.mediumHeader mb="10px" ml="5px">{t('Round History')}</TYPE.mediumHeader>
       <TYPE.main color=''>
         <RoundResult round={bet.round} mb="24px">
