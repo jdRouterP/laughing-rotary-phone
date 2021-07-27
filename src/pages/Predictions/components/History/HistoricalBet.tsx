@@ -3,8 +3,6 @@ import { useWeb3React } from '@web3-react/core'
 import {
   Box,
   Flex,
-  PlayCircleOutlineIcon,
-  WaitIcon,
 } from '@pancakeswap/uikit'
 import styled from 'styled-components'
 import { Bet, PredictionStatus } from 'state/prediction/types'
@@ -17,7 +15,7 @@ import ReclaimPositionButton from '../ReclaimPositionButton'
 import BetDetails from './BetDetails'
 import { TYPE } from 'theme'
 import { useIsDarkMode } from 'state/user/hooks'
-import { ChevronUp, ChevronDown } from 'react-feather'
+import { ChevronUp, ChevronDown, Clock, PlayCircle } from 'react-feather'
 
 interface BetProps {
   bet: Bet
@@ -100,7 +98,7 @@ const HistoricalBet: React.FC<BetProps> = ({ bet }) => {
     if (isOpenRound) {
       return (
         <Flex alignItems="center">
-          <WaitIcon color="primary" mr="6px" width="24px" />
+          <Clock style={{color: "primary", marginRight: "18px", width:"24px"}} />
           <TYPE.main color="primary" fontWeight={500}>
             {t('Starting Soon')}
           </TYPE.main>
@@ -111,7 +109,7 @@ const HistoricalBet: React.FC<BetProps> = ({ bet }) => {
     if (isLiveRound) {
       return (
         <Flex alignItems="center">
-          <PlayCircleOutlineIcon color="secondary" mr="6px" width="24px" />
+          <PlayCircle style={{color: "primary", marginRight: "18px", width:"24px"}} />
           <TYPE.main fontWeight={500}>
             {'Live Now'}
           </TYPE.main>
