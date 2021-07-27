@@ -44,7 +44,7 @@ const BetDetails: React.FC<BetDetailsProps> = ({ bet, result }) => {
         </TYPE.main>
       )}
       {<BetResult bet={bet} result={result} />}
-      <TYPE.mediumHeader mb="10px" ml="5px">{t('Round History')}</TYPE.mediumHeader>
+      <TYPE.mediumHeader mb="10px" ml="5px">{t('Round Details')}</TYPE.mediumHeader>
       <TYPE.main color=''>
         <RoundResult round={bet.round} mb="24px">
           <PayoutRow positionLabel={t('BULL')} multiplier={bullMultiplier} amount={bullAmount} />

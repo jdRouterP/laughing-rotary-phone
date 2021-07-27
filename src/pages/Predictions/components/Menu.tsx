@@ -65,7 +65,7 @@ const Menu = () => {
     <Header>
       <StyleItem>
         <TokenUSDPrice />
-        <TimerLabel interval="15" unit="min" />
+        <TimerLabel interval="5" unit="min" />
       </StyleItem>
       <HistoryButton />
     </Header>

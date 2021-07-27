@@ -97,7 +97,7 @@ const BetResult: React.FC<BetResultProps> = ({ bet, result }) => {
   return (
     <>
       <Flex alignItems="center" justifyContent="space-between" mb="8px" ml="5px">
-        <TYPE.mediumHeader>{t('Your History')}</TYPE.mediumHeader>
+        <TYPE.mediumHeader>{result === Result.LIVE ? ('Your Position') : ('Your History')}</TYPE.mediumHeader>
         <Flex alignItems="center">
           <TYPE.mediumHeader as="h3" color={getHeaderColor()} mr="4px">
             {getHeaderText()}
