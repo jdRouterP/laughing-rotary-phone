@@ -3,9 +3,10 @@ import styled from 'styled-components'
 // import { useWeb3React } from '@web3-react/core'
 import { Box, Flex } from '@pancakeswap/uikit'
 import { useTranslation } from 'react-i18next'
-import { useGetCurrentEpoch, useGetLastOraclePrice } from 'state/hook'
+import { useGetCurrentEpoch, useGetLastOraclePrice, useGetRewardRate } from 'state/hook'
 import { Bet, BetPosition } from 'state/prediction/types'
 import { formatToken, getMultiplier, getPayout } from 'pages/Predictions/helpers'
+
 import { getRoundResult, Result } from 'state/prediction/hooks'
 import PnlChart from './PnlChart'
 import SummaryRow from './SummaryRow'
@@ -76,12 +77,13 @@ const getPnlSummary = (bets: Bet[], currentEpoch: number): PnlSummary => {
   }
   return bets.reduce((summary: PnlSummary, bet) => {
     const roundResult = getRoundResult(bet, currentEpoch)
+    const rewardRate = useGetRewardRate()
     if (roundResult === Result.WIN) {
       const payout = getNetPayout(bet)
       let { bestRound } = summary.won
       if (payout > bestRound.payout) {
         const { bullAmount, bearAmount, totalAmount } = bet.round
-        const multiplier = getMultiplier(totalAmount, bet.position === BetPosition.BULL ? bullAmount : bearAmount)
+        const multiplier = getMultiplier(totalAmount, bet.position === BetPosition.BULL ? bullAmount : bearAmount, rewardRate)
         bestRound = { id: bet.round.id, payout, multiplier }
       }
       return {

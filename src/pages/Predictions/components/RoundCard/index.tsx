@@ -1,6 +1,6 @@
 import React from 'react'
 import { useWeb3React } from '@web3-react/core'
-import { useGetBetByRoundId, useGetCurrentEpoch } from 'state/hook'
+import { useGetBetByRoundId, useGetCurrentEpoch, useGetRewardRate } from 'state/hook'
 import { BetPosition, Round } from 'state/prediction/types'
 import { getMultiplier } from '../../helpers'
 import ExpiredRoundCard from './ExpiredRoundCard'
@@ -16,12 +16,13 @@ const RoundCard: React.FC<RoundCardProps> = ({ round }) => {
   const { id, epoch, lockPrice, closePrice, totalAmount, bullAmount, bearAmount } = round
   const currentEpoch = useGetCurrentEpoch()
   const { account } = useWeb3React()
+  const rewardRate = useGetRewardRate()
   const bet = useGetBetByRoundId(account, id)
   const hasEntered = bet !== null
   const hasEnteredUp = hasEntered && bet?.position === BetPosition.BULL
   const hasEnteredDown = hasEntered && bet?.position === BetPosition.BEAR
-  const bullMultiplier = getMultiplier(totalAmount, bullAmount)
-  const bearMultiplier = getMultiplier(totalAmount, bearAmount)
+  const bullMultiplier = getMultiplier(totalAmount, bullAmount, rewardRate)
+  const bearMultiplier = getMultiplier(totalAmount, bearAmount, rewardRate)
 
   // Next (open) round
   if (epoch === currentEpoch && lockPrice === null) {
