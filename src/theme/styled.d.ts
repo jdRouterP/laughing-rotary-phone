@@ -18,6 +18,7 @@ export interface Colors {
   //tab text color
   text7: Color
   text8: Color
+  text9: Color
 
   // backgrounds / greys
   bg1: Color

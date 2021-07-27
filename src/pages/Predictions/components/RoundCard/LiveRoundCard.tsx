@@ -20,6 +20,7 @@ import { AutoColumn } from 'components/Column'
 import { TYPE } from 'theme'
 import { useIsDarkMode } from 'state/user/hooks'
 
+
 interface LiveRoundCardProps {
   round: Round
   betAmount?: number
@@ -31,7 +32,6 @@ interface LiveRoundCardProps {
 
 
 const CardHeaderBlock = styled.div<{ isPositionUp: boolean }>`
-
   margin-top: 23px;
   width: 206px;
   padding-top: 30px;
@@ -60,7 +60,7 @@ const CardFooterBlock = styled.div<{ isPositionUp: boolean }>`
 // `
 
 const Wrapper = styled(AutoColumn) <{ showBackground: boolean; bgColor: any; darkMode: boolean }>`
-  border: ${({ darkMode }) => darkMode ? '' : '1px solid #C3C5CB'};
+  border: 1px solid #ff007a;
   border-radius: 12px;
   width: 100%;
   overflow: hidden;

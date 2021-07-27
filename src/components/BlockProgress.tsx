@@ -1,6 +1,7 @@
 import React from 'react'
-import { Progress, ProgressProps } from '@pancakeswap/uikit'
 import useCurrentBlockTimestamp from 'hooks/useCurrentBlockTimestamp';
+import Progress from './Progress/Progress';
+import { ProgressProps } from '@pancakeswap/uikit';
 
 interface BlockProgressProps extends ProgressProps {
     startBlock: number

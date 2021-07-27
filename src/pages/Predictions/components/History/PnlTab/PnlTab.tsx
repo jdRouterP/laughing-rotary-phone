@@ -155,38 +155,38 @@ const PnlTab: React.FC<PnlTabProps> = ({ hasBetHistory, bets }: PnlTabProps) => 
       </Flex>
       <Box >
         <StyledBox>
-          <TYPE.main mb="11px" fontWeight="600">
+          <TYPE.main mb="5px" fontWeight="600">
             {t('Average return / round')}
           </TYPE.main>
-          <TYPE.main color={avgTokenWonIsPositive ? '#29a329' : '#ff471a'}>
+          <TYPE.main color={avgTokenWonIsPositive ? '#29a329' : '#ff471a'} font-size="14px">
             {`${avgTokenWonIsPositive ? '+' : ''}${formatToken(avgTokenWonPerRound)} MATIC`}
           </TYPE.main>
-          <TYPE.main fontSize="14px" marginTop="5px">
+          <TYPE.main fontSize="14px">
             {`~$${formatToken(tokenusdPrice * (avgTokenWonPerRound))}`}
           </TYPE.main>
 
           {hasBestRound && (
             <>
-              <TYPE.main mt="16px" mb="11px" fontWeight="600">
+              <TYPE.main mt="16px" mb="5px" fontWeight="600">
                 {`Best round: #${summary.won.bestRound.id}`}
               </TYPE.main>
               <Flex alignItems="flex-end">
-                <TYPE.main color={'#29a329'}>{`+${formatToken(summary.won.bestRound.payout)} MATIC`}</TYPE.main>
+                <TYPE.main font-size="14px" color={'#29a329'}>{`+${formatToken(summary.won.bestRound.payout)} MATIC`}</TYPE.main>
                 <TYPE.main>
                   ({summary.won.bestRound.multiplier.toFixed(2)}x)
                 </TYPE.main>
               </Flex>
-              <TYPE.main fontSize="14px" marginTop="5px">
+              <TYPE.main fontSize="14px">
                 {`~$${formatToken(tokenusdPrice * (summary.won.bestRound.payout))}`}
               </TYPE.main>
             </>
           )}
 
-          <TYPE.main mt="16px" mb="11px" fontWeight="600">
+          <TYPE.main mt="16px" mb="5px" fontWeight="600">
             {t('Average position entered / round')}
           </TYPE.main>
-          <TYPE.main>{`${formatToken(avgPositionEntered)} MATIC`}</TYPE.main>
-          <TYPE.main fontSize="14px" marginTop="5px">
+          <TYPE.main font-size="14px">{`${formatToken(avgPositionEntered)} MATIC`}</TYPE.main>
+          <TYPE.main fontSize="14px">
             {`~$${formatToken(tokenusdPrice * (avgPositionEntered))}`}
           </TYPE.main>
         </StyledBox>
