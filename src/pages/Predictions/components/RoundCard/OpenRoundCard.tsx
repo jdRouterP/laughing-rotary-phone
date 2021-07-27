@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { useWeb3React } from '@web3-react/core'
 import { PlayCircleOutlineIcon, useTooltip } from '@pancakeswap/uikit'
@@ -16,7 +16,7 @@ import PositionModal from './PositionModal'
 import useCurrentBlockTimestamp from 'hooks/useCurrentBlockTimestamp'
 // import { CardBGImage, CardNoise } from 'components/earn/styled'
 import { AutoColumn } from 'components/Column'
-import { useMemo } from 'react'
+// import { useMemo } from 'react'
 // import usePersistState from 'hooks/usePersistState'
 import { ButtonBull, ButtonBear } from 'components/Button'
 import { useIsDarkMode } from 'state/user/hooks'
@@ -102,7 +102,15 @@ const OpenRoundCard: React.FC<OpenRoundCardProps> = ({
     epoch: round.epoch,
     loading: false
   })
-  const loading = useMemo(() => { return loadingState.loading }, [loadingState.loading])
+  useEffect(() => {
+
+    return () => {
+      setLoadingState({
+        epoch: round.epoch,
+        loading: false
+      })
+    }
+  }, [round.epoch, account])
   // const dispatch = useDispatch()
   const currentTimestamp = useCurrentBlockTimestamp()
   const { isSettingPosition, position } = state
@@ -219,7 +227,7 @@ const OpenRoundCard: React.FC<OpenRoundCardProps> = ({
                 width="200px"
                 onClick={() => handleSetPosition(BetPosition.BULL)}
                 mb="4px"
-                disabled={loading || !canEnterPosition || isBufferPhase}
+                disabled={loadingState.loading || !canEnterPosition || isBufferPhase}
               >
                 {t('Bet BULL')}
               </ButtonBull>
@@ -228,7 +236,7 @@ const OpenRoundCard: React.FC<OpenRoundCardProps> = ({
                 variant="danger"
                 width="200px"
                 onClick={() => handleSetPosition(BetPosition.BEAR)}
-                disabled={loading || !canEnterPosition || isBufferPhase}
+                disabled={loadingState.loading || !canEnterPosition || isBufferPhase}
               >
                 {t('Bet BEAR')}
               </ButtonBear>

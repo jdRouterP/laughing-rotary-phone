@@ -11,7 +11,7 @@ export const formatUsd = (usd: number | JSBI, maxPrecision: number = 3) => {
 
 export const formatToken = (token: number | string) => {
   const value = typeof token === "string" ? parseFloat(token) : token;
-  return value ? value.toLocaleString(undefined, { minimumFractionDigits: 3, maximumFractionDigits: 3 }) : '0'
+  return value ? formatNumber(value, 2, 5) : '0'
 }
 
 export const padTime = (num: number) => num.toString().padStart(2, '0')
