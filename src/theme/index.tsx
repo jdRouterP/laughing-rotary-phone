@@ -51,6 +51,7 @@ export function colors(darkMode: boolean): Colors {
     //Card: tab-text
     text7: darkMode ? '#DD3679' : '#FFFFFF',
     text8: darkMode ? '#FFFFFF' : '#DD3679',
+    text9: darkMode ? '#565A69' : '#FFFFFF',
 
     // backgrounds / greys
     bg1: darkMode ? '#212429' : '#FFFFFF',

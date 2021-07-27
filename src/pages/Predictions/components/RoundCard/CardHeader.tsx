@@ -86,7 +86,7 @@ const Round = styled.div`
   justify-self: center;
 `
 
-const CardHeader: React.FC<CardHeaderProps> = ({ status, title, epoch }) => {
+const CardHeader: React.FC<CardHeaderProps> = ({ status, title, epoch, icon }) => {
   const textColor = getTextColorByStatus(status, 'text4')
   // const roundIDColor = getRoundIDColorByStatus(status, 'text')
   const isLive = status === 'live'
@@ -102,6 +102,7 @@ const CardHeader: React.FC<CardHeaderProps> = ({ status, title, epoch }) => {
           </TYPE.main>
         </Round>
         <Flex alignItems="center">
+          {icon}
           <TYPE.main color={textColor} lineHeight="21px">
             {title}
           </TYPE.main>

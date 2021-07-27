@@ -60,7 +60,7 @@ const CardFooterBlock = styled.div<{ isPositionUp: boolean }>`
 // `
 
 const Wrapper = styled(AutoColumn) <{ showBackground: boolean; bgColor: any; darkMode: boolean }>`
-  border: 3px solid ${({darkMode}) => darkMode ? '#565A69' : '#C3C5CB'};
+  border: 1px solid #ff007a;
   border-radius: 12px;
   width: 100%;
   overflow: hidden;
