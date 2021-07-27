@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { useTooltip } from '@pancakeswap/uikit'
 import { formatToken } from '../../helpers'
-import { PlayCircle } from 'react-feather'
+import { CheckCircle } from 'react-feather'
 
 interface EnteredTagProps {
   amount?: number
@@ -25,7 +25,7 @@ const EnteredTag: React.FC<EnteredTagProps> = ({ amount }: EnteredTagProps) => {
   return (
     <>
       <span ref={targetRef}>
-        <StyledEnteredTag>{<PlayCircle />}</StyledEnteredTag>{' '}
+        <StyledEnteredTag>{<CheckCircle />}</StyledEnteredTag>{' '}
       </span>{' '}
       {tooltipVisible && tooltip}
     </>
