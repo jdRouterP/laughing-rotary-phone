@@ -34,7 +34,7 @@ interface PnlSummary {
   entered: PnlCategory
 }
 
-const TREASURY_FEE = 0.03
+const TREASURY_FEE = 0.1
 
 const getNetPayout = (bet: Bet) => {
   const rawPayout = getPayout(bet)

@@ -26,6 +26,7 @@ const initialState: PredictionsState = {
     currentRoundStartTime: 0,
     interval: 100,
     buffer: 2,
+    rewardRate: 95,
     minBetAmount: JSBI.BigInt('10000'),
     lastOraclePrice: BIG_INT_ZERO.toString(),
     rounds: {},

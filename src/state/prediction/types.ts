@@ -94,6 +94,7 @@ export interface PredictionsState {
     interval: number
     buffer: number
     minBetAmount: JSBI
+    rewardRate: number
     lastOraclePrice: string
     rounds: RoundData
     history: HistoryData

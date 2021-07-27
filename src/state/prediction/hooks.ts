@@ -195,16 +195,18 @@ export const useStaticPredictionsData = async () => {
 
   try {
     const currentEpoch = await contract.currentEpoch();
-    const interval = await contract.interval()
-    const minBetAmount = await contract.minBetAmount()
-    const isPaused = await contract.paused()
-    const buffer = await contract.buffer()
+    const interval = await contract.interval();
+    const minBetAmount = await contract.minBetAmount();
+    const isPaused = await contract.paused();
+    const buffer = await contract.buffer();
+    const rewardRate = await contract.rewardRate();
     return {
       status: isPaused ? PredictionStatus.PAUSED : PredictionStatus.LIVE,
       currentEpoch: Number(currentEpoch),
       interval: Number(interval),
       buffer: Number(buffer),
       minBetAmount: minBetAmount.toNumber(),
+      rewardRate: rewardRate.toNumber()
     }
   } catch (error) {
     console.log(error)
