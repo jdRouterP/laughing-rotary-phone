@@ -5,7 +5,6 @@ import {
   ChevronDownIcon,
   ChevronUpIcon,
   Flex,
-  IconButton,
   PlayCircleOutlineIcon,
   WaitIcon,
 } from '@pancakeswap/uikit'
@@ -19,6 +18,7 @@ import CollectWinningsButton from '../CollectWinningsButton'
 import ReclaimPositionButton from '../ReclaimPositionButton'
 import BetDetails from './BetDetails'
 import { TYPE } from 'theme'
+// import { ButtonEmpty } from 'components/Button'
 
 interface BetProps {
   bet: Bet
@@ -157,9 +157,9 @@ const HistoricalBet: React.FC<BetProps> = ({ bet }) => {
           </ReclaimPositionButton>
         )}
         {!isOpenRound && !isLiveRound && (
-          <IconButton variant="text" scale="sm">
-            {isOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}
-          </IconButton>
+          <>
+            {isOpen ? <ChevronUpIcon color="primary" /> : <ChevronDownIcon color="primary" />}
+          </>
         )}
       </StyledBet>
       <LineStyled>

@@ -34,7 +34,7 @@ const RoundResult: React.FC<RoundResultProps> = ({ round, children, ...props }) 
           <TYPE.main color={isPositionUp ? '#29a329' : '#ff471a'} fontWeight={500} fontSize="24px">
             {formatUsd(closePrice)}
           </TYPE.main>
-          <PositionTag betPosition={betPosition}>{formatUsd(priceDifference)}</PositionTag>
+          <PositionTag betPosition={betPosition}>{formatUsd(priceDifference, 6)}</PositionTag>
         </Flex>
       )}
       {lockPrice && <LockPriceRow lockPrice={lockPrice} />}

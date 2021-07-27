@@ -1,10 +1,10 @@
 import React from 'react'
-import styled from 'styled-components'
+import styled, { CSSProperties } from 'styled-components'
 import { Box, Flex } from '@pancakeswap/uikit'
 import { useTranslation } from 'react-i18next'
 import { BetPosition } from 'state/prediction/types'
 // import { RoundMultiplierDownArrow, RoundMultiplierUpArrow } from '../../RoundMultiplierArrows'
-// import EnteredTag from './EnteredTag'
+import EnteredTag from './EnteredTag'
 import { TYPE } from 'theme'
 
 interface MultiplierArrowProps {
@@ -28,10 +28,10 @@ const Content = styled.div`
   width: 100%;
 `
 
-// const EnteredTagWrapper = styled.div`
-//   position: absolute;
-//   z-index: 10;
-// `
+const EnteredTagWrapper = styled.div`
+  position: absolute;
+  z-index: 10;
+`
 
 // const getTextColor =
 //   (fallback = 'textSubtle') =>
@@ -72,21 +72,22 @@ const MultiplierArrow: React.FC<MultiplierArrowProps> = ({
     </Box>
   )
 
-  // const getEnteredTag = (position: CSSProperties) => {
-  //   if (!hasEntered) {
-  //     return null
-  //   }
+  const getEnteredTag = (position: CSSProperties) => {
+    if (!hasEntered) {
+      return null
+    }
 
-  //   return (
-  //     <EnteredTagWrapper style={position}>
-  //       <EnteredTag amount={betAmount} />
-  //     </EnteredTagWrapper>
-  //   )
-  // }
+    return (
+      <EnteredTagWrapper style={position}>
+        <EnteredTag amount={betAmount} />
+      </EnteredTagWrapper>
+    )
+  }
 
   if (betPosition === BetPosition.BEAR) {
     return (
       <Box position="relative">
+        {getEnteredTag({ bottom: "-35px", right: 0 })}
         <Content>
           {!isDisabled && multiplierText}
           <TYPE.main color={'text1'} fontSize="20px" margin="10px">
@@ -99,6 +100,7 @@ const MultiplierArrow: React.FC<MultiplierArrowProps> = ({
 
   return (
     <Box position="relative">
+      {getEnteredTag({ top: "-30px", left: 0 })}
       <Content>
         <TYPE.main color={'text1'} fontSize="20px" margin="10px">
           {t('BULL')}

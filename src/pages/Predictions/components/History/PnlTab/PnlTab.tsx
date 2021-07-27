@@ -134,13 +134,13 @@ const PnlTab: React.FC<PnlTabProps> = ({ hasBetHistory, bets }: PnlTabProps) => 
       <Flex>
         <PnlChart lost={summary.lost.rounds} won={summary.won.rounds} />
         <Flex flexDirection="column" justifyContent="center" pl="24px">
-          <TYPE.main color="textSubtle" fontSize="18px" marginLeft="2px">
+          <TYPE.main fontSize="18px" marginLeft="2px">
             {t('Net results')}
           </TYPE.main>
           <TYPE.main fontSize="17px" marginTop="11px" lineHeight="1" color={netResultIsPositive ? '#29a329' : '#ff471a'}>
             {`${netResultIsPositive ? '+' : ''}${formatToken(netResultAmount)} MATIC`}
           </TYPE.main>
-          <TYPE.main color="textSubtle" marginTop="5px">
+          <TYPE.main marginTop="5px">
             {`~$${formatToken(tokenusdPrice * (netResultAmount))}`}
           </TYPE.main>
         </Flex>
@@ -149,35 +149,35 @@ const PnlTab: React.FC<PnlTabProps> = ({ hasBetHistory, bets }: PnlTabProps) => 
         <TYPE.main mt="54px" mb="11px" fontWeight="600">
           {t('Average return / round')}
         </TYPE.main>
-        <TYPE.main color={avgTokenWonIsPositive ? '#29a329' : '#ff471a'} mb="5px">
+        <TYPE.main color={avgTokenWonIsPositive ? '#29a329' : '#ff471a'}>
           {`${avgTokenWonIsPositive ? '+' : ''}${formatToken(avgTokenWonPerRound)} MATIC`}
         </TYPE.main>
-        <TYPE.main color="textSubtle" fontSize="14px">
+        <TYPE.main fontSize="14px" marginTop="5px">
           {`~$${formatToken(tokenusdPrice * (avgTokenWonPerRound))}`}
         </TYPE.main>
 
         {hasBestRound && (
           <>
-            <TYPE.main mt="16px" color="textSubtle">
-              {t('Best round: #%roundId%', { roundId: summary.won.bestRound.id })}
+            <TYPE.main mt="16px" mb="11px" fontWeight="600">
+              {`Best round: #${summary.won.bestRound.id}`}
             </TYPE.main>
             <Flex alignItems="flex-end">
-              <TYPE.main color="success">{`+${formatToken(summary.won.bestRound.payout)} MATIC`}</TYPE.main>
-              <TYPE.main ml="4px" color="textSubtle">
+              <TYPE.main color={'#29a329'}>{`+${formatToken(summary.won.bestRound.payout)} MATIC`}</TYPE.main>
+              <TYPE.main>
                 ({summary.won.bestRound.multiplier.toFixed(2)}x)
               </TYPE.main>
             </Flex>
-            <TYPE.main color="textSubtle">
+            <TYPE.main fontSize="14px" marginTop="5px">
               {`~$${formatToken(tokenusdPrice * (summary.won.bestRound.payout))}`}
             </TYPE.main>
           </>
         )}
 
-        <TYPE.main mt="30px" mb="11px" fontWeight="600" color="textSubtle">
+        <TYPE.main mt="16px" mb="11px" fontWeight="600">
           {t('Average position entered / round')}
         </TYPE.main>
-        <TYPE.main fontSize="16px" mb="5px">{`${formatToken(avgPositionEntered)} MATIC`}</TYPE.main>
-        <TYPE.main color="textSubtle" fontSize="14px">
+        <TYPE.main>{`${formatToken(avgPositionEntered)} MATIC`}</TYPE.main>
+        <TYPE.main fontSize="14px" marginTop="5px">
           {`~$${formatToken(tokenusdPrice * (avgPositionEntered))}`}
         </TYPE.main>
 

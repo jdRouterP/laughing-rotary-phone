@@ -5,8 +5,8 @@ import { formatNumber } from 'utils/formatBalance'
 import getTimePeriods from 'utils/getTimePeriods'
 
 
-export const formatUsd = (usd: number | JSBI) => {
-  return `$${formatNumber(usd || 0, 3, 3)}`
+export const formatUsd = (usd: number | JSBI, maxPrecision: number = 3) => {
+  return `$${formatNumber(usd || 0, 3, maxPrecision)}`
 }
 
 export const formatToken = (token: number | string) => {

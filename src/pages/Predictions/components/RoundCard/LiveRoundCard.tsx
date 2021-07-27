@@ -60,7 +60,7 @@ const CardFooterBlock = styled.div<{ isPositionUp: boolean }>`
 // `
 
 const Wrapper = styled(AutoColumn) <{ showBackground: boolean; bgColor: any; darkMode: boolean }>`
-  border: ${({darkMode}) => darkMode ? '' : '1px solid #C3C5CB'};
+  border: ${({ darkMode }) => darkMode ? '' : '1px solid #C3C5CB'};
   border-radius: 12px;
   width: 100%;
   overflow: hidden;
@@ -159,7 +159,7 @@ const LiveRoundCard: React.FC<LiveRoundCardProps> = ({
               </TYPE.main>
             </MouseoverTooltip>
             <PositionTag betPosition={isBull ? BetPosition.BULL : BetPosition.BEAR}>
-              {formatUsd(priceDifference)}
+              {formatUsd(priceDifference, 6)}
             </PositionTag>
           </Flex>
           {lockPrice && <LockPriceRow lockPrice={lockPrice} />}
