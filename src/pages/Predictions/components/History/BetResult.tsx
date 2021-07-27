@@ -1,17 +1,17 @@
 import React from 'react'
 import { useWeb3React } from '@web3-react/core'
 import { Box, Flex, PrizeIcon, BlockIcon, LinkExternal } from '@pancakeswap/uikit'
-import { useDispatch } from 'react-redux'
+// import { useDispatch } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import { useBetCanClaim } from 'state/hook'
+// import { useBetCanClaim } from 'state/hook'
 import styled from 'styled-components'
 import { Bet, BetPosition } from 'state/prediction/types'
-import { fetchBet } from 'state/prediction/reducer'
+// import { fetchBet } from 'state/prediction/reducer'
 import { Result } from 'state/prediction/hooks'
 import { getExplorerLink } from 'utils'
 import useIsRefundable from '../../hooks/useIsRefundable'
 import { formatToken, getPayout } from '../../helpers'
-import CollectWinningsButton from '../CollectWinningsButton'
+// import CollectWinningsButton from '../CollectWinningsButton'
 import PositionTag from '../PositionTag'
 import ReclaimPositionButton from '../ReclaimPositionButton'
 import { TYPE } from 'theme'
@@ -29,11 +29,11 @@ const StyledBetResult = styled(Box)`
 
 const BetResult: React.FC<BetResultProps> = ({ bet, result }) => {
   const { t } = useTranslation()
-  const dispatch = useDispatch()
-  const { account, chainId } = useWeb3React()
+  // const dispatch = useDispatch()
+  const { chainId } = useWeb3React()
   const { isRefundable } = useIsRefundable(bet.round.epoch)
   //const tokenUSDCPrice = useUSDCPrice(WETH[chainId ?? 137])
-  const canClaim = useBetCanClaim(account ?? '', bet.round.id)
+  // const canClaim = useBetCanClaim(account ?? '', bet.round.id)
 
   // Winners get the payout, otherwise the claim what they put it if it was canceled
   const payout = result === Result.WIN ? getPayout(bet) : bet.amount
@@ -88,10 +88,10 @@ const BetResult: React.FC<BetResultProps> = ({ bet, result }) => {
     }
   }
 
-  const handleSuccess = async () => {
-    if (account && bet.id)
-      dispatch(fetchBet({ account, id: bet.id }))
-  }
+  // const handleSuccess = async () => {
+  //   if (account && bet.id)
+  //     dispatch(fetchBet({ account, id: bet.id }))
+  // }
 
   return (
     <>
@@ -105,7 +105,7 @@ const BetResult: React.FC<BetResultProps> = ({ bet, result }) => {
         </Flex>
       </Flex>
       <StyledBetResult>
-        {result === Result.WIN && !canClaim && !bet.claimed && (
+        {/* {result === Result.WIN && canClaim && !bet.claimed && (
           <CollectWinningsButton
             payout={payout}
             roundId={bet.round.id}
@@ -116,14 +116,7 @@ const BetResult: React.FC<BetResultProps> = ({ bet, result }) => {
           >
             {t('Collect Winnings')}
           </CollectWinningsButton>
-        )}
-        {bet.claimed && (
-          <Flex justifyContent="center">
-            {chainId && bet.claimedHash && <LinkExternal href={getExplorerLink(chainId, bet.claimedHash, "transaction")} mb="16px">
-              {t('View on Explorer')}
-            </LinkExternal>}
-          </Flex>
-        )}
+        )} */}
         {result === Result.CANCELED && isRefundable && (
           <ReclaimPositionButton epoch={bet.round.epoch} width="100%" mb="16px" />
         )}
@@ -147,6 +140,13 @@ const BetResult: React.FC<BetResultProps> = ({ bet, result }) => {
             </TYPE.main>
           </Box>
         </Flex>}
+        {bet.claimed && (
+          <Flex justifyContent="center" mt='15px'>
+            {chainId && bet.claimedHash && <LinkExternal href={getExplorerLink(chainId, bet.claimedHash, "transaction")} mb="16px">
+              {t('View on Explorer')}
+            </LinkExternal>}
+          </Flex>
+        )}
       </StyledBetResult>
     </>
   )

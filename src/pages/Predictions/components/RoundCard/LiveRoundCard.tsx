@@ -159,7 +159,7 @@ const LiveRoundCard: React.FC<LiveRoundCardProps> = ({
               </TYPE.main>
             </MouseoverTooltip>
             <PositionTag betPosition={isBull ? BetPosition.BULL : BetPosition.BEAR}>
-              {formatUsd(priceDifference)}
+              {formatUsd(priceDifference, 6)}
             </PositionTag>
           </Flex>
           {lockPrice && <LockPriceRow lockPrice={lockPrice} />}

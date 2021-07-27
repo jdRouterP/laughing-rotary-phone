@@ -41,7 +41,7 @@ const StyledBet = styled(Flex).attrs({ alignItems: 'center', p: '16px' })`
   cursor: pointer;
   border: 1px solid rgba(0,0,0,0.1);
   border-radius: 10px 10px 0px 0px;
-  background: ${({theme}) => theme.bg7};
+  background: ${({ theme }) => theme.bg7};
 `
 
 const YourResult = styled(Box)`
@@ -162,9 +162,9 @@ const HistoricalBet: React.FC<BetProps> = ({ bet }) => {
             {t('Reclaim')}
           </ReclaimPositionButton>
         )}
-        {!isOpenRound && !isLiveRound && (
+        {!isOpenRound && (
           <IconStyle>
-            {isOpen ? <ChevronUp size={20} color={darkMode ? "#FFFFFF" : "rgb(23, 24, 31)"} /> : <ChevronDown size={20} color={darkMode ? "#FFFFFF" : "rgb(23, 24, 31)"}/>}
+            {isOpen ? <ChevronUp size={20} color={darkMode ? "#FFFFFF" : "rgb(23, 24, 31)"} /> : <ChevronDown size={20} color={darkMode ? "#FFFFFF" : "rgb(23, 24, 31)"} />}
           </IconStyle>
         )}
       </StyledBet>
