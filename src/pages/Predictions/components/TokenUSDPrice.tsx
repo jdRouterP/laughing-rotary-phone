@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import { useCountUp } from 'react-countup'
 import { useGetLastOraclePrice } from 'state/hook'
+import QuestionHelper from 'components/QuestionHelper'
 // import CurrencyLogo from 'components/CurrencyLogo'
 // import { WMATIC } from '../../../constants'
 
@@ -79,6 +80,7 @@ const TokenUSDPrice: React.FC = () => {
                 <CurrentPrice>
                     {`$${countUp}`}
                 </CurrentPrice>
+                <QuestionHelper text="Prediction Market is in BETA, use at your own risk!" />
             </PriceFeed>
         </Wrapper>
     )

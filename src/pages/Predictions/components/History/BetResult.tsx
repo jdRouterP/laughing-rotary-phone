@@ -21,7 +21,7 @@ interface BetResultProps {
 }
 
 const StyledBetResult = styled(Box)`
-
+  border: 1px solid;
   border-radius: 16px;
   margin-bottom: 24px;
   padding: 11px;

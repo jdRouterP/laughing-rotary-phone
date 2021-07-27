@@ -10,7 +10,14 @@ import { getRoundResult, Result } from 'state/prediction/hooks'
 import PnlChart from './PnlChart'
 import SummaryRow from './SummaryRow'
 import { TYPE } from 'theme'
+import { useIsDarkMode } from 'state/user/hooks'
 
+
+const StyledBox = styled.div`
+  padding: 10px;
+  border: 1px solid;
+  border-radius: 10px;  
+`
 interface PnlTabProps {
   hasBetHistory: boolean
   bets: Bet[]
@@ -124,14 +131,15 @@ const PnlTab: React.FC<PnlTabProps> = ({ hasBetHistory, bets }: PnlTabProps) => 
 
   // Guard in case user has only lost rounds
   const hasBestRound = summary.won.bestRound.payout !== 0
+  const darkMode = useIsDarkMode()
 
   return hasBetHistory ? (
-    <Box p="16px">
+    <Box p="16px" style={{ border: "1px solid rgba(0,0,0,0.1)", background: darkMode ? "#2F303C" : "rgba(47, 48, 60, 0.10)" }}>
       <TYPE.main
         fontSize="24px" pb="24px">
         {t('Your history')}
       </TYPE.main>
-      <Flex>
+      <Flex mb="35px">
         <PnlChart lost={summary.lost.rounds} won={summary.won.rounds} />
         <Flex flexDirection="column" justifyContent="center" pl="24px">
           <TYPE.main fontSize="18px" marginLeft="2px">
@@ -145,41 +153,44 @@ const PnlTab: React.FC<PnlTabProps> = ({ hasBetHistory, bets }: PnlTabProps) => 
           </TYPE.main>
         </Flex>
       </Flex>
-      <Box>
-        <TYPE.main mt="54px" mb="11px" fontWeight="600">
-          {t('Average return / round')}
-        </TYPE.main>
-        <TYPE.main color={avgTokenWonIsPositive ? '#29a329' : '#ff471a'}>
-          {`${avgTokenWonIsPositive ? '+' : ''}${formatToken(avgTokenWonPerRound)} MATIC`}
-        </TYPE.main>
-        <TYPE.main fontSize="14px" marginTop="5px">
-          {`~$${formatToken(tokenusdPrice * (avgTokenWonPerRound))}`}
-        </TYPE.main>
+      <Box >
+        <StyledBox>
+          <TYPE.main mt="54px" mb="11px" fontWeight="600">
+            {t('Average return / round')}
+          </TYPE.main>
+          <TYPE.main color={avgTokenWonIsPositive ? '#29a329' : '#ff471a'}>
+            {`${avgTokenWonIsPositive ? '+' : ''}${formatToken(avgTokenWonPerRound)} MATIC`}
+          </TYPE.main>
+          <TYPE.main fontSize="14px" marginTop="5px">
+            {`~$${formatToken(tokenusdPrice * (avgTokenWonPerRound))}`}
+          </TYPE.main>
 
-        {hasBestRound && (
-          <>
-            <TYPE.main mt="16px" mb="11px" fontWeight="600">
-              {`Best round: #${summary.won.bestRound.id}`}
-            </TYPE.main>
-            <Flex alignItems="flex-end">
-              <TYPE.main color={'#29a329'}>{`+${formatToken(summary.won.bestRound.payout)} MATIC`}</TYPE.main>
-              <TYPE.main>
-                ({summary.won.bestRound.multiplier.toFixed(2)}x)
+          {hasBestRound && (
+            <>
+              <TYPE.main mt="16px" mb="11px" fontWeight="600">
+                {`Best round: #${summary.won.bestRound.id}`}
               </TYPE.main>
-            </Flex>
-            <TYPE.main fontSize="14px" marginTop="5px">
-              {`~$${formatToken(tokenusdPrice * (summary.won.bestRound.payout))}`}
-            </TYPE.main>
-          </>
-        )}
+              <Flex alignItems="flex-end">
+                <TYPE.main color={'#29a329'}>{`+${formatToken(summary.won.bestRound.payout)} MATIC`}</TYPE.main>
+                <TYPE.main>
+                  ({summary.won.bestRound.multiplier.toFixed(2)}x)
+                </TYPE.main>
+              </Flex>
+              <TYPE.main fontSize="14px" marginTop="5px">
+                {`~$${formatToken(tokenusdPrice * (summary.won.bestRound.payout))}`}
+              </TYPE.main>
+            </>
+          )}
 
-        <TYPE.main mt="16px" mb="11px" fontWeight="600">
-          {t('Average position entered / round')}
-        </TYPE.main>
-        <TYPE.main>{`${formatToken(avgPositionEntered)} MATIC`}</TYPE.main>
-        <TYPE.main fontSize="14px" marginTop="5px">
-          {`~$${formatToken(tokenusdPrice * (avgPositionEntered))}`}
-        </TYPE.main>
+          <TYPE.main mt="16px" mb="11px" fontWeight="600">
+            {t('Average position entered / round')}
+          </TYPE.main>
+          <TYPE.main>{`${formatToken(avgPositionEntered)} MATIC`}</TYPE.main>
+          <TYPE.main fontSize="14px" marginTop="5px">
+            {`~$${formatToken(tokenusdPrice * (avgPositionEntered))}`}
+          </TYPE.main>
+        </StyledBox>
+
 
         <Divider />
 

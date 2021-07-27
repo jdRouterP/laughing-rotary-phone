@@ -2,8 +2,6 @@ import React, { useState } from 'react'
 import { useWeb3React } from '@web3-react/core'
 import {
   Box,
-  ChevronDownIcon,
-  ChevronUpIcon,
   Flex,
   PlayCircleOutlineIcon,
   WaitIcon,
@@ -18,25 +16,32 @@ import CollectWinningsButton from '../CollectWinningsButton'
 import ReclaimPositionButton from '../ReclaimPositionButton'
 import BetDetails from './BetDetails'
 import { TYPE } from 'theme'
-// import { ButtonEmpty } from 'components/Button'
+import { useIsDarkMode } from 'state/user/hooks'
+import { ChevronUp, ChevronDown } from 'react-feather'
 
 interface BetProps {
   bet: Bet
 }
 
 
-const Line = styled.div`
-  width:100%;
-  margin-left: 16px;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-`
+// const Line = styled.div`
+//   width:100%;
+//   margin-left: 16px;
+//   border: 1px solid rgba(0, 0, 0, 0.1);
+// `
 
-const LineStyled = styled.div`
-  max-width: 360px;
-`
+// const LineStyled = styled.div`
+//   max-width: 360px;
+// `
 
+const IconStyle = styled.div`
+  margin-left: 12px;
+`
 const StyledBet = styled(Flex).attrs({ alignItems: 'center', p: '16px' })`
   cursor: pointer;
+  border: 1px solid rgba(0,0,0,0.1);
+  border-radius: 10px 10px 0px 0px;
+  background: ${({ theme }) => theme.bg7};
 `
 
 const YourResult = styled(Box)`
@@ -88,6 +93,7 @@ const HistoricalBet: React.FC<BetProps> = ({ bet }) => {
 
   // Winners get the payout, otherwise the claim what they put it if it was canceled
   const payout = roundResult === Result.WIN ? getPayout(bet) : amount
+  const darkMode = useIsDarkMode()
 
   const renderBetLabel = () => {
     if (isOpenRound) {
@@ -126,7 +132,7 @@ const HistoricalBet: React.FC<BetProps> = ({ bet }) => {
 
   return (
     <>
-      <StyledBet onClick={toggleOpen} role="button">
+      <StyledBet onClick={toggleOpen} role="button" mb="10px">
         <Box width="48px">
 
           <TYPE.main fontSize="12px" mb="2px">
@@ -157,14 +163,14 @@ const HistoricalBet: React.FC<BetProps> = ({ bet }) => {
           </ReclaimPositionButton>
         )}
         {!isOpenRound && !isLiveRound && (
-          <>
-            {isOpen ? <ChevronUpIcon color="primary" /> : <ChevronDownIcon color="primary" />}
-          </>
+          <IconStyle>
+            {isOpen ? <ChevronUp size={20} color={darkMode ? "#FFFFFF" : "rgb(23, 24, 31)"} /> : <ChevronDown size={20} color={darkMode ? "#FFFFFF" : "rgb(23, 24, 31)"} />}
+          </IconStyle>
         )}
       </StyledBet>
-      <LineStyled>
+      {/* <LineStyled>
         <Line />
-      </LineStyled>
+      </LineStyled> */}
       {isOpen && <BetDetails bet={bet} result={getRoundResult(bet, currentEpoch)} />}
     </>
   )

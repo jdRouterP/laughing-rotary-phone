@@ -70,7 +70,7 @@ const CollectWinningsButton: React.FC<CollectWinningsButtonProps> = ({
   }
 
   return (
-    <ButtonPrimary padding={"12px"}
+    <ButtonPrimary padding={"7px"}
       width={"30%"} onClick={handleClick} disabled={hasClaimed}>
       {children}
     </ButtonPrimary>

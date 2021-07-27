@@ -11,6 +11,19 @@ import useOnNextRound from './hooks/useOnNextRound'
 
 SwiperCore.use([Keyboard, Mousewheel])
 
+
+// const BetaVersionCard = styled.div`
+//   margin: 0 auto;
+//   text-align: center;
+//   padding: 2px;
+//   margin-bottom: 6px;
+//   max-width: 366px;
+//   width: 100%;
+//   border: 1px solid;
+//   border-radius: 5px;
+//   background: radial-gradient(76.02% 75.41% at 1.84% 0%,#ff007a 0%,#2172e5 100%);
+// `
+
 const StyledSwiper = styled.div`
   .swiper-wrapper {
     align-items: center;
@@ -37,6 +50,9 @@ const Positions: React.FC = () => {
 
   return (
     <div>
+      {/* <BetaVersionCard>
+        <span>Prediction Market is in BETA, use at own risk</span>
+      </BetaVersionCard> */}
       <MenuWrapper>
         <Menu />
       </MenuWrapper>
