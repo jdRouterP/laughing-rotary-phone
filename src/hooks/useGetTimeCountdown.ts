@@ -13,7 +13,7 @@ const useTimeCountdown = (time: number) => {
     const startCountdown = async () => {
       const currentBlock = await library?.getBlockNumber();
       const currentTime = (currentBlock && (await library?.getBlock(currentBlock))?.timestamp) || 0;
-      console.log(currentBlock, currentTime, time);
+      // console.log(currentBlock, currentTime, time);
       if (time > currentTime) {
         setSecondsRemaining((time - currentTime))
         // Clear previous interval

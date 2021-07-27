@@ -100,7 +100,7 @@ const Predictions = () => {
         )
       } else {
         // If the latest epoch from the API does not match the latest epoch from the contract we have an unrecoverable error
-        console.log(latestRound, latestRound?.epoch === currentEpoch)
+        // console.log(latestRound, latestRound?.epoch === currentEpoch)
         dispatch(setPredictionStatus(PredictionStatus.ERROR))
       }
     }
