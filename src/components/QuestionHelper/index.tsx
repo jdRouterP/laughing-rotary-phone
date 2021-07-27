@@ -54,7 +54,7 @@ export default function QuestionHelper({ text }: { text: string }) {
   const close = useCallback(() => setShow(false), [setShow])
 
   return (
-    <span style={{ marginLeft: 4 }}>
+    <span style={{ marginLeft: 4, marginTop: 3}}>
       <Tooltip text={text} show={show}>
         <QuestionWrapper onClick={open} onMouseEnter={open} onMouseLeave={close}>
           <Question size={16} />

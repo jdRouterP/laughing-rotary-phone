@@ -16,9 +16,13 @@ interface BetDetailsProps {
 }
 
 const StyledBetDetails = styled.div`
-  border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+  border: 2px solid rgba(0, 0, 0, 0.1);
+  border-top: none;
   border-radius: 0px 0px 30px 30px;
   padding: 20px;
+  margin-bottom: 10px;
+  margin-top: -10px;
+  background: ${({theme}) => theme.bg7};
 `
 
 const BetDetails: React.FC<BetDetailsProps> = ({ bet, result }) => {
