@@ -5,7 +5,7 @@ import { Flex, PlayCircleOutlineIcon, Skeleton } from '@pancakeswap/uikit'
 import { useTranslation } from 'react-i18next'
 import { Round, BetPosition } from 'state/prediction/types'
 import { useGetinterval, useGetLastOraclePrice } from 'state/hook'
-// import BlockProgress from 'components/BlockProgress'
+import BlockProgress from 'components/BlockProgress'
 import { formatUsd } from '../../helpers'
 import PositionTag from '../PositionTag'
 import { RoundResultBox, LockPriceRow, PrizePoolRow } from '../RoundResult'
@@ -139,6 +139,7 @@ const LiveRoundCard: React.FC<LiveRoundCardProps> = ({
         epoch={round.epoch}
         blockTime={estimatedEndTime}
       />
+      <BlockProgress variant="flat" scale="sm" startBlock={lockAt} endBlock={estimatedEndTime} />
       <ContentWrapper>
         <CardHeaderBlock isPositionUp={isBull}>
           <MultiplierArrow
