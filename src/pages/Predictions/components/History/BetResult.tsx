@@ -117,13 +117,6 @@ const BetResult: React.FC<BetResultProps> = ({ bet, result }) => {
             {t('Collect Winnings')}
           </CollectWinningsButton>
         )} */}
-        {bet.claimed && (
-          <Flex justifyContent="center">
-            {chainId && bet.claimedHash && <LinkExternal href={getExplorerLink(chainId, bet.claimedHash, "transaction")} mb="16px">
-              {t('View on Explorer')}
-            </LinkExternal>}
-          </Flex>
-        )}
         {result === Result.CANCELED && isRefundable && (
           <ReclaimPositionButton epoch={bet.round.epoch} width="100%" mb="16px" />
         )}
@@ -147,6 +140,13 @@ const BetResult: React.FC<BetResultProps> = ({ bet, result }) => {
             </TYPE.main>
           </Box>
         </Flex>}
+        {bet.claimed && (
+          <Flex justifyContent="center" mt='15px'>
+            {chainId && bet.claimedHash && <LinkExternal href={getExplorerLink(chainId, bet.claimedHash, "transaction")} mb="16px">
+              {t('View on Explorer')}
+            </LinkExternal>}
+          </Flex>
+        )}
       </StyledBetResult>
     </>
   )

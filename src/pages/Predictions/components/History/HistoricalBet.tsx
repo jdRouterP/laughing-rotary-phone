@@ -162,7 +162,7 @@ const HistoricalBet: React.FC<BetProps> = ({ bet }) => {
             {t('Reclaim')}
           </ReclaimPositionButton>
         )}
-        {!isOpenRound && !isLiveRound && (
+        {!isOpenRound && (
           <IconStyle>
             {isOpen ? <ChevronUp size={20} color={darkMode ? "#FFFFFF" : "rgb(23, 24, 31)"} /> : <ChevronDown size={20} color={darkMode ? "#FFFFFF" : "rgb(23, 24, 31)"} />}
           </IconStyle>

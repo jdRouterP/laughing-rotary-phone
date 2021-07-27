@@ -14,7 +14,7 @@ import { useIsDarkMode } from 'state/user/hooks'
 
 
 const StyledBox = styled.div`
-  padding: 10px;
+  padding: 15px;
   border: 1px solid;
   border-radius: 10px;  
 `
@@ -155,7 +155,7 @@ const PnlTab: React.FC<PnlTabProps> = ({ hasBetHistory, bets }: PnlTabProps) => 
       </Flex>
       <Box >
         <StyledBox>
-          <TYPE.main mt="54px" mb="11px" fontWeight="600">
+          <TYPE.main mb="11px" fontWeight="600">
             {t('Average return / round')}
           </TYPE.main>
           <TYPE.main color={avgTokenWonIsPositive ? '#29a329' : '#ff471a'}>
