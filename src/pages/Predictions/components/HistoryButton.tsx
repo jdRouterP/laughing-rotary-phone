@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { useWeb3React } from '@web3-react/core'
-import { AutoRenewIcon, HistoryIcon } from '@pancakeswap/uikit'
+import { AutoRenewIcon} from '@pancakeswap/uikit'
 import { useDispatch } from 'react-redux'
 import { setHistoryPaneState } from 'state/prediction/reducer'
 import { useGetIsFetchingHistory, useGetPredictionsStatus } from 'state/hook'
 import styled from 'styled-components'
 import { getBetHistory } from 'state/prediction/hooks'
+import {User} from 'react-feather'
 
 
 
@@ -96,7 +97,7 @@ const HistoryButton = () => {
     <StyledMenuButton onClick={handleClick} disabled={!account}>
       {show ? <NotificationIcon /> : ''}
 
-      {isFetchingHistory ? <AutoRenewIcon spin color="white" /> : <HistoryIcon width="24px" color="white" />}
+      {isFetchingHistory ? <AutoRenewIcon spin color="white" /> : <User width="24px" color="white" />}
     </StyledMenuButton>
   )
 }
