@@ -20,6 +20,7 @@ import { AutoColumn } from 'components/Column'
 import { TYPE } from 'theme'
 import { useIsDarkMode } from 'state/user/hooks'
 
+
 interface LiveRoundCardProps {
   round: Round
   betAmount?: number
@@ -31,7 +32,6 @@ interface LiveRoundCardProps {
 
 
 const CardHeaderBlock = styled.div<{ isPositionUp: boolean }>`
-
   margin-top: 23px;
   width: 206px;
   padding-top: 30px;
