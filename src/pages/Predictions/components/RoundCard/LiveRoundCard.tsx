@@ -60,7 +60,7 @@ const CardFooterBlock = styled.div<{ isPositionUp: boolean }>`
 // `
 
 const Wrapper = styled(AutoColumn) <{ showBackground: boolean; bgColor: any; darkMode: boolean }>`
-  border: ${({darkMode}) => darkMode ? '1px solid radial-gradient(174.47% 188.91% at 1.84% 0%,#ff007a 0%,#2172e5 100%),#edeef2' : '1px solid #C3C5CB'};
+  border: 3px solid ${({darkMode}) => darkMode ? '#565A69' : '#C3C5CB'};
   border-radius: 12px;
   width: 100%;
   overflow: hidden;

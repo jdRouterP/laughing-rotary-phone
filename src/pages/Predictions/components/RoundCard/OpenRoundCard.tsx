@@ -57,7 +57,7 @@ const CardFooterBlock = styled.div`
 
 const Wrapper = styled(AutoColumn) <{ showBackground: boolean; bgColor: any; darkMode: boolean }>`
   border-radius: 12px;
-  border: ${({ darkMode }) => darkMode ? '' : '1px solid #C3C5CB'};
+  border: ${({ darkMode }) => darkMode ? '1px solid #565A69' : '1px solid #C3C5CB'};
   width: 100%;
   overflow: hidden;
   position: relative;
@@ -236,7 +236,7 @@ const OpenRoundCard: React.FC<OpenRoundCardProps> = ({
           ) : (
             <>
               <div ref={targetRef}>
-                <ButtonBear disabled width="100%" mb="8px">
+                <ButtonBear disabled width="100%" mb="8px" padding="28px" fontSize="20px">
                   {`${positionDisplay} Entered`}
                 </ButtonBear>
               </div>
