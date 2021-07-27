@@ -77,7 +77,7 @@ const HistoryButton = () => {
         if (!isCancelled) {
           // Filter out bets that were not winners
           const winnerBets = bets.filter((bet) => {
-            return bet.position === bet?.round?.position
+            return bet.position === bet?.round?.position || bet?.round?.failed
           })
           setShow(winnerBets.length > 0)
         }

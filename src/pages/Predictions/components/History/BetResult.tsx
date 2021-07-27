@@ -3,18 +3,18 @@ import { useWeb3React } from '@web3-react/core'
 import { Box, Flex, PrizeIcon, BlockIcon, LinkExternal } from '@pancakeswap/uikit'
 // import { useDispatch } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-// import { useBetCanClaim } from 'state/hook'
 import styled from 'styled-components'
 import { Bet, BetPosition } from 'state/prediction/types'
 // import { fetchBet } from 'state/prediction/reducer'
 import { Result } from 'state/prediction/hooks'
 import { getExplorerLink } from 'utils'
 import useIsRefundable from '../../hooks/useIsRefundable'
-import { formatToken, getPayout } from '../../helpers'
+import { formatToken, getNetPayout } from '../../helpers'
 // import CollectWinningsButton from '../CollectWinningsButton'
 import PositionTag from '../PositionTag'
 import ReclaimPositionButton from '../ReclaimPositionButton'
 import { TYPE } from 'theme'
+import { useGetRewardRate } from 'state/hook'
 interface BetResultProps {
   bet: Bet
   result: Result
@@ -32,11 +32,12 @@ const BetResult: React.FC<BetResultProps> = ({ bet, result }) => {
   // const dispatch = useDispatch()
   const { chainId } = useWeb3React()
   const { isRefundable } = useIsRefundable(bet.round.epoch)
+  const rewardRate = useGetRewardRate()
   //const tokenUSDCPrice = useUSDCPrice(WETH[chainId ?? 137])
   // const canClaim = useBetCanClaim(account ?? '', bet.round.id)
-
+  debugger
   // Winners get the payout, otherwise the claim what they put it if it was canceled
-  const payout = result === Result.WIN ? getPayout(bet) : bet.amount
+  const payout = result === Result.WIN ? getNetPayout(bet, rewardRate) : bet.amount
 
   const getHeaderColor = () => {
     switch (result) {

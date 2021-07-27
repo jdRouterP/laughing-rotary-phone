@@ -79,6 +79,11 @@ export const useGetMinBetAmount = () => {
     return useMemo(() => new CurrencyAmount(Currency.getNativeCurrency(chainId ?? 137), minBetAmount), [minBetAmount, chainId])
 }
 
+export const useGetRewardRate = () => {
+    const rewardRate = useSelector((state: AppState) => state.predictions.rewardRate)
+    return rewardRate / 100
+}
+
 export const useGetIsFetchingHistory = () => {
     return useSelector((state: AppState) => state.predictions.isFetchingHistory)
 }

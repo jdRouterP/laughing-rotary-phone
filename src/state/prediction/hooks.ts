@@ -174,7 +174,7 @@ export const getRoundResult = (bet: Bet, currentEpoch: number): Result => {
 /**
  * Given a bet object, check if it is eligible to be claimed or refunded
  */
-export const getCanClaim = (bet: Bet) => {
+export const getCanClaim = (bet: Bet | BetResponse) => {
   return !bet.claimed && (bet.position === bet.round.position || bet.round.failed === true)
 }
 
@@ -182,7 +182,7 @@ export const getCanClaim = (bet: Bet) => {
  * Returns only bets where the user has won.
  * This is necessary because the API currently cannot distinguish between an uncliamed bet that has won or lost
  */
-export const getUnclaimedWinningBets = (bets: Bet[]): Bet[] => {
+export const getUnclaimedWinningBets = (bets: Bet[] | BetResponse[]): Bet[] => {
   return bets.filter(getCanClaim)
 }
 
@@ -195,16 +195,18 @@ export const useStaticPredictionsData = async () => {
 
   try {
     const currentEpoch = await contract.currentEpoch();
-    const interval = await contract.interval()
-    const minBetAmount = await contract.minBetAmount()
-    const isPaused = await contract.paused()
-    const buffer = await contract.buffer()
+    const interval = await contract.interval();
+    const minBetAmount = await contract.minBetAmount();
+    const isPaused = await contract.paused();
+    const buffer = await contract.buffer();
+    const rewardRate = await contract.rewardRate();
     return {
       status: isPaused ? PredictionStatus.PAUSED : PredictionStatus.LIVE,
       currentEpoch: Number(currentEpoch),
       interval: Number(interval),
       buffer: Number(buffer),
       minBetAmount: minBetAmount.toNumber(),
+      rewardRate: rewardRate.toNumber()
     }
   } catch (error) {
     console.log(error)

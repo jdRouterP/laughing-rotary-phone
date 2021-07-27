@@ -5,10 +5,12 @@ import { useTranslation } from 'react-i18next'
 // import { getExplorerLink } from 'utils'
 import { Result } from 'state/prediction/hooks'
 import { getMultiplier } from '../../helpers'
+
 import { PayoutRow, RoundResult } from '../RoundResult'
 import BetResult from './BetResult'
 // import { useActiveWeb3React } from 'hooks'
 import { TYPE } from 'theme'
+import { useGetRewardRate } from 'state/hook'
 
 interface BetDetailsProps {
   bet: Bet
@@ -22,15 +24,16 @@ const StyledBetDetails = styled.div`
   padding: 20px;
   margin-bottom: 10px;
   margin-top: -10px;
-  background: ${({theme}) => theme.bg7};
+  background: ${({ theme }) => theme.bg7};
 `
 
 const BetDetails: React.FC<BetDetailsProps> = ({ bet, result }) => {
   const { t } = useTranslation()
   // const { chainId } = useActiveWeb3React()
   const { totalAmount, bullAmount, bearAmount } = bet.round
-  const bullMultiplier = getMultiplier(totalAmount, bullAmount)
-  const bearMultiplier = getMultiplier(totalAmount, bearAmount)
+  const rewardRate = useGetRewardRate()
+  const bullMultiplier = getMultiplier(totalAmount, bullAmount, rewardRate)
+  const bearMultiplier = getMultiplier(totalAmount, bearAmount, rewardRate)
   return (
     <StyledBetDetails>
       {result === Result.CANCELED && (
