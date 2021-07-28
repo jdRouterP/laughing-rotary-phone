@@ -11,7 +11,7 @@ export const formatUsd = (usd: number | JSBI, maxPrecision: number = 3) => {
 
 export const formatToken = (token: number | string) => {
   const value = typeof token === "string" ? parseFloat(token) : token;
-  return value ? formatNumber(value, 2, 5) : '0'
+  return !!value ? formatNumber(value, 2, 5) : '0'
 }
 
 export const padTime = (num: number) => num.toString().padStart(2, '0')
@@ -45,7 +45,7 @@ export const getPayout = (bet: Bet, rewardRate = 1) => {
 
   const { bullAmount, bearAmount, totalAmount } = bet.round
   const multiplier = getMultiplier(totalAmount, bet.position === BetPosition.BULL ? bullAmount : bearAmount, rewardRate)
-  return bet.amount * multiplier
+  return (bet.amount * multiplier)
 }
 
 
@@ -57,6 +57,16 @@ export const getNetPayout = (bet: Bet, rewardRate = 1): number => {
   const payout = getPayout(bet, rewardRate)
   return payout
 }
+
+export const getNetGains = (bet: Bet, rewardRate = 1): number => {
+  if (!bet || !bet.round) {
+    return 0
+  }
+
+  const payout = getPayout(bet, rewardRate)
+  return payout - bet.amount
+}
+
 
 // TODO: Move this to the UI Kit
 export const getBubbleGumBackground = () => {
