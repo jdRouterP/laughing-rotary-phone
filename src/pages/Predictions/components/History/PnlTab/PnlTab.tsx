@@ -86,7 +86,6 @@ const getPnlSummary = (bets: Bet[], currentEpoch: number): PnlSummary => {
         const multiplier = getMultiplier(totalAmount, bet.position === BetPosition.BULL ? bullAmount : bearAmount, rewardRate)
         bestRound = { id: bet.round.id, payout, multiplier }
       }
-      debugger
       return {
         won: {
           rounds: summary.won.rounds + 1,

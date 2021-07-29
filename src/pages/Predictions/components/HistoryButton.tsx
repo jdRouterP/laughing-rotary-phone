@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { useWeb3React } from '@web3-react/core'
-import { AutoRenewIcon} from '@pancakeswap/uikit'
+import { AutoRenewIcon } from '@pancakeswap/uikit'
 import { useDispatch } from 'react-redux'
 import { setHistoryPaneState } from 'state/prediction/reducer'
-import { useGetIsFetchingHistory, useGetPredictionsStatus } from 'state/hook'
+import { useGetIsFetchingHistory, useGetPredictionsStatus, useIsHistoryPaneOpen } from 'state/hook'
 import styled from 'styled-components'
 import { getBetHistory } from 'state/prediction/hooks'
-import {User} from 'react-feather'
+import { User } from 'react-feather'
 
 
 
@@ -57,6 +57,7 @@ export const StyledMenuButton = styled.button`
 
 const HistoryButton = () => {
   const isFetchingHistory = useGetIsFetchingHistory()
+  const isHistoryPaneOpen = useIsHistoryPaneOpen()
   const [show, setShow] = useState(false)
   const dispatch = useDispatch()
   const { account } = useWeb3React()
@@ -71,7 +72,8 @@ const HistoryButton = () => {
 
     const getBets = async () => {
 
-      if (account) {
+      if (account && isHistoryPaneOpen) {
+
         const bets = await getBetHistory({ user: account.toLowerCase(), claimed: false })
 
         if (!isCancelled) {
@@ -91,7 +93,7 @@ const HistoryButton = () => {
 
       isCancelled = true
     }
-  }, [account, predictionStatus, setShow])
+  }, [account, predictionStatus, setShow, isHistoryPaneOpen])
 
   return (
     <StyledMenuButton onClick={handleClick} disabled={!account}>
