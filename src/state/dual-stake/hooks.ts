@@ -366,11 +366,12 @@ const getTokenByAddress = (address: string) => {
 }
 
 export function useTotalDualFarmUniEarned(): TokenAmount | undefined {
-
+  const { chainId } = useActiveWeb3React()
+  const uni = chainId ? UNI[chainId] : undefined
   const stakingInfos = useStakingInfo()
 
   return useMemo(() => {
-    if (!DFYN) return undefined
+    if (!uni) return undefined
     return (
       stakingInfos?.reduce(
         (accumulator, stakingInfo) => {
@@ -378,10 +379,10 @@ export function useTotalDualFarmUniEarned(): TokenAmount | undefined {
           const amount = index === 0 ? stakingInfo?.earnedAmount : stakingInfo.earnedAmountTwo
           return accumulator.add(amount)
         },
-        new TokenAmount(DFYN, '0')
-      ) ?? new TokenAmount(DFYN, '0')
+        new TokenAmount(uni, '0')
+      ) ?? new TokenAmount(uni, '0')
     )
-  }, [stakingInfos])
+  }, [stakingInfos, uni])
 }
 
 // based on typed value
