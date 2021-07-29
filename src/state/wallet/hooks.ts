@@ -154,7 +154,6 @@ export function useAggregateUniBalance(): TokenAmount | undefined {
   const uniToClaimFlora: TokenAmount | undefined = useTotalFloraUniEarned()
   const uniToClaimEcosystem: TokenAmount | undefined = useTotalEcosystemUniEarned()
   const uniToClaimDualFarms: TokenAmount | undefined = useTotalDualFarmUniEarned()
-  console.log(uniToClaimDualFarms)
   const uniUnHarvested: TokenAmount | undefined = uniToClaimPreStake && uniToClaimFlora && uniToClaimVault && uniToClaimEcosystem && uniToClaimDualFarms && uniToClaimPreStake.add(uniToClaimVault).add(uniToClaimFlora).add(uniToClaimEcosystem).add(uniToClaimDualFarms)
 
   if (!uni) return undefined
