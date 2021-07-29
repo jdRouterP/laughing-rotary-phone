@@ -12,7 +12,6 @@ import {
   MarketResponse,
 } from './queries'
 import { usePredictionContract } from 'hooks/useContract'
-import { useSingleCallResult } from 'state/multicall/hooks'
 
 export enum Result {
   WIN = 'win',
@@ -190,22 +189,29 @@ export const getUnclaimedWinningBets = (bets: Bet[] | BetResponse[]): Bet[] => {
 /**
  * Gets static data from the contract
  */
-export const useStaticPredictionsData = () => {
-  const predictionContract = usePredictionContract();
-  const currentEpoch = useSingleCallResult(predictionContract, 'currentEpoch')
-  const interval = useSingleCallResult(predictionContract, 'interval')
-  const minBetAmount = useSingleCallResult(predictionContract, 'minBetAmount')
-  const isPaused = useSingleCallResult(predictionContract, 'paused')
-  const buffer = useSingleCallResult(predictionContract, 'buffer')
-  const rewardRate = useSingleCallResult(predictionContract, 'rewardRate')
-  return {
-    status: isPaused.result?.[0] ? PredictionStatus.PAUSED : PredictionStatus.LIVE,
-    currentEpoch: Number(currentEpoch?.result?.[0]),
-    interval: Number(interval?.result?.[0]),
-    buffer: Number(buffer?.result?.[0]),
-    minBetAmount: minBetAmount?.result?.[0].toNumber(),
-    rewardRate: rewardRate?.result?.[0].toNumber()
+export const useStaticPredictionsData = async () => {
+  const contract = usePredictionContract();
+  if (!contract) return;
+
+  try {
+    const currentEpoch = await contract.currentEpoch();
+    const interval = await contract.interval();
+    const minBetAmount = await contract.minBetAmount();
+    const isPaused = await contract.paused();
+    const buffer = await contract.buffer();
+    const rewardRate = await contract.rewardRate();
+    return {
+      status: isPaused ? PredictionStatus.PAUSED : PredictionStatus.LIVE,
+      currentEpoch: Number(currentEpoch),
+      interval: Number(interval),
+      buffer: Number(buffer),
+      minBetAmount: minBetAmount.toNumber(),
+      rewardRate: rewardRate.toNumber()
+    }
+  } catch (error) {
+    console.log(error)
   }
+
 }
 
 export const getMarketData = async (): Promise<{
@@ -264,7 +270,6 @@ export const getBetHistory = async (
   first = 1000,
   skip = 0,
 ): Promise<BetResponse[]> => {
-  console.log('I/m erew')
   const response = await request(
     GRAPH_API_PREDICTION,
     gql`
