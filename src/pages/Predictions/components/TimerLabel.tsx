@@ -29,6 +29,7 @@ const Wrapper = styled.div`
     ${({ theme }) => theme.mediaWidth.upToSmall`
         width: 260px;
         margin-left: 8px;
+        padding: 6px;
   `};
 `
 const Timer = styled.div`

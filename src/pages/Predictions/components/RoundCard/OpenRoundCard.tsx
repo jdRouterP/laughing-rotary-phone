@@ -229,7 +229,7 @@ const OpenRoundCard: React.FC<OpenRoundCardProps> = ({
                 mb="4px"
                 disabled={loadingState.loading || !canEnterPosition || isBufferPhase}
               >
-                {t('Bet BULL')}
+                {t('BULL')}
               </ButtonBull>
               <ButtonBear
                 padding="10px"
@@ -238,7 +238,7 @@ const OpenRoundCard: React.FC<OpenRoundCardProps> = ({
                 onClick={() => handleSetPosition(BetPosition.BEAR)}
                 disabled={loadingState.loading || !canEnterPosition || isBufferPhase}
               >
-                {t('Bet BEAR')}
+                {t('BEAR')}
               </ButtonBear>
             </>
           ) : (

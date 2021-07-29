@@ -25,6 +25,7 @@ import Desktop from './Desktop'
 
 import { ThemeProvider as SCThemeProvider } from 'styled-components'
 import { light } from '@pancakeswap/uikit'
+import { HelmetProvider } from 'react-helmet-async'
 const FUTURE_ROUND_COUNT = 1 // the number of rounds in the future to show
 
 const Predictions = () => {
@@ -119,13 +120,16 @@ const Predictions = () => {
     return <PageLoader />
   }
 
+
   return (
     <>
       <SCThemeProvider theme={light}>
         <SwiperProvider>
-          <Container>
+          <HelmetProvider>
+            <Container>
             <Desktop />
-          </Container>
+            </Container> 
+          </HelmetProvider>
         </SwiperProvider>
       </SCThemeProvider>
     </>

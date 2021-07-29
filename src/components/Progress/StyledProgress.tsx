@@ -14,7 +14,7 @@ export const Bar = styled.div<BarProps>`
   left: 0;
   background: radial-gradient(174.47% 188.91% at 1.84% 0%,#ff007a 0%,#2172e5 100%),#edeef2;
   height: 3px;
-  transition: width 200ms ease;
+  transition: width 1s ease;
 `;
 
 Bar.defaultProps = {

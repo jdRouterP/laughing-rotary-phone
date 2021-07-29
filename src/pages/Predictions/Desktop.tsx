@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 // import {  Button } from '@pancakeswap/uikit'
-import { useGetPredictionsStatus, useIsHistoryPaneOpen } from 'state/hook'
+import { useGetPredictionsStatus, useIsChartPaneOpen, useIsHistoryPaneOpen } from 'state/hook'
 import { PredictionStatus } from 'state/prediction/types'
 // import TradingView from './components/TradingView'
 import { ErrorNotification, PauseNotification } from './components/Notification'
@@ -9,8 +9,16 @@ import { ErrorNotification, PauseNotification } from './components/Notification'
 // import History from 'pages/Predictions/components/History'
 import Positions from './Positions'
 import History from './History'
+import { Helmet } from 'react-helmet-async'
+import TradingView from './components/TradingView'
+import ChartModal from 'components/Modal/ChartModal'
+import { useDispatch } from 'react-redux'
+import { setChartPaneState } from 'state/prediction/reducer'
 
 
+const StyleChart = styled.div`
+  height: 100vh;
+`
 // const ExpandChartButton = styled(Button)`
 //   background-color: ${({ theme }) => theme.card.background};
 //   border-bottom-left-radius: 0;
@@ -54,9 +62,7 @@ const SplitWrapper = styled.div`
 
 const StyledDesktop = styled.div`
   display: flex;
-   height: 100%;
-
-
+  height: 100%;
 `
 // ${({ theme }) => theme.mediaWidth.upToLarge} {
 //   display: flex;
@@ -101,6 +107,11 @@ const Desktop: React.FC = () => {
   // const gutterRef = useRef<HTMLDivElement>()
   const isHistoryPaneOpen = useIsHistoryPaneOpen()
   const status = useGetPredictionsStatus()
+  const isChartPaneOpen = useIsChartPaneOpen()
+  const dispatch = useDispatch()
+  const handleClick = () => {
+    dispatch(setChartPaneState(!isChartPaneOpen))
+  }
 
   // const toggleChartPane = () => {
   //   const newChartPaneState = !isChartPaneOpen
@@ -119,6 +130,9 @@ const Desktop: React.FC = () => {
 
   return (
     <>
+      <Helmet>
+        <script src="https://s3.tradingview.com/tv.js" type="text/javascript" id="tradingViewWidget" />
+      </Helmet>
       <StyledDesktop>
         <SplitWrapper>
           <PositionPane>
@@ -132,12 +146,15 @@ const Desktop: React.FC = () => {
           </PositionPane>
           {/* <Gutter ref={gutterRef} /> */}
           {/* <ChartPane ref={chartRef}>
-            <TradingView />
+            
           </ChartPane> */}
+          <ChartModal flexdirection='column' minHeight={30} maxHeight={50} isOpen={isChartPaneOpen} onDismiss={handleClick}>
+            <StyleChart>
+              <TradingView />
+            </StyleChart>
+          </ChartModal>  
         </SplitWrapper>
         {isHistoryPaneOpen && <History />}
-
-
       </StyledDesktop>
     </>
   )
