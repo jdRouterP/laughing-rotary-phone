@@ -181,7 +181,7 @@ export default function Manage({
                   ?.multiply(BIG_INT_SECONDS_IN_WEEK)
                   ?.toFixed(0, { groupSeparator: ',' }) ?? '-'
                 : '0'}
-              {` DFYN / week`}
+              {` ${stakingInfo?.rewardToken?.symbol ?? 'DFYN'} / week`}
             </TYPE.body>
           </AutoColumn>
         </PoolData>
@@ -265,7 +265,7 @@ export default function Manage({
             <AutoColumn gap="sm">
               <RowBetween>
                 <div>
-                  <TYPE.black>Your unclaimed DFYN</TYPE.black>
+                  <TYPE.black>Your unclaimed {stakingInfo?.rewardToken?.symbol ?? 'DFYN'}</TYPE.black>
                 </div>
                 {stakingInfo?.earnedAmount && JSBI.notEqual(BIG_INT_ZERO, stakingInfo?.earnedAmount?.raw) && (
                   <ButtonPrimary
@@ -297,9 +297,9 @@ export default function Manage({
                   {stakingInfo?.active
                     ? stakingInfo?.rewardRate
                       ?.multiply(BIG_INT_SECONDS_IN_WEEK)
-                      ?.toSignificant(4, { groupSeparator: ',' }) ?? '-'
+                      ?.toSignificant(4, { groupSeparator: ',' }) ?? 'DFYN'
                     : '0'}
-                  {' DFYN / week'}
+                  {` ${stakingInfo?.rewardToken?.symbol ?? 'DFYN'} / week`}
                 </TYPE.black>
               </RowBetween>
             </AutoColumn>
@@ -309,7 +309,7 @@ export default function Manage({
           <span role="img" aria-label="wizard-icon" style={{ marginRight: '8px' }}>
             ⭐️
           </span>
-          When you withdraw, the contract will automagically claim DFYN on your behalf!
+          When you withdraw, the contract will automagically claim {stakingInfo?.rewardToken?.symbol ?? 'DFYN'} on your behalf!
         </TYPE.main>
 
         {!showAddLiquidityButton && (
