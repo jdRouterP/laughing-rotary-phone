@@ -1,6 +1,6 @@
 import { ChainId, CurrencyAmount, JSBI, Token, TokenAmount } from '@dfyn/sdk'
 import { useMemo } from 'react'
-import { UNI } from '../../constants'
+import { DFYN, ROUTE, UNI } from '../../constants'
 import { VAULT_INTERFACE } from '../../constants/abis/vault'
 import { useActiveWeb3React } from '../../hooks'
 import { NEVER_RELOAD, useMultipleContractSingleData } from '../multicall/hooks'
@@ -16,44 +16,58 @@ export const STAKING_REWARDS_INFO: {
   [chainId in ChainId]?: {
     vaultName: string
     vaultAddress: string
+    vaultToken: Token
     multiplier: number
     startedOn: number
   }[]
 } = {
   [ChainId.MATIC]: [
     {
+      vaultName: 'ROUTE 6-month vault',
+      vaultAddress: '0xc5574645F618EE9A3b5d8c4f69b1983D7D226290',
+      vaultToken: ROUTE,
+      multiplier: 2,
+      startedOn: 1627137000
+    },
+    {
       vaultName: 'DFYN 6-month vault',
       vaultAddress: '0xc5574645F618EE9A3b5d8c4f69b1983D7D226290',
+      vaultToken: DFYN,
       multiplier: 2,
       startedOn: 1627137000
     },
     {
       vaultName: 'DFYN 4-month vault',
       vaultAddress: '0x7C5B1B6ec97E9b57B75ea8C6B72C0dDaCCfecB54',
+      vaultToken: DFYN,
       multiplier: 3,
       startedOn: 1627137000
     },
     {
       vaultName: 'DFYN 6-month vault',
       vaultAddress: '0x864208438F598d4a857AE4B586FB49b0BA855af9',
+      vaultToken: DFYN,
       multiplier: 2,
       startedOn: 1624535769
     },
     {
       vaultName: 'DFYN 4-month vault',
       vaultAddress: '0x8b016E4f714451f3aFF88B82Ec9dfAe13D664d42',
+      vaultToken: DFYN,
       multiplier: 3,
       startedOn: 1624535769
     },
     {
       vaultName: 'DFYN 6-month vault',
       vaultAddress: '0x21D5815d9654074192A2F6A6230406A6bB4201BE',
+      vaultToken: DFYN,
       multiplier: 2,
       startedOn: 1621941297
     },
     {
       vaultName: 'DFYN 4-month vault',
       vaultAddress: '0x5179E3460Bb13A9CEc85419d477A487C4780c92c',
+      vaultToken: DFYN,
       multiplier: 3,
       startedOn: 1621941297
     },
@@ -63,6 +77,7 @@ export const STAKING_REWARDS_INFO: {
 export interface StakingInfo {
   // the address of the reward contract
   vaultAddress: string
+  vaultToken: Token
   vaultName: string
   rewardToken: Token
   startedOn: number
@@ -231,6 +246,7 @@ export function useStakingInfo(vaultToFilterBy?: string | null): StakingInfo[] {
         memo.push({
           vaultAddress: rewardsAddress,
           vaultName: info[index].vaultName,
+          vaultToken: info[index].vaultToken,
           multiplier: info[index].multiplier,
           startedOn: info[index].startedOn,
           rewardToken: uni,

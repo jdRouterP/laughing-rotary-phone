@@ -133,7 +133,7 @@ export default function Manage({
           <AutoColumn gap="sm">
             <TYPE.body style={{ margin: 0 }} fontSize={14}>Total Deposits</TYPE.body>
             <TYPE.body fontSize={22} fontWeight={500}>
-              {stakingInfo ? `${stakingInfo.totalStakedAmount.toFixed(0, { groupSeparator: ',' })} DFYN` : "0 DFYN"}
+              {stakingInfo ? `${stakingInfo.totalStakedAmount.toFixed(0, { groupSeparator: ',' })} ${stakingInfo?.vaultToken?.symbol ?? '-'}` : "0 DFYN"}
             </TYPE.body>
           </AutoColumn>
         </PoolData>
@@ -260,7 +260,7 @@ export default function Manage({
                     {stakingInfo?.stakedAmount?.toSignificant(6) ?? '-'}
                   </TYPE.white>
                   <TYPE.white>
-                    DFYN
+                    {`${stakingInfo?.vaultToken?.symbol ?? '-'}`}
                   </TYPE.white>
                 </RowBetween>
               </AutoColumn>
@@ -272,7 +272,7 @@ export default function Manage({
             <AutoColumn gap="sm">
               <RowBetween>
                 <div>
-                  <TYPE.black>Your unclaimed DFYN</TYPE.black>
+                  <TYPE.black>Your unclaimed {`${stakingInfo?.vaultToken?.symbol ?? '-'}`}</TYPE.black>
                 </div>
                 {/* {stakingInfo?.earnedAmount && JSBI.notEqual(BIG_INT_ZERO, stakingInfo?.earnedAmount?.raw) && (
                   <ButtonEmpty
@@ -323,7 +323,7 @@ export default function Manage({
           <DataRow style={{ marginBottom: '1rem' }}>
             {stakingInfo && stakingInfo.active && (
               <ButtonPrimary padding="8px" borderRadius="8px" width="160px" onClick={handleDepositClick}>
-                {stakingInfo?.stakedAmount?.greaterThan(JSBI.BigInt(0)) ? 'Deposit' : 'Deposit DFYN'}
+                {stakingInfo?.stakedAmount?.greaterThan(JSBI.BigInt(0)) ? 'Deposit' : `Deposit ${stakingInfo?.vaultToken?.symbol ?? '-'}`}
               </ButtonPrimary>
             )}
 
@@ -342,7 +342,7 @@ export default function Manage({
           </DataRow>
         )}
         {stakingInfo && (
-          <TYPE.main>{stakingInfo?.vaultLimit?.subtract(stakingInfo?.totalStakedAmount).toSignificant(6, { groupSeparator: ',' })} DFYN Available Limit</TYPE.main>
+          <TYPE.main>{stakingInfo?.vaultLimit?.subtract(stakingInfo?.totalStakedAmount).toSignificant(6, { groupSeparator: ',' })} {`${stakingInfo?.vaultToken?.symbol ?? '-'}`} Available Limit</TYPE.main>
         )}
       </PositionInfo>
     </PageWrapper>
