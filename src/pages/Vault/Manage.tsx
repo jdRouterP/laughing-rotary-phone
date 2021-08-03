@@ -97,6 +97,7 @@ export default function Manage({
   // detect existing unstaked LP position to show add button if none found
   const userLiquidityUnstaked = useTokenBalance(account ?? undefined, stakingInfo?.stakedAmount?.token)
   const showAddLiquidityButton = Boolean(stakingInfo?.stakedAmount?.equalTo('0') && userLiquidityUnstaked?.equalTo('0'))
+  const showDepositButton = stakingInfo?.totalStakedAmount && JSBI.notEqual(BIG_INT_ZERO, stakingInfo?.vaultLimit?.subtract(stakingInfo?.totalStakedAmount).raw)
 
   // toggle for staking modal and unstaking modal
   const [showStakingModal, setShowStakingModal] = useState(false)
@@ -319,28 +320,28 @@ export default function Manage({
           {`Tokens staked and rewards can be linearly claimed over a period of ${stakingInfo ? stakingInfo.vesting / (60 * 60 * 24) : 0}  days.`}
         </TYPE.main>
 
-        {!showAddLiquidityButton && (
-          <DataRow style={{ marginBottom: '1rem' }}>
-            {stakingInfo && stakingInfo.active && (
-              <ButtonPrimary padding="8px" borderRadius="8px" width="160px" onClick={handleDepositClick}>
-                {stakingInfo?.stakedAmount?.greaterThan(JSBI.BigInt(0)) ? 'Deposit' : `Deposit ${stakingInfo?.vaultToken?.symbol ?? '-'}`}
-              </ButtonPrimary>
-            )}
 
-            {stakingInfo?.earnedAmount && JSBI.notEqual(BIG_INT_ZERO, stakingInfo?.earnedAmount?.raw) && (
-              <>
-                <ButtonPrimary
-                  padding="8px"
-                  borderRadius="8px"
-                  width="160px"
-                  onClick={() => setShowClaimRewardModal(true)}
-                >
-                  Claim
-                </ButtonPrimary>
-              </>
-            )}
-          </DataRow>
-        )}
+        <DataRow style={{ marginBottom: '1rem' }}>
+          {stakingInfo && stakingInfo.active && !showAddLiquidityButton && showDepositButton && (
+            <ButtonPrimary padding="8px" borderRadius="8px" width="160px" onClick={handleDepositClick}>
+              {stakingInfo?.stakedAmount?.greaterThan(JSBI.BigInt(0)) ? 'Deposit' : `Deposit ${stakingInfo?.vaultToken?.symbol ?? '-'}`}
+            </ButtonPrimary>
+          )}
+
+          {stakingInfo?.earnedAmount && JSBI.notEqual(BIG_INT_ZERO, stakingInfo?.earnedAmount?.raw) && (
+            <>
+              <ButtonPrimary
+                padding="8px"
+                borderRadius="8px"
+                width="160px"
+                onClick={() => setShowClaimRewardModal(true)}
+              >
+                Claim
+              </ButtonPrimary>
+            </>
+          )}
+        </DataRow>
+
         {stakingInfo && (
           <TYPE.main>{stakingInfo?.vaultLimit?.subtract(stakingInfo?.totalStakedAmount).toSignificant(6, { groupSeparator: ',' })} {`${stakingInfo?.vaultToken?.symbol ?? '-'}`} Available Limit</TYPE.main>
         )}
