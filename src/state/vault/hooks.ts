@@ -1,6 +1,6 @@
 import { ChainId, CurrencyAmount, JSBI, Token, TokenAmount } from '@dfyn/sdk'
 import { useMemo } from 'react'
-import { DFYN, ROUTE, UNI } from '../../constants'
+import { DFYN, UNI } from '../../constants'
 import { VAULT_INTERFACE } from '../../constants/abis/vault'
 import { useActiveWeb3React } from '../../hooks'
 import { NEVER_RELOAD, useMultipleContractSingleData } from '../multicall/hooks'
@@ -22,13 +22,6 @@ export const STAKING_REWARDS_INFO: {
   }[]
 } = {
   [ChainId.MATIC]: [
-    {
-      vaultName: 'ROUTE 6-month vault',
-      vaultAddress: '0xc5574645F618EE9A3b5d8c4f69b1983D7D226290',
-      vaultToken: ROUTE,
-      multiplier: 2,
-      startedOn: 1627137000
-    },
     {
       vaultName: 'DFYN 6-month vault',
       vaultAddress: '0xc5574645F618EE9A3b5d8c4f69b1983D7D226290',
