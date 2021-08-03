@@ -1,6 +1,6 @@
 import { ChainId, CurrencyAmount, JSBI, Token, TokenAmount } from '@dfyn/sdk'
 import { useMemo } from 'react'
-import { DFYN, UNI } from '../../constants'
+import { DFYN, ROUTE, UNI } from '../../constants'
 import { VAULT_INTERFACE } from '../../constants/abis/vault'
 import { useActiveWeb3React } from '../../hooks'
 import { NEVER_RELOAD, useMultipleContractSingleData } from '../multicall/hooks'
@@ -22,6 +22,13 @@ export const STAKING_REWARDS_INFO: {
   }[]
 } = {
   [ChainId.MATIC]: [
+    {
+      vaultName: 'ROUTE 6-month vault',
+      vaultAddress: '0x3f820e5b1BC0Aa2E3FFAC70731e319316Bc47D91',
+      vaultToken: ROUTE,
+      multiplier: 2,
+      startedOn: 1627991691
+    },
     {
       vaultName: 'DFYN 6-month vault',
       vaultAddress: '0xc5574645F618EE9A3b5d8c4f69b1983D7D226290',
@@ -72,7 +79,6 @@ export interface StakingInfo {
   vaultAddress: string
   vaultToken: Token
   vaultName: string
-  rewardToken: Token
   startedOn: number
   // the amount of token currently staked, or undefined if no account
   stakedAmount: TokenAmount
@@ -209,10 +215,10 @@ export function useStakingInfo(vaultToFilterBy?: string | null): StakingInfo[] {
           claimedAmount: userVaultInfoState?.result?.[0].claimedAmount ?? 0,
           totalEarned: userVaultInfoState?.result?.[0].totalEarned ?? 0
         }
-        const stakedAmount = new TokenAmount(uni, JSBI.BigInt(balanceState?.result?.[0] ?? 0))
-        const totalStakedAmount = new TokenAmount(uni, JSBI.BigInt(totalSupplyState.result?.[0]))
+        const stakedAmount = new TokenAmount(info[index].vaultToken, JSBI.BigInt(balanceState?.result?.[0] ?? 0))
+        const totalStakedAmount = new TokenAmount(info[index].vaultToken, JSBI.BigInt(totalSupplyState.result?.[0]))
         const interestRate = interestRateState.result?.[0].toNumber()
-        const vaultLimit = new TokenAmount(uni, JSBI.BigInt(vaultLimitState.result?.[0]))
+        const vaultLimit = new TokenAmount(info[index].vaultToken, JSBI.BigInt(vaultLimitState.result?.[0]))
         const vesting = vestingState.result?.[0].toNumber()
 
         // const getHypotheticalRewardRate = (
@@ -242,9 +248,8 @@ export function useStakingInfo(vaultToFilterBy?: string | null): StakingInfo[] {
           vaultToken: info[index].vaultToken,
           multiplier: info[index].multiplier,
           startedOn: info[index].startedOn,
-          rewardToken: uni,
           periodFinish: periodFinishSeconds > 0 ? periodFinishSeconds : undefined,
-          earnedAmount: new TokenAmount(uni, JSBI.BigInt(earnedAmountState?.result?.[0] ?? 0)),
+          earnedAmount: new TokenAmount(info[index].vaultToken, JSBI.BigInt(earnedAmountState?.result?.[0] ?? 0)),
           interestRate,
           vesting,
           vaultLimit,
@@ -282,7 +287,13 @@ export function useTotalVaultUniEarned(): TokenAmount | undefined {
     if (!uni) return undefined
     return (
       stakingInfos?.reduce(
-        (accumulator, stakingInfo) => accumulator.add(stakingInfo.earnedAmount),
+        (accumulator, stakingInfo) => {
+          if (stakingInfo.vaultToken !== ROUTE) {
+
+            return accumulator.add(stakingInfo.earnedAmount)
+          }
+          return accumulator
+        },
         new TokenAmount(uni, '0')
       ) ?? new TokenAmount(uni, '0')
     )

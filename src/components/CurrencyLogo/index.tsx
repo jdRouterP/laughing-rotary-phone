@@ -253,6 +253,17 @@ export const getTokenLogoURL = (address: string) => {
   if (address?.toLowerCase() === '0xeCf8f2FA183b1C4d2A269BF98A54fCe86C812d3e'.toLowerCase()) {
     uri = 'https://i.imgur.com/Z8V1O7H.png'
   }
+
+  if (address?.toLowerCase() === '0x2ce13e4199443fdfff531abb30c9b6594446bbc7'.toLowerCase()) {
+    uri = 'https://assets.coingecko.com/coins/images/14728/small/7.png?1618414105'
+  }
+  if (address?.toLowerCase() === '0x083c56d87ead73d6231c165ec450c6e28f3399c9'.toLowerCase()) {
+    uri = 'https://assets.coingecko.com/coins/images/12523/small/chartex.png'
+  }
+  if (address?.toLowerCase() === '0x41b3966b4ff7b427969ddf5da3627d6aeae9a48e'.toLowerCase()) {
+    uri = 'https://cryptologos.cc/logos/nexo-nexo-logo.svg'
+  }
+
   if (address?.toLowerCase() === '0xfbdd194376de19a88118e84e279b977f165d01b8'.toLowerCase()) {
     uri = 'https://raw.githubusercontent.com/beefyfinance/beefy-app/prod/src/images/single-assets/BIFI.png'
   }
