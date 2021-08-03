@@ -99,7 +99,7 @@ export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) 
         <RowBetween>
           <TYPE.white> Total deposited</TYPE.white>
           <TYPE.white>
-            {stakingInfo && `${stakingInfo.totalStakedAmount.toFixed(0, { groupSeparator: ',' })} DFYN`}
+            {stakingInfo && `${stakingInfo.totalStakedAmount.toFixed(0, { groupSeparator: ',' })} ${stakingInfo?.vaultToken?.symbol ?? 'DFYN'}`}
           </TYPE.white>
         </RowBetween>
         <RowBetween>
@@ -107,8 +107,8 @@ export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) 
           <TYPE.white>
             {stakingInfo
               ? stakingInfo.active
-                ? `${stakingInfo.vaultLimit?.toFixed(0, { groupSeparator: ',' })} DFYN`
-                : '0 DFYN'
+                ? `${stakingInfo.vaultLimit?.toFixed(0, { groupSeparator: ',' })} ${stakingInfo?.vaultToken?.symbol ?? 'DFYN'}`
+                : `0 ${stakingInfo?.vaultToken?.symbol ?? 'DFYN'}`
               : '-'}
           </TYPE.white>
         </RowBetween>
@@ -117,8 +117,8 @@ export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) 
           <TYPE.white>
             {stakingInfo
               ? stakingInfo.active
-                ? `${stakingInfo?.vaultLimit?.subtract(stakingInfo?.totalStakedAmount).toSignificant(6, { groupSeparator: ',' })} DFYN`
-                : '0 DFYN'
+                ? `${stakingInfo?.vaultLimit?.subtract(stakingInfo?.totalStakedAmount).toSignificant(6, { groupSeparator: ',' })} ${stakingInfo?.vaultToken?.symbol ?? 'DFYN'}`
+                : `0 ${stakingInfo?.vaultToken?.symbol ?? 'DFYN'}`
               : '-'}
           </TYPE.white>
         </RowBetween>
