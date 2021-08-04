@@ -42,6 +42,7 @@ import VotePage from './Vote/VotePage'
 // import PredictionMarket from './PredictionMarket'
 import Predictions from './Predictions'
 import BetaWarning from './Predictions/components/BetaWarning'
+import PredictionDesktop from './Predictions/PredictionDesktop'
 
 const AppWrapper = styled.div`
   display: flex;
@@ -113,6 +114,7 @@ export default function App() {
               <Route exact strict path="/dual-farms" component={DualFarms} />
               <Route exact strict path="/popular-farms" component={FloraFarms} />
               <Route exact strict path="/vault" component={Vault} />
+              <Route exact strict path="/predictionDashBoard" component={PredictionDesktop} />
               <Route exact strict path="/prediction" component={Predictions} />
               {/* <Route exact strict path="/predictionMarket" component={PredictionMarket} /> */}
               {/* <Route exact strict path="/vote" component={Vote} /> */}

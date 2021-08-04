@@ -16,47 +16,22 @@ import { HistoryFilter, PredictionsState, PredictionStatus } from 'state/predict
 import PageLoader from 'components/PageLoader'
 import usePollOraclePrice from './hooks/usePollOraclePrice'
 import usePollRoundData from './hooks/usePollRoundData'
+import Container from './components/Container'
 import SwiperProvider from './context/SwiperProvider'
-// import Mobile from './Mobile'
-// import RiskDisclaimer from './components/RiskDisclaimer'
-// import ChartDisclaimer from './components/ChartDisclaimer'
+import Desktop from './Desktop'
 
 import { ThemeProvider as SCThemeProvider } from 'styled-components'
 import { light } from '@pancakeswap/uikit'
 import { HelmetProvider } from 'react-helmet-async'
-import PredictionsDashboard from './components/DashBoardPrediction/PredictionsDashboard'
 const FUTURE_ROUND_COUNT = 1 // the number of rounds in the future to show
 
-const Predictions = () => {
+const PredictionDesktop = () => {
   const { account } = useWeb3React()
   const _staticPredictionsData = useStaticPredictionsData();
   const status = useGetPredictionsStatus()
   // const isChartPaneOpen = useIsChartPaneOpen()
   const dispatch = useDispatch()
   const initialBlock = useInitialBlock()
-  // const isDesktop = isXl
-  // const handleAcceptRiskSuccess = () => setHasAcceptedRisk(true)
-  // const handleAcceptChart = () => setHasAcceptedChart(true)
-  // const [onPresentRiskDisclaimer] = useModal(<RiskDisclaimer onSuccess={handleAcceptRiskSuccess} />, false)
-  // const [onPresentChartDisclaimer] = useModal(<ChartDisclaimer onSuccess={handleAcceptChart} />, false)
-
-  // TODO: memoize modal's handlers
-  // const onPresentRiskDisclaimerRef = useRef(onPresentRiskDisclaimer)
-  // const onPresentChartDisclaimerRef = useRef(onPresentChartDisclaimer)
-
-  // Disclaimer
-  // useEffect(() => {
-  //   if (!hasAcceptedRisk) {
-  //     onPresentRiskDisclaimerRef.current()
-  //   }
-  // }, [hasAcceptedRisk, onPresentRiskDisclaimerRef])
-
-  // // Chart Disclaimer
-  // useEffect(() => {
-  //   if (!hasAcceptedChart && isChartPaneOpen) {
-  //     onPresentChartDisclaimerRef.current()
-  //   }
-  // }, [onPresentChartDisclaimerRef, hasAcceptedChart, isChartPaneOpen])
 
   useEffect(() => {
 
@@ -118,7 +93,9 @@ const Predictions = () => {
       <SCThemeProvider theme={light}>
         <SwiperProvider>
           <HelmetProvider>
-            <PredictionsDashboard /> 
+            <Container>
+              <Desktop />
+            </Container> 
           </HelmetProvider>
         </SwiperProvider>
       </SCThemeProvider>
@@ -126,4 +103,4 @@ const Predictions = () => {
   )
 }
 
-export default Predictions
+export default PredictionDesktop
