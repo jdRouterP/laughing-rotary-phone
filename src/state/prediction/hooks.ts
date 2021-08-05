@@ -1,6 +1,6 @@
 //@ts-nocheck
 import { request, gql } from 'graphql-request'
-import { GRAPH_API_PREDICTION } from '../../constants'
+import {  GRAPH_API_PREDICTION } from '../../constants'
 import { Bet, BetPosition, Market, PredictionStatus, Round, RoundData } from './types'
 
 import {
@@ -12,6 +12,9 @@ import {
   MarketResponse,
 } from './queries'
 import { usePredictionContract } from 'hooks/useContract'
+import { ChainId, Currency, Token } from '@dfyn/sdk'
+import { useActiveWeb3React } from 'hooks'
+import { useMemo } from 'react'
 
 export enum Result {
   WIN = 'win',
@@ -311,4 +314,50 @@ export const getBet = async (betId: string): Promise<BetResponse> => {
     },
   )
   return response.bet
+}
+
+
+//Prediction market Pair
+export const PREDICTION_INFO: {
+  [chainId in ChainId]?: {
+    id: number
+    candleSize: number
+    currency: Currency | Token
+  }[]
+} = {
+  [ChainId.MATIC]: [
+    {
+      id: 1,
+      candleSize: 5,
+      currency: Currency.getNativeCurrency(137),
+    },
+  ]
+}
+
+export interface PredictionInfo {
+  id: number,
+  candleSize: number,
+  currency: Currency | Token
+}
+export function usePredictionInfo( ): PredictionInfo[] {
+  const { chainId } = useActiveWeb3React()
+
+  const info = [...PREDICTION_INFO[chainId ?? 137]]
+  const predictionIds = useMemo(() => info.map(({ id }) => id), [info])
+
+  return useMemo(() => {
+    if (!chainId) return []
+    return predictionIds.reduce<PredictionInfo[]>((memo, predictionIdss, index) => {
+      memo.push({
+        id: predictionIdss, 
+        candleSize: info[index].candleSize,
+        currency: info[index].currency,
+      })
+    return memo
+    }, [])
+  }, [
+    info,
+    chainId,
+    predictionIds,
+  ])
 }

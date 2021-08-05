@@ -1,11 +1,13 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import { RowBetween } from 'components/Row'
 import { CardBGImage, CardNoise, CardSection, DataCard } from 'components/vault/styled'
 import { AutoColumn } from 'components/Column'
 import { ExternalLink, TYPE } from 'theme'
-import PredictionMarket5Min from './PredictionMarket5Min'
-import { useGetSortedRounds } from 'state/hook'
+import { useGetCurrentEpoch, useGetLastOraclePrice} from 'state/hook'
+import { useCountUp } from 'react-countup'
+import { usePredictionInfo } from 'state/prediction/hooks'
+import PredictionMarket from './PredictionMarket'
 
 const PageWrapper = styled(AutoColumn)`
   max-width: 640px;
@@ -33,7 +35,22 @@ const PoolSection = styled.div`
 `
 
 const PredictionsDashboard: React.FC = () => {
-  const rounds = useGetSortedRounds()
+  const rounds = useGetCurrentEpoch()
+  const price = useGetLastOraclePrice()
+  const predictionInfos = usePredictionInfo()
+  const { countUp, update } = useCountUp({
+      start: 0,
+      end: price,
+      duration: 1,
+      decimals: 3,
+    })
+
+    useEffect(() => {
+      let isMounted = true;
+      if (isMounted) update(price)
+      return () => { isMounted = false };
+    }, [price, update])
+
   return (
     <PageWrapper gap="lg" justify="center">
       <TopSection gap="md">
@@ -70,7 +87,10 @@ const PredictionsDashboard: React.FC = () => {
         </DataRow>
 
         <PoolSection>
-            <PredictionMarket5Min round={rounds[rounds.length - 3]} />
+            {predictionInfos.map((predictionValue)=>{
+                return <PredictionMarket predictionValue={predictionValue} round={rounds -1} price={countUp} />
+            })}
+            
         </PoolSection>
       </AutoColumn>
     </PageWrapper>

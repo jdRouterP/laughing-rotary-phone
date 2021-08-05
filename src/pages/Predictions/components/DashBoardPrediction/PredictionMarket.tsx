@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import { useColor } from 'hooks/useColor'
 import { StyledInternalLink, TYPE } from 'theme'
@@ -8,16 +8,14 @@ import { CardBGImage, CardNoise } from 'components/multiTokenVault/styled'
 import { RowBetween } from 'components/Row'
 import { UNI_TOKEN, USDT } from '/home/ankush/work/prediction/dfyn-exchange-interface/src/constants/index'
 import DoubleCurrencyLogo from 'components/DoubleLogo'
-import { Currency } from '@dfyn/sdk'
-import { useActiveWeb3React } from 'hooks'
-import { useGetLastOraclePrice } from 'state/hook'
-import { useCountUp } from 'react-countup'
 import { Clock } from 'react-feather'
-import { Round } from 'state/prediction/types'
+import { PredictionInfo } from 'state/prediction/hooks'
 
 
 interface PredictionMarketProps{
-    round: Round
+    round: number
+    price: string | number
+    predictionValue: PredictionInfo
 }
 
 const StatContainer = styled.div`
@@ -29,7 +27,8 @@ const StatContainer = styled.div`
   margin-right: 1rem;
   margin-left: 1rem;
   ${({ theme }) => theme.mediaWidth.upToSmall`
-  display: none;
+  display: flex;
+  flex-direction: column
 `};
 `
 
@@ -61,37 +60,20 @@ const TopSection = styled.div`
     `};
 `
 
-const PredictionMarket5Min: React.FC<PredictionMarketProps> = ({round}) =>{
-    const CurrentEpoch = round.epoch
+const PredictionMarket: React.FC<PredictionMarketProps> = ({predictionValue, round, price}) =>{
+    const CurrentEpoch = round
     const backgroundColor = useColor(UNI_TOKEN);
-    const { chainId } = useActiveWeb3React()
-    const price = useGetLastOraclePrice()
-    console.log("Price::", price);
-    
-    const { countUp, update } = useCountUp({
-        start: 0,
-        end: price,
-        duration: 1,
-        decimals: 3,
-    })
-
-    useEffect(() => {
-        let isMounted = true;
-        if (isMounted) update(price)
-        return () => { isMounted = false };
-    }, [price, update])
-    
 
     return (
         <Wrapper showBackground={false} bgColor={backgroundColor}>
         <CardBGImage desaturate />
         <CardNoise />
         <TopSection>
-            <DoubleCurrencyLogo currency0={Currency.getNativeCurrency(chainId)} currency1={USDT} size={24} />
+            <DoubleCurrencyLogo currency0={predictionValue.currency} currency1={USDT} size={24} />
             <TYPE.white fontWeight={600} fontSize={24} style={{ marginLeft: '8px' }}>
-            {Currency.getNativeCurrency(chainId).symbol}-USDT
+                {`${predictionValue?.currency.symbol ?? ""}`}-USDT
             </TYPE.white>
-            <StyledInternalLink to={`/predictionDashBoard`} style={{ width: '100%' }}>
+            <StyledInternalLink to={`/prediction/${predictionValue.currency.symbol}/${predictionValue.candleSize}`} style={{ width: '100%' }}>
                 <ButtonPrimary padding="8px" borderRadius="8px">
                     Enter
                 </ButtonPrimary>
@@ -101,12 +83,12 @@ const PredictionMarket5Min: React.FC<PredictionMarketProps> = ({round}) =>{
         <StatContainer>
             <RowBetween>
                 <Clock />
-                <TYPE.white>5 Minute Candle</TYPE.white>
+                <TYPE.white>{`${predictionValue.candleSize}`} Minute Candle</TYPE.white>
             </RowBetween>
             <RowBetween>
                 <TYPE.white>Current Price</TYPE.white>
                 <TYPE.white>
-                    {`$${countUp}`}
+                    {`$${price}`}
                 </TYPE.white>
             </RowBetween>
             <RowBetween>
@@ -120,4 +102,4 @@ const PredictionMarket5Min: React.FC<PredictionMarketProps> = ({round}) =>{
     )
 }
 
-export default PredictionMarket5Min
+export default PredictionMarket
