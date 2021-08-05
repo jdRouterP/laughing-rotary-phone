@@ -71,7 +71,7 @@ const PredictionMarket: React.FC<PredictionMarketProps> = ({predictionValue, rou
         <TopSection>
             <DoubleCurrencyLogo currency0={predictionValue.currency} currency1={USDT} size={24} />
             <TYPE.white fontWeight={600} fontSize={24} style={{ marginLeft: '8px' }}>
-                {`${predictionValue?.currency.symbol ?? ""}`}-USDT
+                {`${predictionValue?.currency.symbol ?? ""}`}-USD
             </TYPE.white>
             <StyledInternalLink to={`/prediction/${predictionValue.currency.symbol}/${predictionValue.candleSize}`} style={{ width: '100%' }}>
                 <ButtonPrimary padding="8px" borderRadius="8px">

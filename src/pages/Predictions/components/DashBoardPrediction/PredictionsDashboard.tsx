@@ -60,7 +60,7 @@ const PredictionsDashboard: React.FC = () => {
           <CardSection>
             <AutoColumn gap="md">
               <RowBetween>
-                <TYPE.white fontWeight={600} fontSize={"24px"} textAlign={'center'}>Predictions Markets</TYPE.white>
+                <TYPE.white fontWeight={600} fontSize={"20px"} textAlign={'center'}>Predictions Markets</TYPE.white>
               </RowBetween>
               <RowBetween>
                 <TYPE.white fontSize={14}>
