@@ -342,10 +342,17 @@ export const PREDICTION_INFO: {
     },
     {
       id: 2,
-      candleSize: "10",
+      candleSize: "15",
       currency: Currency.getNativeCurrency(137),
       GRAPH_API_PREDICTION: 'https://api.thegraph.com/subgraphs/name/iamshashvat/matic-prediction-v2',
-      prediction_address: '0xadf010915702a5f64e0e11285d5ae74503fad0e1'
+      prediction_address: '0xdc2cb17ec40832e502a9723541c1db96e85e7e5d'
+    },
+    {
+      id: 3,
+      candleSize: "60",
+      currency: Currency.getNativeCurrency(137),
+      GRAPH_API_PREDICTION: 'https://api.thegraph.com/subgraphs/name/iamshashvat/matic-prediction-v3',
+      prediction_address: '0xd53a50878eeBb092Fd8E15eBBEf75335D1bB12E7'
     }
   ]
 }

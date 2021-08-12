@@ -115,6 +115,9 @@ export const predictionsSlice = createSlice({
                 ...action.payload,
             }
         },
+        clearState: (state) => {
+            Object.assign(state, initialState)
+        },
         updateMarketData: (state, action: PayloadAction<{ rounds: Round[]; market: Market }>) => {
             const { rounds, market } = action.payload
             const newRoundData = makeRoundData(rounds)
@@ -232,6 +235,7 @@ export const predictionsSlice = createSlice({
 // Actions
 export const {
     initialize,
+    clearState,
     setChartPaneState,
     setCurrentEpoch,
     setHistoryFilter,

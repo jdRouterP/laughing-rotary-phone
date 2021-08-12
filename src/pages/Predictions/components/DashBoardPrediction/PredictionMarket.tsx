@@ -11,7 +11,6 @@ import DoubleCurrencyLogo from 'components/DoubleLogo'
 import { Clock } from 'react-feather'
 import { getMarketData, PredictionInfo } from 'state/prediction/hooks'
 import { useInitialBlock } from 'state/hook'
-import usePollRoundData from 'pages/Predictions/hooks/usePollRoundData'
 
 
 interface PredictionMarketProps{
@@ -68,7 +67,7 @@ const PredictionMarket: React.FC<PredictionMarketProps> = ({predictionValue, pri
 
         const fetchInitialData = async () => {
             const CurrentEpoch = await getMarketData(predictionValue.GRAPH_API_PREDICTION)
-            setEpoch(CurrentEpoch.rounds[1].epoch)
+            setEpoch(CurrentEpoch.market.epoch-1)
         }
         if (initialBlock > 0) {
             fetchInitialData()
@@ -78,7 +77,6 @@ const PredictionMarket: React.FC<PredictionMarketProps> = ({predictionValue, pri
     
     
     const backgroundColor = useColor(UNI_TOKEN);
-    usePollRoundData(predictionValue.GRAPH_API_PREDICTION)
     
     return (
         <Wrapper showBackground={false} bgColor={backgroundColor}>

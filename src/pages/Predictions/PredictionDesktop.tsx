@@ -11,7 +11,7 @@ import {
   transformRoundResponse,
   usePredictionInfo,
 } from 'state/prediction/hooks'
-import { fetchCurrentBets, initialize, setPredictionStatus } from 'state/prediction/reducer'
+import { clearState, fetchCurrentBets, initialize, setPredictionStatus } from 'state/prediction/reducer'
 import { HistoryFilter, PredictionsState, PredictionStatus } from 'state/prediction/types'
 // import usePersistState from 'hooks/usePersistState'
 import PageLoader from 'components/PageLoader'
@@ -51,9 +51,14 @@ export default function PredictionDesktop({
   const dispatch = useDispatch()
   const initialBlock = useInitialBlock()
 
+  
   useEffect(() => {
-    dispatch(setPredictionStatus(PredictionStatus.INITIAL))
+    dispatch(clearState());
   }, [dispatch])
+
+  // useEffect(() => {
+  //   dispatch(setPredictionStatus(PredictionStatus.INITIAL))
+  // }, [dispatch])
 
   useEffect(() => {
 
