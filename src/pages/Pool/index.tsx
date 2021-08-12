@@ -25,6 +25,7 @@ import { useStakingInfo as usePreStakingInfo } from '../../state/stake/hooks'
 import { useStakingInfo as useVanillaStakingInfo } from '../../state/vanilla-stake/hooks'
 import { BIG_INT_ZERO } from '../../constants'
 import { useDerivedSwapInfo } from 'state/swap/hooks'
+import { CHART_URL_PREFIX } from 'constants/networks'
 
 const PageWrapper = styled(AutoColumn)`
   max-width: 640px;
@@ -80,7 +81,7 @@ const EmptyProposals = styled.div`
 
 export default function Pool() {
   const theme = useContext(ThemeContext)
-  const { account} = useActiveWeb3React()
+  const { account, chainId } = useActiveWeb3React()
 
   // fetch the user's balances of all tracked V2 LP tokens
   const trackedTokenPairs = useTrackedTokenPairs()
@@ -140,18 +141,18 @@ export default function Pool() {
     )
   })
 
-  const {currencies: swapCurrency} = useDerivedSwapInfo()
+  const { currencies: swapCurrency } = useDerivedSwapInfo()
 
   const [inputCurrency, setinputCurrency] = useState(swapCurrency?.INPUT instanceof Token ? swapCurrency?.INPUT?.address : swapCurrency?.INPUT?.symbol ?? 'MATIC')
   const [outputCurrency, setOutputCurrency] = useState(swapCurrency?.OUTPUT instanceof Token ? swapCurrency?.OUTPUT?.address : swapCurrency?.OUTPUT?.symbol ?? '0xC168E40227E4ebD8C1caE80F7a55a4F0e6D66C97')
 
-  useEffect(()=>{
+  useEffect(() => {
     const localInput = sessionStorage.getItem('CurrencyInput')
     const localOutput = sessionStorage.getItem('CurrencyOutput')
-    if(localInput){
+    if (localInput) {
       setinputCurrency(localInput)
     }
-    if(localOutput){
+    if (localOutput) {
       setOutputCurrency(localOutput)
     }
   }, [inputCurrency, outputCurrency])
@@ -228,7 +229,7 @@ export default function Pool() {
               <>
                 <ButtonSecondary>
                   <RowBetween>
-                    <ExternalLink href={'https://info.dfyn.network/account/' + account}>
+                    <ExternalLink href={`https://${CHART_URL_PREFIX[(chainId ? chainId : 1)]}.dfyn.network/account/` + account}>
                       Account analytics and accrued fees
                     </ExternalLink>
                     <span> ↗</span>

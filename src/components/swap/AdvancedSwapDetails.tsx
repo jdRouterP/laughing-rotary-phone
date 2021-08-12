@@ -1,4 +1,6 @@
 import { Trade, TradeType } from '@dfyn/sdk'
+import { CHART_URL_PREFIX } from 'constants/networks'
+import { useActiveWeb3React } from 'hooks'
 import React, { useContext } from 'react'
 import styled, { ThemeContext } from 'styled-components'
 import { Field } from '../../state/swap/actions'
@@ -79,7 +81,7 @@ export interface AdvancedSwapDetailsProps {
 
 export function AdvancedSwapDetails({ trade }: AdvancedSwapDetailsProps) {
   const theme = useContext(ThemeContext)
-
+  const { chainId } = useActiveWeb3React()
   const [allowedSlippage] = useUserSlippageTolerance()
 
   const showRoute = Boolean(trade && trade.route.path.length > 2)
@@ -105,7 +107,7 @@ export function AdvancedSwapDetails({ trade }: AdvancedSwapDetailsProps) {
           {!showRoute && (
             <AutoColumn style={{ padding: '12px 16px 0 16px' }}>
               <InfoLink
-                href={'https://info.dfyn.network/pair/' + trade.route.pairs[0].liquidityToken.address}
+                href={`https://${CHART_URL_PREFIX[(chainId ? chainId : 1)]}.dfyn.network/pair/` + trade.route.pairs[0].liquidityToken.address}
                 target="_blank"
               >
                 View pair analytics ↗

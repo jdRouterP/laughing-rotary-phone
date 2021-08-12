@@ -93,10 +93,20 @@ export const SUPPORTED_NETWORKS: {
 
 export const HEADER_ACCESS = {
     vault: [ChainId.MATIC],
-    charts: [ChainId.MATIC],
+    charts: [ChainId.MATIC, ChainId.OKEX],
     farms: [ChainId.MATIC],
     prediction: [ChainId.MATIC],
     gaslessMode: [ChainId.MATIC]
+}
+
+export const CHART_URL_PREFIX = {
+    [ChainId.MAINNET]: "info",
+    [ChainId.ROPSTEN]: "info",
+    [ChainId.RINKEBY]: "info",
+    [ChainId.GÖRLI]: "info",
+    [ChainId.KOVAN]: "info",
+    [ChainId.MATIC]: "info",
+    [ChainId.OKEX]: "info-okex"
 }
 
 export const GASLESS_SUPPORT = [ChainId.MATIC]

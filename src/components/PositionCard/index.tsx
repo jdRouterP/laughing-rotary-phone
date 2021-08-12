@@ -25,6 +25,7 @@ import DoubleCurrencyLogo from '../DoubleLogo'
 import { RowBetween, RowFixed, AutoRow } from '../Row'
 import { Dots } from '../swap/styleds'
 import { BIG_INT_ZERO } from '../../constants'
+import { CHART_URL_PREFIX } from 'constants/networks'
 
 export const FixedHeightRow = styled(RowBetween)`
   height: 24px;
@@ -298,7 +299,7 @@ export default function FullPositionCard({ pair, border, stakedBalance, stakingI
             <ButtonSecondary padding="8px" borderRadius="8px">
               <ExternalLink
                 style={{ width: '100%', textAlign: 'center' }}
-                href={`https://info.dfyn.network/account/${account}`}
+                href={`https://${CHART_URL_PREFIX[(chainId ? chainId : 1)]}.dfyn.network/account/${account}`}
               >
                 View accrued fees and analytics<span style={{ fontSize: '11px' }}>↗</span>
               </ExternalLink>
