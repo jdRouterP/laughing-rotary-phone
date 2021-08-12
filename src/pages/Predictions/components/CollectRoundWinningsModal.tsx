@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import styled from 'styled-components'
 import {
   ModalContainer,
@@ -15,11 +15,12 @@ import { useWeb3React } from '@web3-react/core'
 import { useDispatch } from 'react-redux'
 import { markBetAsCollected } from 'state/prediction/reducer'
 import { useTranslation } from 'react-i18next'
-import { usePredictionContract } from 'hooks/useContract'
+import { usePredictionContract} from 'hooks/useContract'
 import { formatToken } from '../helpers'
 import { useTransactionAdder } from 'state/transactions/hooks'
 import { TYPE } from 'theme'
 import { ButtonPrimary } from 'components/Button'
+import { AddressContext } from '../PredictionDesktop'
 
 interface CollectRoundWinningsModalProps extends InjectedModalProps {
   payout: number
@@ -44,7 +45,9 @@ const CollectRoundWinningsModal: React.FC<CollectRoundWinningsModalProps> = ({
   const addTransaction = useTransactionAdder()
   const { t } = useTranslation()
   const [, setHash] = useState<string | undefined>()
-  const predictionsContract = usePredictionContract()
+
+  const AddressValue = useContext(AddressContext)
+  const predictionsContract = usePredictionContract(AddressValue)
   const dispatch = useDispatch()
 
   const handleClick = async () => {

@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useCallback, useContext, useMemo, useState } from 'react'
 import {
   ArrowBackIcon,
   CardBody,
@@ -32,6 +32,7 @@ import { useWalletModalToggle } from 'state/application/hooks'
 import { maxAmountSpend } from 'utils/maxAmountSpend'
 import CurrencyInputPanel from '../../../../components/CurrencyInputPanel'
 import useDerivedBettingInfo from 'pages/Predictions/hooks/useDerivedBettingInfo'
+import { AddressContext } from 'pages/Predictions/PredictionDesktop'
 
 
 interface SetPositionCardProps {
@@ -86,7 +87,8 @@ const SetPositionCard: React.FC<SetPositionCardProps> = ({ position, togglePosit
 
   const minBetAmountBalance = useGetMinBetAmount()
   const { t } = useTranslation()
-  const predictionsContract = usePredictionContract()
+  const AddressValue = useContext(AddressContext)
+  const predictionsContract = usePredictionContract(AddressValue)
 
   const balanceDisplay = useMemo(() => {
     return balance ? balance.toFixed(6) : '0';

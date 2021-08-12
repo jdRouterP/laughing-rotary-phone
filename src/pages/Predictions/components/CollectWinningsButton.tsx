@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { ButtonProps } from '@pancakeswap/uikit'
 import { ButtonPrimary } from 'components/Button'
 import { useActiveWeb3React } from 'hooks'
@@ -8,6 +8,7 @@ import { useTransactionAdder } from 'state/transactions/hooks'
 import { TransactionResponse } from '@ethersproject/providers'
 import { markBetAsCollected } from 'state/prediction/reducer'
 import { useWalletModalToggle } from 'state/application/hooks'
+import { AddressContext } from '../PredictionDesktop'
 
 interface CollectWinningsButtonProps extends ButtonProps {
   payout: number
@@ -30,7 +31,8 @@ const CollectWinningsButton: React.FC<CollectWinningsButtonProps> = ({
   //   false,
   // )
   const { account } = useActiveWeb3React()
-  const predictionsContract = usePredictionContract()
+  const AddressValue = useContext(AddressContext)
+  const predictionsContract = usePredictionContract(AddressValue)
   const addTransaction = useTransactionAdder()
   const dispatch = useDispatch()
 

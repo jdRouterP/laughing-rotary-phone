@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useContext} from 'react'
 import { useWeb3React } from '@web3-react/core'
 import {
   Box,
@@ -15,6 +15,7 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 import { TYPE, CloseIcon } from 'theme'
 import { ButtonTab, ButtonTabItem } from 'components/ButtonTab'
+import { GraphContext } from 'pages/Predictions/PredictionDesktop'
 
 const Filter = styled.label`
   align-items: center;
@@ -63,6 +64,7 @@ export enum HistoryTabs {
 }
 
 const Header: React.FC<HeaderProps> = ({ activeTab, setActiveTab }) => {
+  const GraphValue = useContext(GraphContext)
   const historyFilter = useGetHistoryFilter()
   const isFetchingHistory = useGetIsFetchingHistory()
   const { t } = useTranslation()
@@ -75,7 +77,7 @@ const Header: React.FC<HeaderProps> = ({ activeTab, setActiveTab }) => {
 
   const handleChange = (newFilter: HistoryFilter) => async () => {
     if (newFilter !== historyFilter && account) {
-      dispatch(fetchHistory({ account, claimed: getClaimParam(newFilter) }))
+      dispatch(fetchHistory({GraphValue, account, claimed: getClaimParam(newFilter) }))
       dispatch(setHistoryFilter(newFilter))
     }
   }

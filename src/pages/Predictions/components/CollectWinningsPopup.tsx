@@ -1,5 +1,5 @@
 
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState, useContext } from 'react'
 import styled, { css, keyframes } from 'styled-components'
 import { CloseIcon, IconButton } from '@pancakeswap/uikit'
 import { CSSTransition } from 'react-transition-group'
@@ -11,6 +11,7 @@ import { setHistoryPaneState } from 'state/prediction/reducer'
 import { AutoColumn } from 'components/Column'
 import { useActiveWeb3React } from 'hooks'
 import { ButtonPrimary } from 'components/Button'
+import { GraphContext } from '../PredictionDesktop'
 
 
 /**
@@ -117,6 +118,7 @@ box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);`
 
 const CollectWinningsPopup = () => {
   const [isOpen, setIsOpen] = useState(false)
+  const GraphValue = useContext(GraphContext)
   // const { t } = useTranslation()
   const ref = useRef(null)
   const timer = useRef<ReturnType<typeof setTimeout>>()
@@ -139,7 +141,7 @@ const CollectWinningsPopup = () => {
     let isCancelled = false
     if (account) {
       timer.current = setInterval(async () => {
-        const bets = await getBetHistory({ user: account.toLowerCase(), claimed: false })
+        const bets = await getBetHistory(GraphValue, { user: account.toLowerCase(), claimed: false })
 
         if (!isCancelled) {
           // Filter out bets that were not winners

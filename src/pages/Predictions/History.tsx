@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import { Flex } from '@pancakeswap/uikit'
 import { useWeb3React } from '@web3-react/core'
 import styled from 'styled-components'
@@ -19,6 +19,7 @@ import RoundsTab from './components/History/RoundsTab'
 import PnlTab from './components/History/PnlTab/PnlTab'
 import Modal from 'components/Modal'
 import { TYPE } from 'theme'
+import { GraphContext } from './PredictionDesktop'
 
 // const StyledHistory = styled.div`
 //   background-color: 'white'
@@ -51,6 +52,7 @@ const SpinnerWrapper = styled.div`
 
 const History = () => {
   const { account } = useWeb3React()
+  const GraphValue = useContext(GraphContext)
   const dispatch = useDispatch()
   const isHistoryPaneOpen = useIsHistoryPaneOpen()
   const isFetchingHistory = useGetIsFetchingHistory()
@@ -62,9 +64,9 @@ const History = () => {
 
   useEffect(() => {
     if (account && isHistoryPaneOpen) {
-      dispatch(fetchHistory({ account }))
+      dispatch(fetchHistory({GraphValue, account }))
     }
-  }, [account, currentEpoch, isHistoryPaneOpen, dispatch])
+  }, [account, currentEpoch, isHistoryPaneOpen, dispatch, GraphValue])
 
   // Currently the api cannot filter by unclaimed AND won so we do it here
   // when the user has selected Uncollected only include positions they won

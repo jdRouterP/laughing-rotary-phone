@@ -1,10 +1,11 @@
-import React, { ReactNode, useState } from 'react'
+import React, { ReactNode, useContext, useState } from 'react'
 import { ButtonProps } from '@pancakeswap/uikit'
 import { useTranslation } from 'react-i18next'
 import { usePredictionContract } from 'hooks/useContract'
 import { useTransactionAdder } from 'state/transactions/hooks'
 import { TransactionResponse } from '@ethersproject/providers'
 import { ButtonPrimary } from 'components/Button'
+import { AddressContext } from '../PredictionDesktop'
 
 interface ReclaimPositionButtonProps extends ButtonProps {
   epoch: number
@@ -16,7 +17,8 @@ const ReclaimPositionButton: React.FC<ReclaimPositionButtonProps> = ({ epoch, on
   const [, setIsPendingTx] = useState(false)
   const { t } = useTranslation()
   const addTransaction = useTransactionAdder()
-  const predictionsContract = usePredictionContract()
+  const AddressValue = useContext(AddressContext)
+  const predictionsContract = usePredictionContract(AddressValue)
 
   const handleReclaim = async () => {
     if (predictionsContract) {

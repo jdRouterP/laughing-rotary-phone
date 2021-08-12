@@ -35,10 +35,10 @@ const initialState: PredictionsState = {
 }
 
 // Thunks
-export const fetchBet = createAsyncThunk<{ account: string; bet: Bet }, { account: string; id: string }>(
+export const fetchBet = createAsyncThunk<{ account: string; bet: Bet }, { GraphValue: string, account: string; id: string }>(
     'predictions/fetchBet',
-    async ({ account, id }) => {
-        const response = await getBet(id)
+    async ({ GraphValue, account, id }) => {
+        const response = await getBet(id, GraphValue)
         const bet = transformBetResponse(response)
         return { account, bet }
     },
@@ -48,8 +48,8 @@ export const fetchRoundBet = createAsyncThunk<
     { account: string; roundId: string; bet: Bet },
     { account: string; roundId: string }
 //@ts-ignore
->('predictions/fetchRoundBet', async ({ account, roundId }) => {
-    const betResponses = await getBetHistory({
+>('predictions/fetchRoundBet', async ({ GraphValue, account, roundId }) => {
+    const betResponses = await getBetHistory(GraphValue, {
         user: account.toLowerCase(),
         round: roundId,
     })
@@ -69,9 +69,9 @@ export const fetchRoundBet = createAsyncThunk<
  */
 export const fetchCurrentBets = createAsyncThunk<
     { account: string; bets: Bet[] },
-    { account: string; roundIds: string[] }
->('predictions/fetchCurrentBets', async ({ account, roundIds }) => {
-    const betResponses = await getBetHistory({
+    { GraphValue: string; account: string; roundIds: string[] }
+>('predictions/fetchCurrentBets', async ({ GraphValue, account, roundIds }) => {
+    const betResponses = await getBetHistory(GraphValue, {
         user: account.toLowerCase(),
         round_in: roundIds,
     })
@@ -79,16 +79,15 @@ export const fetchCurrentBets = createAsyncThunk<
     return { account, bets: betResponses.map(transformBetResponse) }
 })
 
-export const fetchHistory = createAsyncThunk<{ account: string; bets: Bet[] }, { account: string; claimed?: boolean }>(
+export const fetchHistory = createAsyncThunk<{ account: string; bets: Bet[] }, { GraphValue: string; account: string; claimed?: boolean; }>(
     'predictions/fetchHistory',
-    async ({ account, claimed }) => {
-        const response = await getBetHistory({
+    async ({ GraphValue, account, claimed }) => {
+        const response = await getBetHistory(GraphValue, {
             user: account.toLowerCase(),
             //@ts-ignore
             claimed,
         })
         const bets = response.map(transformBetResponse)
-
         return { account, bets }
     },
 )

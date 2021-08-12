@@ -13,7 +13,7 @@ import IUniswapV2PairABI from '../constants/abis/uniswap-v2-pair.json'
 import FACTORY_ABI from "../constants/abis/factory.json";
 import ROUTER_ABI from "../constants/abis/uniswap-v2-router-02.json";
 import { useMemo } from 'react'
-import { GOVERNANCE_ADDRESS, MERKLE_DISTRIBUTOR_ADDRESS, PREDICTION_ADDRESS, UNI } from '../constants'
+import { GOVERNANCE_ADDRESS, MERKLE_DISTRIBUTOR_ADDRESS, UNI } from '../constants'
 import {
   ARGENT_WALLET_DETECTOR_ABI,
   ARGENT_WALLET_DETECTOR_MAINNET_ADDRESS
@@ -157,8 +157,8 @@ export function useMultiTokenVaultContract(stakingAddress?: string, withSignerIf
 export function useDualFarmsContract(stakingAddress?: string, withSignerIfPossible?: boolean): Contract | null {
   return useContract(stakingAddress, STAKING_REWARDS_DUAL_FARMING_ABI, withSignerIfPossible)
 }
-export function usePredictionContract(withSignerIfPossible?: boolean): Contract | null {
-  return useContract(PREDICTION_ADDRESS, PREDICTION_MARKET_ABI, withSignerIfPossible)
+export function usePredictionContract(predictionAddress: string, withSignerIfPossible?: boolean): Contract | null {
+  return useContract(predictionAddress, PREDICTION_MARKET_ABI, withSignerIfPossible)
 }
 export function useChainlinkOracleContract(chainlinkAddress?: string, withSignerIfPossible?: boolean): Contract | null {
   return useContract(chainlinkAddress, CHAINLINK_ABI, withSignerIfPossible)

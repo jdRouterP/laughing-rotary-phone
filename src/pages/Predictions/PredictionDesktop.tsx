@@ -9,6 +9,7 @@ import {
   makeFutureRoundResponse,
   makeRoundData,
   transformRoundResponse,
+  usePredictionInfo,
 } from 'state/prediction/hooks'
 import { fetchCurrentBets, initialize, setPredictionStatus } from 'state/prediction/reducer'
 import { HistoryFilter, PredictionsState, PredictionStatus } from 'state/prediction/types'
@@ -23,27 +24,49 @@ import Desktop from './Desktop'
 import { ThemeProvider as SCThemeProvider } from 'styled-components'
 import { light } from '@pancakeswap/uikit'
 import { HelmetProvider } from 'react-helmet-async'
+import { RouteComponentProps } from 'react-router-dom'
 const FUTURE_ROUND_COUNT = 1 // the number of rounds in the future to show
 
-const PredictionDesktop = () => {
+export const GraphContext = React.createContext('')
+export const AddressContext = React.createContext('')
+export const CandleSizeContext = React.createContext('')
+
+export default function PredictionDesktop({
+  match: {
+    params: {currency, candleSize}
+  }
+}: RouteComponentProps<{currency: string, candleSize: string }>){
+  
+  const InfoValue = usePredictionInfo(currency, candleSize)
+  const API_GRAPH_VALUE = InfoValue.map(Api_Info => Api_Info.GRAPH_API_PREDICTION)
+  const GRAPH = API_GRAPH_VALUE[0]
+  const API_ADDRESS_VALUE = InfoValue.map(Api_Info => Api_Info.prediction_address)
+  const predictionAddress = API_ADDRESS_VALUE[0]
+  
+
   const { account } = useWeb3React()
-  const _staticPredictionsData = useStaticPredictionsData();
+  const _staticPredictionsData = useStaticPredictionsData(predictionAddress);
   const status = useGetPredictionsStatus()
   // const isChartPaneOpen = useIsChartPaneOpen()
   const dispatch = useDispatch()
   const initialBlock = useInitialBlock()
 
   useEffect(() => {
+    dispatch(setPredictionStatus(PredictionStatus.INITIAL))
+  }, [dispatch])
+
+  useEffect(() => {
 
     const fetchInitialData = async () => {
-      const [staticPredictionsData, marketData] = await Promise.all([_staticPredictionsData, getMarketData()])
+      const [staticPredictionsData, marketData] = await Promise.all([_staticPredictionsData, getMarketData(GRAPH)])
+      
       if (staticPredictionsData === undefined || marketData === undefined) return;
-
       const { currentEpoch, interval, buffer } = staticPredictionsData;
       const latestRound = marketData.rounds.find((round) => round.epoch === currentEpoch)
+      
       // Fetch data on current unclaimed bets
       //@ts-ignore
-      dispatch(fetchCurrentBets({ account, roundIds: marketData.rounds.map((round) => round.id) }))
+      dispatch(fetchCurrentBets({ GRAPH, account, roundIds: marketData.rounds.map((round) => round.id) }))
 
       if (marketData.market.paused) {
         dispatch(setPredictionStatus(PredictionStatus.PAUSED))
@@ -73,14 +96,16 @@ const PredictionDesktop = () => {
       }
     }
 
+    
     // Do not start initialization until the first block has been retrieved
     if (initialBlock > 0) {
       fetchInitialData()
     }
-  }, [initialBlock, dispatch, _staticPredictionsData, account])
+  }, [initialBlock, dispatch, _staticPredictionsData, account, GRAPH])
+
 
   usePollBlockNumber()
-  usePollRoundData()
+  usePollRoundData(GRAPH)
   usePollOraclePrice()
 
   if (status === PredictionStatus.INITIAL) {
@@ -94,7 +119,13 @@ const PredictionDesktop = () => {
         <SwiperProvider>
           <HelmetProvider>
             <Container>
-              <Desktop />
+              <GraphContext.Provider value={GRAPH}>
+                <AddressContext.Provider value={predictionAddress}>
+                  <CandleSizeContext.Provider value={candleSize}>
+                    <Desktop />
+                  </CandleSizeContext.Provider>
+                </AddressContext.Provider>
+              </GraphContext.Provider>
             </Container> 
           </HelmetProvider>
         </SwiperProvider>
@@ -102,5 +133,3 @@ const PredictionDesktop = () => {
     </>
   )
 }
-
-export default PredictionDesktop

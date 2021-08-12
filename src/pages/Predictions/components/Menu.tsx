@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import styled from 'styled-components'
 import HistoryButton from './HistoryButton'
 import TokenUSDPrice from './TokenUSDPrice'
 import TimerLabel from './TimerLabel'
+import { CandleSizeContext } from '../PredictionDesktop'
 
 // const SetCol = styled.div`
 //   flex: none;
@@ -61,11 +62,12 @@ const StyleItem = styled.div`
 `
 
 const Menu = () => {
+  const time = useContext(CandleSizeContext)
   return (
     <Header>
       <StyleItem>
         <TokenUSDPrice />
-        <TimerLabel interval="5" unit="min" />
+        <TimerLabel interval={`${time}`} unit="min" />
       </StyleItem>
       <HistoryButton />
     </Header>

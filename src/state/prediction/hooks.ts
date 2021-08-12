@@ -2,6 +2,7 @@
 import { request, gql } from 'graphql-request'
 import {  GRAPH_API_PREDICTION } from '../../constants'
 import { Bet, BetPosition, Market, PredictionStatus, Round, RoundData } from './types'
+// import PREDICTION_MARKET_ABI  from '../../constants/abis/prediction-contract.json'
 
 import {
   BetResponse,
@@ -169,7 +170,7 @@ export const getRoundResult = (bet: Bet, currentEpoch: number): Result => {
   if (round.epoch >= currentEpoch - 1) {
     return Result.LIVE
   }
-  const roundResultPosition = round.closePrice > round.lockPrice ? BetPosition.BULL : BetPosition.BEAR
+  const roundResultPosition = round.closePrice > round.lockPrice ? BetPosition.BULL : round.closePrice === round.lockPrice ? BetPosition.HOUSE : BetPosition.BEAR
 
   return bet.position === roundResultPosition ? Result.WIN : Result.LOSE
 }
@@ -192,8 +193,9 @@ export const getUnclaimedWinningBets = (bets: Bet[] | BetResponse[]): Bet[] => {
 /**
  * Gets static data from the contract
  */
-export const useStaticPredictionsData = async () => {
-  const contract = usePredictionContract();
+export const useStaticPredictionsData = async (AddressValue: string | undefined) => {
+  const contract = usePredictionContract(AddressValue);
+  
   if (!contract) return;
 
   try {
@@ -203,6 +205,7 @@ export const useStaticPredictionsData = async () => {
     const isPaused = await contract.paused();
     const buffer = await contract.buffer();
     const rewardRate = await contract.rewardRate();
+    
     return {
       status: isPaused ? PredictionStatus.PAUSED : PredictionStatus.LIVE,
       currentEpoch: Number(currentEpoch),
@@ -217,12 +220,13 @@ export const useStaticPredictionsData = async () => {
 
 }
 
-export const getMarketData = async (): Promise<{
+export const getMarketData = async (API_INFO: string): Promise<{
   rounds: Round[]
   market: Market
 }> => {
+
   const response = (await request(
-    GRAPH_API_PREDICTION,
+    API_INFO,
     gql`
       query getMarketData {
         rounds(first: 5, orderBy: epoch, orderDirection: desc) {
@@ -269,12 +273,13 @@ export const getRound = async (id: string) => {
 type BetHistoryWhereClause = Record<string, string | number | boolean | string[]>
 
 export const getBetHistory = async (
+  GraphValue: string,
   where: BetHistoryWhereClause = {},
   first = 1000,
   skip = 0,
 ): Promise<BetResponse[]> => {
   const response = await request(
-    GRAPH_API_PREDICTION,
+    GraphValue,
     gql`
       query getBetHistory($first: Int!, $skip: Int!, $where: Bet_filter) {
         bets(first: $first, skip: $skip, where: $where) {
@@ -293,9 +298,9 @@ export const getBetHistory = async (
   return response.bets
 }
 
-export const getBet = async (betId: string): Promise<BetResponse> => {
+export const getBet = async (betId: string, GraphValue: string): Promise<BetResponse> => {
   const response = await request(
-    GRAPH_API_PREDICTION,
+    GraphValue,
     gql`
       query getBet($id: ID!) {
         bet(id: $id) {
@@ -321,30 +326,63 @@ export const getBet = async (betId: string): Promise<BetResponse> => {
 export const PREDICTION_INFO: {
   [chainId in ChainId]?: {
     id: number
-    candleSize: number
+    candleSize: string
     currency: Currency | Token
+    GRAPH_API_PREDICTION: string
+    prediction_address: string
   }[]
 } = {
   [ChainId.MATIC]: [
     {
       id: 1,
-      candleSize: 5,
+      candleSize: "5",
       currency: Currency.getNativeCurrency(137),
+      GRAPH_API_PREDICTION: 'https://api.thegraph.com/subgraphs/name/iamshashvat/matic-prediction',
+      prediction_address: '0x150B4fD25c7c0c65301e86B599822f2feeCC29E7'
     },
+    {
+      id: 2,
+      candleSize: "10",
+      currency: Currency.getNativeCurrency(137),
+      GRAPH_API_PREDICTION: 'https://api.thegraph.com/subgraphs/name/iamshashvat/matic-prediction-v2',
+      prediction_address: '0xadf010915702a5f64e0e11285d5ae74503fad0e1'
+    }
   ]
 }
 
 export interface PredictionInfo {
   id: number,
-  candleSize: number,
+  candleSize: string,
   currency: Currency | Token
+  GRAPH_API_PREDICTION: string
+  prediction_address: string
+  round: number | string
 }
-export function usePredictionInfo( ): PredictionInfo[] {
+export function usePredictionInfo(currencyA?: string | null, candleSize: string = ''): PredictionInfo[] {
   const { chainId } = useActiveWeb3React()
+  
+  // const info = [...PREDICTION_INFO[chainId ?? 137]]
+  const info = useMemo(
+    ()=>
+      chainId
+      ? PREDICTION_INFO[chainId]?.filter(predictionInfos =>
+        currencyA === undefined
+        ? true
+        : currencyA === null
+          ? false
+          : (predictionInfos.currency.symbol === currencyA && predictionInfos.candleSize === candleSize)
+        ) ?? []
+        : [] ,
+      [chainId, currencyA, candleSize]
+    )
+  
+  // async function round(){
+  //   const rounds = await getMarketData(info[index].GRAPH_API_PREDICTION)
+  // }
+  // round()
+  // console.log("Roundsss::", rounds);
 
-  const info = [...PREDICTION_INFO[chainId ?? 137]]
   const predictionIds = useMemo(() => info.map(({ id }) => id), [info])
-
   return useMemo(() => {
     if (!chainId) return []
     return predictionIds.reduce<PredictionInfo[]>((memo, predictionIdss, index) => {
@@ -352,6 +390,8 @@ export function usePredictionInfo( ): PredictionInfo[] {
         id: predictionIdss, 
         candleSize: info[index].candleSize,
         currency: info[index].currency,
+        GRAPH_API_PREDICTION: info[index].GRAPH_API_PREDICTION,
+        prediction_address: info[index].prediction_address
       })
     return memo
     }, [])

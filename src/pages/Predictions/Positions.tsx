@@ -44,8 +44,7 @@ const MenuWrapper = styled.div`
 const Positions: React.FC = () => {
   const { setSwiper } = useSwiper()
   const rounds = useGetSortedRounds()
-  const initialIndex = Math.floor(rounds.length / 2)
-
+  const initialIndex = Math.floor(rounds.length / 2);
   useOnNextRound()
 
   return (

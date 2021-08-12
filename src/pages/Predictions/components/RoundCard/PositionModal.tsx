@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo } from 'react'
+import React, { useState, useCallback, useMemo, useContext } from 'react'
 // import useIsArgentWallet from '../../hooks/useIsArgentWallet'
 // import useTransactionDeadline from '../../hooks/useTransactionDeadline'
 import Modal from 'components/Modal'
@@ -25,6 +25,7 @@ import { useGetMinBetAmount } from 'state/hook'
 import { useActiveWeb3React } from 'hooks'
 import { BIG_INT_ZERO } from 'utils/bigNumber'
 import { useWalletModalToggle } from 'state/application/hooks'
+import { AddressContext } from 'pages/Predictions/PredictionDesktop'
 
 // const HypotheticalRewardRate = styled.div<{ dim: boolean }>`
 //   display: flex;
@@ -56,7 +57,8 @@ export default function PositionModal({ isOpen, position, togglePosition, setLoa
   let balance = useCurrencyBalance(account ?? undefined, Currency.getNativeCurrency(chainId ?? 137))
   const dust = JSBI.BigInt("10000000000000000"); //TODO
   const minBetAmountBalance = useGetMinBetAmount()
-  const predictionsContract = usePredictionContract()
+  const AddressValue = useContext(AddressContext)
+  const predictionsContract = usePredictionContract(AddressValue)
 
   const maxBalance = useMemo(() => {
     if (balance === undefined) {

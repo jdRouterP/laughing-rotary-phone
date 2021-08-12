@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import { useWeb3React } from '@web3-react/core'
 import { AutoRenewIcon} from '@pancakeswap/uikit'
 import { useDispatch } from 'react-redux'
@@ -7,7 +7,7 @@ import { useGetIsFetchingHistory, useGetPredictionsStatus } from 'state/hook'
 import styled from 'styled-components'
 import { getBetHistory } from 'state/prediction/hooks'
 import {User} from 'react-feather'
-
+import { GraphContext } from '../PredictionDesktop'
 
 
 const NotificationIcon = styled.div`
@@ -56,6 +56,7 @@ export const StyledMenuButton = styled.button`
 
 
 const HistoryButton = () => {
+  const GraphValue = useContext(GraphContext)
   const isFetchingHistory = useGetIsFetchingHistory()
   const [show, setShow] = useState(false)
   const dispatch = useDispatch()
@@ -72,8 +73,7 @@ const HistoryButton = () => {
     const getBets = async () => {
 
       if (account) {
-        const bets = await getBetHistory({ user: account.toLowerCase(), claimed: false })
-
+        const bets = await getBetHistory(GraphValue, { user: account.toLowerCase(), claimed: false })
         if (!isCancelled) {
           // Filter out bets that were not winners
           const winnerBets = bets.filter((bet) => {
@@ -84,14 +84,13 @@ const HistoryButton = () => {
 
       }
     }
-
+    
     getBets();
 
     return () => {
-
       isCancelled = true
     }
-  }, [account, predictionStatus, setShow])
+  }, [account, predictionStatus, setShow, GraphValue])
 
   return (
     <StyledMenuButton onClick={handleClick} disabled={!account}>

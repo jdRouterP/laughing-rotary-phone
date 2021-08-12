@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { useColor } from 'hooks/useColor'
 import { StyledInternalLink, TYPE } from 'theme'
@@ -9,11 +9,12 @@ import { RowBetween } from 'components/Row'
 import { UNI_TOKEN, USDT } from '/home/ankush/work/prediction/dfyn-exchange-interface/src/constants/index'
 import DoubleCurrencyLogo from 'components/DoubleLogo'
 import { Clock } from 'react-feather'
-import { PredictionInfo } from 'state/prediction/hooks'
+import { getMarketData, PredictionInfo } from 'state/prediction/hooks'
+import { useInitialBlock } from 'state/hook'
+import usePollRoundData from 'pages/Predictions/hooks/usePollRoundData'
 
 
 interface PredictionMarketProps{
-    round: number
     price: string | number
     predictionValue: PredictionInfo
 }
@@ -60,10 +61,25 @@ const TopSection = styled.div`
     `};
 `
 
-const PredictionMarket: React.FC<PredictionMarketProps> = ({predictionValue, round, price}) =>{
-    const CurrentEpoch = round
-    const backgroundColor = useColor(UNI_TOKEN);
+const PredictionMarket: React.FC<PredictionMarketProps> = ({predictionValue, price}) =>{
+    const initialBlock = useInitialBlock()
+    const [epoch, setEpoch] = useState(0)
+    useEffect(() => {
 
+        const fetchInitialData = async () => {
+            const CurrentEpoch = await getMarketData(predictionValue.GRAPH_API_PREDICTION)
+            setEpoch(CurrentEpoch.rounds[1].epoch)
+        }
+        if (initialBlock > 0) {
+            fetchInitialData()
+        }
+    }, [initialBlock, predictionValue.GRAPH_API_PREDICTION])
+
+    
+    
+    const backgroundColor = useColor(UNI_TOKEN);
+    usePollRoundData(predictionValue.GRAPH_API_PREDICTION)
+    
     return (
         <Wrapper showBackground={false} bgColor={backgroundColor}>
         <CardBGImage desaturate />
@@ -94,7 +110,7 @@ const PredictionMarket: React.FC<PredictionMarketProps> = ({predictionValue, rou
             <RowBetween>
                 <TYPE.white>Current Round</TYPE.white>
                 <TYPE.white>
-                    {`${CurrentEpoch}`}
+                    {epoch === 0 ? 'Loading..' : epoch}
                 </TYPE.white>
             </RowBetween>
         </StatContainer>
