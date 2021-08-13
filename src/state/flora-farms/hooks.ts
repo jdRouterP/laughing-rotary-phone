@@ -743,7 +743,7 @@ export function useStakingInfo(pairToFilterBy?: Pair | null, version: string = '
           version: info[index].version,
           burnRate: info[index].burnRate,
           startTime: info[index].startTime ?? 0,
-          rewardToken: info[index].rewardToken ?? DFYN,
+          rewardToken: info[index].rewardToken ?? uni,
           tokens: info[index].tokens,
           userVestingInfo: { hasSetConfig: userVestingInfoState?.result?.[0].hasSetConfig, hasOptForVesting: userVestingInfoState?.result?.[0].hasOptForVesting },
           periodFinish: periodFinishMs > 0 ? new Date(periodFinishMs) : undefined,
@@ -802,7 +802,7 @@ export function useTotalFloraUniEarned(): TokenAmount | undefined {
     return (
       stakingInfos?.reduce(
         (accumulator, stakingInfo) => {
-          if (stakingInfo.rewardToken !== MATICPAD) {
+          if (stakingInfo.rewardToken === uni) {
 
             return accumulator.add(stakingInfo.earnedAmount)
           }

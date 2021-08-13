@@ -318,7 +318,7 @@ export function useStakingInfo(pairToFilterBy?: Pair | null, version: string = '
           version: info[index].version,
           startTime: info[index].startTime ?? 0,
           tokens: info[index].tokens,
-          rewardToken: info[index].rewardToken ?? DFYN,
+          rewardToken: info[index].rewardToken ?? uni,
           periodFinish: periodFinishMs > 0 ? new Date(periodFinishMs) : undefined,
           earnedAmount: new TokenAmount(uni, JSBI.BigInt(earnedAmountState?.result?.[0] ?? 0)),
           rewardRate: individualRewardRate,
