@@ -1,6 +1,6 @@
 import { ChainId, CurrencyAmount, JSBI, Token, TokenAmount, Pair } from '@dfyn/sdk'
 import { useMemo } from 'react'
-import { UNI, USDC, DFYN, FISH, UFT, ANY, AGA, AGAr, NORD, BIFI, COSMIC, TITAN, ICE, WMATIC, CRV, UNI_TOKEN, AAVE, LINK, LUNA } from '../../constants'
+import { UNI, USDC, DFYN, FISH, UFT, ANY, AGA, AGAr, NORD, BIFI, COSMIC, TITAN, ICE, WMATIC, CRV, UNI_TOKEN, AAVE, LINK, LUNA, ELE, GAJ } from '../../constants'
 import { STAKING_REWARDS_BASIC_FARMS_INTERFACE } from '../../constants/abis/staking-rewards-basic-farms'
 import { useActiveWeb3React } from '../../hooks'
 import { NEVER_RELOAD, useMultipleContractSingleData } from '../multicall/hooks'
@@ -24,6 +24,42 @@ export const STAKING_REWARDS_INFO: {
   }[]
 } = {
   [ChainId.MATIC]: [
+    {
+      tokens: [DFYN, AGA],
+      baseToken: DFYN,
+      startTime: 1628857800,
+      stakingRewardAddress: '0x2CaAA00D4505aD79FA75C06c475828e47B01C042',
+      version: 'v2'
+    },
+    {
+      tokens: [DFYN, AGAr],
+      baseToken: DFYN,
+      startTime: 1628857800,
+      stakingRewardAddress: '0xf8F6cf2f6Dc86dDB471552AA33cD6BeAC495E444',
+      version: 'v2'
+    },
+    {
+      tokens: [DFYN, GAJ],
+      baseToken: DFYN,
+      startTime: 1628857800,
+      stakingRewardAddress: '0x8257383036071C57235bfA12B76778215C348528',
+      version: 'v2'
+    },
+    {
+      tokens: [USDC, ELE],
+      baseToken: USDC,
+      startTime: 1628857800,
+      stakingRewardAddress: '0xB6a316dDe99a2844C80355a3Ef165AaD5Eb7d708',
+      version: 'v2'
+    },
+    {
+      tokens: [DFYN, ELE],
+      baseToken: DFYN,
+      startTime: 1628857800,
+      stakingRewardAddress: '0x139D73E055308507b6718AFFAB679c2186b6d90e',
+      version: 'v2'
+    },
+
     {
       tokens: [DFYN, FISH],
       baseToken: DFYN,
@@ -356,7 +392,13 @@ export function useTotalEcosystemUniEarned(): TokenAmount | undefined {
     if (!uni) return undefined
     return (
       stakingInfos?.reduce(
-        (accumulator, stakingInfo) => accumulator.add(stakingInfo.earnedAmount),
+        (accumulator, stakingInfo) => {
+          if (stakingInfo.rewardToken === uni) {
+
+            return accumulator.add(stakingInfo.earnedAmount)
+          }
+          return accumulator
+        },
         new TokenAmount(uni, '0')
       ) ?? new TokenAmount(uni, '0')
     )
