@@ -1,6 +1,7 @@
-import React, { useEffect } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { Box } from '@pancakeswap/uikit'
 import { DefaultTheme, useTheme } from 'styled-components'
+import { CandleSizeContext } from '../PredictionDesktop'
 // import { CloseIcon, TYPE } from 'theme'
 // import { Flex } from 'rebass'
 // import { useTranslation } from 'react-i18next'
@@ -22,7 +23,7 @@ const tradingViewListener = async () =>
     }),
   )
 
-const initializeTradingView = (TradingViewObj: any, theme: DefaultTheme) => {
+const initializeTradingView = (TradingViewObj: any, theme: DefaultTheme, intervalValue: string) => {
   /* eslint-disable new-cap */
   /* eslint-disable no-new */
   // @ts-ignore
@@ -30,7 +31,7 @@ const initializeTradingView = (TradingViewObj: any, theme: DefaultTheme) => {
     autosize: true,
     height: '100%',
     symbol: 'BINANCE:MATICUSDT',
-    interval: '5',
+    interval: intervalValue,
     timezone: 'Etc/UTC',
     theme: theme.bg4,
     style: '1',
@@ -43,6 +44,7 @@ const initializeTradingView = (TradingViewObj: any, theme: DefaultTheme) => {
 
 const TradingView = () => {
   const theme = useTheme()
+  const intervalValue = useContext(CandleSizeContext)
   // const { t } = useTranslation()
   // const dispatch = useDispatch()
   // const darkMode = useIsDarkMode()
@@ -51,13 +53,13 @@ const TradingView = () => {
     // @ts-ignore
     if (window.TradingView) {
       // @ts-ignore
-      initializeTradingView(window.TradingView, theme)
+      initializeTradingView(window.TradingView, theme, intervalValue)
     } else {
       tradingViewListener().then((tv) => {
-        initializeTradingView(tv, theme )
+        initializeTradingView(tv, theme, intervalValue)
       })
     }
-  }, [theme])
+  }, [theme, intervalValue])
 
   // const handleClick = () => {
   //   dispatch(setChartPaneState(false))
