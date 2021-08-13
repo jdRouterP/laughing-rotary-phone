@@ -364,6 +364,13 @@ export const getTokenLogoURL = (address: string) => {
     uri = 'https://raw.githubusercontent.com/nordfinance/nord-assets/master/logo.png'
   }
 
+  if (address?.toLowerCase() === '0xAcD7B3D9c10e97d0efA418903C0c7669E702E4C0'.toLowerCase()) {
+    uri = 'https://eleven.finance/ELE-logo.svg'
+  }
+  if (address?.toLowerCase() === '0xF4B0903774532AEe5ee567C02aaB681a81539e92'.toLowerCase()) {
+    uri = 'https://gaj.finance/logo.png'
+  }
+
 
 
 
