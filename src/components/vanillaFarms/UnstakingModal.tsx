@@ -87,11 +87,11 @@ export default function UnstakingModal({ isOpen, onDismiss, stakingInfo }: Staki
               <TYPE.body fontWeight={600} fontSize={36}>
                 {<FormattedCurrencyAmount currencyAmount={stakingInfo?.earnedAmount} />}
               </TYPE.body>
-              <TYPE.body>Unclaimed DFYN</TYPE.body>
+              <TYPE.body>Unclaimed {stakingInfo?.rewardToken?.symbol ?? 'DFYN'}</TYPE.body>
             </AutoColumn>
           )}
           <TYPE.subHeader style={{ textAlign: 'center' }}>
-            When you withdraw, your DFYN is claimed and your liquidity is removed from the mining pool.
+            When you withdraw, your {stakingInfo?.rewardToken?.symbol ?? 'DFYN'} is claimed and your liquidity is removed from the mining pool.
           </TYPE.subHeader>
           <ButtonError disabled={!!error} error={!!error && !!stakingInfo?.stakedAmount} onClick={onWithdraw}>
             {error ?? 'Withdraw & Claim'}
@@ -101,8 +101,8 @@ export default function UnstakingModal({ isOpen, onDismiss, stakingInfo }: Staki
       {attempting && !hash && (
         <LoadingView onDismiss={wrappedOndismiss}>
           <AutoColumn gap="12px" justify={'center'}>
-            <TYPE.body fontSize={20}>Withdrawing {stakingInfo?.stakedAmount?.toSignificant(4)} DFYN-V2</TYPE.body>
-            <TYPE.body fontSize={20}>Claiming {stakingInfo?.earnedAmount?.toSignificant(4)} DFYN</TYPE.body>
+            <TYPE.body fontSize={20}>Withdrawing {stakingInfo?.stakedAmount?.toSignificant(4)} DFYN-LP</TYPE.body>
+            <TYPE.body fontSize={20}>Claiming {stakingInfo?.earnedAmount?.toSignificant(4)} {stakingInfo?.rewardToken?.symbol ?? 'DFYN'}</TYPE.body>
           </AutoColumn>
         </LoadingView>
       )}
@@ -111,7 +111,7 @@ export default function UnstakingModal({ isOpen, onDismiss, stakingInfo }: Staki
           <AutoColumn gap="12px" justify={'center'}>
             <TYPE.largeHeader>Transaction Submitted</TYPE.largeHeader>
             <TYPE.body fontSize={20}>Withdrew LP Tokens!</TYPE.body>
-            <TYPE.body fontSize={20}>Claimed DFYN!</TYPE.body>
+            <TYPE.body fontSize={20}>Claimed {stakingInfo?.rewardToken?.symbol ?? 'DFYN'}!</TYPE.body>
           </AutoColumn>
         </SubmittedView>
       )}

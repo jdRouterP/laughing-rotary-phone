@@ -1,12 +1,12 @@
 import React, { useEffect, useState, useContext } from 'react'
 import { useWeb3React } from '@web3-react/core'
-import { AutoRenewIcon} from '@pancakeswap/uikit'
+import { AutoRenewIcon } from '@pancakeswap/uikit'
 import { useDispatch } from 'react-redux'
 import { setHistoryPaneState } from 'state/prediction/reducer'
 import { useGetIsFetchingHistory, useGetPredictionsStatus } from 'state/hook'
 import styled from 'styled-components'
 import { getBetHistory } from 'state/prediction/hooks'
-import {User} from 'react-feather'
+import { User } from 'react-feather'
 import { GraphContext } from '../PredictionDesktop'
 
 
@@ -58,6 +58,7 @@ export const StyledMenuButton = styled.button`
 const HistoryButton = () => {
   const GraphValue = useContext(GraphContext)
   const isFetchingHistory = useGetIsFetchingHistory()
+  // const isHistoryPaneOpen = useIsHistoryPaneOpen()
   const [show, setShow] = useState(false)
   const dispatch = useDispatch()
   const { account } = useWeb3React()
@@ -84,7 +85,7 @@ const HistoryButton = () => {
 
       }
     }
-    
+
     getBets();
 
     return () => {

@@ -87,7 +87,7 @@ export default function UnstakingModal({ isOpen, onDismiss, stakingInfo }: Staki
               <TYPE.body fontWeight={600} fontSize={36}>
                 {<FormattedCurrencyAmount currencyAmount={stakingInfo?.earnedAmount} />}
               </TYPE.body>
-              <TYPE.body>Unclaimed DFYN</TYPE.body>
+              <TYPE.body>Unclaimed {stakingInfo?.vaultToken?.symbol ?? '-'}</TYPE.body>
             </AutoColumn>
           )}
           <TYPE.subHeader style={{ textAlign: 'center' }}>
@@ -101,8 +101,8 @@ export default function UnstakingModal({ isOpen, onDismiss, stakingInfo }: Staki
       {attempting && !hash && (
         <LoadingView onDismiss={wrappedOndismiss}>
           <AutoColumn gap="12px" justify={'center'}>
-            <TYPE.body fontSize={20}>Withdrawing {stakingInfo?.stakedAmount?.toSignificant(4)} DFYN-V2</TYPE.body>
-            <TYPE.body fontSize={20}>Claiming {stakingInfo?.earnedAmount?.toSignificant(4)} DFYN</TYPE.body>
+            <TYPE.body fontSize={20}>Withdrawing {stakingInfo?.stakedAmount?.toSignificant(4)} {stakingInfo?.vaultToken?.symbol ?? '-'}</TYPE.body>
+            <TYPE.body fontSize={20}>Claiming {stakingInfo?.earnedAmount?.toSignificant(4)} {stakingInfo?.vaultToken?.symbol ?? '-'}</TYPE.body>
           </AutoColumn>
         </LoadingView>
       )}
@@ -110,8 +110,8 @@ export default function UnstakingModal({ isOpen, onDismiss, stakingInfo }: Staki
         <SubmittedView onDismiss={wrappedOndismiss} hash={hash}>
           <AutoColumn gap="12px" justify={'center'}>
             <TYPE.largeHeader>Transaction Submitted</TYPE.largeHeader>
-            <TYPE.body fontSize={20}>Withdrew LP Tokens!</TYPE.body>
-            <TYPE.body fontSize={20}>Claimed DFYN!</TYPE.body>
+            <TYPE.body fontSize={20}>Withdrew Tokens!</TYPE.body>
+            <TYPE.body fontSize={20}>Claimed {stakingInfo?.vaultToken?.symbol ?? '-'}!</TYPE.body>
           </AutoColumn>
         </SubmittedView>
       )}

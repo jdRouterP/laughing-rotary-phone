@@ -2,7 +2,7 @@
 import { ChainId, CurrencyAmount, JSBI, Token, TokenAmount, Pair } from '@dfyn/sdk'
 import { useMemo } from 'react'
 import { BigNumber } from 'ethers'
-import { ROUTE, UNI, ETHER, USDC, DFYN, WBTC, USDT, DAI, WMATIC, UNI_TOKEN, AAVE, LUNA, UST, LINK, CRV, QUICK, MATICPAD, MIMATIC } from '../../constants'
+import { ROUTE, UNI, ETHER, USDC, DFYN, WBTC, USDT, DAI, WMATIC, UNI_TOKEN, AAVE, LUNA, UST, LINK, CRV, QUICK, MATICPAD, MIMATIC, NEXO } from '../../constants'
 import { STAKING_REWARDS_FLORA_FARMS_INTERFACE } from '../../constants/abis/staking-rewards-flora-farms'
 import { useActiveWeb3React } from '../../hooks'
 import { NEVER_RELOAD, useMultipleContractSingleData } from '../multicall/hooks'
@@ -27,6 +27,14 @@ export const STAKING_REWARDS_INFO: {
   }[]
 } = {
   [ChainId.MATIC]: [
+    {
+      tokens: [NEXO, ETHER],
+      baseToken: ETHER,
+      startTime: 1627993800,
+      stakingRewardAddress: '0xC406879608072142C53f8be94B33086CE56bb485',
+      version: 'v3',
+      burnRate: '35'
+    },
     {
       tokens: [UST, USDT],
       baseToken: USDT,

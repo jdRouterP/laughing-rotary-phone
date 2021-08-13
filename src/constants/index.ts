@@ -78,6 +78,10 @@ export const MIMATIC = new Token(ChainId.MATIC, '0xa3fa99a148fa48d14ed51d610c367
 export const ICE = new Token(ChainId.MATIC, '0x4a81f8796e0c6ad4877a51c86693b0de8093f2ef', 18, 'ICE', 'Iron Finance ICE Token')
 export const TITAN = new Token(ChainId.MATIC, '0xaaa5b9e6c589642f98a1cda99b9d024b8407285a', 18, 'TITAN', 'Titan DAO Finance')
 
+export const NEXO = new Token(ChainId.MATIC, '0x41b3966b4ff7b427969ddf5da3627d6aeae9a48e', 18, 'NEXO', 'Nexo')
+export const CHART = new Token(ChainId.MATIC, '0x083c56d87ead73d6231c165ec450c6e28f3399c9', 18, 'CHART', 'ChartEx')
+export const RVF = new Token(ChainId.MATIC, '0x2ce13e4199443fdfff531abb30c9b6594446bbc7', 18, 'RVF', 'Rocket Vault')
+
 
 //TEST TOKENS
 export const REWARDTEST = new Token(ChainId.MATIC, '0xD33dcD9673e1fA99F064CB4682c6299351AD771C', 18, 'TEST', 'Test Token')
@@ -111,7 +115,7 @@ export const UNI: { [chainId in ChainId]: Token } = {
   [ChainId.OKEX]: new Token(ChainId.OKEX, UNI_ADDRESS, 18, 'DFYN', 'Dfyn'),
 }
 
-export const REWARD_TOKENS: Token[] = [ROUTE, DFYN, ZEE, AURORA, ROYA, BOOTY, SX, EZ, UFARM, NWC, mRTK, XDO, FRM]
+export const REWARD_TOKENS: Token[] = [ROUTE, DFYN, ZEE, AURORA, ROYA, BOOTY, SX, EZ, UFARM, NWC, mRTK, XDO, FRM, RVF, CHART]
 
 export const COMMON_CONTRACT_NAMES: { [address: string]: string } = {
   [UNI_ADDRESS]: 'DFYN',

@@ -6,7 +6,7 @@ import { darken } from 'polished'
 import { useTranslation } from 'react-i18next'
 import { isAndroid, isIOS, isMobile } from 'react-device-detect'
 import styled from 'styled-components'
-import { HEADER_ACCESS, NETWORK_LABEL } from '../../constants/networks'
+import { HEADER_ACCESS, NETWORK_LABEL, CHART_URL_PREFIX } from '../../constants/networks'
 import Logo from '../../assets/images/DFYN logo final.png'
 import LogoDark from '../../assets/images/DFYN logo dark.png'
 import DarkLogoMobile from '../../assets/images/logo_white.png'
@@ -374,7 +374,7 @@ export default function Header() {
 
   const countUpValue = aggregateBalance?.toFixed(0) ?? '0'
   const countUpValuePrevious = usePrevious(countUpValue) ?? '0'
-  
+
   return (
     <HeaderFrame>
       <ClaimModal />
@@ -414,7 +414,7 @@ export default function Header() {
           {chainId && HEADER_ACCESS.vault.includes(chainId) && <StyledNavLink id={`vault-nav-link`} to={'/vault'}>
             Vault
           </StyledNavLink>}
-          {chainId && HEADER_ACCESS.charts.includes(chainId) && <StyledExternalLink id={`stake-nav-link`} href={'https://info.dfyn.network/home/'}>
+          {chainId && HEADER_ACCESS.charts.includes(chainId) && <StyledExternalLink id={`stake-nav-link`} href={`https://${CHART_URL_PREFIX[(chainId ? chainId : 1)]}.dfyn.network/home/`}>
             Charts <span style={{ fontSize: '11px' }}>↗</span>
           </StyledExternalLink>}
           {/* <StyledDocsLink id={`docs-nav-link`} href={'https://docs.dfyn.network/'}>

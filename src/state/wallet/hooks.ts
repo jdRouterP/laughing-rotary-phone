@@ -11,6 +11,10 @@ import { useUserUnclaimedAmount } from '../claim/hooks'
 import { useTotalUniEarned } from '../stake/hooks'
 import { useTotalVaultUniEarned } from 'state/vault/hooks'
 import { useTotalFloraUniEarned } from 'state/flora-farms/hooks'
+import { useTotalDualFarmUniEarned } from 'state/dual-stake/hooks'
+import { useTotalEcosystemUniEarned } from 'state/vanilla-stake/hooks'
+// import { useTotalEcosystemUniEarned } from 'state/vanilla-stake/hooks'
+// import { useTotalDualFarmUniEarned } from 'state/dual-stake/hooks'
 
 /**
  * Returns a map of the given addresses to their eventually consistent ETH balances.
@@ -148,7 +152,9 @@ export function useAggregateUniBalance(): TokenAmount | undefined {
   const uniToClaimPreStake: TokenAmount | undefined = useTotalUniEarned()
   const uniToClaimVault: TokenAmount | undefined = useTotalVaultUniEarned()
   const uniToClaimFlora: TokenAmount | undefined = useTotalFloraUniEarned()
-  const uniUnHarvested: TokenAmount | undefined = uniToClaimPreStake && uniToClaimFlora && uniToClaimVault && uniToClaimPreStake.add(uniToClaimVault).add(uniToClaimFlora)
+  const uniToClaimEcosystem: TokenAmount | undefined = useTotalEcosystemUniEarned()
+  const uniToClaimDualFarms: TokenAmount | undefined = useTotalDualFarmUniEarned()
+  const uniUnHarvested: TokenAmount | undefined = uniToClaimPreStake && uniToClaimFlora && uniToClaimVault && uniToClaimEcosystem && uniToClaimDualFarms && uniToClaimPreStake.add(uniToClaimVault).add(uniToClaimFlora).add(uniToClaimEcosystem).add(uniToClaimDualFarms)
 
   if (!uni) return undefined
 

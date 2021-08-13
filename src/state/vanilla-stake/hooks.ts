@@ -25,6 +25,13 @@ export const STAKING_REWARDS_INFO: {
 } = {
   [ChainId.MATIC]: [
     {
+      tokens: [DFYN, FISH],
+      baseToken: DFYN,
+      startTime: 1627993800,
+      stakingRewardAddress: '0xA0b4Eb5201635011eEf2A7eE7d12237b229C38D2',
+      version: 'v2'
+    },
+    {
       tokens: [DFYN, WMATIC],
       baseToken: DFYN,
       startTime: 1627142400,

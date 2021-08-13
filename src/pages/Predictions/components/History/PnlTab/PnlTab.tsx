@@ -5,7 +5,7 @@ import { Box, Flex } from '@pancakeswap/uikit'
 import { useTranslation } from 'react-i18next'
 import { useGetCurrentEpoch, useGetLastOraclePrice, useGetRewardRate } from 'state/hook'
 import { Bet, BetPosition } from 'state/prediction/types'
-import { formatToken, getMultiplier, getNetPayout } from 'pages/Predictions/helpers'
+import { formatToken, getMultiplier, getNetGains } from 'pages/Predictions/helpers'
 
 import { getRoundResult, Result } from 'state/prediction/hooks'
 import PnlChart from './PnlChart'
@@ -79,7 +79,7 @@ const getPnlSummary = (bets: Bet[], currentEpoch: number): PnlSummary => {
     const roundResult = getRoundResult(bet, currentEpoch)
     const rewardRate = useGetRewardRate()
     if (roundResult === Result.WIN) {
-      const payout = getNetPayout(bet, rewardRate)
+      const payout = getNetGains(bet, rewardRate)
       let { bestRound } = summary.won
       if (payout > bestRound.payout) {
         const { bullAmount, bearAmount, totalAmount } = bet.round

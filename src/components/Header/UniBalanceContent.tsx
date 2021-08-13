@@ -2,6 +2,7 @@ import { ChainId, TokenAmount } from '@dfyn/sdk'
 import React from 'react'
 import { X } from 'react-feather'
 import styled from 'styled-components'
+import { CHART_URL_PREFIX } from '../../constants/networks'
 import tokenLogo from '../../assets/big-dfyn.svg'
 import { UNI } from '../../constants'
 import { useActiveWeb3React } from '../../hooks'
@@ -176,7 +177,7 @@ export default function UniBalanceContent({ setShowUniBalanceModal }: { setShowU
               <TYPE.white color="white">{totalSupply?.toFixed(0, { groupSeparator: ',' })}</TYPE.white>
             </RowBetween> */}
             {uni && uni.chainId === ChainId.MAINNET ? (
-              <ExternalLink href={`https://info.dfyn.network/token/${uni.address}`}>View DFYN Analytics</ExternalLink>
+              <ExternalLink href={`https://${CHART_URL_PREFIX[(chainId ? chainId : 1)]}.dfyn.network/token/${uni.address}`}>View DFYN Analytics</ExternalLink>
             ) : null}
           </AutoColumn>
         </CardSection>

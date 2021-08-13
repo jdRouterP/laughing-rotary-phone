@@ -28,7 +28,7 @@ export default function BetaWarning() {
   return (<PhishAlert isActive={active}>
     <div style={{ display: 'flex' }}>
       <AlertTriangle style={{ marginRight: 6 }} size={12} /> Prediction Market is in BETA, use at your own risk!
-      <ExternalLink style={{ color: 'white', textDecoration: 'underline', marginLeft: "5px", fontWeight: "normal" }} href="https://docs.dfyn.network/">
+      <ExternalLink style={{ color: 'white', textDecoration: 'underline', marginLeft: "5px", fontWeight: "normal" }} href="https://docs.dfyn.network/prediction-markets/intro-to-prediction-markets">
         {('Learn More')}
       </ExternalLink>
     </div>

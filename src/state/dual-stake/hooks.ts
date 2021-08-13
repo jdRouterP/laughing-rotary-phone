@@ -1,6 +1,6 @@
 import { ChainId, CurrencyAmount, JSBI, Token, TokenAmount, Pair } from '@dfyn/sdk'
 import { useMemo } from 'react'
-import { UNI, ROUTE, REWARD_TOKENS, EMPTY, DFYN, USDC, ZEE, AURORA, BOOTY, ROYA, SX, EZ, UFARM, NWC, mRTK, XUSD, XDO, FRM } from '../../constants'
+import { UNI, ROUTE, REWARD_TOKENS, EMPTY, DFYN, USDC, ZEE, AURORA, BOOTY, ROYA, SX, EZ, UFARM, NWC, mRTK, XUSD, XDO, FRM, CHART, RVF } from '../../constants'
 import { STAKING_REWARDS_DUAL_FARMS_INTERFACE } from '../../constants/abis/staking-rewards-dual-farms'
 import { useActiveWeb3React } from '../../hooks'
 import { NEVER_RELOAD, useMultipleContractSingleData } from '../multicall/hooks'
@@ -25,6 +25,22 @@ export const STAKING_REWARDS_INFO: {
   }[]
 } = {
   [ChainId.MATIC]: [
+    {
+      tokens: [CHART, DFYN],
+      rewardTokens: [DFYN, CHART],
+      baseToken: DFYN,
+      start: 1627993800000,
+      stakingRewardAddress: '0x925616a980CA726A428476e8c74d737D568390F6',
+      version: 'v2'
+    },
+    {
+      tokens: [RVF, DFYN],
+      rewardTokens: [DFYN, RVF],
+      baseToken: DFYN,
+      start: 1627993800000,
+      stakingRewardAddress: '0x153E36832263BcAcEc552Eb53537680E54B5737F',
+      version: 'v2'
+    },
     {
       tokens: [ROUTE, DFYN],
       rewardTokens: [ROUTE, DFYN],
@@ -366,11 +382,12 @@ const getTokenByAddress = (address: string) => {
 }
 
 export function useTotalDualFarmUniEarned(): TokenAmount | undefined {
-
+  const { chainId } = useActiveWeb3React()
+  const uni = chainId ? UNI[chainId] : undefined
   const stakingInfos = useStakingInfo()
 
   return useMemo(() => {
-    if (!DFYN) return undefined
+    if (!uni) return undefined
     return (
       stakingInfos?.reduce(
         (accumulator, stakingInfo) => {
@@ -378,10 +395,10 @@ export function useTotalDualFarmUniEarned(): TokenAmount | undefined {
           const amount = index === 0 ? stakingInfo?.earnedAmount : stakingInfo.earnedAmountTwo
           return accumulator.add(amount)
         },
-        new TokenAmount(DFYN, '0')
-      ) ?? new TokenAmount(DFYN, '0')
+        new TokenAmount(uni, '0')
+      ) ?? new TokenAmount(uni, '0')
     )
-  }, [stakingInfos])
+  }, [stakingInfos, uni])
 }
 
 // based on typed value
