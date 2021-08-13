@@ -43,6 +43,8 @@ export default function PredictionDesktop({
   const API_ADDRESS_VALUE = InfoValue.map(Api_Info => Api_Info.prediction_address)
   const predictionAddress = API_ADDRESS_VALUE[0]
   
+  
+  
 
   const { account } = useWeb3React()
   const _staticPredictionsData = useStaticPredictionsData(predictionAddress);
@@ -64,11 +66,10 @@ export default function PredictionDesktop({
 
     const fetchInitialData = async () => {
       const [staticPredictionsData, marketData] = await Promise.all([_staticPredictionsData, getMarketData(GRAPH)])
-      
       if (staticPredictionsData === undefined || marketData === undefined) return;
       const { currentEpoch, interval, buffer } = staticPredictionsData;
       const latestRound = marketData.rounds.find((round) => round.epoch === currentEpoch)
-      
+
       // Fetch data on current unclaimed bets
       //@ts-ignore
       dispatch(fetchCurrentBets({ GRAPH, account, roundIds: marketData.rounds.map((round) => round.id) }))

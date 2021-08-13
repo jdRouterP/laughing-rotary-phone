@@ -69,9 +69,9 @@ export const fetchRoundBet = createAsyncThunk<
  */
 export const fetchCurrentBets = createAsyncThunk<
     { account: string; bets: Bet[] },
-    { GraphValue: string; account: string; roundIds: string[] }
->('predictions/fetchCurrentBets', async ({ GraphValue, account, roundIds }) => {
-    const betResponses = await getBetHistory(GraphValue, {
+    { GRAPH: string; account: string; roundIds: string[] }
+>('predictions/fetchCurrentBets', async ({ GRAPH, account, roundIds }) => {
+    const betResponses = await getBetHistory(GRAPH, {
         user: account.toLowerCase(),
         round_in: roundIds,
     })
