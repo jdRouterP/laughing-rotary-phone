@@ -87,7 +87,7 @@ const PredictionsDashboard: React.FC = () => {
 
         <PoolSection>
             {predictionInfos.map((predictionValue)=>{
-                return <PredictionMarket predictionValue={predictionValue} price={countUp} />
+                return <PredictionMarket key={predictionValue.id} predictionValue={predictionValue} price={countUp} />
             })}
         </PoolSection>
       </AutoColumn>
