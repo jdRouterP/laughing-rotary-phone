@@ -391,9 +391,12 @@ export function useTotalDualFarmUniEarned(): TokenAmount | undefined {
     return (
       stakingInfos?.reduce(
         (accumulator, stakingInfo) => {
-          const index = stakingInfo?.rewardAddresses.indexOf(DFYN)
-          const amount = index === 0 ? stakingInfo?.earnedAmount : stakingInfo.earnedAmountTwo
-          return accumulator.add(amount)
+          if (stakingInfo?.rewardAddresses.includes(DFYN)) {
+            const index = stakingInfo?.rewardAddresses.indexOf(DFYN)
+            const amount = index === 0 ? stakingInfo?.earnedAmount : stakingInfo.earnedAmountTwo
+            return accumulator.add(amount)
+          }
+          return accumulator
         },
         new TokenAmount(uni, '0')
       ) ?? new TokenAmount(uni, '0')

@@ -82,10 +82,15 @@ export const NEXO = new Token(ChainId.MATIC, '0x41b3966b4ff7b427969ddf5da3627d6a
 export const CHART = new Token(ChainId.MATIC, '0x083c56d87ead73d6231c165ec450c6e28f3399c9', 18, 'CHART', 'ChartEx')
 export const RVF = new Token(ChainId.MATIC, '0x2ce13e4199443fdfff531abb30c9b6594446bbc7', 18, 'RVF', 'Rocket Vault')
 
+export const GAJ = new Token(ChainId.MATIC, '0xF4B0903774532AEe5ee567C02aaB681a81539e92', 18, 'GAJ', 'GAJ')
+export const ELE = new Token(ChainId.MATIC, '0xAcD7B3D9c10e97d0efA418903C0c7669E702E4C0', 18, 'ELE', 'Eleven.finance')
 
+//OKEX
+export const WOKT = new Token(ChainId.OKEX, '0x8f8526dbfd6e38e3d8307702ca8469bae6c56c15', 18, 'OKT', 'Wrapped OKT')
+export const DAIK = new Token(ChainId.OKEX, '0x21cde7e32a6caf4742d00d44b07279e7596d26b9', 18, 'DAIK', 'DAI')
 //TEST TOKENS
-export const REWARDTEST = new Token(ChainId.MATIC, '0xD33dcD9673e1fA99F064CB4682c6299351AD771C', 18, 'TEST', 'Test Token')
-export const REWARDTEST2 = new Token(ChainId.MATIC, '0x246b774CfB1087620620dAbC1f8D46938403C487', 18, 'TEST2', 'Test2 Token')
+export const REWARDTEST2 = new Token(ChainId.OKEX, '0x6c5e0d6e2150e7f9743fe5b9cb357e5e2da33447', 18, 'TEST2', 'Test2 Token')
+export const REWARDTEST = new Token(ChainId.OKEX, '0x6c5e0d6e2150e7f9743fe5b9cb357e5e2da33447', 18, 'TEST', 'Test Token')
 
 // Block time here is slightly higher (~1s) than average in order to avoid ongoing proposals past the displayed time
 export const AVERAGE_BLOCK_TIME_IN_SECS = 13
@@ -111,8 +116,8 @@ export const UNI: { [chainId in ChainId]: Token } = {
   [ChainId.ROPSTEN]: new Token(ChainId.ROPSTEN, UNI_ADDRESS, 18, 'UNI', 'Uniswap'),
   [ChainId.GÖRLI]: new Token(ChainId.GÖRLI, UNI_ADDRESS, 18, 'UNI', 'Uniswap'),
   [ChainId.KOVAN]: new Token(ChainId.KOVAN, UNI_ADDRESS, 18, 'UNI', 'Uniswap'),
-  [ChainId.MATIC]: new Token(ChainId.MATIC, UNI_ADDRESS, 18, 'DFYN', 'Dfyn'),
-  [ChainId.OKEX]: new Token(ChainId.OKEX, UNI_ADDRESS, 18, 'DFYN', 'Dfyn'),
+  [ChainId.MATIC]: new Token(ChainId.MATIC, UNI_ADDRESS, 18, 'DFYN', 'DFYN Token'),
+  [ChainId.OKEX]: new Token(ChainId.OKEX, "0x6c5e0d6e2150e7f9743fe5b9cb357e5e2da33447", 18, 'TEST', 'TEST'),
 }
 
 export const REWARD_TOKENS: Token[] = [ROUTE, DFYN, ZEE, AURORA, ROYA, BOOTY, SX, EZ, UFARM, NWC, mRTK, XDO, FRM, RVF, CHART]
