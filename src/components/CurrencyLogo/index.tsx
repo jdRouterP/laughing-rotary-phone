@@ -1,5 +1,6 @@
 import { ChainId, Currency, Token } from '@dfyn/sdk'
 import { useActiveWeb3React } from 'hooks'
+import { useCurrency } from 'hooks/Tokens'
 import React, { useMemo } from 'react'
 import styled from 'styled-components'
 
@@ -46,26 +47,28 @@ export default function CurrencyLogo({
   size?: string
   style?: React.CSSProperties
 }) {
+  const currencyIdA = currency instanceof Token ? currency.address : currency?.symbol
+  const currencyA = useCurrency(currencyIdA)
   const { chainId } = useActiveWeb3React()
-  const uriLocations = useHttpLocations(currency instanceof WrappedTokenInfo ? currency.logoURI : undefined)
+  const uriLocations = useHttpLocations(currencyA instanceof WrappedTokenInfo ? currencyA.logoURI : undefined)
 
   const srcs: string[] = useMemo(() => {
     if (!chainId) return []
-    if (currency === Currency.getNativeCurrency(chainId)) return []
+    if (currencyA === Currency.getNativeCurrency(chainId)) return []
 
-    if (currency instanceof Token) {
-      if (currency instanceof WrappedTokenInfo) {
-        return [...uriLocations, getTokenLogoURL(currency.address)]
+    if (currencyA instanceof Token) {
+      if (currencyA instanceof WrappedTokenInfo) {
+        return [...uriLocations, getTokenLogoURL(currencyA.address)]
       }
-      return [getTokenLogoURL(currency.address)]
+      return [getTokenLogoURL(currencyA.address)]
     }
     return []
-  }, [chainId, currency, uriLocations])
+  }, [chainId, currencyA, uriLocations])
 
-  if (currency === Currency.getNativeCurrency(chainId)) {
+  if (currencyA === Currency.getNativeCurrency(chainId)) {
     if (chainId)
       return <StyledNativeLogo src={logo[chainId] || `/images/tokens/unknown.png`} size={size} style={style} />
   }
 
-  return <StyledLogo size={size} srcs={srcs} alt={`${currency?.getSymbol(chainId) ?? 'token'} logo`} style={style} />
+  return <StyledLogo size={size} srcs={srcs} alt={`${currencyA?.getSymbol(chainId) ?? 'token'} logo`} style={style} />
 }

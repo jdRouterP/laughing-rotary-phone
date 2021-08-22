@@ -1,5 +1,4 @@
-import { Currency, Token } from '@dfyn/sdk'
-import { useCurrency } from 'hooks/Tokens'
+import { Currency } from '@dfyn/sdk'
 import React from 'react'
 import styled from 'styled-components'
 import CurrencyLogo from '../CurrencyLogo'
@@ -32,13 +31,10 @@ export default function DoubleCurrencyLogo({
   size = 16,
   margin = false
 }: DoubleCurrencyLogoProps) {
-  const currencyIdA = currency0 instanceof Token ? currency0.address : currency0?.symbol
-  const currencyIdB = currency1 instanceof Token ? currency1.address : currency1?.symbol
-  const [currencyA, currencyB] = [useCurrency(currencyIdA), useCurrency(currencyIdB)]
   return (
     <Wrapper sizeraw={size} margin={margin}>
-      {currency0 && <HigherLogo currency={currencyA ?? undefined} size={size.toString() + 'px'} />}
-      {currency1 && <CoveredLogo currency={currencyB ?? undefined} size={size.toString() + 'px'} sizeraw={size} />}
+      {currency0 && <HigherLogo currency={currency0 ?? undefined} size={size.toString() + 'px'} />}
+      {currency1 && <CoveredLogo currency={currency1 ?? undefined} size={size.toString() + 'px'} sizeraw={size} />}
     </Wrapper>
   )
 }
