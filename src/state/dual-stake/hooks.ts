@@ -30,7 +30,7 @@ export const STAKING_REWARDS_INFO: {
       tokens: [ROUTE, DFYN],
       rewardTokens: [ROUTE, DFYN],
       baseToken: DFYN,
-      start: 1629721800000,
+      start: 1629723600000,
       stakingRewardAddress: '0xEdBB73C0ccD3F00cD75c2749b0df40A1BE394EE2',
       version: 'v3'
     },

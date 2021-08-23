@@ -28,42 +28,42 @@ export const STAKING_REWARDS_INFO: {
     {
       tokens: [DFYN, WMATIC],
       baseToken: DFYN,
-      startTime: 1629721800,
+      startTime: 1629723600,
       stakingRewardAddress: '0x45Ea0bBa68c7435b55A4bBD6B09ec2A0DfCDf334',
       version: 'v3'
     },
     {
       tokens: [DFYN, LUNA],
       baseToken: DFYN,
-      startTime: 1629721800,
+      startTime: 1629723600,
       stakingRewardAddress: '0x52b965ccd44A98A8aa064bC597C895adCD02e9BC',
       version: 'v3'
     },
     {
       tokens: [DFYN, LINK],
       baseToken: DFYN,
-      startTime: 1629721800,
+      startTime: 1629723600,
       stakingRewardAddress: '0xD739035dcFfbEc4069E46021019eE7ABBF537AA2',
       version: 'v3'
     },
     {
       tokens: [DFYN, AAVE],
       baseToken: DFYN,
-      startTime: 1629721800,
+      startTime: 1629723600,
       stakingRewardAddress: '0x75919e23AccA92977C9098255c509311E6A62C59',
       version: 'v3'
     },
     {
       tokens: [DFYN, UNI_TOKEN],
       baseToken: DFYN,
-      startTime: 1629721800,
+      startTime: 1629723600,
       stakingRewardAddress: '0x924B6897aAfb0d4B20A6E439f99C19173987E19b',
       version: 'v3'
     },
     {
       tokens: [DFYN, CRV],
       baseToken: DFYN,
-      startTime: 1629721800,
+      startTime: 1629723600,
       stakingRewardAddress: '0x25D779d16021dDD15932f9f3B6EE745b4c8fd488',
       version: 'v3'
     },

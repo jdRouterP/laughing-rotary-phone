@@ -31,7 +31,7 @@ export const STAKING_REWARDS_INFO: {
     {
       tokens: [UST, USDT],
       baseToken: USDT,
-      startTime: 1629721800,
+      startTime: 1629723600,
       stakingRewardAddress: '0xb4Ca3F9982CBAe99629167D1Ef0aC2939FA52e80',
       version: 'v4',
       burnRate: '35'
@@ -39,7 +39,7 @@ export const STAKING_REWARDS_INFO: {
     {
       tokens: [DFYN, USDC],
       baseToken: USDC,
-      startTime: 1629721800,
+      startTime: 1629723600,
       stakingRewardAddress: '0x001A4e27CCDfe8ed6BBaFfEc9AE0985aB5542BEf',
       version: 'v4',
       burnRate: '35'
@@ -47,7 +47,7 @@ export const STAKING_REWARDS_INFO: {
     {
       tokens: [DFYN, ETHER],
       baseToken: ETHER,
-      startTime: 1629721800,
+      startTime: 1629723600,
       stakingRewardAddress: '0xEAb0FD1FE0926E43b61612d65002Ba6320AA1080',
       version: 'v4',
       burnRate: '35'
@@ -55,7 +55,7 @@ export const STAKING_REWARDS_INFO: {
     {
       tokens: [WBTC, ETHER],
       baseToken: ETHER,
-      startTime: 1629721800,
+      startTime: 1629723600,
       stakingRewardAddress: '0x64bf206E80DE13691AD162348Dd478f5B0CBFe00',
       version: 'v4',
       burnRate: '35'
@@ -63,7 +63,7 @@ export const STAKING_REWARDS_INFO: {
     {
       tokens: [USDT, USDC],
       baseToken: USDC,
-      startTime: 1629721800,
+      startTime: 1629723600,
       stakingRewardAddress: '0x72189093cB70ED931B66972FBE6F1a309701ed8d',
       version: 'v4',
       burnRate: '35'
@@ -71,7 +71,7 @@ export const STAKING_REWARDS_INFO: {
     {
       tokens: [USDT, DAI],
       baseToken: USDT,
-      startTime: 1629721800,
+      startTime: 1629723600,
       stakingRewardAddress: '0x584575d9AaDD76D6DDE860bb90F2b5B2f38e0308',
       version: 'v4',
       burnRate: '35'
@@ -79,7 +79,7 @@ export const STAKING_REWARDS_INFO: {
     {
       tokens: [DAI, USDC],
       baseToken: USDC,
-      startTime: 1629721800,
+      startTime: 1629723600,
       stakingRewardAddress: '0x299CEF5Ca7C9EceE77638b7fa9b516FF7badfB4f',
       version: 'v4',
       burnRate: '35'
@@ -87,7 +87,7 @@ export const STAKING_REWARDS_INFO: {
     {
       tokens: [USDC, ETHER],
       baseToken: USDC,
-      startTime: 1629721800,
+      startTime: 1629723600,
       stakingRewardAddress: '0xf57AdA7DcBa902602655ec7aC672AeC61F17246e',
       version: 'v4',
       burnRate: '35'
@@ -95,7 +95,7 @@ export const STAKING_REWARDS_INFO: {
     {
       tokens: [USDC, ROUTE],
       baseToken: USDC,
-      startTime: 1629721800,
+      startTime: 1629723600,
       stakingRewardAddress: '0xadD690b421cd697763Bf9807A516E723E999E332',
       version: 'v4',
       burnRate: '35'
@@ -103,7 +103,7 @@ export const STAKING_REWARDS_INFO: {
     {
       tokens: [ETHER, ROUTE],
       baseToken: ETHER,
-      startTime: 1629721800,
+      startTime: 1629723600,
       stakingRewardAddress: '0xc14603d08A4f130192B7a864AB49A990383898AD',
       version: 'v4',
       burnRate: '35'
@@ -111,7 +111,7 @@ export const STAKING_REWARDS_INFO: {
     {
       tokens: [WMATIC, ETHER],
       baseToken: WMATIC,
-      startTime: 1629721800,
+      startTime: 1629723600,
       stakingRewardAddress: '0x5bbEe00100b30B1F3937432A5C9D2577F59b1238',
       version: 'v4',
       burnRate: '35'
@@ -119,7 +119,7 @@ export const STAKING_REWARDS_INFO: {
     {
       tokens: [CRV, ETHER],
       baseToken: ETHER,
-      startTime: 1629721800,
+      startTime: 1629723600,
       stakingRewardAddress: '0xff885dDA95360e00a5E12a74426464Ea1d036285',
       version: 'v4',
       burnRate: '35'
@@ -127,7 +127,7 @@ export const STAKING_REWARDS_INFO: {
     {
       tokens: [UNI_TOKEN, ETHER],
       baseToken: ETHER,
-      startTime: 1629721800,
+      startTime: 1629723600,
       stakingRewardAddress: '0x71f2FbD3049dA7F36cedaBC5A79e5637cADCDFbb',
       version: 'v4',
       burnRate: '35'
@@ -135,7 +135,7 @@ export const STAKING_REWARDS_INFO: {
     {
       tokens: [QUICK, WMATIC],
       baseToken: WMATIC,
-      startTime: 1629721800,
+      startTime: 1629723600,
       stakingRewardAddress: '0xC64280F3D6B8aAA8388Ce13E0bF1401A839B79A3',
       version: 'v4',
       burnRate: '35'
@@ -143,7 +143,7 @@ export const STAKING_REWARDS_INFO: {
     {
       tokens: [AAVE, ETHER],
       baseToken: ETHER,
-      startTime: 1629721800,
+      startTime: 1629723600,
       stakingRewardAddress: '0x99FaDefbc7DB0C17FCe6fEe1B991138abe94e01A',
       version: 'v4',
       burnRate: '35'
@@ -151,7 +151,7 @@ export const STAKING_REWARDS_INFO: {
     {
       tokens: [LINK, ETHER],
       baseToken: ETHER,
-      startTime: 1629721800,
+      startTime: 1629723600,
       stakingRewardAddress: '0xe7Cb4A502e9d68062013174C96d94D4b09f93855',
       version: 'v4',
       burnRate: '35'
@@ -159,7 +159,7 @@ export const STAKING_REWARDS_INFO: {
     {
       tokens: [NEXO, ETHER],
       baseToken: ETHER,
-      startTime: 1629721800,
+      startTime: 1629723600,
       stakingRewardAddress: '0xD423437f2e647b3D542C96B35D8e3FC0F9Ce8AB0',
       version: 'v4',
       burnRate: '35'
