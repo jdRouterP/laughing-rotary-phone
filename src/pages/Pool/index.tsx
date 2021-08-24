@@ -26,6 +26,19 @@ import { useStakingInfo as useVanillaStakingInfo } from '../../state/vanilla-sta
 import { BIG_INT_ZERO } from '../../constants'
 import { useDerivedSwapInfo } from 'state/swap/hooks'
 import { CHART_URL_PREFIX } from 'constants/networks'
+import { SearchInput } from 'components/SearchModal/styleds'
+
+
+
+// const SearchItem = styled.div`
+//   display: flex;
+//   max-width: 645px;
+//   width: 100%;
+//   border-radius: 10px;
+//   background: ${({theme}) => theme.bg3};
+//   border-radius: 10px;
+//   padding-right: 13px;
+// `
 
 const PageWrapper = styled(AutoColumn)`
   max-width: 640px;
@@ -157,6 +170,8 @@ export default function Pool() {
     }
   }, [inputCurrency, outputCurrency])
 
+  const [searchItem, setSearchItem] = useState('')
+
   return (
     <>
       <PageWrapper>
@@ -235,10 +250,52 @@ export default function Pool() {
                     <span> ↗</span>
                   </RowBetween>
                 </ButtonSecondary>
-                {v2PairsWithoutStakedAmount.map(v2Pair => (
+                {/* <SearchItem> */}
+                  <SearchInput 
+                    type="text" 
+                    placeholder="Search by name, symbol, address" 
+                    onChange={(e)=>{
+                    setSearchItem(e.target.value)
+                  }}/>
+                {/* </SearchItem> */}
+                {v2PairsWithoutStakedAmount?.filter(stakingInfos => {
+                  if(searchItem === '') return stakingInfos
+                  //for symbol
+                  else if(stakingInfos?.token0.symbol?.toLowerCase().includes(searchItem.toLowerCase()) 
+                  || stakingInfos?.token1?.symbol?.toLowerCase().includes(searchItem.toLowerCase())) return stakingInfos
+
+                  //for name
+                  else if(stakingInfos?.token0?.name?.toLowerCase().includes(searchItem.toLowerCase()) 
+                  || stakingInfos?.token1?.name?.toLowerCase().includes(searchItem.toLowerCase())) return stakingInfos
+
+                  //for address
+                  else if(stakingInfos?.token0?.address?.toLowerCase().includes(searchItem.toLowerCase()) 
+                  || stakingInfos?.token1?.address?.toLowerCase().includes(searchItem.toLowerCase())) return stakingInfos
+
+                  //Other case
+                  else return ""
+                  
+                }).map(v2Pair => (
                   <FullPositionCard key={v2Pair.liquidityToken.address} pair={v2Pair} />
                 ))}
-                {stakingPairs.map(
+                {stakingPairs?.filter(stakingInfos => {
+                  if(searchItem === '') return stakingInfos
+                  //for symbol
+                  else if(stakingInfos[1]?.token0.symbol?.toLowerCase().includes(searchItem.toLowerCase()) 
+                  || stakingInfos[1]?.token1?.symbol?.toLowerCase().includes(searchItem.toLowerCase())) return stakingInfos
+
+                  //for name
+                  else if(stakingInfos[1]?.token0?.name?.toLowerCase().includes(searchItem.toLowerCase()) 
+                  || stakingInfos[1]?.token1?.name?.toLowerCase().includes(searchItem.toLowerCase())) return stakingInfos
+
+                  //for address
+                  else if(stakingInfos[1]?.token0?.address?.toLowerCase().includes(searchItem.toLowerCase()) 
+                  || stakingInfos[1]?.token1?.address?.toLowerCase().includes(searchItem.toLowerCase())) return stakingInfos
+
+                  //Other case
+                  else return ""
+                  
+                }).map(
                   (stakingPair, i) => {
                     return stakingPair[1] && ( // skip pairs that arent loaded
                       <FullPositionCard

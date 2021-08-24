@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { AutoColumn } from '../../components/Column'
 import styled from 'styled-components'
 import { STAKING_REWARDS_INFO, useStakingInfo } from '../../state/vault/hooks'
@@ -11,6 +11,8 @@ import { CardSection, DataCard, CardNoise, CardBGImage } from '../../components/
 import Loader from '../../components/Loader'
 import { useActiveWeb3React } from '../../hooks'
 import { OutlineCard } from '../../components/Card'
+import { SearchInput } from 'components/SearchModal/styleds'
+
 
 const PageWrapper = styled(AutoColumn)`
   max-width: 640px;
@@ -50,6 +52,7 @@ export default function Vault() {
   const stakingInfosWithBalance = stakingInfos
   // toggle copy if rewards are inactive
   const stakingRewardsExist = Boolean(typeof chainId === 'number' && (STAKING_REWARDS_INFO[chainId]?.length ?? 0) > 0)
+  const [searchItem, setSearchItem] = useState('')
 
   return (
     <PageWrapper gap="lg" justify="center">
@@ -89,9 +92,21 @@ export default function Vault() {
           <TYPE.mediumHeader fontSize={16} style={{ marginTop: '0.5rem' }}>Participating vaults</TYPE.mediumHeader>
           {/* <Countdown exactEnd={stakingInfos?.[0]?.periodFinish} /> */}
         </DataRow>
-
+        <SearchInput 
+          type="text" 
+          placeholder="Search"  
+          onChange={(e)=>{
+          setSearchItem(e.target.value)
+        }}/>
         <PoolSection>
-          {multiStakingInfos?.map((multiStakingInfo) => <MultiTokenPoolCard key={multiStakingInfo.vaultAddress} multiStakingInfo={multiStakingInfo} />)}
+          {multiStakingInfos?.filter(stakingInfos => {
+              if(searchItem === '') return stakingInfos
+              //for symbol
+              else if(stakingInfos?.vaultName?.toLowerCase().includes(searchItem.toLowerCase()) 
+              ) return stakingInfos
+              //Other case
+              else return ""
+            })?.map((multiStakingInfo) => <MultiTokenPoolCard key={multiStakingInfo.vaultAddress} multiStakingInfo={multiStakingInfo} />)}
         </PoolSection>
 
         <PoolSection>
@@ -102,7 +117,14 @@ export default function Vault() {
           ) : stakingInfos?.length !== 0 && stakingInfosWithBalance.length === 0 ? (
             <OutlineCard>No active pools</OutlineCard>
           ) : (
-            stakingInfosWithBalance?.map(stakingInfo => {
+            stakingInfosWithBalance?.filter(stakingInfos => {
+              if(searchItem === '') return stakingInfos
+              //for symbol
+              else if(stakingInfos?.vaultName?.toLowerCase().includes(searchItem.toLowerCase()) 
+              ) return stakingInfos
+              //Other case
+              else return ""
+            })?.map(stakingInfo => {
               // need to sort by added liquidity here
               return <PoolCard key={stakingInfo.vaultAddress} stakingInfo={stakingInfo} />
             })
