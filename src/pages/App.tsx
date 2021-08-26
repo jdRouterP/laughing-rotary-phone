@@ -44,6 +44,9 @@ import Predictions from './Predictions'
 import BetaWarning from './Predictions/components/BetaWarning'
 import PredictionDesktop from './Predictions/PredictionDesktop'
 import EcoSystemArchived from './VanillaFarms/EcoSystemArchived'
+import DualFarmsArrchived from './DualFarms/DualFarmsArchived'
+import PopularFarmsArchived from './FloraFarms/PopularFarmsArchived'
+import PreStakinfFarmsArchived from './Earn/PreStakingFarmsArchived'
 
 const AppWrapper = styled.div`
   display: flex;
@@ -132,10 +135,13 @@ export default function App() {
               <Route exact strict path="/migrate/v1" component={MigrateV1} />
               <Route exact strict path="/migrate/v1/:address" component={MigrateV1Exchange} />
               <Route exact strict path="/dfyn/:currencyIdA/:currencyIdB" component={Manage} />
+              <Route exact strict path="/dfyn/:archived" component={PreStakinfFarmsArchived} />
               <Route exact strict path="/eco-farms/:currencyIdA/:currencyIdB/:version?" component={ManageVanillaFarms} />
               <Route exact strict path="/eco-farms/:archived" component={EcoSystemArchived} />
               <Route exact strict path="/dual-farms/:currencyIdA/:currencyIdB/:version?" component={ManageDualFarms} />
+              <Route exact strict path="/dual-farms/:archived" component={DualFarmsArrchived} />
               <Route exact strict path="/popular-farms/:currencyIdA/:currencyIdB/:version?" component={ManageFloraFarms} />
+              <Route exact strict path="/popular-farms/:archived" component={PopularFarmsArchived} />
               <Route exact strict path="/vault/:vaultID" component={ManageVault} />
               <Route exact strict path="/multi-vault/:vaultID" component={MultiTokenManage} />
               <Route exact strict path="/vote/:id" component={VotePage} />

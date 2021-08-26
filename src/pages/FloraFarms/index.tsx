@@ -3,7 +3,7 @@ import { AutoColumn } from '../../components/Column'
 import styled from 'styled-components'
 import { STAKING_REWARDS_INFO, useStakingInfo } from '../../state/flora-farms/hooks'
 // import { TYPE, ExternalLink } from '../../theme'
-import { TYPE } from '../../theme'
+import { StyledInternalLink, TYPE } from '../../theme'
 import PoolCard from '../../components/floraFarms/PoolCard'
 import { RowBetween } from '../../components/Row'
 import { CardSection, DataCard, CardNoise, CardBGImage } from '../../components/floraFarms/styled'
@@ -13,6 +13,18 @@ import { JSBI } from '@dfyn/sdk'
 import { BIG_INT_ZERO } from '../../constants'
 import { OutlineCard } from '../../components/Card'
 import { SearchInput } from 'components/SearchModal/styleds'
+import { ButtonPrimary } from 'components/Button'
+
+const TopSectionHeader = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 0.3fr;
+  grid-gap: 0px;
+  align-items: center;
+  z-index: 1;
+  ${({ theme }) => theme.mediaWidth.upToSmall`
+    grid-template-columns: 1fr 0.3fr;
+  `};
+`
 
 const PageWrapper = styled(AutoColumn)`
   max-width: 640px;
@@ -69,9 +81,17 @@ export default function Earn() {
           <CardNoise />
           <CardSection>
             <AutoColumn gap="md">
+            <TopSectionHeader>
               <RowBetween>
                 <TYPE.white fontWeight={600}>Popular Farms</TYPE.white>
               </RowBetween>
+              <StyledInternalLink to={`/popular-farms/archived`} style={{ width: '100%'}}>
+                <ButtonPrimary padding="8px" borderRadius="8px">
+                  Archived
+                </ButtonPrimary>
+              </StyledInternalLink>
+            </TopSectionHeader>
+              
               <RowBetween>
                 <TYPE.white fontSize={14}> Deposit your Liquidity Provider tokens to receive DFYN with insane APR.</TYPE.white>
               </RowBetween>
