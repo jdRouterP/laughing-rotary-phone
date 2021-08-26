@@ -55,7 +55,6 @@ export default function PreStakinfFarmsArchived() {
 
   // staking info for connected account
   const stakingInfos = useInactiveStakingInfo();
-  debugger
   /**
    * only show staking cards with balance
    * @todo only account for this if rewards are inactive
