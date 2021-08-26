@@ -10,6 +10,8 @@ import Loader from '../../components/Loader'
 import { useActiveWeb3React } from '../../hooks'
 import { OutlineCard } from '../../components/Card'
 import PoolCard from 'components/vanillaFarms/PoolCard'
+import { JSBI } from '@dfyn/sdk'
+import { BIG_INT_ZERO } from '../../constants'
 
 
 const PoolSection = styled.div`
@@ -48,16 +50,23 @@ flex-direction: column;
 
 export default function EcoSystemArchived() {
   const { chainId } = useActiveWeb3React()
-  const [searchItem, setSearchItem] = useState('')
-  // staking info for connected account
-  const stakingInfos = useInactiveStakingInfo()
-  /**
-* only show staking cards with balance
-* @todo only account for this if rewards are inactive
-*/
-  const stakingInfosWithBalance = stakingInfos
-  const stakingRewardsExist = Boolean(typeof chainId === 'number' && (INACTIVE_STAKING_REWARDS_INFO[chainId]?.length ?? 0) > 0)
 
+  // staking info for connected account
+  const stakingInfos = useInactiveStakingInfo();
+  /**
+   * only show staking cards with balance
+   * @todo only account for this if rewards are inactive
+   */
+  const stakingInfosWithBalance = stakingInfos?.filter((s) => JSBI.greaterThan(s.stakedAmount.raw, BIG_INT_ZERO))
+
+  const activeFarms = stakingInfos?.filter((s) => s.active);
+
+  const stakingInfosWithRewards = stakingInfos?.filter((s) => JSBI.greaterThan(s.earnedAmount.raw, BIG_INT_ZERO))
+
+  const stakingFarms = [...new Set([...stakingInfosWithBalance, ...activeFarms, ...stakingInfosWithRewards])]
+
+  const stakingRewardsExist = Boolean(typeof chainId === 'number' && (INACTIVE_STAKING_REWARDS_INFO[chainId]?.length ?? 0) > 0)
+  const [searchItem, setSearchItem] = useState('')
   return (
     <PageWrapper gap="lg" justify="center">
       <TopSection gap="md">
@@ -102,11 +111,11 @@ export default function EcoSystemArchived() {
           {stakingRewardsExist && stakingInfos?.length === 0 ? (
             <Loader style={{ margin: 'auto' }} />
           ) : !stakingRewardsExist ? (
-            <OutlineCard>No active pools</OutlineCard>
-          ) : stakingInfos?.length !== 0 && stakingInfosWithBalance.length === 0 ? (
-            <OutlineCard>No active pools</OutlineCard>
+            <OutlineCard>No pools</OutlineCard>
+          ) : stakingFarms?.length === 0 ? (
+            <OutlineCard>No archived pools</OutlineCard>
           ) : (
-            stakingInfosWithBalance?.filter(stakingInfos => {
+            stakingFarms?.filter(stakingInfos => {
               if (searchItem === '') return stakingInfos
               //for symbol
               else if (stakingInfos?.tokens[0].symbol?.toLowerCase().includes(searchItem.toLowerCase())
@@ -125,7 +134,7 @@ export default function EcoSystemArchived() {
 
               //Other case
               else return ""
-            }).map(stakingInfo => {
+            })?.map(stakingInfo => {
               // need to sort by added liquidity here
               return <PoolCard key={stakingInfo.stakingRewardAddress} stakingInfo={stakingInfo} />
             })

@@ -5,6 +5,13 @@ import { TYPE, ExternalLink } from '../../theme'
 import { RowBetween } from '../../components/Row'
 import { CardSection, DataCard, CardNoise, CardBGImage } from '../../components/dualFarms/styled'
 import { SearchInput } from 'components/SearchModal/styleds'
+import { INACTIVE_STAKING_REWARDS_INFO, useInactiveStakingInfo } from 'state/dual-stake/hooks'
+import { useActiveWeb3React } from 'hooks'
+import Loader from 'components/Loader'
+import { OutlineCard } from 'components/Card'
+import PoolCard from 'components/dualFarms/PoolCard'
+import { JSBI } from '@dfyn/sdk'
+import { BIG_INT_ZERO } from '../../constants'
 
 
 
@@ -34,6 +41,24 @@ flex-direction: column;
 `
 
 export default function DualFarmsArrchived() {
+  const { chainId } = useActiveWeb3React()
+
+  // staking info for connected account
+  const stakingInfos = useInactiveStakingInfo();
+  debugger
+  /**
+   * only show staking cards with balance
+   * @todo only account for this if rewards are inactive
+   */
+  const stakingInfosWithBalance = stakingInfos?.filter((s) => JSBI.greaterThan(s.stakedAmount.raw, BIG_INT_ZERO))
+
+  const activeFarms = stakingInfos?.filter((s) => s.active);
+
+  const stakingInfosWithRewards = stakingInfos?.filter((s) => JSBI.greaterThan(s.earnedAmount.raw, BIG_INT_ZERO))
+
+  const stakingFarms = [...new Set([...stakingInfosWithBalance, ...activeFarms, ...stakingInfosWithRewards])]
+
+  const stakingRewardsExist = Boolean(typeof chainId === 'number' && (INACTIVE_STAKING_REWARDS_INFO[chainId]?.length ?? 0) > 0)
   const [searchItem, setSearchItem] = useState('')
   console.log("SearchItem:", searchItem);
 
@@ -50,7 +75,7 @@ export default function DualFarmsArrchived() {
               </RowBetween>
               <RowBetween>
                 <TYPE.white fontSize={14}>
-                    These are the archived Dual Farms. Details of your Liquidity.
+                  These are the archived Dual Farms. Details of your Liquidity.
                 </TYPE.white>
               </RowBetween>{' '}
               <ExternalLink
@@ -72,14 +97,45 @@ export default function DualFarmsArrchived() {
           <TYPE.mediumHeader style={{ marginTop: '0.5rem' }}>Participating pools</TYPE.mediumHeader>
         </DataRow>
 
-        <SearchInput 
-          type="text" 
-          placeholder="Search by name, symbol, address" 
-          onChange={(e)=>{
-          setSearchItem(e.target.value)
-        }}/>
+        <SearchInput
+          type="text"
+          placeholder="Search by name, symbol, address"
+          onChange={(e) => {
+            setSearchItem(e.target.value)
+          }} />
 
         <PoolSection>
+          {stakingRewardsExist && stakingInfos?.length === 0 ? (
+            <Loader style={{ margin: 'auto' }} />
+          ) : !stakingRewardsExist ? (
+            <OutlineCard>No pools</OutlineCard>
+          ) : stakingFarms?.length === 0 ? (
+            <OutlineCard>No archived pools</OutlineCard>
+          ) : (
+            stakingFarms?.filter(stakingInfos => {
+              if (searchItem === '') return stakingInfos
+              //for symbol
+              else if (stakingInfos?.tokens[0].symbol?.toLowerCase().includes(searchItem.toLowerCase())
+                || stakingInfos?.tokens[1].symbol?.toLowerCase().includes(searchItem.toLowerCase())
+              ) return stakingInfos
+
+              //for name
+              else if (stakingInfos?.tokens[0].name?.toLowerCase().includes(searchItem.toLowerCase())
+                || stakingInfos?.tokens[1].name?.toLowerCase().includes(searchItem.toLowerCase())
+              ) return stakingInfos
+
+              //for address
+              else if (stakingInfos?.tokens[0].address?.toLowerCase().includes(searchItem.toLowerCase())
+                || stakingInfos?.tokens[1].address?.toLowerCase().includes(searchItem.toLowerCase())
+              ) return stakingInfos
+
+              //Other case
+              else return ""
+            })?.map(stakingInfo => {
+              // need to sort by added liquidity here
+              return <PoolCard key={stakingInfo.stakingRewardAddress} stakingInfo={stakingInfo} />
+            })
+          )}
         </PoolSection>
       </AutoColumn>
     </PageWrapper>

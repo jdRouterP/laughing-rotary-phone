@@ -165,6 +165,22 @@ export const STAKING_REWARDS_INFO: {
       burnRate: '35'
     },
 
+  ]
+}
+
+export const INACTIVE_STAKING_REWARDS_INFO: {
+  [chainId in ChainId]?: {
+    tokens: [Token, Token]
+    baseToken?: Token
+    rewardToken?: Token
+    startTime?: number
+    stakingRewardAddress: string
+    version: string
+    burnRate: string
+  }[]
+} = {
+  [ChainId.MATIC]: [
+
     //v3
     {
       tokens: [NEXO, ETHER],
@@ -607,6 +623,7 @@ export const STAKING_REWARDS_INFO: {
     },
   ]
 }
+
 interface UserVestingInfo {
   hasOptForVesting: boolean
   hasSetConfig: boolean
@@ -687,6 +704,262 @@ export function useStakingInfo(pairToFilterBy?: Pair | null, version: string = '
     () =>
       chainId
         ? STAKING_REWARDS_INFO[chainId]?.filter(stakingRewardInfo =>
+          pairToFilterBy === undefined
+            ? true
+            : pairToFilterBy === null
+              ? false
+              : pairToFilterBy.involvesToken(stakingRewardInfo.tokens[0]) &&
+              pairToFilterBy.involvesToken(stakingRewardInfo.tokens[1]) && version === stakingRewardInfo.version
+        ) ?? []
+        : [],
+    [chainId, pairToFilterBy, version]
+  )
+
+  const uni = chainId ? UNI[chainId] : undefined
+
+  const rewardsAddresses = useMemo(() => info.map(({ stakingRewardAddress }) => stakingRewardAddress), [info])
+
+  const accountArg = useMemo(() => [account ?? undefined], [account])
+
+  // get all the info from the staking rewards contracts
+  const balances = useMultipleContractSingleData(rewardsAddresses, STAKING_REWARDS_FLORA_FARMS_INTERFACE, 'balanceOf', accountArg)
+  const earnedAmounts = useMultipleContractSingleData(rewardsAddresses, STAKING_REWARDS_FLORA_FARMS_INTERFACE, 'earned', accountArg)
+  const claimedSplits = useMultipleContractSingleData(rewardsAddresses, STAKING_REWARDS_FLORA_FARMS_INTERFACE, 'claimedSplits', accountArg)
+  const totalSupplies = useMultipleContractSingleData(rewardsAddresses, STAKING_REWARDS_FLORA_FARMS_INTERFACE, 'totalSupply')
+  const hasClaimed = useMultipleContractSingleData(rewardsAddresses, STAKING_REWARDS_FLORA_FARMS_INTERFACE, 'hasClaimed', accountArg)
+  const totalEarnedReward = useMultipleContractSingleData(rewardsAddresses, STAKING_REWARDS_FLORA_FARMS_INTERFACE, 'totalEarnedReward', accountArg)
+  const totalVestedAmount = useMultipleContractSingleData(rewardsAddresses, STAKING_REWARDS_FLORA_FARMS_INTERFACE, 'totalVestedRewardForUser', accountArg)
+  const userVestingInfo = useMultipleContractSingleData(rewardsAddresses, STAKING_REWARDS_FLORA_FARMS_INTERFACE, 'getUserVestingInfo', accountArg)
+
+  // tokens per second, constants
+  const rewardRates = useMultipleContractSingleData(
+    rewardsAddresses,
+    STAKING_REWARDS_FLORA_FARMS_INTERFACE,
+    'rewardRate',
+    undefined,
+    NEVER_RELOAD
+  )
+  const periodFinishes = useMultipleContractSingleData(
+    rewardsAddresses,
+    STAKING_REWARDS_FLORA_FARMS_INTERFACE,
+    'periodFinish',
+    undefined,
+    NEVER_RELOAD
+  )
+  const splitWindow = useMultipleContractSingleData(
+    rewardsAddresses,
+    STAKING_REWARDS_FLORA_FARMS_INTERFACE,
+    'splitWindow',
+    undefined,
+    NEVER_RELOAD
+  )
+  const splits = useMultipleContractSingleData(
+    rewardsAddresses,
+    STAKING_REWARDS_FLORA_FARMS_INTERFACE,
+    'splits',
+    undefined,
+    NEVER_RELOAD
+  )
+  const vesting = useMultipleContractSingleData(
+    rewardsAddresses,
+    STAKING_REWARDS_FLORA_FARMS_INTERFACE,
+    'vestingPeriod',
+    undefined,
+    NEVER_RELOAD
+  )
+
+  return useMemo(() => {
+    if (!chainId || !uni) return []
+
+    return rewardsAddresses.reduce<StakingInfo[]>((memo, rewardsAddress, index) => {
+      // these two are dependent on account
+      const balanceState = balances[index]
+      const earnedAmountState = earnedAmounts[index]
+      const totalVestedAmountState = totalVestedAmount[index]
+      const claimedSplitsState = claimedSplits[index]
+      const hasClaimedPartialState = hasClaimed[index]
+      const totalEarnedRewardState = totalEarnedReward[index]
+      const userVestingInfoState = userVestingInfo[index]
+      // these get fetched regardless of account
+      const totalSupplyState = totalSupplies[index]
+      const rewardRateState = rewardRates[index]
+      const periodFinishState = periodFinishes[index]
+      const splitWindowState = splitWindow[index]
+      const splitsState = splits[index]
+      const vestingState = vesting[index]
+
+      if (
+        // these may be undefined if not logged in
+        !balanceState?.loading &&
+        !earnedAmountState?.loading &&
+        !claimedSplitsState?.loading &&
+        !hasClaimedPartialState?.loading &&
+        !totalVestedAmountState?.loading &&
+        !totalEarnedRewardState?.loading &&
+        !userVestingInfoState?.loading &&
+        // always need these
+        totalSupplyState &&
+        !totalSupplyState.loading &&
+        rewardRateState &&
+        !rewardRateState.loading &&
+        periodFinishState &&
+        !periodFinishState.loading &&
+        splitWindowState &&
+        !splitWindowState.loading &&
+        splitsState &&
+        !splitsState.loading &&
+        vestingState &&
+        !vestingState.loading
+
+      ) {
+        if (
+          balanceState?.error ||
+          earnedAmountState?.error ||
+          claimedSplitsState?.error ||
+          userVestingInfoState?.error ||
+          totalEarnedRewardState?.error ||
+          hasClaimedPartialState?.error ||
+          totalVestedAmountState?.error ||
+          totalSupplyState.error ||
+          rewardRateState.error ||
+          periodFinishState.error ||
+          splitWindowState.error ||
+          splitsState.error ||
+          vestingState.error
+        ) {
+          console.error('Failed to load staking rewards info')
+          return memo
+        }
+
+        // get the LP token
+        const tokens = info[index].tokens
+        const dummyPair = new Pair(new TokenAmount(tokens[0], '0'), new TokenAmount(tokens[1], '0'))
+
+        // check for account, if no account set to 0
+
+        const stakedAmount = new TokenAmount(dummyPair.liquidityToken, JSBI.BigInt(balanceState?.result?.[0] ?? 0))
+        const totalStakedAmount = new TokenAmount(dummyPair.liquidityToken, JSBI.BigInt(totalSupplyState?.result?.[0] ?? 0))
+        const totalRewardRate = new TokenAmount(uni, JSBI.BigInt(rewardRateState?.result?.[0] ?? 0))
+        const totalVestedAmount = new TokenAmount(uni, JSBI.BigInt(totalVestedAmountState?.result?.[0] ?? 0))
+        const totalEarnedReward = new TokenAmount(uni, JSBI.BigInt(totalEarnedRewardState?.result?.[0] ?? 0))
+        const userClaimedSplit = claimedSplitsState?.result?.[0]?.toNumber() ?? 0;
+        const splits = splitsState?.result?.[0]?.toNumber() ?? 0
+        const hasClaimedPartial = hasClaimedPartialState?.result?.[0] ?? false
+        const getHypotheticalRewardRate = (
+          stakedAmount: TokenAmount,
+          totalStakedAmount: TokenAmount,
+          totalRewardRate: TokenAmount
+        ): TokenAmount => {
+          return new TokenAmount(
+            uni,
+            JSBI.greaterThan(totalStakedAmount.raw, JSBI.BigInt(0))
+              ? JSBI.divide(JSBI.multiply(totalRewardRate.raw, stakedAmount.raw), totalStakedAmount.raw)
+              : JSBI.BigInt(0)
+          )
+        }
+
+        const individualRewardRate = getHypotheticalRewardRate(stakedAmount, totalStakedAmount, totalRewardRate)
+
+        const periodFinishSeconds = periodFinishState.result?.[0]?.toNumber()
+        const periodFinishMs = periodFinishSeconds * 1000
+
+        const vestingPeriodSeconds = vestingState.result?.[0]?.toNumber()
+        const vestingPeriodMs = vestingPeriodSeconds * 1000
+
+        const splitWindowSeconds = splitWindowState.result?.[0]?.toNumber()
+        const splitWindowStateMs = splitWindowSeconds * 1000
+
+
+
+        // compare period end timestamp vs current block timestamp (in seconds)
+        const active = periodFinishSeconds && currentBlockTimestamp ? periodFinishSeconds > currentBlockTimestamp?.toNumber() : true
+
+        // compare vesting end timestamp vs current block timestamp (in seconds)
+        const vestingEndsSeconds = vestingPeriodSeconds + periodFinishSeconds;
+        const vestingActive = vestingEndsSeconds && currentBlockTimestamp ? vestingEndsSeconds > currentBlockTimestamp?.toNumber() : true
+        let currentSplit = Math.sign(Math.floor(Date.now() / 1000) - periodFinishSeconds) === -1 ? 0 : (Math.floor(Date.now() / 1000) - periodFinishSeconds) / splitWindowSeconds;
+
+        currentSplit = currentSplit > splits ? splits : currentSplit;
+
+        const unlockAt = active ? periodFinishSeconds : vestingActive ? (periodFinishSeconds + (Math.floor(currentSplit + 1) * splitWindowSeconds)) : vestingEndsSeconds;
+        // debugger
+        //const unclaimedAmount = JSBI.divide(JSBI.multiply(JSBI.BigInt(totalVestedAmountState?.result?.[0] ?? 0), JSBI.BigInt((Math.floor(currentSplit + 1) - userClaimedSplit))), splits);
+        // totalvestedamount*(currentsplit-userclaimedlastsplit)/splits;
+        const unclaimedSplits = BigNumber.from((Math.floor(currentSplit) - userClaimedSplit))
+
+        let unclaimedAmount = BigNumber.from(totalVestedAmountState?.result?.[0] ?? 0).mul(unclaimedSplits).div(BigNumber.from(splits))
+        unclaimedAmount = unclaimedAmount.div(BigNumber.from('1000000000000000000'))
+
+        let ableToClaim = !vestingActive || (Math.floor(Date.now() / 1000) >= periodFinishSeconds &&
+          (userClaimedSplit !== Math.floor(currentSplit) ? true : !hasClaimedPartial))
+        memo.push({
+          type: { typeOf: 'Popular Farms', url: 'popular-farms' },
+          stakingRewardAddress: rewardsAddress,
+          baseToken: info[index].baseToken,
+          version: info[index].version,
+          burnRate: info[index].burnRate,
+          startTime: info[index].startTime ?? 0,
+          rewardToken: info[index].rewardToken ?? uni,
+          tokens: info[index].tokens,
+          userVestingInfo: { hasSetConfig: userVestingInfoState?.result?.[0].hasSetConfig, hasOptForVesting: userVestingInfoState?.result?.[0].hasOptForVesting },
+          periodFinish: periodFinishMs > 0 ? new Date(periodFinishMs) : undefined,
+          splitWindow: splitWindowStateMs > 0 ? new Date(splitWindowStateMs) : undefined,
+          vestingPeriod: vestingPeriodMs > 0 ? new Date(periodFinishMs + vestingPeriodMs) : undefined, //vesting period after period ends
+          earnedAmount: new TokenAmount(uni, JSBI.BigInt(earnedAmountState?.result?.[0] ?? 0)),
+          unclaimedAmount: unclaimedAmount,
+          totalVestedAmount: totalVestedAmount,
+          rewardRate: individualRewardRate,
+          totalRewardRate: totalRewardRate,
+          stakedAmount: stakedAmount,
+          claimedSplits: userClaimedSplit,
+          totalEarnedReward,
+          ableToClaim,
+          dfynPrice,
+          hasClaimedPartial,
+          totalStakedAmount: totalStakedAmount,
+          getHypotheticalRewardRate,
+          unlockAt: unlockAt > 0 ? new Date(unlockAt * 1000) : undefined,
+          vestingActive,
+          active
+        })
+      }
+      return memo
+    }, [])
+  }, [
+    balances,
+    chainId,
+    currentBlockTimestamp,
+    earnedAmounts,
+    totalEarnedReward,
+    info,
+    periodFinishes,
+    rewardRates,
+    rewardsAddresses,
+    totalSupplies,
+    claimedSplits,
+    totalVestedAmount,
+    splitWindow,
+    splits,
+    hasClaimed,
+    vesting,
+    uni,
+    dfynPrice,
+    userVestingInfo
+  ])
+}
+
+export function useInactiveStakingInfo(pairToFilterBy?: Pair | null, version: string = 'v1'): StakingInfo[] {
+  const { chainId, account } = useActiveWeb3React()
+
+  const [, dfynUsdcPair] = usePair(USDC, DFYN);
+  const dfynPrice = Number(dfynUsdcPair?.priceOf(DFYN)?.toSignificant(6))
+  // detect if staking is ended
+  const currentBlockTimestamp = useCurrentBlockTimestamp()
+
+  const info = useMemo(
+    () =>
+      chainId
+        ? INACTIVE_STAKING_REWARDS_INFO[chainId]?.filter(stakingRewardInfo =>
           pairToFilterBy === undefined
             ? true
             : pairToFilterBy === null

@@ -118,6 +118,41 @@ export const STAKING_REWARDS_INFO: {
       stakingRewardAddress: '0xA0b4Eb5201635011eEf2A7eE7d12237b229C38D2',
       version: 'v2'
     },
+    {
+      tokens: [DFYN, TITAN],
+      baseToken: DFYN,
+      startTime: 1626183000,
+      stakingRewardAddress: '0xd94aA4f6BAAC53E558140a769B9DA6231bfb335e',
+      version: 'v1'
+    },
+    {
+      tokens: [DFYN, ICE],
+      baseToken: DFYN,
+      startTime: 1626183000,
+      stakingRewardAddress: '0xD854E7339840F7D1E12B54FD75235eBc0bB6BfAC',
+      version: 'v1'
+    },
+    {
+      tokens: [DFYN, BIFI],
+      baseToken: DFYN,
+      startTime: 1625758200,
+      stakingRewardAddress: '0xECe1b93A70A0429Db6cF4580C325F831FBB16d52',
+      version: 'v1'
+    },
+    {
+      tokens: [DFYN, COSMIC],
+      baseToken: DFYN,
+      startTime: 1625758200,
+      stakingRewardAddress: '0xccEFB3926E9e2f77d4ce4E661f8D720f379817eD',
+      version: 'v1'
+    },
+    {
+      tokens: [DFYN, NORD],
+      baseToken: DFYN,
+      startTime: 1624980600,
+      stakingRewardAddress: '0x2d7c3E61430E4CF4DC091C61df03eaAB6d67cd26',
+      version: 'v1'
+    },
   ]
 }
 
@@ -174,42 +209,6 @@ export const INACTIVE_STAKING_REWARDS_INFO: {
       startTime: 1627142400,
       stakingRewardAddress: '0x098fdadCcde328e6CD1168125e1e7685eEa54342',
       version: 'v2'
-    },
-
-    {
-      tokens: [DFYN, TITAN],
-      baseToken: DFYN,
-      startTime: 1626183000,
-      stakingRewardAddress: '0xd94aA4f6BAAC53E558140a769B9DA6231bfb335e',
-      version: 'v1'
-    },
-    {
-      tokens: [DFYN, ICE],
-      baseToken: DFYN,
-      startTime: 1626183000,
-      stakingRewardAddress: '0xD854E7339840F7D1E12B54FD75235eBc0bB6BfAC',
-      version: 'v1'
-    },
-    {
-      tokens: [DFYN, BIFI],
-      baseToken: DFYN,
-      startTime: 1625758200,
-      stakingRewardAddress: '0xECe1b93A70A0429Db6cF4580C325F831FBB16d52',
-      version: 'v1'
-    },
-    {
-      tokens: [DFYN, COSMIC],
-      baseToken: DFYN,
-      startTime: 1625758200,
-      stakingRewardAddress: '0xccEFB3926E9e2f77d4ce4E661f8D720f379817eD',
-      version: 'v1'
-    },
-    {
-      tokens: [DFYN, NORD],
-      baseToken: DFYN,
-      startTime: 1624980600,
-      stakingRewardAddress: '0x2d7c3E61430E4CF4DC091C61df03eaAB6d67cd26',
-      version: 'v1'
     },
     {
       tokens: [DFYN, AGA],
