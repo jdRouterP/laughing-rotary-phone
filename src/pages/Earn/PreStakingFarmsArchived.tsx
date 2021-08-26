@@ -1,10 +1,22 @@
 import React, { useState } from 'react'
 import { AutoColumn } from '../../components/Column'
 import styled from 'styled-components'
-import { TYPE, ExternalLink } from '../../theme'
+import { TYPE, ExternalLink, StyledInternalLink } from '../../theme'
 import { RowBetween } from '../../components/Row'
 import { CardSection, DataCard, CardNoise, CardBGImage } from '../../components/dualFarms/styled'
 import { SearchInput } from 'components/SearchModal/styleds'
+import { ButtonPrimary } from 'components/Button'
+
+const TopSectionHeader = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 0.3fr;
+  grid-gap: 0px;
+  align-items: center;
+  z-index: 1;
+  ${({ theme }) => theme.mediaWidth.upToSmall`
+    grid-template-columns: 1fr 0.3fr;
+  `};
+`
 
 const PageWrapper = styled(AutoColumn)`
   max-width: 640px;
@@ -43,9 +55,16 @@ export default function PreStakinfFarmsArchived() {
           <CardNoise />
           <CardSection>
             <AutoColumn gap="md">
-              <RowBetween>
-                <TYPE.white fontWeight={600}>Pre-Staking Farms</TYPE.white>
-              </RowBetween>
+                <TopSectionHeader>
+                    <RowBetween>
+                        <TYPE.white fontWeight={600}>Pre-Staking Farms</TYPE.white>
+                    </RowBetween>
+                    <StyledInternalLink to={`/dfyn`} style={{ width: '100%'}}>
+                        <ButtonPrimary padding="8px" borderRadius="8px">
+                            Active Farms
+                        </ButtonPrimary>
+                    </StyledInternalLink>
+                </TopSectionHeader>
               <RowBetween>
                 <TYPE.white fontSize={14}>
                     These are the archived Pre-Staking Farms. Details of your Liquidity.

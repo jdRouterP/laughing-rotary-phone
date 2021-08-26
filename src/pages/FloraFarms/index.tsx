@@ -81,17 +81,16 @@ export default function Earn() {
           <CardNoise />
           <CardSection>
             <AutoColumn gap="md">
-            <TopSectionHeader>
-              <RowBetween>
-                <TYPE.white fontWeight={600}>Popular Farms</TYPE.white>
-              </RowBetween>
-              <StyledInternalLink to={`/popular-farms/archived`} style={{ width: '100%'}}>
-                <ButtonPrimary padding="8px" borderRadius="8px">
-                  Archived
-                </ButtonPrimary>
-              </StyledInternalLink>
-            </TopSectionHeader>
-              
+              <TopSectionHeader>
+                <RowBetween>
+                  <TYPE.white fontWeight={600}>Popular Farms</TYPE.white>
+                </RowBetween>
+                <StyledInternalLink to={`/popular-farms/archived`} style={{ width: '100%'}}>
+                  <ButtonPrimary padding="8px" borderRadius="8px">
+                    Archived Pools
+                  </ButtonPrimary>
+                </StyledInternalLink>
+              </TopSectionHeader>
               <RowBetween>
                 <TYPE.white fontSize={14}> Deposit your Liquidity Provider tokens to receive DFYN with insane APR.</TYPE.white>
               </RowBetween>

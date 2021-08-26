@@ -82,7 +82,7 @@ export default function VanillaFarms() {
                 </RowBetween>
                 <StyledInternalLink to={`/eco-farms/archived`} style={{ width: '100%'}}>
                   <ButtonPrimary padding="8px" borderRadius="8px">
-                    Archived
+                    Archived Pools
                   </ButtonPrimary>
                 </StyledInternalLink>
               </TopSectionHeader>
