@@ -58,7 +58,7 @@ export default function PreStakinfFarmsArchived() {
 
   const stakingRewardsExist = Boolean(typeof chainId === 'number' && (INACTIVE_STAKING_REWARDS_INFO[chainId]?.length ?? 0) > 0)
   const [searchItem, setSearchItem] = useState('')
-  console.log("SearchItem:", searchItem);
+
 
   return (
     <PageWrapper gap="lg" justify="center">
