@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { AutoColumn } from '../../components/Column'
 import styled from 'styled-components'
 import { STAKING_REWARDS_INFO, useStakingInfo } from '../../state/vanilla-stake/hooks'
-import { TYPE, ExternalLink } from '../../theme'
+import { TYPE, ExternalLink, StyledInternalLink } from '../../theme'
 import PoolCard from '../../components/vanillaFarms/PoolCard'
 import { RowBetween } from '../../components/Row'
 import { CardSection, DataCard, CardNoise, CardBGImage } from '../../components/vanillaFarms/styled'
@@ -13,6 +13,18 @@ import { useActiveWeb3React } from '../../hooks'
 // import { BIG_INT_ZERO } from '../../constants'
 import { OutlineCard } from '../../components/Card'
 import { SearchInput } from 'components/SearchModal/styleds'
+import { ButtonPrimary } from 'components/Button'
+
+const TopSectionHeader = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 0.3fr;
+  grid-gap: 0px;
+  align-items: center;
+  z-index: 1;
+  ${({ theme }) => theme.mediaWidth.upToSmall`
+    grid-template-columns: 1fr 0.3fr;
+  `};
+`
 
 
 const PageWrapper = styled(AutoColumn)`
@@ -64,10 +76,18 @@ export default function VanillaFarms() {
           <CardNoise />
           <CardSection>
             <AutoColumn gap="md">
-              <RowBetween>
-                <TYPE.white fontWeight={600}>DFYN Ecosystem Farms</TYPE.white>
-              </RowBetween>
-              <RowBetween>
+              <TopSectionHeader>
+                <RowBetween>
+                  <TYPE.white fontWeight={600}>DFYN Ecosystem Farms</TYPE.white>
+                </RowBetween>
+                <StyledInternalLink to={`/eco-farms/archived`} style={{ width: '100%'}}>
+                  <ButtonPrimary padding="8px" borderRadius="8px">
+                    Archived
+                  </ButtonPrimary>
+                </StyledInternalLink>
+              </TopSectionHeader>
+                
+                <RowBetween>
                 <TYPE.white fontSize={14}>
                   Deposit your Liquidity Provider tokens to receive DFYN, the Dfyn protocol governance token.
                 </TYPE.white>

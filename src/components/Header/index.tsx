@@ -13,7 +13,7 @@ import DarkLogoMobile from '../../assets/images/logo_white.png'
 import LogoMobile from '../../assets/images/dfyn_colour.png'
 import { useActiveWeb3React } from '../../hooks'
 import { useDarkModeManager, useGaslessModeManager } from '../../state/user/hooks'
-import { useETHBalances, useAggregateUniBalance } from '../../state/wallet/hooks'
+import { useETHBalances, useTokenBalance } from '../../state/wallet/hooks'
 import { CardNoise } from '../earn/styled'
 import { CountUp } from 'use-count-up'
 import { TYPE, ExternalLink } from '../../theme'
@@ -36,6 +36,7 @@ import QuestionHelper from 'components/QuestionHelper'
 import Toggle from 'components/Toggle'
 import FarmsMenu from 'components/FarmsMenu'
 import Web3Network from 'components/Web3Network'
+import { UNI } from './../../constants/index'
 
 const HeaderFrame = styled.div`
   display: grid;
@@ -367,12 +368,15 @@ export default function Header() {
 
   const { claimTxn } = useUserHasSubmittedClaim(account ?? undefined)
 
-  const aggregateBalance: TokenAmount | undefined = useAggregateUniBalance()
+  // const aggregateBalance: TokenAmount | undefined = useAggregateUniBalance()
+  const uni = chainId ? UNI[chainId] : undefined
+  const aggregateBalance: TokenAmount | undefined = useTokenBalance(account ?? undefined, uni)
 
   const [showUniBalanceModal, setShowUniBalanceModal] = useState(false)
   const showClaimPopup = useShowClaimPopup()
 
   const countUpValue = aggregateBalance?.toFixed(0) ?? '0'
+  
   const countUpValuePrevious = usePrevious(countUpValue) ?? '0'
 
   return (
