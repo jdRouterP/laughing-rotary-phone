@@ -5,6 +5,11 @@ import { TYPE, ExternalLink } from '../../theme'
 import { RowBetween } from '../../components/Row'
 import { CardSection, DataCard, CardNoise, CardBGImage } from '../../components/vanillaFarms/styled'
 import { SearchInput } from 'components/SearchModal/styleds'
+import { INACTIVE_STAKING_REWARDS_INFO, useInactiveStakingInfo } from '../../state/vanilla-stake/hooks'
+import Loader from '../../components/Loader'
+import { useActiveWeb3React } from '../../hooks'
+import { OutlineCard } from '../../components/Card'
+import PoolCard from 'components/vanillaFarms/PoolCard'
 
 
 const PoolSection = styled.div`
@@ -42,11 +47,17 @@ flex-direction: column;
 `
 
 export default function EcoSystemArchived() {
-//   const { chainId } = useActiveWeb3React()
+  const { chainId } = useActiveWeb3React()
   const [searchItem, setSearchItem] = useState('')
-  console.log("SearchItem:", searchItem);
-  
-  
+  // staking info for connected account
+  const stakingInfos = useInactiveStakingInfo()
+  /**
+* only show staking cards with balance
+* @todo only account for this if rewards are inactive
+*/
+  const stakingInfosWithBalance = stakingInfos
+  const stakingRewardsExist = Boolean(typeof chainId === 'number' && (INACTIVE_STAKING_REWARDS_INFO[chainId]?.length ?? 0) > 0)
+
   return (
     <PageWrapper gap="lg" justify="center">
       <TopSection gap="md">
@@ -55,10 +66,10 @@ export default function EcoSystemArchived() {
           <CardNoise />
           <CardSection>
             <AutoColumn gap="md">
-                <RowBetween>
-                  <TYPE.white fontWeight={600}>DFYN Ecosystem Farms</TYPE.white>
-                </RowBetween>
-                <RowBetween>
+              <RowBetween>
+                <TYPE.white fontWeight={600}>DFYN Ecosystem Farms</TYPE.white>
+              </RowBetween>
+              <RowBetween>
                 <TYPE.white fontSize={14}>
                   These are the archived Ecosystem Farms. Details of your Liquidity.
                 </TYPE.white>
@@ -81,14 +92,44 @@ export default function EcoSystemArchived() {
         <DataRow style={{ alignItems: 'baseline' }}>
           <TYPE.mediumHeader style={{ marginTop: '0.5rem' }}>Participating pools</TYPE.mediumHeader>
         </DataRow>
-        <SearchInput 
-          type="text" 
-          placeholder="Search by name, symbol, address" 
-          onChange={(e)=>{
-          setSearchItem(e.target.value)
-        }}/>
+        <SearchInput
+          type="text"
+          placeholder="Search by name, symbol, address"
+          onChange={(e) => {
+            setSearchItem(e.target.value)
+          }} />
         <PoolSection>
+          {stakingRewardsExist && stakingInfos?.length === 0 ? (
+            <Loader style={{ margin: 'auto' }} />
+          ) : !stakingRewardsExist ? (
+            <OutlineCard>No active pools</OutlineCard>
+          ) : stakingInfos?.length !== 0 && stakingInfosWithBalance.length === 0 ? (
+            <OutlineCard>No active pools</OutlineCard>
+          ) : (
+            stakingInfosWithBalance?.filter(stakingInfos => {
+              if (searchItem === '') return stakingInfos
+              //for symbol
+              else if (stakingInfos?.tokens[0].symbol?.toLowerCase().includes(searchItem.toLowerCase())
+                || stakingInfos?.tokens[1].symbol?.toLowerCase().includes(searchItem.toLowerCase())
+              ) return stakingInfos
 
+              //for name
+              else if (stakingInfos?.tokens[0].name?.toLowerCase().includes(searchItem.toLowerCase())
+                || stakingInfos?.tokens[1].name?.toLowerCase().includes(searchItem.toLowerCase())
+              ) return stakingInfos
+
+              //for address
+              else if (stakingInfos?.tokens[0].address?.toLowerCase().includes(searchItem.toLowerCase())
+                || stakingInfos?.tokens[1].address?.toLowerCase().includes(searchItem.toLowerCase())
+              ) return stakingInfos
+
+              //Other case
+              else return ""
+            }).map(stakingInfo => {
+              // need to sort by added liquidity here
+              return <PoolCard key={stakingInfo.stakingRewardAddress} stakingInfo={stakingInfo} />
+            })
+          )}
         </PoolSection>
       </AutoColumn>
     </PageWrapper>
