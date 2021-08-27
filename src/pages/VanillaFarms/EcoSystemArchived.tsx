@@ -12,7 +12,7 @@ import { OutlineCard } from '../../components/Card'
 import PoolCard from 'components/vanillaFarms/PoolCard'
 import { JSBI } from '@dfyn/sdk'
 import { BIG_INT_ZERO } from '../../constants'
-import { ButtonPrimary } from 'components/Button'
+import { ButtonPink } from 'components/Button'
 
 
 const TopSectionHeader = styled.div`
@@ -91,10 +91,10 @@ export default function EcoSystemArchived() {
                 <RowBetween>
                   <TYPE.white fontWeight={600}>DFYN Ecosystem Farms</TYPE.white>
                 </RowBetween>
-                <StyledInternalLink to={`/eco-farms`} style={{ width: '100%' }}>
-                  <ButtonPrimary padding="8px" borderRadius="8px">
+                <StyledInternalLink to={`/eco-farms`} style={{ width: '100%', color: '#ff007a' }}>
+                  <ButtonPink padding="8px" borderRadius="8px">
                     Active Farms
-                  </ButtonPrimary>
+                  </ButtonPink>
                 </StyledInternalLink>
               </TopSectionHeader>
 

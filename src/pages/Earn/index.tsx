@@ -14,7 +14,7 @@ import { JSBI } from '@dfyn/sdk'
 import { BIG_INT_ZERO } from '../../constants'
 import { OutlineCard } from '../../components/Card'
 import { SearchInput } from 'components/SearchModal/styleds'
-import { ButtonPrimary } from 'components/Button'
+import { ButtonPink } from 'components/Button'
 
 
 const TopSectionHeader = styled.div`
@@ -87,10 +87,10 @@ export default function Earn() {
                 <RowBetween>
                   <TYPE.white fontWeight={600}>Pre-staking pools</TYPE.white>
                 </RowBetween>
-                <StyledInternalLink to={`/dfyn/archived`} style={{ width: '100%'}}>
-                  <ButtonPrimary padding="8px" borderRadius="8px">
+                <StyledInternalLink to={`/dfyn/archived`} style={{ width: '100%', color: '#ff007a'}}>
+                  <ButtonPink padding="8px" borderRadius="8px">
                     Archived Pools
-                  </ButtonPrimary>
+                  </ButtonPink>
                 </StyledInternalLink>
               </TopSectionHeader>
               

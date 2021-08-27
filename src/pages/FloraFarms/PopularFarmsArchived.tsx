@@ -12,7 +12,7 @@ import { JSBI } from '@dfyn/sdk'
 import { BIG_INT_ZERO } from '../../constants'
 import { useActiveWeb3React } from '../../hooks'
 import { INACTIVE_STAKING_REWARDS_INFO, useInactiveStakingInfo } from 'state/flora-farms/hooks'
-import { ButtonPrimary } from 'components/Button'
+import { ButtonPink } from 'components/Button'
 
 const TopSectionHeader = styled.div`
   display: grid;
@@ -84,10 +84,10 @@ export default function PopularFarmsArchived() {
                 <RowBetween>
                   <TYPE.white fontWeight={600}>Popular Farms</TYPE.white>
                 </RowBetween>
-                <StyledInternalLink to={`/popular-farms`} style={{ width: '100%' }}>
-                  <ButtonPrimary padding="8px" borderRadius="8px">
+                <StyledInternalLink to={`/popular-farms`} style={{ width: '100%', color: '#ff007a'}}>
+                  <ButtonPink padding="8px" borderRadius="8px">
                     Active Farms
-                  </ButtonPrimary>
+                  </ButtonPink>
                 </StyledInternalLink>
               </TopSectionHeader>
               <RowBetween>

@@ -12,7 +12,7 @@ import { INACTIVE_STAKING_REWARDS_INFO, useInactiveStakingInfo } from 'state/sta
 import { JSBI } from '@dfyn/sdk'
 import { BIG_INT_ZERO } from '../../constants'
 import { useActiveWeb3React } from 'hooks'
-import { ButtonPrimary } from 'components/Button'
+import { ButtonPink } from 'components/Button'
 
 const TopSectionHeader = styled.div`
   display: grid;
@@ -83,10 +83,10 @@ export default function PreStakinfFarmsArchived() {
                 <RowBetween>
                   <TYPE.white fontWeight={600}>Pre-Staking Farms</TYPE.white>
                 </RowBetween>
-                <StyledInternalLink to={`/dfyn`} style={{ width: '100%' }}>
-                  <ButtonPrimary padding="8px" borderRadius="8px">
+                <StyledInternalLink to={`/dfyn`} style={{ width: '100%', color: '#ff007a' }}>
+                  <ButtonPink padding="8px" borderRadius="8px">
                     Active Farms
-                  </ButtonPrimary>
+                  </ButtonPink>
                 </StyledInternalLink>
               </TopSectionHeader>
               <RowBetween>

@@ -66,6 +66,7 @@ export function colors(darkMode: boolean): Colors {
     //card background
     bg9: darkMode ? 'linear-gradient(180deg, #2D3646 0%, #2C2F35 216.76%)' : '#FDEAF1',
     bg10: darkMode ? '#17181F' : '#FFFFFF',
+    bg11: darkMode ? 'linear-gradient(165deg, #2c3545 0%,rgb(44 47 54) 100%)' : '#FFFFFF',
 
     //specialty colors
     modalBG: darkMode ? 'rgba(0,0,0,.425)' : 'rgba(0,0,0,0.3)',
@@ -93,7 +94,9 @@ export function colors(darkMode: boolean): Colors {
     green1: '#27AE60',
     yellow1: '#FFE270',
     yellow2: '#F3841E',
-    blue1: '#2172E5'
+    blue1: '#2172E5',
+    pink1: '#ff007a',
+    pink2: '#FF8CC3'
 
     // dont wanna forget these blue yet
     // blue4: darkMode ? '#153d6f70' : '#C4D9F8',

@@ -12,7 +12,7 @@ import { OutlineCard } from 'components/Card'
 import PoolCard from 'components/dualFarms/PoolCard'
 import { JSBI } from '@dfyn/sdk'
 import { BIG_INT_ZERO } from '../../constants'
-import { ButtonPrimary } from 'components/Button'
+import { ButtonPink } from 'components/Button'
 
 
 const TopSectionHeader = styled.div`
@@ -84,10 +84,10 @@ export default function DualFarmsArrchived() {
                 <RowBetween>
                   <TYPE.white fontWeight={600}>Dual Farms</TYPE.white>
                 </RowBetween>
-                <StyledInternalLink to={`/dual-farms`} style={{ width: '100%' }}>
-                  <ButtonPrimary padding="8px" borderRadius="8px">
+                <StyledInternalLink to={`/dual-farms`} style={{ width: '100%', color: '#ff007a' }}>
+                  <ButtonPink padding="8px" borderRadius="8px">
                     Active Pools
-                  </ButtonPrimary>
+                  </ButtonPink>
                 </StyledInternalLink>
               </TopSectionHeader>
               <RowBetween>
