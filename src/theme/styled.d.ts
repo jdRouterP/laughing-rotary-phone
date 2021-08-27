@@ -31,6 +31,7 @@ export interface Colors {
   bg8: Color
   bg9: Color
   bg10: Color
+  bg11: Color
 
   modalBG: Color
   advancedBG: Color
@@ -57,6 +58,8 @@ export interface Colors {
   yellow1: Color
   yellow2: Color
   blue1: Color
+  pink1: Color
+  pink2: Color
 }
 
 export interface Grids {
@@ -67,7 +70,7 @@ export interface Grids {
 
 declare module 'styled-components' {
   /* eslint-disable @typescript-eslint/no-empty-interface */
-  export interface DefaultTheme1 extends PancakeTheme {}
+  export interface DefaultTheme1 extends PancakeTheme { }
   export interface DefaultTheme extends Colors {
     grids: Grids
 
