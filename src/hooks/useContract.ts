@@ -12,6 +12,7 @@ import { ChainId, FACTORY_ADDRESS, WETH, ROUTER_ADDRESS } from '@dfyn/sdk'
 import IUniswapV2PairABI from '../constants/abis/uniswap-v2-pair.json'
 import FACTORY_ABI from "../constants/abis/factory.json";
 import ROUTER_ABI from "../constants/abis/uniswap-v2-router-02.json";
+import MULTICALL2_ABI from '../constants/abis/multicall2.json';
 import { useMemo } from 'react'
 import { GOVERNANCE_ADDRESS, MERKLE_DISTRIBUTOR_ADDRESS, UNI } from '../constants'
 import {
@@ -25,7 +26,7 @@ import ERC20_ABI from '../constants/abis/erc20.json'
 import { MIGRATOR_ABI, MIGRATOR_ADDRESS } from '../constants/abis/migrator'
 import UNISOCKS_ABI from '../constants/abis/unisocks.json'
 import WETH_ABI from '../constants/abis/weth.json'
-import { MULTICALLV2_ABI, MULTICALL_ABI, MULTICALL_NETWORKS, MULTICALL_V2_NETWORKS } from '../constants/multicall'
+import { MULTICALL_ABI, MULTICALL_NETWORKS, MULTICALL_V2_NETWORKS } from '../constants/multicall'
 import { V1_EXCHANGE_ABI, V1_FACTORY_ABI, V1_FACTORY_ADDRESSES } from '../constants/v1'
 import { getContract } from '../utils'
 import { useActiveWeb3React } from './index'
@@ -61,6 +62,8 @@ export function useRouterContract(): Contract | null {
   const { chainId } = useActiveWeb3React();
   return useContract(chainId && ROUTER_ADDRESS[chainId], ROUTER_ABI, true);
 }
+
+
 
 export function useV2MigratorContract(): Contract | null {
   return useContract(MIGRATOR_ADDRESS, MIGRATOR_ABI, true)
@@ -129,7 +132,7 @@ export function useMulticallContract(): Contract | null {
 }
 export function useMulticallV2Contract(): Contract | null {
   const { chainId } = useActiveWeb3React()
-  return useContract(chainId && MULTICALL_V2_NETWORKS[chainId], MULTICALLV2_ABI, false)
+  return useContract(chainId && MULTICALL_V2_NETWORKS[chainId], MULTICALL2_ABI, false)
 }
 
 export function useMerkleDistributorContract(): Contract | null {
