@@ -16,6 +16,7 @@ const MEDIA_WIDTHS = {
   upToExtraSmall: 500,
   upToSmall: 720,
   upToMedium: 960,
+  upToMediumLarge: 1160,
   upToLarge: 1370,
   upToExtraLarge: 1480 
 }
@@ -96,7 +97,6 @@ export function colors(darkMode: boolean): Colors {
     yellow2: '#F3841E',
     blue1: '#2172E5',
     pink1: '#ff007a',
-    pink2: '#FF8CC3'
 
     // dont wanna forget these blue yet
     // blue4: darkMode ? '#153d6f70' : '#C4D9F8',

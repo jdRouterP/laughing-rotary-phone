@@ -9,8 +9,8 @@ import { useActiveWeb3React } from '../../hooks'
 const StyledPolling = styled.div`
   position: fixed;
   display: flex;
-  right: 0;
-  bottom: 0;
+  right: 54px;
+  bottom: 13px;
   padding: 1rem;
   color: white;
   transition: opacity 0.25s ease;
@@ -19,17 +19,17 @@ const StyledPolling = styled.div`
     opacity: 1;
   }
 
-  ${({ theme }) => theme.mediaWidth.upToMedium`
-    display: none;
+  ${({ theme }) => theme.mediaWidth.upToMediumLarge`
+    bottom: 72px;
+    right: 0;
   `}
 `
 const StyledPollingDot = styled.div`
-  width: 8px;
-  height: 8px;
+  width: 12px;
+  height: 12px;
   min-height: 8px;
   min-width: 8px;
-  margin-left: 0.5rem;
-  margin-top: 3px;
+  margin: auto 6px;
   border-radius: 50%;
   position: relative;
   background-color: ${({ theme }) => theme.green1};
@@ -86,8 +86,8 @@ export default function Polling() {
   return (
     <ExternalLink href={chainId && blockNumber ? getExplorerLink(chainId, blockNumber.toString(), 'block') : ''}>
       <StyledPolling>
-        <TYPE.small style={{ opacity: isMounted ? '0.2' : '0.6' }}>{blockNumber}</TYPE.small>
         <StyledPollingDot>{!isMounted && <Spinner />}</StyledPollingDot>
+        <TYPE.small style={{ opacity: isMounted ? '0.2' : '0.6', fontSize: "15px"}}>{blockNumber}</TYPE.small>
       </StyledPolling>
     </ExternalLink>
   )

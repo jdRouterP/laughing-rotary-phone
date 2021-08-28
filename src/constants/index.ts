@@ -163,7 +163,7 @@ export const CUSTOM_BASES: { [chainId in ChainId]?: { [tokenAddress: string]: To
 // used for display in the default list when adding liquidity
 export const SUGGESTED_BASES: ChainTokenList = {
   ...WETH_ONLY,
-  [ChainId.MATIC]: []
+  [ChainId.MATIC]: [USDT, USDC, DAI, WBTC, ETHER, UST, DFYN, ROUTE]
 }
 
 // used to construct the list of all pairs we consider by default in the frontend

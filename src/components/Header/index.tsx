@@ -6,17 +6,17 @@ import { darken } from 'polished'
 import { useTranslation } from 'react-i18next'
 import { isAndroid, isIOS, isMobile } from 'react-device-detect'
 import styled from 'styled-components'
-import { HEADER_ACCESS, NETWORK_LABEL, CHART_URL_PREFIX } from '../../constants/networks'
+import { HEADER_ACCESS, NETWORK_LABEL } from '../../constants/networks'
 import Logo from '../../assets/images/DFYN logo final.png'
 import LogoDark from '../../assets/images/DFYN logo dark.png'
 import DarkLogoMobile from '../../assets/images/logo_white.png'
 import LogoMobile from '../../assets/images/dfyn_colour.png'
 import { useActiveWeb3React } from '../../hooks'
-import { useDarkModeManager, useGaslessModeManager } from '../../state/user/hooks'
+import { useDarkModeManager } from '../../state/user/hooks'
 import { useETHBalances, useTokenBalance } from '../../state/wallet/hooks'
 import { CardNoise } from '../earn/styled'
 import { CountUp } from 'use-count-up'
-import { TYPE, ExternalLink } from '../../theme'
+import { TYPE } from '../../theme'
 
 import { YellowCard } from '../Card'
 import { Moon, Sun } from 'react-feather'
@@ -32,11 +32,12 @@ import { Dots } from '../swap/styleds'
 import Modal from '../Modal'
 import UniBalanceContent from './UniBalanceContent'
 import usePrevious from '../../hooks/usePrevious'
-import QuestionHelper from 'components/QuestionHelper'
-import Toggle from 'components/Toggle'
+// import QuestionHelper from 'components/QuestionHelper'
+// import Toggle from 'components/Toggle'
 import FarmsMenu from 'components/FarmsMenu'
 import Web3Network from 'components/Web3Network'
-import { UNI } from './../../constants/index'
+import { DFYN, UNI } from './../../constants/index'
+import CurrencyLogo from 'components/CurrencyLogo'
 
 const HeaderFrame = styled.div`
   display: grid;
@@ -51,7 +52,7 @@ const HeaderFrame = styled.div`
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   padding: 1rem;
   z-index: 2;
-  ${({ theme }) => theme.mediaWidth.upToExtraLarge`
+  ${({ theme }) => theme.mediaWidth.upToMediumLarge`
     grid-template-columns: 1fr;
     padding: 0 1rem;
     width: calc(100%);
@@ -69,7 +70,7 @@ const HeaderControls = styled.div`
   align-items: center;
   justify-self: flex-end;
 
-  ${({ theme }) => theme.mediaWidth.upToExtraLarge`
+  ${({ theme }) => theme.mediaWidth.upToMediumLarge`
     flex-direction: row;
     justify-content: space-between;
     justify-self: center;
@@ -96,40 +97,40 @@ const HeaderElement = styled.div`
     margin-left: 8px;
   }
 
-  ${({ theme }) => theme.mediaWidth.upToExtraLarge`
+  ${({ theme }) => theme.mediaWidth.upToMediumLarge`
    flex-direction: row-reverse;
     align-items: center;
   `};
 `
 
 
-const GaslessModeElement = styled.div`
-  display: flex;
-  align-items: center;
-  white-space: nowrap;
+// const GaslessModeElement = styled.div`
+//   display: flex;
+//   align-items: center;
+//   white-space: nowrap;
 
-  /* addresses safari's lack of support for "gap" */
-  & > *:not(:first-child) {
-    margin-left: 8px;
-  }
+//   /* addresses safari's lack of support for "gap" */
+//   & > *:not(:first-child) {
+//     margin-left: 8px;
+//   }
 
-  ${({ theme }) => theme.mediaWidth.upToExtraLarge`
-    display: flex;
-    width: 100%;
-    margin-bottom: 110px;
-    align-content: flex-start;
-    text-align: center;
-    left: 0;
-    position: absolute;
-    border-radius: 12px 12px 0 0;
-    background-color:  ${({ theme }) => theme.bg3};
-    padding: 1rem 2rem;
-    button#toggle-gasless-mode-button {
-      right: 1rem;
-      position: absolute;
-    }
-  `};
-`
+//   ${({ theme }) => theme.mediaWidth.upToExtraLarge`
+//     display: flex;
+//     width: 100%;
+//     margin-bottom: 110px;
+//     align-content: flex-start;
+//     text-align: center;
+//     left: 0;
+//     position: absolute;
+//     border-radius: 12px 12px 0 0;
+//     background-color:  ${({ theme }) => theme.bg3};
+//     padding: 1rem 2rem;
+//     button#toggle-gasless-mode-button {
+//       right: 1rem;
+//       position: absolute;
+//     }
+//   `};
+// `
 
 const HeaderElementWrap = styled.div`
   display: flex;
@@ -137,14 +138,14 @@ const HeaderElementWrap = styled.div`
 `
 
 const HeaderRow = styled(RowFixed)`
-  ${({ theme }) => theme.mediaWidth.upToExtraLarge`
+  ${({ theme }) => theme.mediaWidth.upToMediumLarge`
    width: 100%;
   `};
 `
 
 const HeaderLinks = styled(Row)`
   justify-content: center;
-  ${({ theme }) => theme.mediaWidth.upToExtraLarge`
+  ${({ theme }) => theme.mediaWidth.upToMediumLarge`
     padding: 1rem 2rem 1rem 1rem;
     justify-content: flex-end;
 `};
@@ -174,11 +175,12 @@ const UNIAmount = styled(AccountElement)`
   padding: 4px 8px;
   height: 36px;
   font-weight: 500;
-  background-color: ${({ theme }) => theme.bg3};
-  background: radial-gradient(174.47% 188.91% at 1.84% 0%, #ff007a 0%, #2172e5 100%), #edeef2;
+  background-color: ${({ theme }) => theme.bg4};
+  // background: radial-gradient(174.47% 188.91% at 1.84% 0%, #ff007a 0%, #2172e5 100%), #edeef2;
 `
 
 const UNIWrapper = styled.span`
+  margin-left: 8px;
   width: fit-content;
   position: relative;
   cursor: pointer;
@@ -283,36 +285,36 @@ const StyledNavLink = styled(NavLink).attrs({
   }
 `
 
-const StyledExternalLink = styled(ExternalLink).attrs({
-  activeClassName
-}) <{ isActive?: boolean }>`
-  ${({ theme }) => theme.flexRowNoWrap}
-  align-items: left;
-  border-radius: 3rem;
-  outline: none;
-  cursor: pointer;
-  text-decoration: none;
-  color: ${({ theme }) => theme.text2};
-  font-size: 1rem;
-  width: fit-content;
-  margin: 0 12px;
-  font-weight: 500;
+// const StyledExternalLink = styled(ExternalLink).attrs({
+//   activeClassName
+// }) <{ isActive?: boolean }>`
+//   ${({ theme }) => theme.flexRowNoWrap}
+//   align-items: left;
+//   border-radius: 3rem;
+//   outline: none;
+//   cursor: pointer;
+//   text-decoration: none;
+//   color: ${({ theme }) => theme.text2};
+//   font-size: 1rem;
+//   width: fit-content;
+//   margin: 0 12px;
+//   font-weight: 500;
 
-  &.${activeClassName} {
-    border-radius: 12px;
-    font-weight: 600;
-    color: ${({ theme }) => theme.text1};
-  }
+//   &.${activeClassName} {
+//     border-radius: 12px;
+//     font-weight: 600;
+//     color: ${({ theme }) => theme.text1};
+//   }
 
-  :hover,
-  :focus {
-    color: ${({ theme }) => darken(0.1, theme.text1)};
-  }
+//   :hover,
+//   :focus {
+//     color: ${({ theme }) => darken(0.1, theme.text1)};
+//   }
 
-  ${({ theme }) => theme.mediaWidth.upToExtraSmall`
-      display: none;
-`}
-`
+//   ${({ theme }) => theme.mediaWidth.upToExtraSmall`
+//       display: none;
+// `}
+// `
 
 // const StyledDocsLink = styled(StyledExternalLink)`
 // ${({ theme }) => theme.mediaWidth.upToExtraSmall`
@@ -320,33 +322,39 @@ const StyledExternalLink = styled(ExternalLink).attrs({
 // `}
 // `
 
-export const StyledMenuButton = styled.button`
-  position: relative;
-  width: 100%;
-  height: 100%;
-  border: none;
-  background-color: transparent;
-  margin: 0;
-  padding: 0;
-  height: 35px;
-  background-color: ${({ theme }) => theme.bg3};
-  margin-left: 8px;
-  padding: 0.15rem 0.5rem;
-  border-radius: 0.5rem;
+const StyledMenuButton = styled.button`
+  display: none;
 
-  :hover,
-  :focus {
-    cursor: pointer;
-    outline: none;
-    background-color: ${({ theme }) => theme.bg4};
-  }
+  ${({ theme }) => theme.mediaWidth.upToMediumLarge`
+    display: block;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border: none;
+    color: ${({theme}) => theme.text1};
+    background-color: transparent;
+    margin: 0;
+    padding: 0;
+    height: 35px;
+    background-color: ${({ theme }) => theme.bg3};
+    margin-left: 8px;
+    padding: 0.15rem 0.5rem;
+    border-radius: 0.5rem;
 
-  svg {
-    margin-top: 2px;
-  }
-  > * {
-    stroke: ${({ theme }) => theme.text1};
-  }
+    :hover,
+    :focus {
+      cursor: pointer;
+      outline: none;
+      background-color: ${({ theme }) => theme.bg4};
+    }
+
+    svg {
+      margin-top: 2px;
+    }
+    > * {
+      stroke: ${({ theme }) => theme.text1};
+    }
+  `}
 `
 
 
@@ -359,7 +367,7 @@ export default function Header() {
   const userEthBalance = useETHBalances(account ? [account] : [])?.[account ?? '']
   // const [isDark] = useDarkModeManager()
   const [darkMode, toggleDarkMode] = useDarkModeManager()
-  const [gaslessMode, toggleSetGaslessMode] = useGaslessModeManager()
+  // const [gaslessMode, toggleSetGaslessMode] = useGaslessModeManager()
   const toggleNetworkModal = useNetworkModalToggle()
 
   const toggleClaimModal = useToggleSelfClaimModal()
@@ -418,9 +426,9 @@ export default function Header() {
           {chainId && HEADER_ACCESS.vault.includes(chainId) && <StyledNavLink id={`vault-nav-link`} to={'/vault'}>
             Vault
           </StyledNavLink>}
-          {chainId && HEADER_ACCESS.charts.includes(chainId) && <StyledExternalLink id={`stake-nav-link`} href={`https://${CHART_URL_PREFIX[(chainId ? chainId : 1)]}.dfyn.network/home/`}>
+          {/* {chainId && HEADER_ACCESS.charts.includes(chainId) && <StyledExternalLink id={`stake-nav-link`} href={`https://${CHART_URL_PREFIX[(chainId ? chainId : 1)]}.dfyn.network/home/`}>
             Charts <span style={{ fontSize: '11px' }}>↗</span>
-          </StyledExternalLink>}
+          </StyledExternalLink>} */}
           {/* <StyledDocsLink id={`docs-nav-link`} href={'https://docs.dfyn.network/'}>
             Docs {!mobile && <span style={{ fontSize: '11px' }}>↗</span>}
           </StyledDocsLink> */}
@@ -429,7 +437,7 @@ export default function Header() {
       </HeaderRow>
       <HeaderControls>
         <HeaderElement>
-          {chainId && HEADER_ACCESS.gaslessMode.includes(chainId) && <GaslessModeElement>
+          {/* {chainId && HEADER_ACCESS.gaslessMode.includes(chainId) && <GaslessModeElement>
             <TYPE.black fontWeight={400} fontSize={14}>
               Gasless Mode
             </TYPE.black>
@@ -442,7 +450,7 @@ export default function Header() {
                 () => toggleSetGaslessMode()
               }
             />
-          </GaslessModeElement>}
+          </GaslessModeElement>} */}
           {availableClaim && !showClaimPopup && (
             <UNIWrapper onClick={toggleClaimModal}>
               <UNIAmount active={!!account && !availableClaim} style={{ pointerEvents: 'auto' }}>
@@ -458,9 +466,10 @@ export default function Header() {
               <UNIAmount active={!!account && !availableClaim} style={{ pointerEvents: 'auto' }}>
                 {account && (
                   <HideSmall>
-                    <TYPE.white
+                    <TYPE.black
                       style={{
-                        paddingRight: '.4rem'
+                        paddingRight: '.4rem',
+                        marginRight: '5px'
                       }}
                     >
                       <CountUp
@@ -471,10 +480,10 @@ export default function Header() {
                         thousandsSeparator={','}
                         duration={1}
                       />
-                    </TYPE.white>
+                    </TYPE.black>
                   </HideSmall>
                 )}
-                DFYN
+                <CurrencyLogo currency={DFYN} />
               </UNIAmount>
               <CardNoise />
             </UNIWrapper>

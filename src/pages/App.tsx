@@ -47,6 +47,8 @@ import EcoSystemArchived from './VanillaFarms/EcoSystemArchived'
 import DualFarmsArrchived from './DualFarms/DualFarmsArchived'
 import PopularFarmsArchived from './FloraFarms/PopularFarmsArchived'
 import PreStakinfFarmsArchived from './Earn/PreStakingFarmsArchived'
+import Analytics from 'components/Header/Analytics'
+import ThemeChange from 'components/Header/ThemeChange'
 
 const AppWrapper = styled.div`
   display: flex;
@@ -104,6 +106,8 @@ export default function App() {
         <BodyWrapper>
           <Popups />
           <Polling />
+          <ThemeChange />
+          <Analytics />
           <TopLevelModals />
           <Web3ReactManager>
             <Switch>

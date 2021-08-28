@@ -31,6 +31,7 @@ export interface Colors {
   bg8: Color
   bg9: Color
   bg10: Color
+  bg11: Color
 
   modalBG: Color
   advancedBG: Color
@@ -57,6 +58,7 @@ export interface Colors {
   yellow1: Color
   yellow2: Color
   blue1: Color
+  pink1: Color
 }
 
 export interface Grids {
@@ -79,6 +81,7 @@ declare module 'styled-components' {
       upToExtraSmall: ThemedCssFunction<DefaultTheme>
       upToSmall: ThemedCssFunction<DefaultTheme>
       upToMedium: ThemedCssFunction<DefaultTheme>
+      upToMediumLarge: ThemedCssFunction<DefaultTheme>
       upToLarge: ThemedCssFunction<DefaultTheme>
       upToExtraLarge: ThemedCssFunction<DefaultTheme>
     }

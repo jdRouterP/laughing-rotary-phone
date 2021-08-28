@@ -11,6 +11,34 @@ import Settings from '../Settings'
 import { useDispatch } from 'react-redux'
 import { AppDispatch } from 'state'
 import { resetMintState } from 'state/mint/actions'
+import { MouseoverTooltip } from 'components/Tooltip'
+import { HEADER_ACCESS } from 'constants/networks'
+import { LocalGasStation } from '@material-ui/icons'
+import Toggle from 'components/Toggle'
+import { useGaslessModeManager } from 'state/user/hooks'
+import { useActiveWeb3React } from 'hooks'
+
+const Icon = styled.div`
+  display: flex;
+  width: 100%;
+`
+
+const TopSection = styled.div`
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 0fr;
+`
+
+const GaslessModeElement = styled.div`
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+
+  /* addresses safari's lack of support for "gap" */
+  & > *:not(:first-child) {
+    margin-left: 8px;
+  }
+`
 
 const Tabs = styled.div`
   ${({ theme }) => theme.flexRowNoWrap}
@@ -48,6 +76,7 @@ const StyledNavLink = styled(NavLink).attrs({
 `
 
 const ActiveText = styled.div`
+  margin: auto;
   font-weight: 500;
   font-size: 20px;
 `
@@ -86,6 +115,8 @@ export function FindPoolTabs() {
 
 export function AddRemoveTabs({ adding, creating }: { adding: boolean; creating: boolean }) {
   // reset states on back
+  const [gaslessMode, toggleSetGaslessMode] = useGaslessModeManager()
+  const { chainId} = useActiveWeb3React()
   const dispatch = useDispatch<AppDispatch>()
 
   return (
@@ -99,8 +130,26 @@ export function AddRemoveTabs({ adding, creating }: { adding: boolean; creating:
         >
           <StyledArrowLeft />
         </HistoryLink>
-        <ActiveText>{creating ? 'Create a pair' : adding ? 'Add Liquidity' : 'Remove Liquidity'}</ActiveText>
-        <Settings />
+        <TopSection>
+          <ActiveText>{creating ? 'Create a pair' : adding ? 'Add Liquidity' : 'Remove Liquidity'}</ActiveText>
+          <Icon>
+            {chainId && HEADER_ACCESS.gaslessMode.includes(chainId) &&<GaslessModeElement>
+              <MouseoverTooltip text={'Gasless Mode. This button will toggle Dfyn’s gasless feature for your wallet. Users with hardware wallets should keep this setting turned off.'} placement='bottom'>
+                <LocalGasStation />
+              </MouseoverTooltip>
+              <Toggle
+                id="toggle-gasless-mode-button"
+                isActive={gaslessMode}
+                toggle={
+                  () => toggleSetGaslessMode()
+                }
+              />
+            </GaslessModeElement>}
+            <Settings />
+          </Icon>
+          
+        </TopSection>
+        
       </RowBetween>
     </Tabs>
   )
