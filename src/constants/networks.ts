@@ -76,7 +76,7 @@ export const SUPPORTED_NETWORKS: {
             decimals: 18,
         },
         rpcUrls: ['https://rpc-mainnet.maticvigil.com'], //['https://matic-mainnet.chainstacklabs.com/'],
-        blockExplorerUrls: ['https://explorer-mainnet.maticvigil.com'],
+        blockExplorerUrls: ['https://polygonscan.com/'],
     },
     [ChainId.OKEX]: {
         chainId: '0x42',

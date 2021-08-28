@@ -36,7 +36,7 @@ import usePrevious from '../../hooks/usePrevious'
 // import Toggle from 'components/Toggle'
 import FarmsMenu from 'components/FarmsMenu'
 import Web3Network from 'components/Web3Network'
-import { DFYN, UNI } from './../../constants/index'
+import { UNI } from './../../constants/index'
 import CurrencyLogo from 'components/CurrencyLogo'
 
 const HeaderFrame = styled.div`
@@ -483,7 +483,7 @@ export default function Header() {
                     </TYPE.black>
                   </HideSmall>
                 )}
-                <CurrencyLogo currency={DFYN} />
+                <CurrencyLogo currency={UNI[chainId ?? 137]} />
               </UNIAmount>
               <CardNoise />
             </UNIWrapper>

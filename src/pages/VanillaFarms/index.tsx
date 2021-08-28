@@ -9,8 +9,8 @@ import { CardSection, DataCard, CardNoise, CardBGImage } from '../../components/
 // import { Countdown } from './Countdown'
 import Loader from '../../components/Loader'
 import { useActiveWeb3React } from '../../hooks'
-// import { JSBI } from '@dfyn/sdk'
-// import { BIG_INT_ZERO } from '../../constants'
+import { JSBI } from '@dfyn/sdk'
+import { BIG_INT_ZERO } from '../../constants'
 import { OutlineCard } from '../../components/Card'
 import { SearchInput } from 'components/SearchModal/styleds'
 import { ButtonPink } from 'components/Button'
@@ -56,18 +56,23 @@ export default function VanillaFarms() {
   const { chainId } = useActiveWeb3React()
 
   // staking info for connected account
-  const stakingInfos = useStakingInfo()
-
+  const stakingInfos = useStakingInfo();
   /**
    * only show staking cards with balance
    * @todo only account for this if rewards are inactive
    */
-  const stakingInfosWithBalance = stakingInfos
+  const stakingInfosWithBalance = stakingInfos?.filter((s) => JSBI.greaterThan(s.stakedAmount.raw, BIG_INT_ZERO))
+
+  const activeFarms = stakingInfos?.filter((s) => s.active);
+
+  const stakingInfosWithRewards = stakingInfos?.filter((s) => JSBI.greaterThan(s.earnedAmount.raw, BIG_INT_ZERO))
+
+  const stakingFarms = [...new Set([...stakingInfosWithBalance, ...activeFarms, ...stakingInfosWithRewards])]
 
   // toggle copy if rewards are inactive
   const stakingRewardsExist = Boolean(typeof chainId === 'number' && (STAKING_REWARDS_INFO[chainId]?.length ?? 0) > 0)
   const [searchItem, setSearchItem] = useState('')
-  
+
   return (
     <PageWrapper gap="lg" justify="center">
       <TopSection gap="md">
@@ -80,14 +85,14 @@ export default function VanillaFarms() {
                 <RowBetween>
                   <TYPE.white fontWeight={600}>DFYN Ecosystem Farms</TYPE.white>
                 </RowBetween>
-                <StyledInternalLink to={`/eco-farms/archived`} style={{ width: '100%', color: '#ff007a'}}>
+                <StyledInternalLink to={`/eco-farms/archived`} style={{ width: '100%', color: '#ff007a' }}>
                   <ButtonPink padding="8px" borderRadius="8px">
                     Archived Pools
                   </ButtonPink>
                 </StyledInternalLink>
               </TopSectionHeader>
-                
-                <RowBetween>
+
+              <RowBetween>
                 <TYPE.white fontSize={14}>
                   Deposit your Liquidity Provider tokens to receive DFYN, the Dfyn protocol governance token.
                 </TYPE.white>
@@ -111,40 +116,40 @@ export default function VanillaFarms() {
           <TYPE.mediumHeader style={{ marginTop: '0.5rem' }}>Participating pools</TYPE.mediumHeader>
           {/* <Countdown exactEnd={stakingInfos?.[0]?.periodFinish} /> */}
         </DataRow>
-        <SearchInput 
-          type="text" 
-          placeholder="Search by name, symbol, address" 
-          onChange={(e)=>{
-          setSearchItem(e.target.value)
-        }}/>
+        <SearchInput
+          type="text"
+          placeholder="Search by name, symbol, address"
+          onChange={(e) => {
+            setSearchItem(e.target.value)
+          }} />
         <PoolSection>
           {stakingRewardsExist && stakingInfos?.length === 0 ? (
             <Loader style={{ margin: 'auto' }} />
           ) : !stakingRewardsExist ? (
             <OutlineCard>No active pools</OutlineCard>
-          ) : stakingInfos?.length !== 0 && stakingInfosWithBalance.length === 0 ? (
+          ) : stakingFarms?.length === 0 ? (
             <OutlineCard>No active pools</OutlineCard>
           ) : (
-            stakingInfosWithBalance?.filter(stakingInfos => {
-              if(searchItem === '') return stakingInfos
+            stakingFarms?.filter(stakingInfos => {
+              if (searchItem === '') return stakingInfos
               //for symbol
-              else if(stakingInfos?.tokens[0].symbol?.toLowerCase().includes(searchItem.toLowerCase()) 
-              || stakingInfos?.tokens[1].symbol?.toLowerCase().includes(searchItem.toLowerCase())
+              else if (stakingInfos?.tokens[0].symbol?.toLowerCase().includes(searchItem.toLowerCase())
+                || stakingInfos?.tokens[1].symbol?.toLowerCase().includes(searchItem.toLowerCase())
               ) return stakingInfos
 
               //for name
-              else if(stakingInfos?.tokens[0].name?.toLowerCase().includes(searchItem.toLowerCase())
-              || stakingInfos?.tokens[1].name?.toLowerCase().includes(searchItem.toLowerCase())
+              else if (stakingInfos?.tokens[0].name?.toLowerCase().includes(searchItem.toLowerCase())
+                || stakingInfos?.tokens[1].name?.toLowerCase().includes(searchItem.toLowerCase())
               ) return stakingInfos
-              
+
               //for address
-              else if(stakingInfos?.tokens[0].address?.toLowerCase().includes(searchItem.toLowerCase())
-              || stakingInfos?.tokens[1].address?.toLowerCase().includes(searchItem.toLowerCase())
+              else if (stakingInfos?.tokens[0].address?.toLowerCase().includes(searchItem.toLowerCase())
+                || stakingInfos?.tokens[1].address?.toLowerCase().includes(searchItem.toLowerCase())
               ) return stakingInfos
 
               //Other case
               else return ""
-            }).map(stakingInfo => {
+            })?.map(stakingInfo => {
               // need to sort by added liquidity here
               return <PoolCard key={stakingInfo.stakingRewardAddress} stakingInfo={stakingInfo} />
             })

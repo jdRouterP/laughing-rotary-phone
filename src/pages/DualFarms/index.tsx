@@ -9,8 +9,8 @@ import { CardSection, DataCard, CardNoise, CardBGImage } from '../../components/
 // import { Countdown } from './Countdown'
 import Loader from '../../components/Loader'
 import { useActiveWeb3React } from '../../hooks'
-// import { JSBI } from '@dfyn/sdk'
-// import { BIG_INT_ZERO } from '../../constants'
+import { JSBI } from '@dfyn/sdk'
+import { BIG_INT_ZERO } from '../../constants'
 import { OutlineCard } from '../../components/Card'
 import { SearchInput } from 'components/SearchModal/styleds'
 import { ButtonPink } from 'components/Button'
@@ -56,13 +56,20 @@ export default function DualFarms() {
   const { chainId } = useActiveWeb3React()
 
   // staking info for connected account
-  const stakingInfos = useStakingInfo()
-
+  // staking info for connected account
+  const stakingInfos = useStakingInfo();
   /**
    * only show staking cards with balance
    * @todo only account for this if rewards are inactive
    */
-  const stakingInfosWithBalance = stakingInfos
+  const stakingInfosWithBalance = stakingInfos?.filter((s) => JSBI.greaterThan(s.stakedAmount.raw, BIG_INT_ZERO))
+
+  const activeFarms = stakingInfos?.filter((s) => s.active);
+
+  const stakingInfosWithRewards = stakingInfos?.filter((s) => JSBI.greaterThan(s.earnedAmount.raw, BIG_INT_ZERO))
+
+  const stakingFarms = [...new Set([...stakingInfosWithBalance, ...activeFarms, ...stakingInfosWithRewards])]
+
 
   // toggle copy if rewards are inactive
   const stakingRewardsExist = Boolean(typeof chainId === 'number' && (STAKING_REWARDS_INFO[chainId]?.length ?? 0) > 0)
@@ -76,16 +83,16 @@ export default function DualFarms() {
           <CardNoise />
           <CardSection>
             <AutoColumn gap="md">
-            <TopSectionHeader>
-              <RowBetween>
-                <TYPE.white fontWeight={600}>Dual Farms</TYPE.white>
-              </RowBetween>
-              <StyledInternalLink to={`/dual-farms/archived`} style={{ width: '100%', color: '#ff007a'}}>
-                <ButtonPink padding="8px" borderRadius="8px">
-                  Archived Pools
-                </ButtonPink>
-              </StyledInternalLink>
-            </TopSectionHeader>
+              <TopSectionHeader>
+                <RowBetween>
+                  <TYPE.white fontWeight={600}>Dual Farms</TYPE.white>
+                </RowBetween>
+                <StyledInternalLink to={`/dual-farms/archived`} style={{ width: '100%', color: '#ff007a' }}>
+                  <ButtonPink padding="8px" borderRadius="8px">
+                    Archived Pools
+                  </ButtonPink>
+                </StyledInternalLink>
+              </TopSectionHeader>
               <RowBetween>
                 <TYPE.white fontSize={14}>
                   Dual Farming pools allow users to stake LP tokens and earn rewards in 2 different tokens.
@@ -110,36 +117,36 @@ export default function DualFarms() {
           <TYPE.mediumHeader style={{ marginTop: '0.5rem' }}>Participating pools</TYPE.mediumHeader>
         </DataRow>
 
-        <SearchInput 
-          type="text" 
-          placeholder="Search by name, symbol, address" 
-          onChange={(e)=>{
-          setSearchItem(e.target.value)
-        }}/>
+        <SearchInput
+          type="text"
+          placeholder="Search by name, symbol, address"
+          onChange={(e) => {
+            setSearchItem(e.target.value)
+          }} />
 
         <PoolSection>
           {stakingRewardsExist && stakingInfos?.length === 0 ? (
             <Loader style={{ margin: 'auto' }} />
           ) : !stakingRewardsExist ? (
             <OutlineCard>No active pools</OutlineCard>
-          ) : stakingInfos?.length !== 0 && stakingInfosWithBalance.length === 0 ? (
+          ) : stakingFarms?.length === 0 ? (
             <OutlineCard>No active pools</OutlineCard>
           ) : (
-            stakingInfosWithBalance?.filter(stakingInfos => {
-              if(searchItem === '') return stakingInfos
+            stakingFarms?.filter(stakingInfos => {
+              if (searchItem === '') return stakingInfos
               //for symbol
-              else if(stakingInfos?.tokens[0].symbol?.toLowerCase().includes(searchItem.toLowerCase()) 
-              || stakingInfos?.tokens[1].symbol?.toLowerCase().includes(searchItem.toLowerCase())
+              else if (stakingInfos?.tokens[0].symbol?.toLowerCase().includes(searchItem.toLowerCase())
+                || stakingInfos?.tokens[1].symbol?.toLowerCase().includes(searchItem.toLowerCase())
               ) return stakingInfos
 
               //for name
-              else if(stakingInfos?.tokens[0].name?.toLowerCase().includes(searchItem.toLowerCase())
-              || stakingInfos?.tokens[1].name?.toLowerCase().includes(searchItem.toLowerCase())
+              else if (stakingInfos?.tokens[0].name?.toLowerCase().includes(searchItem.toLowerCase())
+                || stakingInfos?.tokens[1].name?.toLowerCase().includes(searchItem.toLowerCase())
               ) return stakingInfos
-              
+
               //for address
-              else if(stakingInfos?.tokens[0].address?.toLowerCase().includes(searchItem.toLowerCase())
-              || stakingInfos?.tokens[1].address?.toLowerCase().includes(searchItem.toLowerCase())
+              else if (stakingInfos?.tokens[0].address?.toLowerCase().includes(searchItem.toLowerCase())
+                || stakingInfos?.tokens[1].address?.toLowerCase().includes(searchItem.toLowerCase())
               ) return stakingInfos
 
               //Other case

@@ -30,16 +30,6 @@ import { SearchInput } from 'components/SearchModal/styleds'
 
 
 
-// const SearchItem = styled.div`
-//   display: flex;
-//   max-width: 645px;
-//   width: 100%;
-//   border-radius: 10px;
-//   background: ${({theme}) => theme.bg3};
-//   border-radius: 10px;
-//   padding-right: 13px;
-// `
-
 const PageWrapper = styled(AutoColumn)`
   max-width: 640px;
   width: 100%;
@@ -69,6 +59,8 @@ const ButtonRow = styled(RowFixed)`
 `
 
 const ResponsiveButtonPrimary = styled(ButtonPrimary)`
+  padding: 6px 8px;
+  border-radius: 12px;
   width: fit-content;
   ${({ theme }) => theme.mediaWidth.upToSmall`
     width: 48%;
@@ -217,8 +209,6 @@ export default function Pool() {
                 <ResponsiveButtonPrimary
                   id="join-pool-button"
                   as={Link}
-                  padding="6px 8px"
-                  borderRadius="12px"
                   to={`/add/${inputCurrency}/${outputCurrency}`}
                 >
                   <Text fontWeight={500} fontSize={16}>
@@ -250,14 +240,12 @@ export default function Pool() {
                     <span> ↗</span>
                   </RowBetween>
                 </ButtonSecondary>
-                {/* <SearchItem> */}
                   <SearchInput 
                     type="text" 
-                    placeholder="Search by name, symbol, address" 
+                    placeholder="Search by name, symbol, address"
                     onChange={(e)=>{
                     setSearchItem(e.target.value)
                   }}/>
-                {/* </SearchItem> */}
                 {v2PairsWithoutStakedAmount?.filter(stakingInfos => {
                   if(searchItem === '') return stakingInfos
                   //for symbol

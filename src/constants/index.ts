@@ -92,6 +92,9 @@ export const DAIK = new Token(ChainId.OKEX, '0x21cde7e32a6caf4742d00d44b07279e75
 export const REWARDTEST2 = new Token(ChainId.OKEX, '0x6c5e0d6e2150e7f9743fe5b9cb357e5e2da33447', 18, 'TEST2', 'Test2 Token')
 export const REWARDTEST = new Token(ChainId.OKEX, '0x6c5e0d6e2150e7f9743fe5b9cb357e5e2da33447', 18, 'TEST', 'Test Token')
 
+//TEST DFYN
+// export const DFYNTEST = new Token(ChainId.OKEX,  "0x6c5e0d6e2150e7f9743fe5b9cb357e5e2da33447", 18, 'TEST', 'TEST')
+
 // Block time here is slightly higher (~1s) than average in order to avoid ongoing proposals past the displayed time
 export const AVERAGE_BLOCK_TIME_IN_SECS = 13
 export const PROPOSAL_LENGTH_IN_BLOCKS = 40_320
@@ -117,7 +120,7 @@ export const UNI: { [chainId in ChainId]: Token } = {
   [ChainId.GÖRLI]: new Token(ChainId.GÖRLI, UNI_ADDRESS, 18, 'UNI', 'Uniswap'),
   [ChainId.KOVAN]: new Token(ChainId.KOVAN, UNI_ADDRESS, 18, 'UNI', 'Uniswap'),
   [ChainId.MATIC]: new Token(ChainId.MATIC, UNI_ADDRESS, 18, 'DFYN', 'DFYN Token'),
-  [ChainId.OKEX]: new Token(ChainId.OKEX, "0x6c5e0d6e2150e7f9743fe5b9cb357e5e2da33447", 18, 'TEST', 'TEST'),
+  [ChainId.OKEX]: new Token(ChainId.OKEX, UNI_ADDRESS, 18, 'DFYN', 'DFYN Token'),
 }
 
 export const REWARD_TOKENS: Token[] = [ROUTE, DFYN, ZEE, AURORA, ROYA, BOOTY, SX, EZ, UFARM, NWC, mRTK, XDO, FRM, RVF, CHART]

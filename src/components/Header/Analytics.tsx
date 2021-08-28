@@ -29,7 +29,7 @@ export default function Analytics() {
     const { chainId } = useActiveWeb3React()
     return (
         <AnalyticsStyled>
-            {chainId && HEADER_ACCESS.charts.includes(chainId) && <ExternalLink href={`https://${CHART_URL_PREFIX[(chainId ? chainId : 1)]}.dfyn.network/home/`} style={{textDecoration: 'none'}}>
+            {chainId && HEADER_ACCESS.charts.includes(chainId) && <ExternalLink href={`https://${CHART_URL_PREFIX[(chainId ? chainId : 137)]}.dfyn.network/home/`} style={{textDecoration: 'none'}}>
             <ButtonStyle>
                 <span style={{margin: 'auto 5px auto 0px', fontSize: '17px'}}>Charts</span>
                 <TrendingUp size={"30px"} />

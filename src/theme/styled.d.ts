@@ -69,7 +69,7 @@ export interface Grids {
 
 declare module 'styled-components' {
   /* eslint-disable @typescript-eslint/no-empty-interface */
-  export interface DefaultTheme1 extends PancakeTheme {}
+  export interface DefaultTheme1 extends PancakeTheme { }
   export interface DefaultTheme extends Colors {
     grids: Grids
 
