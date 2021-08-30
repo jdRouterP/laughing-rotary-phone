@@ -635,7 +635,9 @@ export function useInactiveStakingInfo(pairToFilterBy?: Pair | null): StakingInf
 export function useTotalUniEarned(): TokenAmount | undefined {
   const { chainId } = useActiveWeb3React()
   const uni = chainId ? UNI[chainId] : undefined
-  const stakingInfos = useStakingInfo()
+  const activeStakingInfos = useStakingInfo()
+  const inactiveStakingInfos = useInactiveStakingInfo();
+  const stakingInfos = activeStakingInfos.concat(inactiveStakingInfos);
 
   return useMemo(() => {
     if (!uni) return undefined
