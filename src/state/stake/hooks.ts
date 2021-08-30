@@ -583,7 +583,7 @@ export function useInactiveStakingInfo(pairToFilterBy?: Pair | null): StakingInf
         let ableToClaim = !vestingActive || (Math.floor(Date.now() / 1000) >= periodFinishSeconds &&
           (userClaimedSplit !== Math.floor(currentSplit) ? true : !hasClaimedPartial))
         memo.push({
-          type: { typeOf: 'Pre-Stake Farms', url: 'dfyn' },
+          type: { typeOf: 'Archived Pre-Stake Farms', url: 'dfyn/archived' },
           stakingRewardAddress: rewardsAddress,
           baseToken: info[index].baseToken,
           tokens: info[index].tokens,

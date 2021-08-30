@@ -566,7 +566,7 @@ export function useInactiveStakingInfo(pairToFilterBy?: Pair | null, version: st
           periodFinishSeconds && currentBlockTimestamp ? periodFinishSeconds > currentBlockTimestamp.toNumber() : true
 
         memo.push({
-          type: { typeOf: 'Ecosystem Farms', url: 'eco-farms' },
+          type: { typeOf: 'Archived Ecosystem Farms', url: 'eco-farms/archived' },
           stakingRewardAddress: rewardsAddress,
           baseToken: info[index].baseToken,
           version: info[index].version,

@@ -535,7 +535,7 @@ export function useInactiveStakingInfo(pairToFilterBy?: Pair | null, version: st
         const active =
           periodFinishSeconds && currentBlockTimestamp ? periodFinishSeconds > currentBlockTimestamp.toNumber() : true
         memo.push({
-          type: { typeOf: 'Dual Farms', url: 'dual-farms' },
+          type: { typeOf: 'Archived Dual Farms', url: 'dual-farms/archived' },
           rewardAddresses,
           stakingRewardAddress: rewardsAddress,
           baseToken: info[index].baseToken,

@@ -1149,7 +1149,7 @@ export function useInactiveStakingInfo(pairToFilterBy?: Pair | null, version: st
         let ableToClaim = !vestingActive || (Math.floor(Date.now() / 1000) >= periodFinishSeconds &&
           (userClaimedSplit !== Math.floor(currentSplit) ? true : !hasClaimedPartial))
         memo.push({
-          type: { typeOf: 'Popular Farms', url: 'popular-farms' },
+          type: { typeOf: 'Archived Popular Farms', url: 'popular-farms/archived' },
           stakingRewardAddress: rewardsAddress,
           baseToken: info[index].baseToken,
           version: info[index].version,
