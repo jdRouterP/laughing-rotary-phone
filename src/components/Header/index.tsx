@@ -6,7 +6,7 @@ import { darken } from 'polished'
 import { useTranslation } from 'react-i18next'
 import { isAndroid, isIOS, isMobile } from 'react-device-detect'
 import styled from 'styled-components'
-import { HEADER_ACCESS, NETWORK_LABEL } from '../../constants/networks'
+import { CHART_URL_PREFIX, HEADER_ACCESS, NETWORK_LABEL } from '../../constants/networks'
 import Logo from '../../assets/images/DFYN logo final.png'
 import LogoDark from '../../assets/images/DFYN logo dark.png'
 import DarkLogoMobile from '../../assets/images/logo_white.png'
@@ -16,10 +16,10 @@ import { useDarkModeManager } from '../../state/user/hooks'
 import { useETHBalances, useTokenBalance } from '../../state/wallet/hooks'
 import { CardNoise } from '../earn/styled'
 import { CountUp } from 'use-count-up'
-import { TYPE } from '../../theme'
+import { ExternalLink, TYPE } from '../../theme'
 
 import { YellowCard } from '../Card'
-import { Moon, Sun } from 'react-feather'
+import { Moon, Sun, TrendingUp } from 'react-feather'
 import Menu from '../Menu'
 
 import Row, { RowFixed } from '../Row'
@@ -38,6 +38,31 @@ import FarmsMenu from 'components/FarmsMenu'
 import Web3Network from 'components/Web3Network'
 import { UNI } from './../../constants/index'
 import CurrencyLogo from 'components/CurrencyLogo'
+
+const StyledAnalytics = styled.div`
+  display: none;
+  ${({theme}) => theme.mediaWidth.upToMedium`
+    display: block;
+    position: relative;
+    padding: 0.15rem 0.5rem;
+    background-color: ${({ theme }) => theme.bg3};
+    border-radius: 0.5rem;
+    margin-left: 8px;
+    :hover,
+    :focus {
+      cursor: pointer;
+      outline: none;
+      background-color: ${({ theme }) => theme.bg4};
+    }
+    > * {
+      stroke: ${({ theme }) => theme.text1};
+    }
+  `};
+`
+
+const ButtonStyle = styled.div`
+    color: ${({theme}) => theme.text8}
+`
 
 const HeaderFrame = styled.div`
   display: grid;
@@ -86,6 +111,9 @@ const HeaderControls = styled.div`
     border-radius: 12px 12px 0 0;
     background-color: ${({ theme }) => theme.bg1};
   `};
+  ${({ theme }) => theme.mediaWidth.upToExtraSmall`
+    padding: 5px;
+  `};
 `
 
 const HeaderElement = styled.div`
@@ -114,7 +142,7 @@ const HeaderElement = styled.div`
 //     margin-left: 8px;
 //   }
 
-//   ${({ theme }) => theme.mediaWidth.upToExtraLarge`
+//   ${({ theme }) => theme.mediaWidth.upToLarge`
 //     display: flex;
 //     width: 100%;
 //     margin-bottom: 110px;
@@ -506,6 +534,13 @@ export default function Header() {
           </AccountElement>
         </HeaderElement>
         <HeaderElementWrap>
+          <StyledAnalytics>
+            {chainId && HEADER_ACCESS.charts.includes(chainId) && <ExternalLink href={`https://${CHART_URL_PREFIX[(chainId ? chainId : 137)]}.dfyn.network/home/`} style={{textDecoration: 'none'}}>
+            <ButtonStyle>
+                <TrendingUp size={"25px"} />
+            </ButtonStyle>
+            </ExternalLink>}
+          </StyledAnalytics>
           <StyledMenuButton onClick={() => toggleDarkMode()}>
             {darkMode ? <Moon size={20} /> : <Sun size={20} />}
           </StyledMenuButton>
