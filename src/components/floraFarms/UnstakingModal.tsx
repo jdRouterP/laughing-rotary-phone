@@ -90,7 +90,7 @@ export default function UnstakingModal({ isOpen, onDismiss, stakingInfo }: Staki
               {stakingInfo.userVestingInfo.hasSetConfig ? stakingInfo.userVestingInfo.hasOptForVesting ? <TYPE.body fontWeight={600} fontSize={36}>
                 {'25%'}
               </TYPE.body> : <TYPE.body fontWeight={600} fontSize={36}>
-                {parseFloat(stakingInfo?.earnedAmount.toFixed(3)) / 2}
+                {parseFloat(stakingInfo?.earnedAmount.toFixed(3)) * (1 - (parseInt(stakingInfo.burnRate) / 100))}
               </TYPE.body> : <TYPE.body fontWeight={600} fontSize={36}>
                 {'25%'}
               </TYPE.body>}

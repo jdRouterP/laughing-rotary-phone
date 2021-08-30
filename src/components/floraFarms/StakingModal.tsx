@@ -220,7 +220,7 @@ export default function StakingModal({ isOpen, onDismiss, stakingInfo, userLiqui
 
             <TYPE.black>
               {hypotheticalRewardRate.multiply((60 * 60 * 24).toString()).toSignificant(4, { groupSeparator: ',' })}{' '}
-              DFYN / day
+              {stakingInfo?.rewardToken?.symbol ?? 'DFYN'} / day
             </TYPE.black>
           </HypotheticalRewardRate>
 
