@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
 import { AutoColumn } from '../../components/Column'
 import styled from 'styled-components'
-import { STAKING_REWARDS_INFO, useStakingInfo } from '../../state/partnerFarms/hooks'
+import { STAKING_REWARDS_INFO, useStakingInfo } from '../../state/launchFarms/hooks'
 // import { TYPE, ExternalLink } from '../../theme'
 import { ExternalLink, StyledInternalLink, TYPE } from '../../theme'
-import PoolCard from '../../components/partnerFarms/PoolCard'
+import PoolCard from '../../components/launchFarms/PoolCard'
 import { RowBetween } from '../../components/Row'
-import { CardSection, DataCard, CardNoise, CardBGImage } from '../../components/partnerFarms/styled'
+import { CardSection, DataCard, CardNoise, CardBGImage } from '../../components/launchFarms/styled'
 // import { Countdown } from './Countdown'
 import Loader from '../../components/Loader'
 import { useActiveWeb3React } from '../../hooks'
@@ -53,7 +53,7 @@ flex-direction: column;
 `};
 `
 
-export default function PartnerFarms() {
+export default function LaunchFarms() {
   const { chainId } = useActiveWeb3React()
 
   // staking info for connected account
@@ -85,21 +85,21 @@ export default function PartnerFarms() {
             <AutoColumn gap="md">
               <TopSectionHeader>
                 <RowBetween>
-                  <TYPE.white fontWeight={600}>Partner pools</TYPE.white>
+                  <TYPE.white fontWeight={600}>Launch pools</TYPE.white>
                 </RowBetween>
-                <StyledInternalLink to={`/partner-farms/archived`} style={{ width: '100%', color: '#ff007a' }}>
+                <StyledInternalLink to={`/launch-farms/archived`} style={{ width: '100%', color: '#ff007a' }}>
                   <ButtonPink padding="8px" borderRadius="8px">
                     Archived Pools
                   </ButtonPink>
                 </StyledInternalLink>
               </TopSectionHeader>
 
-              <RowBetween>
-                <TYPE.white fontSize={14}> Deposit your Liquidity Provider tokens to receive DFYN with insane APR.</TYPE.white>
-              </RowBetween>
+              {/* <RowBetween>
+                <TYPE.white fontSize={14}> Deposit your Liquidity Provider tokens to receive partner tokens.</TYPE.white>
+              </RowBetween> */}
               <RowBetween>
                 <TYPE.white fontSize={14}>
-                  A total of 5.6M DFYN tokens will be distributed as rewards for this program. 20% of the DFYN token rewards can be claimed after two weeks from the starting date of the program. Remaining rewards will be released 20% every other month.
+                  Launch Farms allow users to stake liquidity in the farms created by Partner Projects of Dfyn and earn rewards in the Partner tokens. The rewards for Launch Farms are sponsored by the projects and those projects which are interested in having their own Launch Farm on Dfyn
                 </TYPE.white>
 
 
@@ -120,7 +120,7 @@ export default function PartnerFarms() {
 
       <AutoColumn gap="lg" style={{ width: '100%', maxWidth: '720px' }}>
         <DataRow style={{ alignItems: 'baseline' }}>
-          <TYPE.mediumHeader fontSize={16} style={{ marginTop: '0.5rem' }}>Partner pools</TYPE.mediumHeader>
+          <TYPE.mediumHeader fontSize={16} style={{ marginTop: '0.5rem' }}>Launch pools</TYPE.mediumHeader>
         </DataRow>
 
         <SearchInput

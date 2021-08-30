@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import { RowBetween } from '../Row'
 import { TYPE, CloseIcon } from '../../theme'
 import { ButtonError } from '../Button'
-import { StakingInfo } from '../../state/partnerFarms/hooks'
+import { StakingInfo } from '../../state/launchFarms/hooks'
 import { useStakingContract } from '../../hooks/useContract'
 import { SubmittedView, LoadingView } from '../ModalViews'
 import { TransactionResponse } from '@ethersproject/providers'
@@ -91,7 +91,7 @@ export default function UnstakingModal({ isOpen, onDismiss, stakingInfo }: Staki
             </AutoColumn>
           )} */}
           <TYPE.subHeader style={{ textAlign: 'center' }}>
-            When you withdraw, your 20% of {stakingInfo?.rewardToken?.symbol ?? 'DFYN'} is claimed and your liquidity is removed from the farming pool. You can stake into new farms!
+            {`When you withdraw, your vested  ${stakingInfo ? stakingInfo?.rewardToken.symbol : "DFYN"} are claimed (if claimable) and your liquidity is removed from the farming pool.`}
           </TYPE.subHeader>
           <ButtonError disabled={!!error} error={!!error && !!stakingInfo?.stakedAmount} onClick={onWithdraw}>
             {error ?? 'Withdraw & Claim'}

@@ -6,7 +6,7 @@ import { TYPE, StyledInternalLink } from '../../theme'
 import DoubleCurrencyLogo from '../DoubleLogo'
 import { JSBI, TokenAmount } from '@dfyn/sdk'
 import { ButtonPrimary } from '../Button'
-import { StakingInfo } from '../../state/partnerFarms/hooks'
+import { StakingInfo } from '../../state/launchFarms/hooks'
 import { useColor } from '../../hooks/useColor'
 import { currencyId } from '../../utils/currencyId'
 import { Break, CardNoise, CardBGImage } from './styled'
@@ -16,7 +16,7 @@ import { usePair } from '../../data/Reserves'
 import useUSDCPrice from '../../utils/useUSDCPrice'
 import { BIG_INT_SECONDS_IN_DAY, EMPTY } from '../../constants'
 import { useActiveWeb3React } from 'hooks'
-import { Countdown } from 'pages/PartnerFarms/Countdown'
+import { Countdown } from 'pages/LaunchFarms/Countdown'
 
 const StatContainer = styled.div`
   display: flex;
@@ -128,7 +128,7 @@ export default function PoolCard({ stakingInfo, isInactive }: { stakingInfo: Sta
           {currency0.symbol}-{currency1.symbol}
         </TYPE.white>
 
-        <StyledInternalLink to={`/partner-farms/${isInactive ? 'archived/' : ''}${currencyId(currency0, chainId)}/${currencyId(currency1, chainId)}/${stakingInfo.version}`} style={{ width: '100%' }}>
+        <StyledInternalLink to={`/launch-farms/${isInactive ? 'archived/' : ''}${currencyId(currency0, chainId)}/${currencyId(currency1, chainId)}/${stakingInfo.version}`} style={{ width: '100%' }}>
           <ButtonPrimary padding="8px" borderRadius="8px">
             {isStaking || !(stakingInfo?.active) ? 'Manage' : 'Deposit'}
           </ButtonPrimary>

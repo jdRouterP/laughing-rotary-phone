@@ -152,8 +152,8 @@ export default function FarmsMenu() {
           <StyledNavLink id={`d-farms-nav-link`} to={'/dual-farms'}>
             Dual Farms
           </StyledNavLink>
-          <StyledNavLink id={`stake-nav-link`} to={'/partner-farms'}>
-            Partner Farms
+          <StyledNavLink id={`stake-nav-link`} to={'/launch-farms'}>
+            Launch Farms
           </StyledNavLink>
           <StyledNavLink id={`stake-nav-link`} to={'/vault'}>
             Single-Asset Vault

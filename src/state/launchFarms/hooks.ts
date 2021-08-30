@@ -2,7 +2,7 @@
 import { ChainId, CurrencyAmount, JSBI, Token, TokenAmount, Pair } from '@dfyn/sdk'
 import { useMemo } from 'react'
 import { BigNumber } from 'ethers'
-import { ROUTE, UNI, ETHER, USDC, AAVE, DFYN } from '../../constants'
+import { UNI, USDC, DFYN, CIRUS } from '../../constants'
 import { STAKING_REWARDS_INTERFACE } from '../../constants/abis/staking-rewards' //same as pre-staking
 import { useActiveWeb3React } from '../../hooks'
 import { NEVER_RELOAD, useMultipleContractSingleData } from '../multicall/hooks'
@@ -10,9 +10,9 @@ import { tryParseAmount } from '../swap/hooks'
 import useCurrentBlockTimestamp from 'hooks/useCurrentBlockTimestamp'
 import { usePair } from 'data/Reserves'
 
-export const STAKING_GENESIS = 1620736200
+export const STAKING_GENESIS = 1630326588
 
-export const REWARDS_DURATION_DAYS = 14
+export const REWARDS_DURATION_DAYS = 30
 
 export const STAKING_REWARDS_INFO: {
   [chainId in ChainId]?: {
@@ -26,19 +26,12 @@ export const STAKING_REWARDS_INFO: {
 } = {
   [ChainId.MATIC]: [
     {
-      tokens: [ROUTE, ETHER],
-      baseToken: ETHER,
+      tokens: [CIRUS, USDC],
+      baseToken: USDC,
       version: 'v1',
-      rewardToken: ETHER,
-      startTime: 1627993800,
-      stakingRewardAddress: '0x4d36f9dbE30cFc2536B1f29527D61AbA37fCB8A0'
-    },
-    {
-      tokens: [AAVE, ETHER],
-      baseToken: ETHER,
-      version: 'v1',
-      startTime: 1627993800,
-      stakingRewardAddress: '0xEfe569aa3d6598004f2ef1921f46E774398F7d0d'
+      rewardToken: CIRUS,
+      startTime: 1630330200,
+      stakingRewardAddress: '0x3F7820B3A39459c1E05E96A8b1D3Fef38491b562'
     },
   ]
 }
@@ -315,7 +308,7 @@ export function useStakingInfo(pairToFilterBy?: Pair | null): StakingInfo[] {
         let ableToClaim = !vestingActive || (Math.floor(Date.now() / 1000) >= periodFinishSeconds &&
           (userClaimedSplit !== Math.floor(currentSplit) ? true : !hasClaimedPartial))
         memo.push({
-          type: { typeOf: 'Pre-Stake Farms', url: 'dfyn' },
+          type: { typeOf: 'Launch Farms', url: 'launch-farms' },
           stakingRewardAddress: rewardsAddress,
           baseToken: info[index].baseToken,
           tokens: info[index].tokens,

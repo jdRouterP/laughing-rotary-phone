@@ -11,12 +11,12 @@ import { useWalletModalToggle } from '../../state/application/hooks'
 import { ExternalLink, TYPE } from '../../theme'
 import { currencyId } from '../../utils/currencyId'
 import { RowBetween } from '../../components/Row'
-import { CardSection, DataCard, CardNoise, CardBGImage } from '../../components/partnerFarms/styled'
+import { CardSection, DataCard, CardNoise, CardBGImage } from '../../components/launchFarms/styled'
 import { ButtonPrimary } from '../../components/Button'
-import StakingModal from '../../components/partnerFarms/StakingModal'
-import { useStakingInfo } from '../../state/partnerFarms/hooks'
-import UnstakingModal from '../../components/partnerFarms/UnstakingModal'
-import ClaimRewardModal from '../../components/partnerFarms/ClaimRewardModal'
+import StakingModal from '../../components/launchFarms/StakingModal'
+import { useStakingInfo } from '../../state/launchFarms/hooks'
+import UnstakingModal from '../../components/launchFarms/UnstakingModal'
+import ClaimRewardModal from '../../components/launchFarms/ClaimRewardModal'
 import { useTokenBalance } from '../../state/wallet/hooks'
 import { useActiveWeb3React } from '../../hooks'
 import { useColor } from '../../hooks/useColor'
@@ -282,7 +282,7 @@ export default function Manage({
         </>
       )}
 
-      <PositionInfo gap="lg" justify="center" dim={!stakingInfo?.ableToClaim}>
+      <PositionInfo gap="lg" justify="center" dim={showAddLiquidityButton}>
         <BottomSection gap="lg" justify="center">
           <StyledDataCard disabled={disableTop} bgColor={backgroundColor} showBackground={!showAddLiquidityButton}>
             <CardSection>
@@ -367,7 +367,7 @@ export default function Manage({
           <span role="img" aria-label="wizard-icon" style={{ marginRight: '8px' }}>
             ⭐️
           </span>
-          {`You can claim 20% of your DFYN token rewards after the farming program ends, and the remaining will be released 20% every other month!`}
+          {`You can claim 20% of your ${stakingInfo ? stakingInfo?.rewardToken.symbol : ""} token rewards after the farming program ends, and the remaining will be released 20% every other month!`}
         </TYPE.main>
 
         {!showAddLiquidityButton && (

@@ -5,10 +5,10 @@ import { TYPE, ExternalLink, StyledInternalLink } from '../../theme'
 import { RowBetween } from '../../components/Row'
 import { CardSection, DataCard, CardNoise, CardBGImage } from '../../components/dualFarms/styled'
 import { SearchInput } from 'components/SearchModal/styleds'
-import PoolCard from 'components/partnerFarms/PoolCard'
+import PoolCard from 'components/launchFarms/PoolCard'
 import Loader from 'components/Loader'
 import { OutlineCard } from 'components/Card'
-import { INACTIVE_STAKING_REWARDS_INFO, useInactiveStakingInfo } from 'state/partnerFarms/hooks'
+import { INACTIVE_STAKING_REWARDS_INFO, useInactiveStakingInfo } from 'state/launchFarms/hooks'
 import { JSBI } from '@dfyn/sdk'
 import { BIG_INT_ZERO } from '../../constants'
 import { useActiveWeb3React } from 'hooks'
@@ -81,9 +81,9 @@ export default function PreStakingFarmsArchived() {
             <AutoColumn gap="md">
               <TopSectionHeader>
                 <RowBetween>
-                  <TYPE.white fontWeight={600}>Partner pools</TYPE.white>
+                  <TYPE.white fontWeight={600}>Launch pools</TYPE.white>
                 </RowBetween>
-                <StyledInternalLink to={`/partner-farms`} style={{ width: '100%', color: '#ff007a' }}>
+                <StyledInternalLink to={`/launch-farms`} style={{ width: '100%', color: '#ff007a' }}>
                   <ButtonPink padding="8px" borderRadius="8px">
                     Active Pools
                   </ButtonPink>
@@ -116,7 +116,7 @@ export default function PreStakingFarmsArchived() {
 
       <AutoColumn gap="lg" style={{ width: '100%', maxWidth: '720px' }}>
         <DataRow style={{ alignItems: 'baseline' }}>
-          <TYPE.mediumHeader fontSize={16} style={{ marginTop: '0.5rem' }}>Partner pools</TYPE.mediumHeader>
+          <TYPE.mediumHeader fontSize={16} style={{ marginTop: '0.5rem' }}>Launch pools</TYPE.mediumHeader>
         </DataRow>
 
         <SearchInput
