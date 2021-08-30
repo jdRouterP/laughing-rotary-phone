@@ -22,12 +22,15 @@ import Manage from './Earn/Manage'
 import InactiveManage from './Earn/InactiveManage'
 import VanillaFarms from './VanillaFarms'
 import DualFarms from './DualFarms'
+import PartnerFarms from './PartnerFarms'
 import FloraFarms from './FloraFarms'
 import Vault from './Vault'
 import ManageVanillaFarms from './VanillaFarms/Manage'
 import InactiveManageVanillaFarms from './VanillaFarms/InactiveManage'
 import ManageDualFarms from './DualFarms/Manage'
+import ManagePartnerFarms from './PartnerFarms/Manage'
 import InactiveManageDualFarms from './DualFarms/InactiveManage'
+import InactiveManagePartnerFarms from './PartnerFarms/InactiveManage'
 import ManageFloraFarms from './FloraFarms/Manage'
 import InactiveManageFloraFarms from './FloraFarms/InactiveManage'
 import ManageVault from './Vault/Manage'
@@ -50,7 +53,8 @@ import PredictionDesktop from './Predictions/PredictionDesktop'
 import EcoSystemArchived from './VanillaFarms/EcoSystemArchived'
 import DualFarmsArrchived from './DualFarms/DualFarmsArchived'
 import PopularFarmsArchived from './FloraFarms/PopularFarmsArchived'
-import PreStakinfFarmsArchived from './Earn/PreStakingFarmsArchived'
+import PreStakingFarmsArchived from './Earn/PreStakingFarmsArchived'
+import PartnerFarmsArchived from "./PartnerFarms/PartnerFarmsArchived"
 import Analytics from 'components/Header/Analytics'
 import ThemeChange from 'components/Header/ThemeChange'
 
@@ -124,6 +128,7 @@ export default function App() {
               <Route exact strict path="/dfyn" component={Earn} />
               <Route exact strict path="/eco-farms" component={VanillaFarms} />
               <Route exact strict path="/dual-farms" component={DualFarms} />
+              <Route exact strict path="/partner-farms" component={PartnerFarms} />
               <Route exact strict path="/popular-farms" component={FloraFarms} />
               <Route exact strict path="/vault" component={Vault} />
               <Route exact strict path="/prediction" component={Predictions} />
@@ -144,13 +149,16 @@ export default function App() {
               <Route exact strict path="/migrate/v1/:address" component={MigrateV1Exchange} />
               <Route exact strict path="/dfyn/:currencyIdA/:currencyIdB" component={Manage} />
               <Route exact strict path="/dfyn/:archived/:currencyIdA/:currencyIdB" component={InactiveManage} />
-              <Route exact strict path="/dfyn/:archived" component={PreStakinfFarmsArchived} />
+              <Route exact strict path="/dfyn/:archived" component={PreStakingFarmsArchived} />
               <Route exact strict path="/eco-farms/:currencyIdA/:currencyIdB/:version?" component={ManageVanillaFarms} />
               <Route exact strict path="/eco-farms/:archived/:currencyIdA/:currencyIdB/:version?" component={InactiveManageVanillaFarms} />
               <Route exact strict path="/eco-farms/:archived" component={EcoSystemArchived} />
               <Route exact strict path="/dual-farms/:currencyIdA/:currencyIdB/:version?" component={ManageDualFarms} />
               <Route exact strict path="/dual-farms/:archived/:currencyIdA/:currencyIdB/:version?" component={InactiveManageDualFarms} />
               <Route exact strict path="/dual-farms/:archived" component={DualFarmsArrchived} />
+              <Route exact strict path="/partner-farms/:currencyIdA/:currencyIdB/:version?" component={ManagePartnerFarms} />
+              <Route exact strict path="/partner-farms/:archived/:currencyIdA/:currencyIdB/:version?" component={InactiveManagePartnerFarms} />
+              <Route exact strict path="/partner-farms/:archived" component={PartnerFarmsArchived} />
               <Route exact strict path="/popular-farms/:currencyIdA/:currencyIdB/:version?" component={ManageFloraFarms} />
               <Route exact strict path="/popular-farms/:archived" component={PopularFarmsArchived} />
               <Route exact strict path="/popular-farms/:archived/:currencyIdA/:currencyIdB/:version?" component={InactiveManageFloraFarms} />
