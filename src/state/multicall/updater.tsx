@@ -121,7 +121,7 @@ export function outdatedListeningKeys(
     return !data.blockNumber || data.blockNumber < minDataBlockNumber
   })
 }
-
+let rpcErrorRetry = 0; const MAX_RPC_RETRIES = 2;
 export default function Updater(): null {
   const dispatch = useDispatch<AppDispatch>()
   const state = useSelector<AppState, AppState['multicall']>(state => state.multicall)
@@ -176,6 +176,7 @@ export default function Updater(): null {
         })
         promise
           .then(({ results: returnData, blockNumber: fetchBlockNumber }) => {
+            rpcErrorRetry = 0;
             // accumulates the length of all previous indices
             const firstCallKeyIndex = chunkedCalls.slice(0, index).reduce<number>((memo, curr) => memo + curr.length, 0)
             const lastCallKeyIndex = firstCallKeyIndex + returnData.length
@@ -228,6 +229,11 @@ export default function Updater(): null {
             if (error.isCancelledError) {
               console.debug('Cancelled fetch for blockNumber', latestBlockNumber, chunk, chainId)
               return
+            }
+            if(error.code === -32603 && rpcErrorRetry <= MAX_RPC_RETRIES) {
+              console.error(`Error fetching multicall`);
+              rpcErrorRetry++;
+              return;
             }
             console.error('Failed to fetch multicall chunk', chunk, chainId, error)
             dispatch(
