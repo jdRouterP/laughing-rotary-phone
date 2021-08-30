@@ -22,6 +22,10 @@ const StyledPolling = styled.div`
   ${({ theme }) => theme.mediaWidth.upToMediumLarge`
     bottom: 72px;
     right: 0;
+  `};
+
+  ${({ theme }) => theme.mediaWidth.upToMedium`
+    display: none;
   `}
 `
 const StyledPollingDot = styled.div`

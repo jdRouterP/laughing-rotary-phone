@@ -18,7 +18,10 @@ const AnalyticsStyled = styled.div`
     }
     ${({ theme }) => theme.mediaWidth.upToMediumLarge`
     bottom: 66px;
-  `}
+  `};
+    ${({ theme }) => theme.mediaWidth.upToMedium`
+    display: none;
+    `}
 `
 const ButtonStyle = styled.div`
     display: flex;
