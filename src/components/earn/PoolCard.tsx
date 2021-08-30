@@ -69,10 +69,10 @@ const BottomSection = styled.div<{ showBackground: boolean }>`
   z-index: 1;
 `
 
-export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) {
+export default function PoolCard({ stakingInfo, isInactive }: { stakingInfo: StakingInfo, isInactive: boolean }) {
   const token0 = stakingInfo.tokens[0]
   const token1 = stakingInfo.tokens[1]
-  const {chainId} = useActiveWeb3React()
+  const { chainId } = useActiveWeb3React()
   const currency0 = unwrappedToken(token0)
   const currency1 = unwrappedToken(token1)
   const baseTokenCurrency = unwrappedToken(stakingInfo.baseToken);
@@ -126,7 +126,7 @@ export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) 
           {currency0.symbol}-{currency1.symbol}
         </TYPE.white>
 
-        <StyledInternalLink to={`/dfyn/${currencyId(currency0, chainId)}/${currencyId(currency1, chainId)}`} style={{ width: '100%' }}>
+        <StyledInternalLink to={`/dfyn/${isInactive ? 'archived/' : ''}${currencyId(currency0, chainId)}/${currencyId(currency1, chainId)}`} style={{ width: '100%' }}>
           <ButtonPrimary padding="8px" borderRadius="8px">
             {'Manage'}
           </ButtonPrimary>

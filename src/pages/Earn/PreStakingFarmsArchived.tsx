@@ -50,7 +50,7 @@ flex-direction: column;
 `};
 `
 
-export default function PreStakinfFarmsArchived() {
+export default function PreStakingFarmsArchived() {
   const { chainId } = useActiveWeb3React()
 
   // staking info for connected account
@@ -149,7 +149,7 @@ export default function PreStakinfFarmsArchived() {
               else return ""
             })?.map(stakingInfo => {
               // need to sort by added liquidity here
-              return <PoolCard key={stakingInfo.stakingRewardAddress} stakingInfo={stakingInfo} />
+              return <PoolCard key={stakingInfo.stakingRewardAddress} stakingInfo={stakingInfo} isInactive={true} />
             })
           )}
         </PoolSection>

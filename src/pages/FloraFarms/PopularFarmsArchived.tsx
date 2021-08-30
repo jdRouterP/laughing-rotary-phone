@@ -84,7 +84,7 @@ export default function PopularFarmsArchived() {
                 <RowBetween>
                   <TYPE.white fontWeight={600}>Popular Farms</TYPE.white>
                 </RowBetween>
-                <StyledInternalLink to={`/popular-farms`} style={{ width: '100%', color: '#ff007a'}}>
+                <StyledInternalLink to={`/popular-farms`} style={{ width: '100%', color: '#ff007a' }}>
                   <ButtonPink padding="8px" borderRadius="8px">
                     Active Farms
                   </ButtonPink>
@@ -150,7 +150,7 @@ export default function PopularFarmsArchived() {
               else return ""
             })?.map(stakingInfo => {
               // need to sort by added liquidity here
-              return <PoolCard key={stakingInfo.stakingRewardAddress} stakingInfo={stakingInfo} />
+              return <PoolCard key={stakingInfo.stakingRewardAddress} stakingInfo={stakingInfo} isInactive={true} />
             })
           )}
         </PoolSection>
