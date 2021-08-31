@@ -1,6 +1,6 @@
 import { ChainId, CurrencyAmount, JSBI, Token, TokenAmount, Pair } from '@dfyn/sdk'
 import { useMemo } from 'react'
-import { UNI, ROUTE, REWARD_TOKENS, EMPTY, DFYN, USDC, ZEE, AURORA, BOOTY, ROYA, SX, EZ, UFARM, NWC, mRTK, XUSD, XDO, FRM, CHART, RVF } from '../../constants'
+import { UNI, ROUTE, REWARD_TOKENS, EMPTY, DFYN, USDC, ZEE, AURORA, BOOTY, ROYA, SX, EZ, UFARM, NWC, mRTK, XUSD, XDO, FRM, CHART, RVF, NORD } from '../../constants'
 import { STAKING_REWARDS_DUAL_FARMS_INTERFACE } from '../../constants/abis/staking-rewards-dual-farms'
 import { useActiveWeb3React } from '../../hooks'
 import { NEVER_RELOAD, useMultipleContractSingleData } from '../multicall/hooks'
@@ -26,6 +26,22 @@ export const STAKING_REWARDS_INFO: {
 } = {
   [ChainId.MATIC]: [
     //v3
+    {
+      tokens: [NORD, DFYN],
+      rewardTokens: [NORD, DFYN],
+      baseToken: DFYN,
+      start: 1630330200000,
+      stakingRewardAddress: '0xD5C27Cc3b43e7a5A16fAb6852e3dc9cD9F00606B',
+      version: 'v3'
+    },
+    // {
+    //   tokens: [SING, DFYN],
+    //   rewardTokens: [SING, DFYN],
+    //   baseToken: DFYN,
+    //   start: 1630330200000,
+    //   stakingRewardAddress: '0x0351F770017974A137554fF889Ff6daE6b4762e3',
+    //   version: 'v3'
+    // },
     {
       tokens: [ROUTE, DFYN],
       rewardTokens: [ROUTE, DFYN],
@@ -535,7 +551,7 @@ export function useInactiveStakingInfo(pairToFilterBy?: Pair | null, version: st
         const active =
           periodFinishSeconds && currentBlockTimestamp ? periodFinishSeconds > currentBlockTimestamp.toNumber() : true
         memo.push({
-          type: { typeOf: 'Dual Farms', url: 'dual-farms' },
+          type: { typeOf: 'Archived Dual Farms', url: 'dual-farms/archived' },
           rewardAddresses,
           stakingRewardAddress: rewardsAddress,
           baseToken: info[index].baseToken,
@@ -588,7 +604,9 @@ const getTokenByAddress = (address: string) => {
 export function useTotalDualFarmUniEarned(): TokenAmount | undefined {
   const { chainId } = useActiveWeb3React()
   const uni = chainId ? UNI[chainId] : undefined
-  const stakingInfos = useStakingInfo()
+  const activeStakingInfos = useStakingInfo()
+  const inactiveStakingInfos = useInactiveStakingInfo();
+  const stakingInfos = activeStakingInfos.concat(inactiveStakingInfos);
 
   return useMemo(() => {
     if (!uni) return undefined

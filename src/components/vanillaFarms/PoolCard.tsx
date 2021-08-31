@@ -70,7 +70,7 @@ const BottomSection = styled.div<{ showBackground: boolean }>`
   z-index: 1;
 `
 
-export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) {
+export default function PoolCard({ stakingInfo, isInactive }: { stakingInfo: StakingInfo, isInactive: boolean }) {
   const token0 = stakingInfo.tokens[0]
   const token1 = stakingInfo.tokens[1]
 
@@ -128,7 +128,7 @@ export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) 
           {currency0.symbol}-{currency1.symbol}
         </TYPE.white>
 
-        <StyledInternalLink to={`/eco-farms/${currencyId(currency0, chainId)}/${currencyId(currency1, chainId)}/${stakingInfo.version}`} style={{ width: '100%' }}>
+        <StyledInternalLink to={`/eco-farms/${isInactive ? 'archived/' : ''}${currencyId(currency0, chainId)}/${currencyId(currency1, chainId)}/${stakingInfo.version}`} style={{ width: '100%' }}>
           <ButtonPrimary padding="8px" borderRadius="8px">
             {isStaking ? 'Manage' : 'Deposit'}
           </ButtonPrimary>

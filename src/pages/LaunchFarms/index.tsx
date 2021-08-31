@@ -1,17 +1,19 @@
 import React, { useState } from 'react'
 import { AutoColumn } from '../../components/Column'
 import styled from 'styled-components'
-import { TYPE, ExternalLink, StyledInternalLink } from '../../theme'
+import { STAKING_REWARDS_INFO, useStakingInfo } from '../../state/launchFarms/hooks'
+// import { TYPE, ExternalLink } from '../../theme'
+import { ExternalLink, StyledInternalLink, TYPE } from '../../theme'
+import PoolCard from '../../components/launchFarms/PoolCard'
 import { RowBetween } from '../../components/Row'
-import { CardSection, DataCard, CardNoise, CardBGImage } from '../../components/dualFarms/styled'
-import { SearchInput } from 'components/SearchModal/styleds'
-import { INACTIVE_STAKING_REWARDS_INFO, useInactiveStakingInfo } from 'state/dual-stake/hooks'
-import { useActiveWeb3React } from 'hooks'
-import Loader from 'components/Loader'
-import { OutlineCard } from 'components/Card'
-import PoolCard from 'components/dualFarms/PoolCard'
+import { CardSection, DataCard, CardNoise, CardBGImage } from '../../components/launchFarms/styled'
+// import { Countdown } from './Countdown'
+import Loader from '../../components/Loader'
+import { useActiveWeb3React } from '../../hooks'
 import { JSBI } from '@dfyn/sdk'
 import { BIG_INT_ZERO } from '../../constants'
+import { OutlineCard } from '../../components/Card'
+import { SearchInput } from 'components/SearchModal/styleds'
 import { ButtonPink } from 'components/Button'
 
 
@@ -51,11 +53,12 @@ flex-direction: column;
 `};
 `
 
-export default function DualFarmsArrchived() {
+export default function LaunchFarms() {
   const { chainId } = useActiveWeb3React()
 
   // staking info for connected account
-  const stakingInfos = useInactiveStakingInfo();
+  const stakingInfos = useStakingInfo()
+
   /**
    * only show staking cards with balance
    * @todo only account for this if rewards are inactive
@@ -68,9 +71,9 @@ export default function DualFarmsArrchived() {
 
   const stakingFarms = [...new Set([...stakingInfosWithBalance, ...activeFarms, ...stakingInfosWithRewards])]
 
-  const stakingRewardsExist = Boolean(typeof chainId === 'number' && (INACTIVE_STAKING_REWARDS_INFO[chainId]?.length ?? 0) > 0)
+  // toggle copy if rewards are inactive
+  const stakingRewardsExist = Boolean(typeof chainId === 'number' && (STAKING_REWARDS_INFO[chainId]?.length ?? 0) > 0)
   const [searchItem, setSearchItem] = useState('')
-
 
   return (
     <PageWrapper gap="lg" justify="center">
@@ -82,18 +85,24 @@ export default function DualFarmsArrchived() {
             <AutoColumn gap="md">
               <TopSectionHeader>
                 <RowBetween>
-                  <TYPE.white fontWeight={600}>Dual Farms</TYPE.white>
+                  <TYPE.white fontWeight={600}>Launch pools</TYPE.white>
                 </RowBetween>
-                <StyledInternalLink to={`/dual-farms`} style={{ width: '100%', color: '#ff007a' }}>
+                <StyledInternalLink to={`/launch-farms/archived`} style={{ width: '100%', color: '#ff007a' }}>
                   <ButtonPink padding="8px" borderRadius="8px">
-                    Active Pools
+                    Archived Pools
                   </ButtonPink>
                 </StyledInternalLink>
               </TopSectionHeader>
+
+              {/* <RowBetween>
+                <TYPE.white fontSize={14}> Deposit your Liquidity Provider tokens to receive partner tokens.</TYPE.white>
+              </RowBetween> */}
               <RowBetween>
                 <TYPE.white fontSize={14}>
-                  These are the archived Dual Farms. Details of your Liquidity.
+                  Launch Farms allow users to stake liquidity in the farms created by Partner Projects of Dfyn and earn rewards in the Partner tokens. The rewards for Launch Farms are sponsored by the projects and those projects which are interested in having their own Launch Farm on Dfyn
                 </TYPE.white>
+
+
               </RowBetween>{' '}
               <ExternalLink
                 style={{ color: 'white', textDecoration: 'underline' }}
@@ -111,7 +120,7 @@ export default function DualFarmsArrchived() {
 
       <AutoColumn gap="lg" style={{ width: '100%', maxWidth: '720px' }}>
         <DataRow style={{ alignItems: 'baseline' }}>
-          <TYPE.mediumHeader style={{ marginTop: '0.5rem' }}>Participating pools</TYPE.mediumHeader>
+          <TYPE.mediumHeader fontSize={16} style={{ marginTop: '0.5rem' }}>Launch pools</TYPE.mediumHeader>
         </DataRow>
 
         <SearchInput
@@ -125,9 +134,9 @@ export default function DualFarmsArrchived() {
           {stakingRewardsExist && stakingInfos?.length === 0 ? (
             <Loader style={{ margin: 'auto' }} />
           ) : !stakingRewardsExist ? (
-            <OutlineCard>No pools</OutlineCard>
+            <OutlineCard>No active pools</OutlineCard>
           ) : stakingFarms?.length === 0 ? (
-            <OutlineCard>No archived pools</OutlineCard>
+            <OutlineCard>No active pools</OutlineCard>
           ) : (
             stakingFarms?.filter(stakingInfos => {
               if (searchItem === '') return stakingInfos
@@ -150,7 +159,7 @@ export default function DualFarmsArrchived() {
               else return ""
             })?.map(stakingInfo => {
               // need to sort by added liquidity here
-              return <PoolCard key={stakingInfo.stakingRewardAddress} stakingInfo={stakingInfo} isInactive={true} />
+              return <PoolCard key={stakingInfo.stakingRewardAddress} stakingInfo={stakingInfo} isInactive={false} />
             })
           )}
         </PoolSection>

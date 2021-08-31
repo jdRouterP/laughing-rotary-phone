@@ -61,29 +61,27 @@ export const SX = new Token(ChainId.MATIC, '0x840195888Db4D6A99ED9F73FcD3B225Bb3
 export const CRV = new Token(ChainId.MATIC, '0x172370d5cd63279efa6d502dab29171933a610af', 18, 'CRV', 'Curve')
 export const LINK = new Token(ChainId.MATIC, '0x53e0bca35ec356bd5dddfebbd1fc0fd03fabad39', 18, 'LINK', 'Chain Link')
 export const MATICPAD = new Token(ChainId.MATIC, '0x3BfcE6D6F0d3D3f1326d86abdbe2845b4740Dc2E', 18, 'MATPAD', 'MATICPAD')
-
 export const COSMIC = new Token(ChainId.MATIC, '0xa5Eb60CA85898f8b26e18fF7c7E43623ccbA772C', 18, 'COSMIC', 'Cosmicswap')
 export const BIFI = new Token(ChainId.MATIC, '0xfbdd194376de19a88118e84e279b977f165d01b8', 18, 'BIFI', 'beefy.finance')
 export const FRM = new Token(ChainId.MATIC, '0xd99baFe5031cC8B345cb2e8c80135991F12D7130', 18, 'FRM', 'Ferrum network token')
-
 export const EZ = new Token(ChainId.MATIC, '0x34C1b299A74588D6Abdc1b85A53345A48428a521', 18, 'EZ', 'EASY V2')
 export const UFARM = new Token(ChainId.MATIC, '0xa7305ae84519ff8be02484cda45834c4e7d13dd6', 18, 'UFARM', 'Unifarm Token')
 export const NWC = new Token(ChainId.MATIC, '0x968F6f898a6Df937fC1859b323aC2F14643e3fED', 18, 'NWC', 'Newscrypto')
 export const mRTK = new Token(ChainId.MATIC, '0x38332D8671961aE13d0BDe040d536eB336495eEA', 18, 'mRTK', 'mRTK')
-
 export const XUSD = new Token(ChainId.MATIC, '0x3A3e7650f8B9f667dA98F236010fBf44Ee4B2975', 18, 'xUSD', 'xDollar Stablecoin')
 export const XDO = new Token(ChainId.MATIC, '0x3Dc7B06dD0B1f08ef9AcBbD2564f8605b4868EEA', 18, 'XDO', 'xDollar')
 export const MIMATIC = new Token(ChainId.MATIC, '0xa3fa99a148fa48d14ed51d610c367c61876997f1', 18, 'MIMATIC', 'miMatic')
-
 export const ICE = new Token(ChainId.MATIC, '0x4a81f8796e0c6ad4877a51c86693b0de8093f2ef', 18, 'ICE', 'Iron Finance ICE Token')
 export const TITAN = new Token(ChainId.MATIC, '0xaaa5b9e6c589642f98a1cda99b9d024b8407285a', 18, 'TITAN', 'Titan DAO Finance')
-
 export const NEXO = new Token(ChainId.MATIC, '0x41b3966b4ff7b427969ddf5da3627d6aeae9a48e', 18, 'NEXO', 'Nexo')
 export const CHART = new Token(ChainId.MATIC, '0x083c56d87ead73d6231c165ec450c6e28f3399c9', 18, 'CHART', 'ChartEx')
 export const RVF = new Token(ChainId.MATIC, '0x2ce13e4199443fdfff531abb30c9b6594446bbc7', 18, 'RVF', 'Rocket Vault')
-
 export const GAJ = new Token(ChainId.MATIC, '0xF4B0903774532AEe5ee567C02aaB681a81539e92', 18, 'GAJ', 'GAJ')
 export const ELE = new Token(ChainId.MATIC, '0xAcD7B3D9c10e97d0efA418903C0c7669E702E4C0', 18, 'ELE', 'Eleven.finance')
+
+export const CIRUS = new Token(ChainId.MATIC, '0x2a82437475a60bebd53e33997636fade77604fc2', 18, 'CIRUS', 'CIRUS')
+export const SILVER = new Token(ChainId.MATIC, '0xbc7cB585346f4F59d07121Bb9Ed7358076243539', 18, 'SILVER', 'Sliver')
+export const SING = new Token(ChainId.MATIC, '0xCB898b0eFb084Df14dd8E018dA37B4d0f06aB26D', 18, 'SING', 'Sing Token')
 
 //OKEX
 export const WOKT = new Token(ChainId.OKEX, '0x8f8526dbfd6e38e3d8307702ca8469bae6c56c15', 18, 'OKT', 'Wrapped OKT')
@@ -94,6 +92,7 @@ export const REWARDTEST = new Token(ChainId.OKEX, '0x6c5e0d6e2150e7f9743fe5b9cb3
 
 //TEST DFYN
 // export const DFYNTEST = new Token(ChainId.OKEX,  "0x6c5e0d6e2150e7f9743fe5b9cb357e5e2da33447", 18, 'TEST', 'TEST')
+export const DFYNTEST = new Token(ChainId.MATIC, "0xD33dcD9673e1fA99F064CB4682c6299351AD771C", 18, 'TEST', 'TEST')
 
 // Block time here is slightly higher (~1s) than average in order to avoid ongoing proposals past the displayed time
 export const AVERAGE_BLOCK_TIME_IN_SECS = 13
@@ -123,7 +122,7 @@ export const UNI: { [chainId in ChainId]: Token } = {
   [ChainId.OKEX]: new Token(ChainId.OKEX, UNI_ADDRESS, 18, 'DFYN', 'DFYN Token'),
 }
 
-export const REWARD_TOKENS: Token[] = [ROUTE, DFYN, ZEE, AURORA, ROYA, BOOTY, SX, EZ, UFARM, NWC, mRTK, XDO, FRM, RVF, CHART]
+export const REWARD_TOKENS: Token[] = [ROUTE, DFYN, ZEE, AURORA, ROYA, BOOTY, SX, EZ, UFARM, NWC, mRTK, XDO, FRM, RVF, CHART, NORD]
 
 export const COMMON_CONTRACT_NAMES: { [address: string]: string } = {
   [UNI_ADDRESS]: 'DFYN',

@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import { RowBetween } from '../Row'
 import { TYPE, CloseIcon } from '../../theme'
 import { ButtonError } from '../Button'
-import { StakingInfo } from '../../state/flora-farms/hooks'
+import { StakingInfo } from '../../state/launchFarms/hooks'
 import { useStakingContract } from '../../hooks/useContract'
 import { SubmittedView, LoadingView } from '../ModalViews'
 import { TransactionResponse } from '@ethersproject/providers'
@@ -31,7 +31,7 @@ export default function UnstakingModal({ isOpen, onDismiss, stakingInfo }: Staki
   const addTransaction = useTransactionAdder()
   const [hash, setHash] = useState<string | undefined>()
   const [attempting, setAttempting] = useState(false)
-  const claimable = stakingInfo.active;
+
   function wrappedOndismiss() {
     setHash(undefined)
     setAttempting(false)
@@ -82,34 +82,27 @@ export default function UnstakingModal({ isOpen, onDismiss, stakingInfo }: Staki
               <TYPE.body>Deposited liquidity:</TYPE.body>
             </AutoColumn>
           )}
-          {stakingInfo?.earnedAmount && !claimable && (
+          {/* {stakingInfo?.earnedAmount && (
             <AutoColumn justify="center" gap="md">
-              {/* <TYPE.body fontWeight={600} fontSize={36}>
+              <TYPE.body fontWeight={600} fontSize={36}>
                 {<FormattedCurrencyAmount currencyAmount={stakingInfo?.earnedAmount} />}
-              </TYPE.body> */}
-              {stakingInfo.userVestingInfo.hasSetConfig ? stakingInfo.userVestingInfo.hasOptForVesting ? <TYPE.body fontWeight={600} fontSize={36}>
-                {'25%'}
-              </TYPE.body> : <TYPE.body fontWeight={600} fontSize={36}>
-                {parseFloat(stakingInfo?.earnedAmount.toFixed(3)) * (1 - (parseInt(stakingInfo.burnRate) / 100))}
-              </TYPE.body> : <TYPE.body fontWeight={600} fontSize={36}>
-                {'25%'}
-              </TYPE.body>}
-              <TYPE.body>{`Unclaimed ${stakingInfo ? stakingInfo?.rewardToken.symbol : "DFYN"}`}</TYPE.body>
+              </TYPE.body>
+              <TYPE.body>Unclaimed DFYN</TYPE.body>
             </AutoColumn>
-          )}
+          )} */}
           <TYPE.subHeader style={{ textAlign: 'center' }}>
             {`When you withdraw, your vested  ${stakingInfo ? stakingInfo?.rewardToken.symbol : "DFYN"} are claimed (if claimable) and your liquidity is removed from the farming pool.`}
           </TYPE.subHeader>
           <ButtonError disabled={!!error} error={!!error && !!stakingInfo?.stakedAmount} onClick={onWithdraw}>
-            {error ?? 'Withdraw'}
+            {error ?? 'Withdraw & Claim'}
           </ButtonError>
         </ContentWrapper>
       )}
       {attempting && !hash && (
         <LoadingView onDismiss={wrappedOndismiss}>
           <AutoColumn gap="12px" justify={'center'}>
-            <TYPE.body fontSize={20}>Withdrawing {stakingInfo?.stakedAmount?.toSignificant(4)} DFYN-LP</TYPE.body>
-            {!claimable && <TYPE.body fontSize={20}>{`Claiming ${stakingInfo ? stakingInfo?.rewardToken.symbol : "DFYN"}`}</TYPE.body>}
+            <TYPE.body fontSize={20}>Withdrawing {stakingInfo?.stakedAmount?.toSignificant(4)} DFYN-V2</TYPE.body>
+            <TYPE.body fontSize={20}>Claiming {stakingInfo?.earnedAmount?.toSignificant(4)} {stakingInfo?.rewardToken?.symbol ?? 'DFYN'}</TYPE.body>
           </AutoColumn>
         </LoadingView>
       )}
@@ -118,7 +111,7 @@ export default function UnstakingModal({ isOpen, onDismiss, stakingInfo }: Staki
           <AutoColumn gap="12px" justify={'center'}>
             <TYPE.largeHeader>Transaction Submitted</TYPE.largeHeader>
             <TYPE.body fontSize={20}>Withdrew LP Tokens!</TYPE.body>
-            {!claimable && <TYPE.body fontSize={20}>{`Claimed ${stakingInfo ? stakingInfo?.rewardToken.symbol : "DFYN"}!`}</TYPE.body>}
+            <TYPE.body fontSize={20}>Claimed {stakingInfo?.rewardToken?.symbol ?? 'DFYN'}!</TYPE.body>
           </AutoColumn>
         </SubmittedView>
       )}

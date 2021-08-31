@@ -2,648 +2,66 @@
 import { ChainId, CurrencyAmount, JSBI, Token, TokenAmount, Pair } from '@dfyn/sdk'
 import { useMemo } from 'react'
 import { BigNumber } from 'ethers'
-import { ROUTE, UNI, ETHER, USDC, DFYN, WBTC, USDT, DAI, WMATIC, UNI_TOKEN, AAVE, LUNA, UST, LINK, CRV, QUICK, MATICPAD, MIMATIC, NEXO } from '../../constants'
-import { STAKING_REWARDS_FLORA_FARMS_INTERFACE } from '../../constants/abis/staking-rewards-flora-farms'
+import { UNI, USDC, DFYN, CIRUS } from '../../constants'
+import { STAKING_REWARDS_INTERFACE } from '../../constants/abis/staking-rewards' //same as pre-staking
 import { useActiveWeb3React } from '../../hooks'
 import { NEVER_RELOAD, useMultipleContractSingleData } from '../multicall/hooks'
 import { tryParseAmount } from '../swap/hooks'
 import useCurrentBlockTimestamp from 'hooks/useCurrentBlockTimestamp'
 import { usePair } from 'data/Reserves'
 
-export const STAKING_GENESIS = 1621956600
+export const STAKING_GENESIS = 1630326588
 
 export const REWARDS_DURATION_DAYS = 30
 
-// TODO add staking rewards addresses here
 export const STAKING_REWARDS_INFO: {
   [chainId in ChainId]?: {
     tokens: [Token, Token]
     baseToken?: Token
     rewardToken?: Token
     startTime?: number
-    stakingRewardAddress: string
     version: string
-    burnRate: string
+    stakingRewardAddress: string
   }[]
 } = {
   [ChainId.MATIC]: [
-    //v4
     {
-      tokens: [UST, USDT],
-      baseToken: USDT,
-      startTime: 1629723600,
-      stakingRewardAddress: '0xb4Ca3F9982CBAe99629167D1Ef0aC2939FA52e80',
-      version: 'v4',
-      burnRate: '35'
-    },
-    {
-      tokens: [DFYN, USDC],
+      tokens: [CIRUS, USDC],
       baseToken: USDC,
-      startTime: 1629723600,
-      stakingRewardAddress: '0x001A4e27CCDfe8ed6BBaFfEc9AE0985aB5542BEf',
-      version: 'v4',
-      burnRate: '35'
+      version: 'v1',
+      rewardToken: CIRUS,
+      startTime: 1630330200,
+      stakingRewardAddress: '0x3F7820B3A39459c1E05E96A8b1D3Fef38491b562'
     },
-    {
-      tokens: [DFYN, ETHER],
-      baseToken: ETHER,
-      startTime: 1629723600,
-      stakingRewardAddress: '0xEAb0FD1FE0926E43b61612d65002Ba6320AA1080',
-      version: 'v4',
-      burnRate: '35'
-    },
-    {
-      tokens: [WBTC, ETHER],
-      baseToken: ETHER,
-      startTime: 1629723600,
-      stakingRewardAddress: '0x64bf206E80DE13691AD162348Dd478f5B0CBFe00',
-      version: 'v4',
-      burnRate: '35'
-    },
-    {
-      tokens: [USDT, USDC],
-      baseToken: USDC,
-      startTime: 1629723600,
-      stakingRewardAddress: '0x72189093cB70ED931B66972FBE6F1a309701ed8d',
-      version: 'v4',
-      burnRate: '35'
-    },
-    {
-      tokens: [USDT, DAI],
-      baseToken: USDT,
-      startTime: 1629723600,
-      stakingRewardAddress: '0x584575d9AaDD76D6DDE860bb90F2b5B2f38e0308',
-      version: 'v4',
-      burnRate: '35'
-    },
-    {
-      tokens: [DAI, USDC],
-      baseToken: USDC,
-      startTime: 1629723600,
-      stakingRewardAddress: '0x299CEF5Ca7C9EceE77638b7fa9b516FF7badfB4f',
-      version: 'v4',
-      burnRate: '35'
-    },
-    {
-      tokens: [USDC, ETHER],
-      baseToken: USDC,
-      startTime: 1629723600,
-      stakingRewardAddress: '0xf57AdA7DcBa902602655ec7aC672AeC61F17246e',
-      version: 'v4',
-      burnRate: '35'
-    },
-    {
-      tokens: [USDC, ROUTE],
-      baseToken: USDC,
-      startTime: 1629723600,
-      stakingRewardAddress: '0xadD690b421cd697763Bf9807A516E723E999E332',
-      version: 'v4',
-      burnRate: '35'
-    },
-    {
-      tokens: [ETHER, ROUTE],
-      baseToken: ETHER,
-      startTime: 1629723600,
-      stakingRewardAddress: '0xc14603d08A4f130192B7a864AB49A990383898AD',
-      version: 'v4',
-      burnRate: '35'
-    },
-    {
-      tokens: [WMATIC, ETHER],
-      baseToken: WMATIC,
-      startTime: 1629723600,
-      stakingRewardAddress: '0x5bbEe00100b30B1F3937432A5C9D2577F59b1238',
-      version: 'v4',
-      burnRate: '35'
-    },
-    {
-      tokens: [CRV, ETHER],
-      baseToken: ETHER,
-      startTime: 1629723600,
-      stakingRewardAddress: '0xff885dDA95360e00a5E12a74426464Ea1d036285',
-      version: 'v4',
-      burnRate: '35'
-    },
-    {
-      tokens: [UNI_TOKEN, ETHER],
-      baseToken: ETHER,
-      startTime: 1629723600,
-      stakingRewardAddress: '0x71f2FbD3049dA7F36cedaBC5A79e5637cADCDFbb',
-      version: 'v4',
-      burnRate: '35'
-    },
-    {
-      tokens: [QUICK, WMATIC],
-      baseToken: WMATIC,
-      startTime: 1629723600,
-      stakingRewardAddress: '0xC64280F3D6B8aAA8388Ce13E0bF1401A839B79A3',
-      version: 'v4',
-      burnRate: '35'
-    },
-    {
-      tokens: [AAVE, ETHER],
-      baseToken: ETHER,
-      startTime: 1629723600,
-      stakingRewardAddress: '0x99FaDefbc7DB0C17FCe6fEe1B991138abe94e01A',
-      version: 'v4',
-      burnRate: '35'
-    },
-    {
-      tokens: [LINK, ETHER],
-      baseToken: ETHER,
-      startTime: 1629723600,
-      stakingRewardAddress: '0xe7Cb4A502e9d68062013174C96d94D4b09f93855',
-      version: 'v4',
-      burnRate: '35'
-    },
-    {
-      tokens: [NEXO, ETHER],
-      baseToken: ETHER,
-      startTime: 1629723600,
-      stakingRewardAddress: '0xD423437f2e647b3D542C96B35D8e3FC0F9Ce8AB0',
-      version: 'v4',
-      burnRate: '35'
-    },
-
   ]
 }
 
+//INACTIVE POOLS
+// TODO add staking rewards addresses here
 export const INACTIVE_STAKING_REWARDS_INFO: {
   [chainId in ChainId]?: {
     tokens: [Token, Token]
     baseToken?: Token
     rewardToken?: Token
     startTime?: number
-    stakingRewardAddress: string
     version: string
-    burnRate: string
+    stakingRewardAddress: string
   }[]
 } = {
-  [ChainId.MATIC]: [
-
-    //v3
-    {
-      tokens: [NEXO, ETHER],
-      baseToken: ETHER,
-      startTime: 1627993800,
-      stakingRewardAddress: '0xC406879608072142C53f8be94B33086CE56bb485',
-      version: 'v3',
-      burnRate: '35'
-    },
-    {
-      tokens: [UST, USDT],
-      baseToken: USDT,
-      startTime: 1627142400,
-      stakingRewardAddress: '0xbFE8679551Ee2CBA6A0FFDBa48AC29Ab89421A1F',
-      version: 'v3',
-      burnRate: '35'
-    },
-    {
-      tokens: [DFYN, USDC],
-      baseToken: USDC,
-      startTime: 1627142400,
-      stakingRewardAddress: '0x5661681563003189a02a21Ca352a08f4D2B7dc6b',
-      version: 'v3',
-      burnRate: '35'
-    },
-    {
-      tokens: [DFYN, ETHER],
-      baseToken: ETHER,
-      startTime: 1627142400,
-      stakingRewardAddress: '0xAE3b7B761FA5d19330E7b70f982e82a8514097F1',
-      version: 'v3',
-      burnRate: '35'
-    },
-    {
-      tokens: [WBTC, ETHER],
-      baseToken: ETHER,
-      startTime: 1627142400,
-      stakingRewardAddress: '0xAA1c6DE472eE563Bc2D5c9414db0ab80C3D0B53e',
-      version: 'v3',
-      burnRate: '35'
-    },
-    {
-      tokens: [USDT, USDC],
-      baseToken: USDC,
-      startTime: 1627142400,
-      stakingRewardAddress: '0x015a19cb6279F2c50fB197e1D83fA35C239521Bc',
-      version: 'v3',
-      burnRate: '35'
-    },
-    {
-      tokens: [USDT, DAI],
-      baseToken: USDT,
-      startTime: 1627142400,
-      stakingRewardAddress: '0x41b03D6146222C2EF99C4af4Bc54Ad879DDE65B4',
-      version: 'v3',
-      burnRate: '35'
-    },
-    {
-      tokens: [DAI, USDC],
-      baseToken: USDC,
-      startTime: 1627142400,
-      stakingRewardAddress: '0xF01261a698cd6331521CE6e1f9b17A011bf1c22E',
-      version: 'v3',
-      burnRate: '35'
-    },
-    {
-      tokens: [USDC, ETHER],
-      baseToken: USDC,
-      startTime: 1627142400,
-      stakingRewardAddress: '0x83bF2d48626b86c11389BF1B38942Caf31B57149',
-      version: 'v3',
-      burnRate: '35'
-    },
-    {
-      tokens: [USDC, ROUTE],
-      baseToken: USDC,
-      startTime: 1627142400,
-      stakingRewardAddress: '0x0D11c2Be47cE813D72D5Ae5C94BE669DBD76BB35',
-      version: 'v3',
-      burnRate: '35'
-    },
-    {
-      tokens: [ETHER, ROUTE],
-      baseToken: ETHER,
-      startTime: 1627142400,
-      stakingRewardAddress: '0xe38298301670DEBbd10FdB350569D7984458F482',
-      version: 'v3',
-      burnRate: '35'
-    },
-    {
-      tokens: [WMATIC, ETHER],
-      baseToken: WMATIC,
-      startTime: 1627142400,
-      stakingRewardAddress: '0x9C1f078085FEB02849edDE18bd28Aa688D20a7Ce',
-      version: 'v3',
-      burnRate: '35'
-    },
-    {
-      tokens: [CRV, ETHER],
-      baseToken: ETHER,
-      startTime: 1627142400,
-      stakingRewardAddress: '0xC20D2f5b9d2FD9E89f33aa0b400A8070f1008B50',
-      version: 'v3',
-      burnRate: '35'
-    },
-    {
-      tokens: [UNI_TOKEN, ETHER],
-      baseToken: ETHER,
-      startTime: 1627142400,
-      stakingRewardAddress: '0x797fEd94a3865df1c2096a0e9a1cDfd194fe7150',
-      version: 'v3',
-      burnRate: '35'
-    },
-    {
-      tokens: [UNI_TOKEN, USDC],
-      baseToken: USDC,
-      startTime: 1627142400,
-      stakingRewardAddress: '0x8FA2e1ae0180f42c7b39EB91C018879E55918145',
-      version: 'v3',
-      burnRate: '35'
-    },
-    {
-      tokens: [QUICK, WMATIC],
-      baseToken: WMATIC,
-      startTime: 1627142400,
-      stakingRewardAddress: '0xc721F5d5BE5DDa564D9daC501757976F21ae8210',
-      version: 'v3',
-      burnRate: '35'
-    },
-    {
-      tokens: [AAVE, ETHER],
-      baseToken: ETHER,
-      startTime: 1627142400,
-      stakingRewardAddress: '0x3481fd816CE3C1418bcDB1105F6D1b4c6B3a9823',
-      version: 'v3',
-      burnRate: '35'
-    },
-    {
-      tokens: [AAVE, USDC],
-      baseToken: USDC,
-      startTime: 1627142400,
-      stakingRewardAddress: '0xcCf0565d6B15560eE0Bcaad6361CD565905CdcFa',
-      version: 'v3',
-      burnRate: '35'
-    },
-    {
-      tokens: [LINK, USDC],
-      baseToken: USDC,
-      startTime: 1627142400,
-      stakingRewardAddress: '0xDC87882BCb8A3F15DDEbCE9023bc4661FEa4dbA5',
-      version: 'v3',
-      burnRate: '35'
-    },
-
-    //v2
-    {
-      tokens: [UST, USDT],
-      baseToken: USDT,
-      startTime: 1625758200,
-      stakingRewardAddress: '0x35A3a9DF5F0E2dFf08FBA3ece64Ea5faeD7D3b18',
-      version: 'v2',
-      burnRate: '50'
-    },
-    {
-      tokens: [DFYN, WMATIC],
-      baseToken: DFYN,
-      startTime: 1625758200,
-      stakingRewardAddress: '0x8555b37C21F78F0B73d905b9c2923EB3A3efe7bc',
-      version: 'v2',
-      burnRate: '50'
-    },
-    {
-      tokens: [LUNA, DFYN],
-      baseToken: DFYN,
-      startTime: 1625758200,
-      stakingRewardAddress: '0xF2BaEc3ECA845A6762863C6159b223E871f5ceAe',
-      version: 'v2',
-      burnRate: '50'
-    },
-    {
-      tokens: [MATICPAD, ETHER],
-      baseToken: ETHER,
-      startTime: 1624980600,
-      rewardToken: MATICPAD,
-      stakingRewardAddress: '0x9Eabb8DcBFc062E3fD445E4028D617C0b6F3eaf1',
-      version: 'v2',
-      burnRate: '50'
-    },
-    {
-      tokens: [DFYN, MIMATIC],
-      baseToken: DFYN,
-      startTime: 1624980600,
-      stakingRewardAddress: '0x98D7c004C54C47b7e65320Bd679CB897Aae6a6D6',
-      version: 'v2',
-      burnRate: '50'
-    },
-    {
-      tokens: [DFYN, USDC],
-      baseToken: USDC,
-      startTime: 1624550400,
-      stakingRewardAddress: '0xeee84F55F493c6ea89b655FFF09F2a2f9C2D1Dd8',
-      version: 'v2',
-      burnRate: '50'
-    },
-    {
-      tokens: [DFYN, ETHER],
-      baseToken: ETHER,
-      startTime: 1624550400,
-      stakingRewardAddress: '0x17e8732E2f0f6c35a794e9db4e63AeaDa9ce927C',
-      version: 'v2',
-      burnRate: '50'
-    },
-    {
-      tokens: [WBTC, ETHER],
-      baseToken: ETHER,
-      startTime: 1624550400,
-      stakingRewardAddress: '0xA51aF13F630489eE77B4489844041031e4e36824',
-      version: 'v2',
-      burnRate: '50'
-    },
-    {
-      tokens: [USDT, USDC],
-      baseToken: USDC,
-      startTime: 1624550400,
-      stakingRewardAddress: '0xa55D1729eF64755D44640C67feA6D18A44EE9326',
-      version: 'v2',
-      burnRate: '50'
-    },
-    {
-      tokens: [DAI, USDT],
-      baseToken: USDT,
-      startTime: 1624550400,
-      stakingRewardAddress: '0xf01adB0eF728D4544E9a1E3543FC98F0C1CAE7FD',
-      version: 'v2',
-      burnRate: '50'
-    },
-    {
-      tokens: [DAI, USDC],
-      baseToken: USDC,
-      startTime: 1624550400,
-      stakingRewardAddress: '0xbd7BD38EC111A1789158b25240B5DaAE043113aE',
-      version: 'v2',
-      burnRate: '50'
-    },
-    {
-      tokens: [ETHER, USDC],
-      baseToken: USDC,
-      startTime: 1624550400,
-      stakingRewardAddress: '0x12286A4a13FCAFB77f08c48A00e6963A0ca6d917',
-      version: 'v2',
-      burnRate: '50'
-    },
-    {
-      tokens: [ROUTE, USDC],
-      baseToken: USDC,
-      startTime: 1624550400,
-      stakingRewardAddress: '0x39a7733e5F418a5F4c11A2212f085F0a776Ac7D3',
-      version: 'v2',
-      burnRate: '50'
-    },
-    {
-      tokens: [ROUTE, ETHER],
-      baseToken: ETHER,
-      startTime: 1624550400,
-      stakingRewardAddress: '0xCf32aF39BC10BAd0E193630E4E49b0Fa44867E7B',
-      version: 'v2',
-      burnRate: '50'
-    },
-    {
-      tokens: [WMATIC, ETHER],
-      baseToken: ETHER,
-      startTime: 1624550400,
-      stakingRewardAddress: '0xC79FC48EC33038e80531B14b1efE0C8cAb50747A',
-      version: 'v2',
-      burnRate: '50'
-    },
-    {
-      tokens: [CRV, ETHER],
-      baseToken: ETHER,
-      startTime: 1624550400,
-      stakingRewardAddress: '0xbE6D6BA111E459610646FD4234005331af49179F',
-      version: 'v2',
-      burnRate: '50'
-    },
-    {
-      tokens: [UNI_TOKEN, ETHER],
-      baseToken: ETHER,
-      startTime: 1624550400,
-      stakingRewardAddress: '0xC9091079b96fc51df933720b5071c0B0d18EF785',
-      version: 'v2',
-      burnRate: '50'
-    },
-    {
-      tokens: [UNI_TOKEN, USDC],
-      baseToken: USDC,
-      startTime: 1624550400,
-      stakingRewardAddress: '0xf8f7F41BC59f37cfC19794CB41Ec37073fc98E5f',
-      version: 'v2',
-      burnRate: '50'
-    },
-    {
-      tokens: [QUICK, WMATIC],
-      baseToken: WMATIC,
-      startTime: 1624550400,
-      stakingRewardAddress: '0x9b0E341661E8A993BBe3dd4b1d2484f100A55BB4',
-      version: 'v2',
-      burnRate: '50'
-    },
-    {
-      tokens: [AAVE, ETHER],
-      baseToken: ETHER,
-      startTime: 1624550400,
-      stakingRewardAddress: '0xE504196B11dE48Da00872697f4683F5596dc8E8E',
-      version: 'v2',
-      burnRate: '50'
-    },
-    {
-      tokens: [AAVE, USDC],
-      baseToken: USDC,
-      startTime: 1624550400,
-      stakingRewardAddress: '0xF4B0Dfe49aa35463D40d2FFAe47006990Ae10465',
-      version: 'v2',
-      burnRate: '50'
-    },
-    {
-      tokens: [LINK, USDC],
-      baseToken: USDC,
-      startTime: 1624550400,
-      stakingRewardAddress: '0x6aa7f7cD7185905948951ab10E5FAE65d4Ab883D',
-      version: 'v2',
-      burnRate: '50'
-    },
-
-
-    // old farms
-
-    {
-      tokens: [LUNA, DFYN],
-      baseToken: DFYN,
-      startTime: 1623164400,
-      stakingRewardAddress: '0xB5583E039E4C9b627F6258bD823fd884668afE02',
-      version: 'v1',
-      burnRate: '50'
-    },
-    {
-      tokens: [UST, USDT],
-      baseToken: USDT,
-      startTime: 1623164400,
-      stakingRewardAddress: '0x4B47d7299Ac443827d4468265A725750475dE9E6',
-      version: 'v1',
-      burnRate: '50'
-    },
-    {
-      tokens: [DFYN, USDC],
-      baseToken: USDC,
-      startTime: 1621956600,
-      stakingRewardAddress: '0x24a5256589126a0eb73a1a011e22C1c838890Ced',
-      version: 'v1',
-      burnRate: '50'
-    },
-    {
-      tokens: [DFYN, ETHER],
-      baseToken: ETHER,
-      startTime: 1621956600,
-      stakingRewardAddress: '0xE4F8C4722Aa44bFf5c99ba64c0bC39C6d883CcB6',
-      version: 'v1',
-      burnRate: '50'
-    },
-    {
-      tokens: [WBTC, ETHER],
-      baseToken: ETHER,
-      startTime: 1621956600,
-      stakingRewardAddress: '0x370737D328cf8DfD830fFFf51Dd9c972345e6Fee',
-      version: 'v1',
-      burnRate: '50'
-    },
-    {
-      tokens: [USDT, USDC],
-      baseToken: USDC,
-      startTime: 1621956600,
-      stakingRewardAddress: '0xf786Ba582AbbE846B35E6e7089a25B761eA54113',
-      version: 'v1',
-      burnRate: '50'
-    },
-    {
-      tokens: [DAI, USDT],
-      baseToken: USDT,
-      startTime: 1621956600,
-      stakingRewardAddress: '0x32B73E973057d309d22EC98B50a8311C0F583Ad3',
-      version: 'v1',
-      burnRate: '50'
-    },
-    {
-      tokens: [ETHER, USDC],
-      baseToken: USDC,
-      startTime: 1621956600,
-      stakingRewardAddress: '0x694351F6dAfe5F2e92857e6a3C0578b68A8C1435',
-      version: 'v1',
-      burnRate: '50'
-    },
-    {
-      tokens: [ROUTE, ETHER],
-      baseToken: ETHER,
-      startTime: 1621956600,
-      stakingRewardAddress: '0xf162a26aCc064B88a0150a36d7B38996723E94D7',
-      version: 'v1',
-      burnRate: '50'
-    },
-    {
-      tokens: [WMATIC, DFYN],
-      baseToken: DFYN,
-      startTime: 1621956600,
-      stakingRewardAddress: '0x376920095Ae17e12BC114D4E33D30DFda83f8EfB',
-      version: 'v1',
-      burnRate: '50'
-    },
-    {
-      tokens: [WMATIC, ETHER],
-      baseToken: ETHER,
-      startTime: 1621956600,
-      stakingRewardAddress: '0x0BADA377367f4937bdf6A17FdaeeB0b798051c91',
-      version: 'v1',
-      burnRate: '50'
-    },
-    {
-      tokens: [UNI_TOKEN, ETHER],
-      baseToken: ETHER,
-      startTime: 1621956600,
-      stakingRewardAddress: '0x3cA3f35b081CD7c47990e0Ef5Eed763b54F22874',
-      version: 'v1',
-      burnRate: '50'
-    },
-    {
-      tokens: [AAVE, ETHER],
-      baseToken: ETHER,
-      startTime: 1621956600,
-      stakingRewardAddress: '0x80dF5A040E045817AB75A4214e29Dc95D83f1118',
-      version: 'v1',
-      burnRate: '50'
-    },
-  ]
+  [ChainId.MATIC]: []
 }
-
-interface UserVestingInfo {
-  hasOptForVesting: boolean
-  hasSetConfig: boolean
-}
-
 interface TypeOfpools {
   typeOf: string
   url: string
 }
-
 export interface StakingInfo {
   // the address of the reward contract
   stakingRewardAddress: string
   // the tokens involved in this pair
   baseToken: any
   startTime: number
-  version: string
   type: TypeOfpools
-  userVestingInfo: UserVestingInfo
-  burnRate: string
+  version: string
   tokens: [Token, Token]
   rewardToken: Token
   // the amount of token currently staked, or undefined if no account
@@ -692,7 +110,7 @@ export interface StakingInfo {
 }
 
 // gets the staking info from the network for the active chain id
-export function useStakingInfo(pairToFilterBy?: Pair | null, version: string = 'v1'): StakingInfo[] {
+export function useStakingInfo(pairToFilterBy?: Pair | null): StakingInfo[] {
   const { chainId, account } = useActiveWeb3React()
 
   const [, dfynUsdcPair] = usePair(USDC, DFYN);
@@ -709,10 +127,10 @@ export function useStakingInfo(pairToFilterBy?: Pair | null, version: string = '
             : pairToFilterBy === null
               ? false
               : pairToFilterBy.involvesToken(stakingRewardInfo.tokens[0]) &&
-              pairToFilterBy.involvesToken(stakingRewardInfo.tokens[1]) && version === stakingRewardInfo.version
+              pairToFilterBy.involvesToken(stakingRewardInfo.tokens[1])
         ) ?? []
         : [],
-    [chainId, pairToFilterBy, version]
+    [chainId, pairToFilterBy]
   )
 
   const uni = chainId ? UNI[chainId] : undefined
@@ -722,47 +140,46 @@ export function useStakingInfo(pairToFilterBy?: Pair | null, version: string = '
   const accountArg = useMemo(() => [account ?? undefined], [account])
 
   // get all the info from the staking rewards contracts
-  const balances = useMultipleContractSingleData(rewardsAddresses, STAKING_REWARDS_FLORA_FARMS_INTERFACE, 'balanceOf', accountArg)
-  const earnedAmounts = useMultipleContractSingleData(rewardsAddresses, STAKING_REWARDS_FLORA_FARMS_INTERFACE, 'earned', accountArg)
-  const claimedSplits = useMultipleContractSingleData(rewardsAddresses, STAKING_REWARDS_FLORA_FARMS_INTERFACE, 'claimedSplits', accountArg)
-  const totalSupplies = useMultipleContractSingleData(rewardsAddresses, STAKING_REWARDS_FLORA_FARMS_INTERFACE, 'totalSupply')
-  const hasClaimed = useMultipleContractSingleData(rewardsAddresses, STAKING_REWARDS_FLORA_FARMS_INTERFACE, 'hasClaimed', accountArg)
-  const totalEarnedReward = useMultipleContractSingleData(rewardsAddresses, STAKING_REWARDS_FLORA_FARMS_INTERFACE, 'totalEarnedReward', accountArg)
-  const totalVestedAmount = useMultipleContractSingleData(rewardsAddresses, STAKING_REWARDS_FLORA_FARMS_INTERFACE, 'totalVestedRewardForUser', accountArg)
-  const userVestingInfo = useMultipleContractSingleData(rewardsAddresses, STAKING_REWARDS_FLORA_FARMS_INTERFACE, 'getUserVestingInfo', accountArg)
+  const balances = useMultipleContractSingleData(rewardsAddresses, STAKING_REWARDS_INTERFACE, 'balanceOf', accountArg)
+  const earnedAmounts = useMultipleContractSingleData(rewardsAddresses, STAKING_REWARDS_INTERFACE, 'earned', accountArg)
+  const claimedSplits = useMultipleContractSingleData(rewardsAddresses, STAKING_REWARDS_INTERFACE, 'claimedSplits', accountArg)
+  const totalSupplies = useMultipleContractSingleData(rewardsAddresses, STAKING_REWARDS_INTERFACE, 'totalSupply')
+  const hasClaimed = useMultipleContractSingleData(rewardsAddresses, STAKING_REWARDS_INTERFACE, 'hasClaimed', accountArg)
+  const totalEarnedReward = useMultipleContractSingleData(rewardsAddresses, STAKING_REWARDS_INTERFACE, 'totalEarnedReward', accountArg)
+  const totalVestedAmount = useMultipleContractSingleData(rewardsAddresses, STAKING_REWARDS_INTERFACE, 'totalVestedRewardForUser', accountArg)
 
   // tokens per second, constants
   const rewardRates = useMultipleContractSingleData(
     rewardsAddresses,
-    STAKING_REWARDS_FLORA_FARMS_INTERFACE,
+    STAKING_REWARDS_INTERFACE,
     'rewardRate',
     undefined,
     NEVER_RELOAD
   )
   const periodFinishes = useMultipleContractSingleData(
     rewardsAddresses,
-    STAKING_REWARDS_FLORA_FARMS_INTERFACE,
+    STAKING_REWARDS_INTERFACE,
     'periodFinish',
     undefined,
     NEVER_RELOAD
   )
   const splitWindow = useMultipleContractSingleData(
     rewardsAddresses,
-    STAKING_REWARDS_FLORA_FARMS_INTERFACE,
+    STAKING_REWARDS_INTERFACE,
     'splitWindow',
     undefined,
     NEVER_RELOAD
   )
   const splits = useMultipleContractSingleData(
     rewardsAddresses,
-    STAKING_REWARDS_FLORA_FARMS_INTERFACE,
+    STAKING_REWARDS_INTERFACE,
     'splits',
     undefined,
     NEVER_RELOAD
   )
   const vesting = useMultipleContractSingleData(
     rewardsAddresses,
-    STAKING_REWARDS_FLORA_FARMS_INTERFACE,
+    STAKING_REWARDS_INTERFACE,
     'vestingPeriod',
     undefined,
     NEVER_RELOAD
@@ -779,7 +196,7 @@ export function useStakingInfo(pairToFilterBy?: Pair | null, version: string = '
       const claimedSplitsState = claimedSplits[index]
       const hasClaimedPartialState = hasClaimed[index]
       const totalEarnedRewardState = totalEarnedReward[index]
-      const userVestingInfoState = userVestingInfo[index]
+
       // these get fetched regardless of account
       const totalSupplyState = totalSupplies[index]
       const rewardRateState = rewardRates[index]
@@ -796,7 +213,6 @@ export function useStakingInfo(pairToFilterBy?: Pair | null, version: string = '
         !hasClaimedPartialState?.loading &&
         !totalVestedAmountState?.loading &&
         !totalEarnedRewardState?.loading &&
-        !userVestingInfoState?.loading &&
         // always need these
         totalSupplyState &&
         !totalSupplyState.loading &&
@@ -816,7 +232,6 @@ export function useStakingInfo(pairToFilterBy?: Pair | null, version: string = '
           balanceState?.error ||
           earnedAmountState?.error ||
           claimedSplitsState?.error ||
-          userVestingInfoState?.error ||
           totalEarnedRewardState?.error ||
           hasClaimedPartialState?.error ||
           totalVestedAmountState?.error ||
@@ -842,6 +257,7 @@ export function useStakingInfo(pairToFilterBy?: Pair | null, version: string = '
         const totalRewardRate = new TokenAmount(uni, JSBI.BigInt(rewardRateState?.result?.[0] ?? 0))
         const totalVestedAmount = new TokenAmount(uni, JSBI.BigInt(totalVestedAmountState?.result?.[0] ?? 0))
         const totalEarnedReward = new TokenAmount(uni, JSBI.BigInt(totalEarnedRewardState?.result?.[0] ?? 0))
+
         const userClaimedSplit = claimedSplitsState?.result?.[0]?.toNumber() ?? 0;
         const splits = splitsState?.result?.[0]?.toNumber() ?? 0
         const hasClaimedPartial = hasClaimedPartialState?.result?.[0] ?? false
@@ -882,26 +298,23 @@ export function useStakingInfo(pairToFilterBy?: Pair | null, version: string = '
         currentSplit = currentSplit > splits ? splits : currentSplit;
 
         const unlockAt = active ? periodFinishSeconds : vestingActive ? (periodFinishSeconds + (Math.floor(currentSplit + 1) * splitWindowSeconds)) : vestingEndsSeconds;
-        // debugger
+
         //const unclaimedAmount = JSBI.divide(JSBI.multiply(JSBI.BigInt(totalVestedAmountState?.result?.[0] ?? 0), JSBI.BigInt((Math.floor(currentSplit + 1) - userClaimedSplit))), splits);
         // totalvestedamount*(currentsplit-userclaimedlastsplit)/splits;
         const unclaimedSplits = BigNumber.from((Math.floor(currentSplit) - userClaimedSplit))
 
         let unclaimedAmount = BigNumber.from(totalVestedAmountState?.result?.[0] ?? 0).mul(unclaimedSplits).div(BigNumber.from(splits))
         unclaimedAmount = unclaimedAmount.div(BigNumber.from('1000000000000000000'))
-
         let ableToClaim = !vestingActive || (Math.floor(Date.now() / 1000) >= periodFinishSeconds &&
           (userClaimedSplit !== Math.floor(currentSplit) ? true : !hasClaimedPartial))
         memo.push({
-          type: { typeOf: 'Popular Farms', url: 'popular-farms' },
+          type: { typeOf: 'Launch Farms', url: 'launch-farms' },
           stakingRewardAddress: rewardsAddress,
           baseToken: info[index].baseToken,
+          tokens: info[index].tokens,
           version: info[index].version,
-          burnRate: info[index].burnRate,
           startTime: info[index].startTime ?? 0,
           rewardToken: info[index].rewardToken ?? uni,
-          tokens: info[index].tokens,
-          userVestingInfo: { hasSetConfig: userVestingInfoState?.result?.[0].hasSetConfig, hasOptForVesting: userVestingInfoState?.result?.[0].hasOptForVesting },
           periodFinish: periodFinishMs > 0 ? new Date(periodFinishMs) : undefined,
           splitWindow: splitWindowStateMs > 0 ? new Date(splitWindowStateMs) : undefined,
           vestingPeriod: vestingPeriodMs > 0 ? new Date(periodFinishMs + vestingPeriodMs) : undefined, //vesting period after period ends
@@ -943,12 +356,11 @@ export function useStakingInfo(pairToFilterBy?: Pair | null, version: string = '
     hasClaimed,
     vesting,
     uni,
-    dfynPrice,
-    userVestingInfo
+    dfynPrice
   ])
 }
 
-export function useInactiveStakingInfo(pairToFilterBy?: Pair | null, version: string = 'v1'): StakingInfo[] {
+export function useInactiveStakingInfo(pairToFilterBy?: Pair | null): StakingInfo[] {
   const { chainId, account } = useActiveWeb3React()
 
   const [, dfynUsdcPair] = usePair(USDC, DFYN);
@@ -965,10 +377,10 @@ export function useInactiveStakingInfo(pairToFilterBy?: Pair | null, version: st
             : pairToFilterBy === null
               ? false
               : pairToFilterBy.involvesToken(stakingRewardInfo.tokens[0]) &&
-              pairToFilterBy.involvesToken(stakingRewardInfo.tokens[1]) && version === stakingRewardInfo.version
+              pairToFilterBy.involvesToken(stakingRewardInfo.tokens[1])
         ) ?? []
         : [],
-    [chainId, pairToFilterBy, version]
+    [chainId, pairToFilterBy]
   )
 
   const uni = chainId ? UNI[chainId] : undefined
@@ -978,47 +390,46 @@ export function useInactiveStakingInfo(pairToFilterBy?: Pair | null, version: st
   const accountArg = useMemo(() => [account ?? undefined], [account])
 
   // get all the info from the staking rewards contracts
-  const balances = useMultipleContractSingleData(rewardsAddresses, STAKING_REWARDS_FLORA_FARMS_INTERFACE, 'balanceOf', accountArg)
-  const earnedAmounts = useMultipleContractSingleData(rewardsAddresses, STAKING_REWARDS_FLORA_FARMS_INTERFACE, 'earned', accountArg)
-  const claimedSplits = useMultipleContractSingleData(rewardsAddresses, STAKING_REWARDS_FLORA_FARMS_INTERFACE, 'claimedSplits', accountArg)
-  const totalSupplies = useMultipleContractSingleData(rewardsAddresses, STAKING_REWARDS_FLORA_FARMS_INTERFACE, 'totalSupply')
-  const hasClaimed = useMultipleContractSingleData(rewardsAddresses, STAKING_REWARDS_FLORA_FARMS_INTERFACE, 'hasClaimed', accountArg)
-  const totalEarnedReward = useMultipleContractSingleData(rewardsAddresses, STAKING_REWARDS_FLORA_FARMS_INTERFACE, 'totalEarnedReward', accountArg)
-  const totalVestedAmount = useMultipleContractSingleData(rewardsAddresses, STAKING_REWARDS_FLORA_FARMS_INTERFACE, 'totalVestedRewardForUser', accountArg)
-  const userVestingInfo = useMultipleContractSingleData(rewardsAddresses, STAKING_REWARDS_FLORA_FARMS_INTERFACE, 'getUserVestingInfo', accountArg)
+  const balances = useMultipleContractSingleData(rewardsAddresses, STAKING_REWARDS_INTERFACE, 'balanceOf', accountArg)
+  const earnedAmounts = useMultipleContractSingleData(rewardsAddresses, STAKING_REWARDS_INTERFACE, 'earned', accountArg)
+  const claimedSplits = useMultipleContractSingleData(rewardsAddresses, STAKING_REWARDS_INTERFACE, 'claimedSplits', accountArg)
+  const totalSupplies = useMultipleContractSingleData(rewardsAddresses, STAKING_REWARDS_INTERFACE, 'totalSupply')
+  const hasClaimed = useMultipleContractSingleData(rewardsAddresses, STAKING_REWARDS_INTERFACE, 'hasClaimed', accountArg)
+  const totalEarnedReward = useMultipleContractSingleData(rewardsAddresses, STAKING_REWARDS_INTERFACE, 'totalEarnedReward', accountArg)
+  const totalVestedAmount = useMultipleContractSingleData(rewardsAddresses, STAKING_REWARDS_INTERFACE, 'totalVestedRewardForUser', accountArg)
 
   // tokens per second, constants
   const rewardRates = useMultipleContractSingleData(
     rewardsAddresses,
-    STAKING_REWARDS_FLORA_FARMS_INTERFACE,
+    STAKING_REWARDS_INTERFACE,
     'rewardRate',
     undefined,
     NEVER_RELOAD
   )
   const periodFinishes = useMultipleContractSingleData(
     rewardsAddresses,
-    STAKING_REWARDS_FLORA_FARMS_INTERFACE,
+    STAKING_REWARDS_INTERFACE,
     'periodFinish',
     undefined,
     NEVER_RELOAD
   )
   const splitWindow = useMultipleContractSingleData(
     rewardsAddresses,
-    STAKING_REWARDS_FLORA_FARMS_INTERFACE,
+    STAKING_REWARDS_INTERFACE,
     'splitWindow',
     undefined,
     NEVER_RELOAD
   )
   const splits = useMultipleContractSingleData(
     rewardsAddresses,
-    STAKING_REWARDS_FLORA_FARMS_INTERFACE,
+    STAKING_REWARDS_INTERFACE,
     'splits',
     undefined,
     NEVER_RELOAD
   )
   const vesting = useMultipleContractSingleData(
     rewardsAddresses,
-    STAKING_REWARDS_FLORA_FARMS_INTERFACE,
+    STAKING_REWARDS_INTERFACE,
     'vestingPeriod',
     undefined,
     NEVER_RELOAD
@@ -1035,7 +446,7 @@ export function useInactiveStakingInfo(pairToFilterBy?: Pair | null, version: st
       const claimedSplitsState = claimedSplits[index]
       const hasClaimedPartialState = hasClaimed[index]
       const totalEarnedRewardState = totalEarnedReward[index]
-      const userVestingInfoState = userVestingInfo[index]
+
       // these get fetched regardless of account
       const totalSupplyState = totalSupplies[index]
       const rewardRateState = rewardRates[index]
@@ -1052,7 +463,6 @@ export function useInactiveStakingInfo(pairToFilterBy?: Pair | null, version: st
         !hasClaimedPartialState?.loading &&
         !totalVestedAmountState?.loading &&
         !totalEarnedRewardState?.loading &&
-        !userVestingInfoState?.loading &&
         // always need these
         totalSupplyState &&
         !totalSupplyState.loading &&
@@ -1072,7 +482,6 @@ export function useInactiveStakingInfo(pairToFilterBy?: Pair | null, version: st
           balanceState?.error ||
           earnedAmountState?.error ||
           claimedSplitsState?.error ||
-          userVestingInfoState?.error ||
           totalEarnedRewardState?.error ||
           hasClaimedPartialState?.error ||
           totalVestedAmountState?.error ||
@@ -1098,6 +507,7 @@ export function useInactiveStakingInfo(pairToFilterBy?: Pair | null, version: st
         const totalRewardRate = new TokenAmount(uni, JSBI.BigInt(rewardRateState?.result?.[0] ?? 0))
         const totalVestedAmount = new TokenAmount(uni, JSBI.BigInt(totalVestedAmountState?.result?.[0] ?? 0))
         const totalEarnedReward = new TokenAmount(uni, JSBI.BigInt(totalEarnedRewardState?.result?.[0] ?? 0))
+
         const userClaimedSplit = claimedSplitsState?.result?.[0]?.toNumber() ?? 0;
         const splits = splitsState?.result?.[0]?.toNumber() ?? 0
         const hasClaimedPartial = hasClaimedPartialState?.result?.[0] ?? false
@@ -1138,26 +548,23 @@ export function useInactiveStakingInfo(pairToFilterBy?: Pair | null, version: st
         currentSplit = currentSplit > splits ? splits : currentSplit;
 
         const unlockAt = active ? periodFinishSeconds : vestingActive ? (periodFinishSeconds + (Math.floor(currentSplit + 1) * splitWindowSeconds)) : vestingEndsSeconds;
-        // debugger
+
         //const unclaimedAmount = JSBI.divide(JSBI.multiply(JSBI.BigInt(totalVestedAmountState?.result?.[0] ?? 0), JSBI.BigInt((Math.floor(currentSplit + 1) - userClaimedSplit))), splits);
         // totalvestedamount*(currentsplit-userclaimedlastsplit)/splits;
         const unclaimedSplits = BigNumber.from((Math.floor(currentSplit) - userClaimedSplit))
 
         let unclaimedAmount = BigNumber.from(totalVestedAmountState?.result?.[0] ?? 0).mul(unclaimedSplits).div(BigNumber.from(splits))
         unclaimedAmount = unclaimedAmount.div(BigNumber.from('1000000000000000000'))
-
         let ableToClaim = !vestingActive || (Math.floor(Date.now() / 1000) >= periodFinishSeconds &&
           (userClaimedSplit !== Math.floor(currentSplit) ? true : !hasClaimedPartial))
         memo.push({
-          type: { typeOf: 'Archived Popular Farms', url: 'popular-farms/archived' },
+          type: { typeOf: 'Archived Pre-Stake Farms', url: 'dfyn/archived' },
           stakingRewardAddress: rewardsAddress,
           baseToken: info[index].baseToken,
-          version: info[index].version,
-          burnRate: info[index].burnRate,
-          startTime: info[index].startTime ?? 0,
-          rewardToken: info[index].rewardToken ?? uni,
           tokens: info[index].tokens,
-          userVestingInfo: { hasSetConfig: userVestingInfoState?.result?.[0].hasSetConfig, hasOptForVesting: userVestingInfoState?.result?.[0].hasOptForVesting },
+          startTime: info[index].startTime ?? 0,
+          version: info[index].version,
+          rewardToken: info[index].rewardToken ?? uni,
           periodFinish: periodFinishMs > 0 ? new Date(periodFinishMs) : undefined,
           splitWindow: splitWindowStateMs > 0 ? new Date(splitWindowStateMs) : undefined,
           vestingPeriod: vestingPeriodMs > 0 ? new Date(periodFinishMs + vestingPeriodMs) : undefined, //vesting period after period ends
@@ -1199,12 +606,11 @@ export function useInactiveStakingInfo(pairToFilterBy?: Pair | null, version: st
     hasClaimed,
     vesting,
     uni,
-    dfynPrice,
-    userVestingInfo
+    dfynPrice
   ])
 }
 
-export function useTotalFloraUniEarned(): TokenAmount | undefined {
+export function useTotalUniEarned(): TokenAmount | undefined {
   const { chainId } = useActiveWeb3React()
   const uni = chainId ? UNI[chainId] : undefined
   const activeStakingInfos = useStakingInfo()

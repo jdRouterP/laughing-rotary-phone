@@ -16,12 +16,12 @@ import { ButtonPink } from 'components/Button'
 
 const TopSectionHeader = styled.div`
   display: grid;
-  grid-template-columns: 1fr 0.3fr;
+  grid-template-columns: 1fr 150px;
   grid-gap: 0px;
   align-items: center;
   z-index: 1;
   ${({ theme }) => theme.mediaWidth.upToSmall`
-    grid-template-columns: 1fr 0.3fr;
+    grid-template-columns: 1fr 134px;
   `};
 `
 
@@ -50,7 +50,7 @@ flex-direction: column;
 `};
 `
 
-export default function PreStakinfFarmsArchived() {
+export default function PreStakingFarmsArchived() {
   const { chainId } = useActiveWeb3React()
 
   // staking info for connected account
@@ -149,7 +149,7 @@ export default function PreStakinfFarmsArchived() {
               else return ""
             })?.map(stakingInfo => {
               // need to sort by added liquidity here
-              return <PoolCard key={stakingInfo.stakingRewardAddress} stakingInfo={stakingInfo} />
+              return <PoolCard key={stakingInfo.stakingRewardAddress} stakingInfo={stakingInfo} isInactive={true} />
             })
           )}
         </PoolSection>

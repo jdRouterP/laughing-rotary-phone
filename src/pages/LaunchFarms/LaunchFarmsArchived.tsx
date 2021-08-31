@@ -5,15 +5,14 @@ import { TYPE, ExternalLink, StyledInternalLink } from '../../theme'
 import { RowBetween } from '../../components/Row'
 import { CardSection, DataCard, CardNoise, CardBGImage } from '../../components/dualFarms/styled'
 import { SearchInput } from 'components/SearchModal/styleds'
-import { INACTIVE_STAKING_REWARDS_INFO, useInactiveStakingInfo } from 'state/dual-stake/hooks'
-import { useActiveWeb3React } from 'hooks'
+import PoolCard from 'components/launchFarms/PoolCard'
 import Loader from 'components/Loader'
 import { OutlineCard } from 'components/Card'
-import PoolCard from 'components/dualFarms/PoolCard'
+import { INACTIVE_STAKING_REWARDS_INFO, useInactiveStakingInfo } from 'state/launchFarms/hooks'
 import { JSBI } from '@dfyn/sdk'
 import { BIG_INT_ZERO } from '../../constants'
+import { useActiveWeb3React } from 'hooks'
 import { ButtonPink } from 'components/Button'
-
 
 const TopSectionHeader = styled.div`
   display: grid;
@@ -51,7 +50,7 @@ flex-direction: column;
 `};
 `
 
-export default function DualFarmsArrchived() {
+export default function PreStakingFarmsArchived() {
   const { chainId } = useActiveWeb3React()
 
   // staking info for connected account
@@ -82,18 +81,24 @@ export default function DualFarmsArrchived() {
             <AutoColumn gap="md">
               <TopSectionHeader>
                 <RowBetween>
-                  <TYPE.white fontWeight={600}>Dual Farms</TYPE.white>
+                  <TYPE.white fontWeight={600}>Launch pools</TYPE.white>
                 </RowBetween>
-                <StyledInternalLink to={`/dual-farms`} style={{ width: '100%', color: '#ff007a' }}>
+                <StyledInternalLink to={`/launch-farms`} style={{ width: '100%', color: '#ff007a' }}>
                   <ButtonPink padding="8px" borderRadius="8px">
                     Active Pools
                   </ButtonPink>
                 </StyledInternalLink>
               </TopSectionHeader>
+
+              <RowBetween>
+                <TYPE.white fontSize={14}> Deposit your Liquidity Provider tokens to receive DFYN with insane APR.</TYPE.white>
+              </RowBetween>
               <RowBetween>
                 <TYPE.white fontSize={14}>
-                  These are the archived Dual Farms. Details of your Liquidity.
+                  A total of 5.6M DFYN tokens will be distributed as rewards for this program. 20% of the DFYN token rewards can be claimed after two weeks from the starting date of the program. Remaining rewards will be released 20% every other month.
                 </TYPE.white>
+
+
               </RowBetween>{' '}
               <ExternalLink
                 style={{ color: 'white', textDecoration: 'underline' }}
@@ -111,7 +116,7 @@ export default function DualFarmsArrchived() {
 
       <AutoColumn gap="lg" style={{ width: '100%', maxWidth: '720px' }}>
         <DataRow style={{ alignItems: 'baseline' }}>
-          <TYPE.mediumHeader style={{ marginTop: '0.5rem' }}>Participating pools</TYPE.mediumHeader>
+          <TYPE.mediumHeader fontSize={16} style={{ marginTop: '0.5rem' }}>Launch pools</TYPE.mediumHeader>
         </DataRow>
 
         <SearchInput
@@ -125,9 +130,9 @@ export default function DualFarmsArrchived() {
           {stakingRewardsExist && stakingInfos?.length === 0 ? (
             <Loader style={{ margin: 'auto' }} />
           ) : !stakingRewardsExist ? (
-            <OutlineCard>No pools</OutlineCard>
+            <OutlineCard>No active pools</OutlineCard>
           ) : stakingFarms?.length === 0 ? (
-            <OutlineCard>No archived pools</OutlineCard>
+            <OutlineCard>No active pools</OutlineCard>
           ) : (
             stakingFarms?.filter(stakingInfos => {
               if (searchItem === '') return stakingInfos
@@ -150,7 +155,7 @@ export default function DualFarmsArrchived() {
               else return ""
             })?.map(stakingInfo => {
               // need to sort by added liquidity here
-              return <PoolCard key={stakingInfo.stakingRewardAddress} stakingInfo={stakingInfo} isInactive={true} />
+              return <PoolCard key={stakingInfo.stakingRewardAddress} stakingInfo={stakingInfo} isInactive={false} />
             })
           )}
         </PoolSection>

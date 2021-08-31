@@ -19,12 +19,12 @@ import { ButtonPink } from 'components/Button'
 
 const TopSectionHeader = styled.div`
   display: grid;
-  grid-template-columns: 1fr 0.3fr;
+  grid-template-columns: 1fr 150px;
   grid-gap: 0px;
   align-items: center;
   z-index: 1;
   ${({ theme }) => theme.mediaWidth.upToSmall`
-    grid-template-columns: 1fr 0.3fr;
+    grid-template-columns: 1fr 134px;
   `};
 `
 
@@ -87,13 +87,13 @@ export default function Earn() {
                 <RowBetween>
                   <TYPE.white fontWeight={600}>Pre-staking pools</TYPE.white>
                 </RowBetween>
-                <StyledInternalLink to={`/dfyn/archived`} style={{ width: '100%', color: '#ff007a'}}>
+                <StyledInternalLink to={`/dfyn/archived`} style={{ width: '100%', color: '#ff007a' }}>
                   <ButtonPink padding="8px" borderRadius="8px">
                     Archived Pools
                   </ButtonPink>
                 </StyledInternalLink>
               </TopSectionHeader>
-              
+
               <RowBetween>
                 <TYPE.white fontSize={14}> Deposit your Liquidity Provider tokens to receive DFYN with insane APR.</TYPE.white>
               </RowBetween>
@@ -127,12 +127,12 @@ export default function Earn() {
           <TYPE.mediumHeader fontSize={16} style={{ marginTop: '0.5rem' }}>Rewards have ended!</TYPE.mediumHeader>
         </DataRow>
 
-        <SearchInput 
-          type="text" 
-          placeholder="Search by name, symbol, address" 
-          onChange={(e)=>{
-          setSearchItem(e.target.value)
-        }}/>
+        <SearchInput
+          type="text"
+          placeholder="Search by name, symbol, address"
+          onChange={(e) => {
+            setSearchItem(e.target.value)
+          }} />
 
         <PoolSection>
           {stakingRewardsExist && stakingInfos?.length === 0 ? (
@@ -143,27 +143,27 @@ export default function Earn() {
             <OutlineCard>No active pools</OutlineCard>
           ) : (
             stakingFarms?.filter(stakingInfos => {
-              if(searchItem === '') return stakingInfos
+              if (searchItem === '') return stakingInfos
               //for symbol
-              else if(stakingInfos?.tokens[0].symbol?.toLowerCase().includes(searchItem.toLowerCase()) 
-              || stakingInfos?.tokens[1].symbol?.toLowerCase().includes(searchItem.toLowerCase())
+              else if (stakingInfos?.tokens[0].symbol?.toLowerCase().includes(searchItem.toLowerCase())
+                || stakingInfos?.tokens[1].symbol?.toLowerCase().includes(searchItem.toLowerCase())
               ) return stakingInfos
 
               //for name
-              else if(stakingInfos?.tokens[0].name?.toLowerCase().includes(searchItem.toLowerCase())
-              || stakingInfos?.tokens[1].name?.toLowerCase().includes(searchItem.toLowerCase())
+              else if (stakingInfos?.tokens[0].name?.toLowerCase().includes(searchItem.toLowerCase())
+                || stakingInfos?.tokens[1].name?.toLowerCase().includes(searchItem.toLowerCase())
               ) return stakingInfos
-              
+
               //for address
-              else if(stakingInfos?.tokens[0].address?.toLowerCase().includes(searchItem.toLowerCase())
-              || stakingInfos?.tokens[1].address?.toLowerCase().includes(searchItem.toLowerCase())
+              else if (stakingInfos?.tokens[0].address?.toLowerCase().includes(searchItem.toLowerCase())
+                || stakingInfos?.tokens[1].address?.toLowerCase().includes(searchItem.toLowerCase())
               ) return stakingInfos
 
               //Other case
               else return ""
             })?.map(stakingInfo => {
               // need to sort by added liquidity here
-              return <PoolCard key={stakingInfo.stakingRewardAddress} stakingInfo={stakingInfo} />
+              return <PoolCard key={stakingInfo.stakingRewardAddress} stakingInfo={stakingInfo} isInactive={false} />
             })
           )}
         </PoolSection>

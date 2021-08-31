@@ -23,6 +23,10 @@ import { useStakingInfo as useFloraStakingInfo } from '../../state/flora-farms/h
 import { useStakingInfo as useDualStakingInfo } from '../../state/dual-stake/hooks'
 import { useStakingInfo as usePreStakingInfo } from '../../state/stake/hooks'
 import { useStakingInfo as useVanillaStakingInfo } from '../../state/vanilla-stake/hooks'
+import { useInactiveStakingInfo as useInactiveFloraStakingInfo } from '../../state/flora-farms/hooks'
+import { useInactiveStakingInfo as useInactiveDualStakingInfo } from '../../state/dual-stake/hooks'
+import { useInactiveStakingInfo as useInactivePreStakingInfo } from '../../state/stake/hooks'
+import { useInactiveStakingInfo as useInactiveVanillaStakingInfo } from '../../state/vanilla-stake/hooks'
 import { BIG_INT_ZERO } from '../../constants'
 import { useDerivedSwapInfo } from 'state/swap/hooks'
 import { CHART_URL_PREFIX } from 'constants/networks'
@@ -128,15 +132,36 @@ export default function Pool() {
   const dualStakingInfosWithBalance = dualStakingInfo?.filter(pool => JSBI.greaterThan(pool.stakedAmount.raw, BIG_INT_ZERO))
   const floraStakingInfo = useFloraStakingInfo()
   const floraStakingInfosWithBalance = floraStakingInfo?.filter(pool => JSBI.greaterThan(pool.stakedAmount.raw, BIG_INT_ZERO))
+  // show liquidity even if its deposited in inactive rewards contract
+  const inactiveVanillaStakingInfo = useInactiveVanillaStakingInfo()
+  const inactiveVanillaStakingInfosWithBalance = inactiveVanillaStakingInfo?.filter(pool => JSBI.greaterThan(pool.stakedAmount.raw, BIG_INT_ZERO))
+  const inactivePreStakingInfo = useInactivePreStakingInfo()
+  const inactivePreStakingsWithBalance = inactivePreStakingInfo?.filter(pool => JSBI.greaterThan(pool.stakedAmount.raw, BIG_INT_ZERO))
+  const inactiveDualStakingInfo = useInactiveDualStakingInfo()
+  const inactiveDualStakingInfosWithBalance = inactiveDualStakingInfo?.filter(pool => JSBI.greaterThan(pool.stakedAmount.raw, BIG_INT_ZERO))
+  const inactiveFloraStakingInfo = useInactiveFloraStakingInfo()
+  const inactiveFloraStakingInfosWithBalance = inactiveFloraStakingInfo?.filter(pool => JSBI.greaterThan(pool.stakedAmount.raw, BIG_INT_ZERO))
   //ORDER MATTERS
-  let stakingPairs = [...usePairs(vanillaStakingInfosWithBalance?.map(stakingInfo => stakingInfo.tokens)),
-  ...usePairs(preStakingsWithBalance?.map(stakingInfo => stakingInfo.tokens)),
-  ...usePairs(dualStakingInfosWithBalance?.map(stakingInfo => stakingInfo.tokens)),
-  ...usePairs(floraStakingInfosWithBalance?.map(stakingInfo => stakingInfo.tokens))]
-  let balances = [...vanillaStakingInfosWithBalance,
-  ...preStakingsWithBalance,
-  ...dualStakingInfosWithBalance,
-  ...floraStakingInfosWithBalance];
+  let stakingPairs = [
+    ...usePairs(vanillaStakingInfosWithBalance?.map(stakingInfo => stakingInfo.tokens)),
+    ...usePairs(inactiveVanillaStakingInfosWithBalance?.map(stakingInfo => stakingInfo.tokens)),
+    ...usePairs(preStakingsWithBalance?.map(stakingInfo => stakingInfo.tokens)),
+    ...usePairs(inactivePreStakingsWithBalance?.map(stakingInfo => stakingInfo.tokens)),
+    ...usePairs(dualStakingInfosWithBalance?.map(stakingInfo => stakingInfo.tokens)),
+    ...usePairs(inactiveDualStakingInfosWithBalance?.map(stakingInfo => stakingInfo.tokens)),
+    ...usePairs(floraStakingInfosWithBalance?.map(stakingInfo => stakingInfo.tokens)),
+    ...usePairs(inactiveFloraStakingInfosWithBalance?.map(stakingInfo => stakingInfo.tokens))
+  ]
+  let balances = [
+    ...vanillaStakingInfosWithBalance,
+    ...inactiveVanillaStakingInfosWithBalance,
+    ...preStakingsWithBalance,
+    ...inactivePreStakingsWithBalance,
+    ...dualStakingInfosWithBalance,
+    ...inactiveDualStakingInfosWithBalance,
+    ...floraStakingInfosWithBalance,
+    ...inactiveFloraStakingInfosWithBalance,
+  ];
   // remove any pairs that also are included in pairs with stake in mining pool
   const v2PairsWithoutStakedAmount = allV2PairsWithLiquidity.filter(v2Pair => {
     return (
@@ -240,49 +265,49 @@ export default function Pool() {
                     <span> ↗</span>
                   </RowBetween>
                 </ButtonSecondary>
-                  <SearchInput 
-                    type="text" 
-                    placeholder="Search by name, symbol, address"
-                    onChange={(e)=>{
+                <SearchInput
+                  type="text"
+                  placeholder="Search by name, symbol, address"
+                  onChange={(e) => {
                     setSearchItem(e.target.value)
-                  }}/>
+                  }} />
                 {v2PairsWithoutStakedAmount?.filter(stakingInfos => {
-                  if(searchItem === '') return stakingInfos
+                  if (searchItem === '') return stakingInfos
                   //for symbol
-                  else if(stakingInfos?.token0.symbol?.toLowerCase().includes(searchItem.toLowerCase()) 
-                  || stakingInfos?.token1?.symbol?.toLowerCase().includes(searchItem.toLowerCase())) return stakingInfos
+                  else if (stakingInfos?.token0.symbol?.toLowerCase().includes(searchItem.toLowerCase())
+                    || stakingInfos?.token1?.symbol?.toLowerCase().includes(searchItem.toLowerCase())) return stakingInfos
 
                   //for name
-                  else if(stakingInfos?.token0?.name?.toLowerCase().includes(searchItem.toLowerCase()) 
-                  || stakingInfos?.token1?.name?.toLowerCase().includes(searchItem.toLowerCase())) return stakingInfos
+                  else if (stakingInfos?.token0?.name?.toLowerCase().includes(searchItem.toLowerCase())
+                    || stakingInfos?.token1?.name?.toLowerCase().includes(searchItem.toLowerCase())) return stakingInfos
 
                   //for address
-                  else if(stakingInfos?.token0?.address?.toLowerCase().includes(searchItem.toLowerCase()) 
-                  || stakingInfos?.token1?.address?.toLowerCase().includes(searchItem.toLowerCase())) return stakingInfos
+                  else if (stakingInfos?.token0?.address?.toLowerCase().includes(searchItem.toLowerCase())
+                    || stakingInfos?.token1?.address?.toLowerCase().includes(searchItem.toLowerCase())) return stakingInfos
 
                   //Other case
                   else return ""
-                  
+
                 }).map(v2Pair => (
                   <FullPositionCard key={v2Pair.liquidityToken.address} pair={v2Pair} />
                 ))}
                 {stakingPairs?.filter(stakingInfos => {
-                  if(searchItem === '') return stakingInfos
+                  if (searchItem === '') return stakingInfos
                   //for symbol
-                  else if(stakingInfos[1]?.token0.symbol?.toLowerCase().includes(searchItem.toLowerCase()) 
-                  || stakingInfos[1]?.token1?.symbol?.toLowerCase().includes(searchItem.toLowerCase())) return stakingInfos
+                  else if (stakingInfos[1]?.token0.symbol?.toLowerCase().includes(searchItem.toLowerCase())
+                    || stakingInfos[1]?.token1?.symbol?.toLowerCase().includes(searchItem.toLowerCase())) return stakingInfos
 
                   //for name
-                  else if(stakingInfos[1]?.token0?.name?.toLowerCase().includes(searchItem.toLowerCase()) 
-                  || stakingInfos[1]?.token1?.name?.toLowerCase().includes(searchItem.toLowerCase())) return stakingInfos
+                  else if (stakingInfos[1]?.token0?.name?.toLowerCase().includes(searchItem.toLowerCase())
+                    || stakingInfos[1]?.token1?.name?.toLowerCase().includes(searchItem.toLowerCase())) return stakingInfos
 
                   //for address
-                  else if(stakingInfos[1]?.token0?.address?.toLowerCase().includes(searchItem.toLowerCase()) 
-                  || stakingInfos[1]?.token1?.address?.toLowerCase().includes(searchItem.toLowerCase())) return stakingInfos
+                  else if (stakingInfos[1]?.token0?.address?.toLowerCase().includes(searchItem.toLowerCase())
+                    || stakingInfos[1]?.token1?.address?.toLowerCase().includes(searchItem.toLowerCase())) return stakingInfos
 
                   //Other case
                   else return ""
-                  
+
                 }).map(
                   (stakingPair, i) => {
                     return stakingPair[1] && ( // skip pairs that arent loaded

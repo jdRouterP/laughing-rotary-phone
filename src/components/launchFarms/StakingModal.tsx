@@ -15,7 +15,7 @@ import { maxAmountSpend } from '../../utils/maxAmountSpend'
 import { usePairContract, useStakingContract } from '../../hooks/useContract'
 import { useApproveCallback, ApprovalState } from '../../hooks/useApproveCallback'
 import { splitSignature } from 'ethers/lib/utils'
-import { StakingInfo, useDerivedStakeInfo } from '../../state/flora-farms/hooks'
+import { StakingInfo, useDerivedStakeInfo } from '../../state/launchFarms/hooks'
 import { wrappedCurrencyAmount } from '../../utils/wrappedCurrency'
 import { TransactionResponse } from '@ethersproject/providers'
 import { useTransactionAdder } from '../../state/transactions/hooks'
@@ -84,6 +84,7 @@ export default function StakingModal({ isOpen, onDismiss, stakingInfo, userLiqui
     setAttempting(true)
     if (stakingContract && parsedAmount && deadline) {
       if (approval === ApprovalState.APPROVED) {
+
         await stakingContract.stake(`0x${parsedAmount.raw.toString(16)}`, { gasLimit: 350000 })
       } else if (signatureData) {
         stakingContract

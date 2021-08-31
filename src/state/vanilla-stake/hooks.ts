@@ -1,6 +1,6 @@
 import { ChainId, CurrencyAmount, JSBI, Token, TokenAmount, Pair } from '@dfyn/sdk'
 import { useMemo } from 'react'
-import { UNI, USDC, DFYN, FISH, UFT, ANY, AGA, AGAr, NORD, BIFI, COSMIC, TITAN, ICE, WMATIC, CRV, UNI_TOKEN, AAVE, LINK, LUNA, ELE, GAJ } from '../../constants'
+import { UNI, USDC, DFYN, FISH, UFT, ANY, AGA, AGAr, NORD, BIFI, COSMIC, TITAN, ICE, WMATIC, CRV, UNI_TOKEN, AAVE, LINK, LUNA, ELE, GAJ, SILVER } from '../../constants'
 import { STAKING_REWARDS_BASIC_FARMS_INTERFACE } from '../../constants/abis/staking-rewards-basic-farms'
 import { useActiveWeb3React } from '../../hooks'
 import { NEVER_RELOAD, useMultipleContractSingleData } from '../multicall/hooks'
@@ -25,6 +25,13 @@ export const STAKING_REWARDS_INFO: {
 } = {
   [ChainId.MATIC]: [
     //v3
+    {
+      tokens: [DFYN, SILVER],
+      baseToken: DFYN,
+      startTime: 1630330200,
+      stakingRewardAddress: '0x3E8c15d0c14A41Df28478A8E22217cBD9e31493D',
+      version: 'v3'
+    },
     {
       tokens: [DFYN, WMATIC],
       baseToken: DFYN,
@@ -566,7 +573,7 @@ export function useInactiveStakingInfo(pairToFilterBy?: Pair | null, version: st
           periodFinishSeconds && currentBlockTimestamp ? periodFinishSeconds > currentBlockTimestamp.toNumber() : true
 
         memo.push({
-          type: { typeOf: 'Ecosystem Farms', url: 'eco-farms' },
+          type: { typeOf: 'Archived Ecosystem Farms', url: 'eco-farms/archived' },
           stakingRewardAddress: rewardsAddress,
           baseToken: info[index].baseToken,
           version: info[index].version,
@@ -604,7 +611,9 @@ export function useInactiveStakingInfo(pairToFilterBy?: Pair | null, version: st
 export function useTotalEcosystemUniEarned(): TokenAmount | undefined {
   const { chainId } = useActiveWeb3React()
   const uni = chainId ? UNI[chainId] : undefined
-  const stakingInfos = useStakingInfo()
+  const activeStakingInfos = useStakingInfo()
+  const inactiveStakingInfos = useInactiveStakingInfo();
+  const stakingInfos = activeStakingInfos.concat(inactiveStakingInfos);
 
   return useMemo(() => {
     if (!uni) return undefined
