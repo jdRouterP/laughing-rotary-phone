@@ -35,7 +35,7 @@ async function fetchChunk(
   blockNumber: number
 }> {
   console.debug('Fetching chunk', chunk, minBlockNumber)
-  let resultsBlockNumber: number
+  let resultsBlockNumber: number = 0
   let results: { success: boolean; returnData: string }[]
   try {
     const { blockNumber, returnData } = await multicall.callStatic.tryBlockAndAggregate(
@@ -45,16 +45,20 @@ async function fetchChunk(
     )
     resultsBlockNumber = blockNumber.toNumber()
     results = returnData
+
+    if (resultsBlockNumber < minBlockNumber) {
+      const retryMessage = `Fetched results for old block number: ${resultsBlockNumber.toString()} vs. ${minBlockNumber}`
+      console.debug(retryMessage)
+      throw new RetryableError(retryMessage)
+    }
+    return { results, blockNumber: resultsBlockNumber }
   } catch (error) {
+    if (error?.code === -32603 || error?.code === -32000 || error?.message?.indexOf('header not found') !== -1) {
+      throw new RetryableError(`header not found for block number ${resultsBlockNumber}`)
+    }
     console.debug('Failed to fetch chunk', error)
     throw error
   }
-  if (resultsBlockNumber < minBlockNumber) {
-    const retryMessage = `Fetched results for old block number: ${resultsBlockNumber.toString()} vs. ${minBlockNumber}`
-    console.debug(retryMessage)
-    throw new RetryableError(retryMessage)
-  }
-  return { results, blockNumber: resultsBlockNumber }
 }
 
 /**
@@ -229,7 +233,6 @@ export default function Updater(): null {
               console.debug('Cancelled fetch for blockNumber', latestBlockNumber, chunk, chainId)
               return
             }
-            console.error('Failed to fetch multicall chunk', chunk, chainId, error)
             dispatch(
               errorFetchingMulticallResults({
                 calls: chunk,
