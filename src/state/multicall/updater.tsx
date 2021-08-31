@@ -35,7 +35,7 @@ async function fetchChunk(
   blockNumber: number
 }> {
   console.debug('Fetching chunk', chunk, minBlockNumber)
-  let resultsBlockNumber: number
+  let resultsBlockNumber: number = 0
   let results: { success: boolean; returnData: string }[]
   try {
     const { blockNumber, returnData } = await multicall.callStatic.tryBlockAndAggregate(
@@ -45,16 +45,20 @@ async function fetchChunk(
     )
     resultsBlockNumber = blockNumber.toNumber()
     results = returnData
+
+    if (resultsBlockNumber < minBlockNumber) {
+      const retryMessage = `Fetched results for old block number: ${resultsBlockNumber.toString()} vs. ${minBlockNumber}`
+      console.debug(retryMessage)
+      throw new RetryableError(retryMessage)
+    }
+    return { results, blockNumber: resultsBlockNumber }
   } catch (error) {
+    if (error?.code === -32603 || error?.code === -32000 || error?.message?.indexOf('header not found') !== -1) {
+      throw new RetryableError(`header not found for block number ${resultsBlockNumber}`)
+    }
     console.debug('Failed to fetch chunk', error)
     throw error
   }
-  if (resultsBlockNumber < minBlockNumber) {
-    const retryMessage = `Fetched results for old block number: ${resultsBlockNumber.toString()} vs. ${minBlockNumber}`
-    console.debug(retryMessage)
-    throw new RetryableError(retryMessage)
-  }
-  return { results, blockNumber: resultsBlockNumber }
 }
 
 /**
@@ -121,7 +125,7 @@ export function outdatedListeningKeys(
     return !data.blockNumber || data.blockNumber < minDataBlockNumber
   })
 }
-let rpcErrorRetry = 0; const MAX_RPC_RETRIES = 2;
+
 export default function Updater(): null {
   const dispatch = useDispatch<AppDispatch>()
   const state = useSelector<AppState, AppState['multicall']>(state => state.multicall)
@@ -176,7 +180,6 @@ export default function Updater(): null {
         })
         promise
           .then(({ results: returnData, blockNumber: fetchBlockNumber }) => {
-            rpcErrorRetry = 0;
             // accumulates the length of all previous indices
             const firstCallKeyIndex = chunkedCalls.slice(0, index).reduce<number>((memo, curr) => memo + curr.length, 0)
             const lastCallKeyIndex = firstCallKeyIndex + returnData.length
@@ -230,12 +233,6 @@ export default function Updater(): null {
               console.debug('Cancelled fetch for blockNumber', latestBlockNumber, chunk, chainId)
               return
             }
-            if(error.code === -32603 && rpcErrorRetry <= MAX_RPC_RETRIES) {
-              console.error(`Error fetching multicall`);
-              rpcErrorRetry++;
-              return;
-            }
-            console.error('Failed to fetch multicall chunk', chunk, chainId, error)
             dispatch(
               errorFetchingMulticallResults({
                 calls: chunk,
