@@ -32,6 +32,7 @@ export enum ApplicationModal {
   CLAIM_POPUP,
   MENU,
   FARMS_MENU,
+  VAULT_MENU,
   DELEGATE,
   VOTE,
   NETWORK

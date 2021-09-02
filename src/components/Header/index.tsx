@@ -38,6 +38,7 @@ import FarmsMenu from 'components/FarmsMenu'
 import Web3Network from 'components/Web3Network'
 import { UNI } from './../../constants/index'
 import CurrencyLogo from 'components/CurrencyLogo'
+import VaultMenu from 'components/VaultMenu'
 
 const StyledAnalytics = styled.div`
   display: none;
@@ -451,9 +452,7 @@ export default function Header() {
           {chainId && HEADER_ACCESS.vault.includes(chainId) && <StyledNavLink id={`vault-nav-link`} to={'/prediction'}>
             Prediction
           </StyledNavLink>}
-          {chainId && HEADER_ACCESS.vault.includes(chainId) && <StyledNavLink id={`vault-nav-link`} to={'/vault'}>
-            Vault
-          </StyledNavLink>}
+          {chainId && HEADER_ACCESS.vault.includes(chainId) && <VaultMenu />}
           {/* {chainId && HEADER_ACCESS.charts.includes(chainId) && <StyledExternalLink id={`stake-nav-link`} href={`https://${CHART_URL_PREFIX[(chainId ? chainId : 1)]}.dfyn.network/home/`}>
             Charts <span style={{ fontSize: '11px' }}>↗</span>
           </StyledExternalLink>} */}
