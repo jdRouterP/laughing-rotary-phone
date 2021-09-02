@@ -76,11 +76,11 @@ export default function XVault() {
                 <CardSection>
                     <AutoColumn gap="md">
                     <RowBetween>
-                        <TYPE.white fontWeight={600}>Maxmize yield by staking DFYN for xDFYN</TYPE.white>
+                        <TYPE.white fontWeight={600}>Maxmize yield by staking DFYN for vDFYN</TYPE.white>
                     </RowBetween>
                     <RowBetween>
                         <TYPE.white fontSize={14}>
-                            For every swap on the exchange on every chain, 0.05% of the swap fees are distributed as DFYN proportional to your share of the DFYNBar. When your DFYN is staked into the DFYNBar, you receive xDFYN in return for voting rights and a fully composable token that can interact with other protocols. Your xDFYN is continuously compounding, when you unstake you will receive all the originally deposited DFYN and any additional from fees.
+                            For every swap on the exchange on every chain, 0.05% of the swap fees are distributed as DFYN proportional to your share of the DFYNBar. When your DFYN is staked into the DFYNBar, you receive vDFYN in return for voting rights and a fully composable token that can interact with other protocols. Your vDFYN is continuously compounding, when you unstake you will receive all the originally deposited DFYN and any additional from fees.
                         </TYPE.white>
                     </RowBetween>{' '}
                     {/* <ExternalLink
@@ -112,13 +112,13 @@ export default function XVault() {
                             <TYPE.body style={{ margin: 0 }}>Balance</TYPE.body>
                             <TYPE.body fontSize={24} fontWeight={500} style={{display: 'flex', justifyContent: 'space-between'}}>
                                 <CurrencyLogo currency={DFYN} style={{margin: 'auto 0'}} />
-                                <span style={{marginLeft: '5px'}}>100 xDFYN</span>
+                                <span style={{marginLeft: '5px'}}>100 vDFYN</span>
                             </TYPE.body>
                         </AutoColumn>
                     </PoolData>
                     <PoolData>
                         <AutoColumn gap="sm">
-                            <TYPE.body style={{ margin: 0 }}>Unstake</TYPE.body>
+                            <TYPE.body style={{ margin: 0 }}>Unstaked</TYPE.body>
                             <TYPE.body fontSize={24} fontWeight={500} style={{display: 'flex', justifyContent: 'space-between'}}>
                                 <CurrencyLogo currency={DFYN} style={{margin: 'auto 0'}} />
                                 <span style={{marginLeft: '5px'}}>100 DFYN</span>
