@@ -46,12 +46,6 @@ export const inactiveTab = {
   opacity: 0.65
 };
 
-// width, index,
-/**
- * [0] [1] [2] ...
- * W * index
- *
- */
 export const TabSlider = styled.div`
   width: ${(props) => `${props.width}px`};
   height: 4px;

@@ -1,82 +1,27 @@
-import { ButtonLight } from 'components/Button'
+import {  CurrencyAmount, JSBI } from '@dfyn/sdk'
+import { ButtonError, ButtonLight } from 'components/Button'
+import CurrencyInputPanel from 'components/CurrencyInputPanel'
 import { CardNoise } from 'components/earn/styled'
 import { RowBetween } from 'components/Row'
-import { BottomGrouping } from 'components/swap/styleds'
-import React from 'react'
+import { DFYN } from 'constants/index'
+import { useActiveWeb3React } from 'hooks'
+import React, { useCallback, useMemo, useState } from 'react'
+import { Text } from 'rebass'
+import { useWalletModalToggle } from 'state/application/hooks'
+import { useDerivedSwapInfo } from 'state/swap/hooks'
+import { useCurrencyBalance } from 'state/wallet/hooks'
 import styled from 'styled-components'
 import { TYPE } from 'theme'
-
-const StyledInput = styled.input<{ error?: boolean; fontSize?: string; align?: string }>`
-  color: ${({ error, theme }) => (error ? theme.red1 : theme.text1)};
-  width: 0;
-  position: relative;
-  font-weight: 500;
-  outline: none;
-  border: none;
-  flex: 1 1 auto;
-  background-color: ${({ theme }) => theme.bg1};
-  font-size: ${({ fontSize }) => fontSize ?? '24px'};
-  text-align: ${({ align }) => align && align};
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  padding: 0px;
-  -webkit-appearance: textfield;
-
-  ::-webkit-search-decoration {
-    -webkit-appearance: none;
-  }
-
-  [type='number'] {
-    -moz-appearance: textfield;
-  }
-
-  ::-webkit-outer-spin-button,
-  ::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-  }
-
-  ::placeholder {
-    color: ${({ theme }) => theme.text4};
-  }
-`
-
-const StyledBalanceMax = styled.button`
-  height: 28px;
-  background-color: ${({ theme }) => theme.primary5};
-  border: 1px solid ${({ theme }) => theme.primary5};
-  border-radius: 0.5rem;
-  font-size: 0.875rem;
-
-  font-weight: 500;
-  cursor: pointer;
-  margin-right: 0.5rem;
-  color: ${({ theme }) => theme.primaryText1};
-  :hover {
-    border: 1px solid ${({ theme }) => theme.primary1};
-  }
-  :focus {
-    border: 1px solid ${({ theme }) => theme.primary1};
-    outline: none;
-  }
-
-  ${({ theme }) => theme.mediaWidth.upToExtraSmall`
-    margin-right: 0.5rem;
-  `};
-`
+import { BIG_INT_ZERO } from 'utils/bigNumber'
+import { maxAmountSpend } from 'utils/maxAmountSpend'
 
 const InputRow = styled.div`
-  ${({ theme }) => theme.flexRowNoWrap}
-  align-items: center;
-  border-radius: 10px;
-  border: 1px solid ${({ theme }) => theme.bg2};
-  padding: 0.75rem 0.5rem 0.75rem 1rem;
+    width: 100%;
+    align-items: center;
+    border-radius: 10px;
+    padding: 0.75rem 0 0.75rem 0;
 `
 
-const MainComponent = styled.div`
-    margin-top: 1rem;
-    width: 100%;
-`
 
 const BodyStyle = styled.div`
     width: 100%;
@@ -106,6 +51,44 @@ const UNIAmount = styled.div`
 `
 
 export default function InputComponent({label}: {label: string}) {
+
+    const {
+        inputError: swapInputError
+    } = useDerivedSwapInfo()
+
+    const [typedValue, setTypedValue] = useState('')
+    const { account, chainId } = useActiveWeb3React()
+    let balance = useCurrencyBalance(account ?? undefined, DFYN)
+    
+    const dust = JSBI.BigInt("10000000000000000"); //TODO
+    
+
+    const maxBalance = useMemo(() => {
+        if (balance === undefined) {
+            return new CurrencyAmount(DFYN, BIG_INT_ZERO);
+        }
+        let dustToken = new CurrencyAmount(DFYN, dust);
+        
+        return balance.greaterThan(dust) ? balance.subtract(dustToken) : balance
+    }, [balance, dust])
+    
+
+    const toggleWalletModal = useWalletModalToggle()
+
+    const onUserInput = useCallback((typedValue: string) => {
+        setTypedValue(typedValue)
+    }, [])
+    
+    // used for max input button
+    const maxAmountInput: CurrencyAmount | undefined =  maxAmountSpend(maxBalance, chainId)
+    
+    const atMaxAmount = Boolean(maxAmountInput && balance?.equalTo(maxAmountInput))
+    const handleMax = useCallback(() => {
+        maxAmountInput && onUserInput(maxAmountInput.toExact())
+    }, [maxAmountInput, onUserInput])
+
+    const isValid = !swapInputError
+
     return (
         <BodyStyle>
             <RowBetween>
@@ -119,18 +102,33 @@ export default function InputComponent({label}: {label: string}) {
                     <CardNoise />
                 </UNIWrapper> 
             </RowBetween>
-            <MainComponent>
-                <InputRow>
-                    <>
-                        <StyledInput placeholder={"0.0"} />
-                        <TYPE.black style={{marginRight: '20px', fontSize: '15px'}}>Balance:</TYPE.black>
-                        <StyledBalanceMax>MAX</StyledBalanceMax>
-                    </>
-                </InputRow>
-                <BottomGrouping>
-                    <ButtonLight>Connect Wallet</ButtonLight>
-                </BottomGrouping>
-            </MainComponent>
+            <InputRow>
+                <CurrencyInputPanel
+                    value={typedValue}
+                    onUserInput={onUserInput}
+                    onMax={handleMax}
+                    showMaxButton={atMaxAmount}
+                    currency={DFYN}
+                    label={''}
+                    disableCurrencySelect={true}
+                    customBalanceText={'Balance: '}
+                    id="stake"
+                />
+                <RowBetween mt={"20px"}>
+                    {account ?  
+                    <ButtonError
+                        disabled={isValid}
+                        error={isValid}
+                    >
+                        <Text fontSize={16} fontWeight={500}>
+                        {swapInputError
+                            ? swapInputError
+                            : 'Swap'}
+                        </Text>
+                    </ButtonError> : 
+                    <ButtonLight onClick={toggleWalletModal}>Connect Wallet</ButtonLight> }
+                </RowBetween>
+            </InputRow>
         </BodyStyle>
     )
 }
