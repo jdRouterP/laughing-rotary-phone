@@ -55,12 +55,12 @@ export const Tabs = ({ selectedTab, onChange, children }) => {
   );
 };
 
-export const TabPanel = ({ label, value, selectedIndex }) => {
+export const TabPanel = ({ label, value, selectedIndex, token }) => {
   const hidden = value !== selectedIndex;
 
   return (
     <StyledTabPanel hidden={hidden} active={!hidden}>
-      <InputComponent label={label} />
+      <InputComponent label={label} token={token} />
     </StyledTabPanel>
   );
 };

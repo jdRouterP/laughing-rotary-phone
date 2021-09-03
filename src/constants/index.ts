@@ -11,6 +11,8 @@ export const PREDICTION_ADDRESS = '0x150B4fD25c7c0c65301e86B599822f2feeCC29E7'
 
 export const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000'
 
+export const DFYN_CHEST = '0x00689687E68b924fa3dBaD36fA4887d48e9CD751'
+
 export { PRELOADED_PROPOSALS } from './proposals'
 
 // a list of tokens by chain
@@ -20,7 +22,7 @@ type ChainTokenList = {
 
 //Chainlink price feed
 export const MATIC_USD = new Token(ChainId.MATIC, '0x0000000000000000000000000000000000000000', 8, 'MATIC', 'MATIC');
-
+export const vDFYN = new Token(ChainId.MATIC, DFYN_CHEST, 18, 'vDFYN', 'vDFYN');
 export const EMPTY = new Token(ChainId.MATIC, '0x0000000000000000000000000000000000000000', 0, 'EMPTY', 'EMPTY')
 export const DAI = new Token(ChainId.MATIC, '0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063', 18, 'DAI', 'Dai Stablecoin')
 export const USDC = new Token(ChainId.MATIC, '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174', 6, 'USDC', 'USDC')

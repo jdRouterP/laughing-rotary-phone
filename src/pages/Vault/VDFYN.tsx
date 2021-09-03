@@ -6,7 +6,7 @@ import { TYPE } from '../../theme'
 import { RowBetween } from '../../components/Row'
 import { CardSection, DataCard, CardNoise, CardBGImage } from '../../components/vault/styled'
 import CurrencyLogo from 'components/CurrencyLogo'
-import { DFYN, UNI } from 'constants/index'
+import { DFYN, UNI, vDFYN } from 'constants/index'
 import { Tab, TabPanel, Tabs } from './tabs/Tabs'
 import { useTokenBalance } from 'state/wallet/hooks'
 import { useActiveWeb3React } from 'hooks'
@@ -64,9 +64,15 @@ const TopSection = styled(AutoColumn)`
 export default function VDFYN() {
 
     const { account, chainId } = useActiveWeb3React()
+
     const uni = chainId ? UNI[chainId] : undefined
-    const aggregateBalance: TokenAmount | undefined = useTokenBalance(account ?? undefined, uni)
-    const countUpValue = aggregateBalance?.toFixed(6) ?? '0'
+    const aggregateBalanceDfyn: TokenAmount | undefined = useTokenBalance(account ?? undefined, uni)
+    const countUpValueDfyn = aggregateBalanceDfyn?.toFixed(4) ?? '0'
+
+    const aggregateBalancevDfyn: TokenAmount | undefined = useTokenBalance(account ?? undefined, vDFYN)
+    const countUpValuevDfyn = aggregateBalancevDfyn?.toFixed(4) ?? '0'
+
+
     
     const [activeTab, setActiveTab] = useState(0);
     //@ts-nocheck
@@ -118,19 +124,19 @@ export default function VDFYN() {
                     </PoolData>
                     <PoolData>
                         <AutoColumn gap="sm">
-                            <TYPE.body style={{ margin: 0 }}>Balance</TYPE.body>
+                            <TYPE.body style={{ margin: 0 }}>Balance vDFYN</TYPE.body>
                             <TYPE.body fontSize={24} fontWeight={500} style={{display: 'flex', justifyContent: 'space-between'}}>
-                                <CurrencyLogo currency={DFYN} style={{margin: 'auto 0'}} />
-                                <span style={{marginLeft: '5px'}}>100 vDFYN</span>
+                                <CurrencyLogo currency={vDFYN} style={{margin: 'auto 0'}} />
+                                <span style={{marginLeft: '5px'}}>{countUpValuevDfyn}</span>
                             </TYPE.body>
                         </AutoColumn>
                     </PoolData>
                     <PoolData>
                         <AutoColumn gap="sm">
-                            <TYPE.body style={{ margin: 0 }}>Unstaked</TYPE.body>
+                            <TYPE.body style={{ margin: 0 }}>Unstaked DFYN</TYPE.body>
                             <TYPE.body fontSize={24} fontWeight={500} style={{display: 'flex', justifyContent: 'space-between'}}>
                                 <CurrencyLogo currency={DFYN} style={{margin: 'auto 0'}} />
-                                <span style={{marginLeft: '5px'}}>{countUpValue}</span>
+                                <span style={{marginLeft: '5px'}}>{countUpValueDfyn}</span>
                             </TYPE.body>
                         </AutoColumn>
                     </PoolData>
@@ -144,8 +150,8 @@ export default function VDFYN() {
                 </Tabs>
             </TabsContainer>
             <TabPanelContainer>
-                <TabPanel value={activeTab} selectedIndex={0} label="Stake DFYN"></TabPanel>
-                <TabPanel value={activeTab} selectedIndex={1} label="Unstake DFYN"></TabPanel>
+                <TabPanel value={activeTab} selectedIndex={0} label="Stake DFYN" token={DFYN}></TabPanel>
+                <TabPanel value={activeTab} selectedIndex={1} label="Unstake DFYN" token={vDFYN}></TabPanel>
             </TabPanelContainer>
         </ContentBody>
     </>
