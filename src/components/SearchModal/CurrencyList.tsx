@@ -6,7 +6,7 @@ import styled from 'styled-components'
 import { useActiveWeb3React } from '../../hooks'
 import { WrappedTokenInfo, useCombinedActiveList } from '../../state/lists/hooks'
 import { useCurrencyBalance } from '../../state/wallet/hooks'
-import { TYPE } from '../../theme'
+import { LinkStyledButton, TYPE } from '../../theme'
 import { useIsUserAddedToken, useAllInactiveTokens } from '../../hooks/Tokens'
 import Column from '../Column'
 import { RowFixed, RowBetween } from '../Row'
@@ -21,10 +21,19 @@ import { LightGreyCard } from 'components/Card'
 import TokenListLogo from '../../assets/svg/tokenlist.svg'
 import QuestionHelper from 'components/QuestionHelper'
 import useTheme from 'hooks/useTheme'
+import { PlusCircle } from 'react-feather'
 
 function currencyKey(currency: Currency, chainId = ChainId.MATIC): string {
   return currency instanceof Token ? currency.address : currency === Currency.getNativeCurrency(chainId) ? Currency.getNativeCurrencySymbol(chainId) || 'MATIC ' : ''
 }
+
+
+const TextIcon = styled.div`
+  display: flex;
+`
+const Icon = styled.div`
+  margin: auto 3px;
+`
 
 const StyledBalanceText = styled(Text)`
   white-space: nowrap;
@@ -110,12 +119,43 @@ function CurrencyRow({
   otherSelected: boolean
   style: CSSProperties
 }) {
+  const { ethereum } = window
   const { account, chainId } = useActiveWeb3React()
   const key = currencyKey(currency)
   const selectedTokenList = useCombinedActiveList()
   const isOnSelectedList = isTokenOnList(selectedTokenList, currency)
   const customAdded = useIsUserAddedToken(currency)
   const balance = useCurrencyBalance(account ?? undefined, currency)
+
+  //for Plus or add directly to the metamask
+  const isMetamask = (ethereum && ethereum.isMetaMask && isOnSelectedList);
+  const addTokenToMetamask = (tokenAddress:any, tokenSymbol:any, tokenDecimals:any) => {
+    if(ethereum) {
+      // @ts-ignore
+      ethereum.request({
+        method: 'wallet_watchAsset',
+        params: {
+          type: 'ERC20', // Initially only supports ERC20, but eventually more!
+          options: {
+            address: tokenAddress, // The address that the token is at.
+            symbol: tokenSymbol, // A ticker symbol or shorthand, up to 5 chars.
+            decimals: tokenDecimals, // The number of decimals in the token
+            // image: tokenImage // A string url of the token logo
+          },
+        },
+      })
+      .then((result:any) => {
+      })
+      .catch((error:any) => {
+        if (error.code === 4001) {
+          // EIP-1193 userRejectedRequest error
+          console.log('We can encrypt anything without the key.');
+        } else {
+          console.error(error);
+        }
+      });
+    } 
+  }
 
   // only show add or remove buttons if not on selected list
   return (
@@ -128,11 +168,32 @@ function CurrencyRow({
     >
       <CurrencyLogo currency={currency} size={'24px'} />
       <Column>
-        <Text title={currency.getName(chainId)} fontWeight={500}>
-          { //TODO: refactor (change in sdk)
-            currency.symbol
-          }
-        </Text>
+        <TextIcon>
+          <Text title={currency.getName(chainId)} fontWeight={500}>
+            { //TODO: refactor (change in sdk)
+              currency.symbol
+            }
+          </Text>
+          <Icon>
+            { isMetamask && currency !== Currency.getNativeCurrency(chainId ?? 137) && (
+              <LinkStyledButton
+              style={{cursor: 'pointer'}}
+              onClick={event => {
+                addTokenToMetamask(
+                  currency instanceof Token ? currency.address : '',
+                  currency.symbol,
+                  currency.decimals
+                )
+                event.stopPropagation()
+              }}
+              >
+              <PlusCircle size={"17px"} />
+              </LinkStyledButton>
+              )
+            }
+          </Icon>
+        </TextIcon>
+        
         <TYPE.darkGray ml="0px" fontSize={'12px'} fontWeight={300}>
           {currency.getName(chainId)} {!isOnSelectedList && customAdded && '• Added by user'}
         </TYPE.darkGray>

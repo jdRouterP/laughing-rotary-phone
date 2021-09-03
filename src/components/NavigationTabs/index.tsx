@@ -15,7 +15,7 @@ import { MouseoverTooltip } from 'components/Tooltip'
 import { HEADER_ACCESS } from 'constants/networks'
 import { LocalGasStation } from '@material-ui/icons'
 import Toggle from 'components/Toggle'
-import { useGaslessModeManager } from 'state/user/hooks'
+import { useGaslessModeManager, useIsGaslessMode } from 'state/user/hooks'
 import { useActiveWeb3React } from 'hooks'
 
 const Icon = styled.div`
@@ -118,7 +118,7 @@ export function AddRemoveTabs({ adding, creating }: { adding: boolean; creating:
   const [gaslessMode, toggleSetGaslessMode] = useGaslessModeManager()
   const { chainId} = useActiveWeb3React()
   const dispatch = useDispatch<AppDispatch>()
-
+  const toggleValue = useIsGaslessMode()
   return (
     <Tabs>
       <RowBetween style={{ padding: '1rem 1rem 0 1rem' }}>
@@ -135,7 +135,7 @@ export function AddRemoveTabs({ adding, creating }: { adding: boolean; creating:
           <Icon>
             {chainId && HEADER_ACCESS.gaslessMode.includes(chainId) &&<GaslessModeElement>
               <MouseoverTooltip text={'Gasless Mode. This button will toggle Dfyn’s gasless feature for your wallet. Users with hardware wallets should keep this setting turned off.'} placement='bottom'>
-                <LocalGasStation />
+                <LocalGasStation style={{color: toggleValue ? 'green' : ''}}/>
               </MouseoverTooltip>
               <Toggle
                 id="toggle-gasless-mode-button"
