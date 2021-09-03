@@ -97,7 +97,7 @@ export default function VaultMenu() {
 
         {open && (
             <MenuFlyout>
-                <StyledNavLink id={`x-vault-nav-link`} to={'/xvault'}>
+                <StyledNavLink id={`x-vault-nav-link`} to={'/vdfyn'}>
                     vDFYN
                 </StyledNavLink>
                 <StyledNavLink id={`v-vault-nav-link`} to={'/vault'}>

@@ -57,7 +57,7 @@ import PreStakingFarmsArchived from './Earn/PreStakingFarmsArchived'
 import LaunchFarmsArchived from "./LaunchFarms/LaunchFarmsArchived"
 import Analytics from 'components/Header/Analytics'
 import ThemeChange from 'components/Header/ThemeChange'
-import XVault from './Vault/XVault'
+import VDFYN from './Vault/VDFYN'
 
 const AppWrapper = styled.div`
   display: flex;
@@ -132,7 +132,7 @@ export default function App() {
               <Route exact strict path="/launch-farms" component={LaunchFarms} />
               <Route exact strict path="/popular-farms" component={FloraFarms} />
               <Route exact strict path="/vault" component={Vault} />
-              <Route exact strict path="/xvault" component={XVault} />
+              <Route exact strict path="/vdfyn" component={VDFYN} />
               <Route exact strict path="/prediction" component={Predictions} />
               <Route exact strict path="/prediction/:currency/:candleSize" component={PredictionDesktop} />
               {/* <Route exact strict path="/predictionMarket" component={PredictionMarket} /> */}

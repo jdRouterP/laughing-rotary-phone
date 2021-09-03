@@ -6,8 +6,10 @@ import { TYPE } from '../../theme'
 import { RowBetween } from '../../components/Row'
 import { CardSection, DataCard, CardNoise, CardBGImage } from '../../components/vault/styled'
 import CurrencyLogo from 'components/CurrencyLogo'
-import { DFYN } from 'constants/index'
+import { DFYN, UNI } from 'constants/index'
 import { Tab, TabPanel, Tabs } from './tabs/Tabs'
+import { useTokenBalance } from 'state/wallet/hooks'
+import { useActiveWeb3React } from 'hooks'
 
 const DataRow = styled(RowBetween)`
   justify-content: center;
@@ -59,12 +61,19 @@ const TopSection = styled(AutoColumn)`
   width: 100%;
 `
 
-export default function XVault() {
+export default function VDFYN() {
+
+    const { account, chainId } = useActiveWeb3React()
+    const uni = chainId ? UNI[chainId] : undefined
+    const aggregateBalance: TokenAmount | undefined = useTokenBalance(account ?? undefined, uni)
+    const countUpValue = aggregateBalance?.toFixed(6) ?? '0'
+    
     const [activeTab, setActiveTab] = useState(0);
     //@ts-nocheck
     const handleChange = (e, value) => {
       setActiveTab(value);
     };
+    
 
   return (
     <>
@@ -121,7 +130,7 @@ export default function XVault() {
                             <TYPE.body style={{ margin: 0 }}>Unstaked</TYPE.body>
                             <TYPE.body fontSize={24} fontWeight={500} style={{display: 'flex', justifyContent: 'space-between'}}>
                                 <CurrencyLogo currency={DFYN} style={{margin: 'auto 0'}} />
-                                <span style={{marginLeft: '5px'}}>100 DFYN</span>
+                                <span style={{marginLeft: '5px'}}>{countUpValue}</span>
                             </TYPE.body>
                         </AutoColumn>
                     </PoolData>
@@ -131,12 +140,12 @@ export default function XVault() {
             <TabsContainer>
                 <Tabs selectedTab={activeTab} onChange={handleChange}>
                     <Tab label="Stake DFYN" value={0}></Tab>
-                    <Tab label="Unstake" value={1}></Tab>
+                    <Tab label="Unstake DFYN" value={1}></Tab>
                 </Tabs>
             </TabsContainer>
             <TabPanelContainer>
                 <TabPanel value={activeTab} selectedIndex={0} label="Stake DFYN"></TabPanel>
-                <TabPanel value={activeTab} selectedIndex={1} label="Unstake"></TabPanel>
+                <TabPanel value={activeTab} selectedIndex={1} label="Unstake DFYN"></TabPanel>
             </TabPanelContainer>
         </ContentBody>
     </>

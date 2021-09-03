@@ -5,10 +5,9 @@ import { CardNoise } from 'components/earn/styled'
 import { RowBetween } from 'components/Row'
 import { DFYN } from 'constants/index'
 import { useActiveWeb3React } from 'hooks'
+import useStake from 'pages/Predictions/hooks/useStake'
 import React, { useCallback, useMemo, useState } from 'react'
-import { Text } from 'rebass'
 import { useWalletModalToggle } from 'state/application/hooks'
-import { useDerivedSwapInfo } from 'state/swap/hooks'
 import { useCurrencyBalance } from 'state/wallet/hooks'
 import styled from 'styled-components'
 import { TYPE } from 'theme'
@@ -52,9 +51,7 @@ const UNIAmount = styled.div`
 
 export default function InputComponent({label}: {label: string}) {
 
-    const {
-        inputError: swapInputError
-    } = useDerivedSwapInfo()
+   
 
     const [typedValue, setTypedValue] = useState('')
     const { account, chainId } = useActiveWeb3React()
@@ -62,7 +59,10 @@ export default function InputComponent({label}: {label: string}) {
     
     const dust = JSBI.BigInt("10000000000000000"); //TODO
     
-
+    const {
+        parsedAmount,
+        error: swapInputError
+    } = useStake(typedValue, DFYN, balance)
     const maxBalance = useMemo(() => {
         if (balance === undefined) {
             return new CurrencyAmount(DFYN, BIG_INT_ZERO);
@@ -86,9 +86,7 @@ export default function InputComponent({label}: {label: string}) {
     const handleMax = useCallback(() => {
         maxAmountInput && onUserInput(maxAmountInput.toExact())
     }, [maxAmountInput, onUserInput])
-
-    const isValid = !swapInputError
-
+    
     return (
         <BodyStyle>
             <RowBetween>
@@ -96,7 +94,7 @@ export default function InputComponent({label}: {label: string}) {
                 <UNIWrapper>
                     <UNIAmount>
                         <TYPE.white padding="0 2px">
-                            1DFYN = 1.5xDFYN
+                            1DFYN = 1.5vDFYN
                         </TYPE.white>
                     </UNIAmount>
                     <CardNoise />
@@ -117,14 +115,11 @@ export default function InputComponent({label}: {label: string}) {
                 <RowBetween mt={"20px"}>
                     {account ?  
                     <ButtonError
-                        disabled={isValid}
-                        error={isValid}
+                        id="swap-button"
+                        disabled={!!swapInputError}
+                        error={!!swapInputError && !!parsedAmount}
                     >
-                        <Text fontSize={16} fontWeight={500}>
-                        {swapInputError
-                            ? swapInputError
-                            : 'Swap'}
-                        </Text>
+                        {swapInputError ?? 'Swap'}
                     </ButtonError> : 
                     <ButtonLight onClick={toggleWalletModal}>Connect Wallet</ButtonLight> }
                 </RowBetween>
