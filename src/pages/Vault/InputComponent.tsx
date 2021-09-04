@@ -1,4 +1,4 @@
-import {  CurrencyAmount, JSBI, Token } from '@dfyn/sdk'
+import { CurrencyAmount, JSBI, Token } from '@dfyn/sdk'
 import { TransactionResponse } from '@ethersproject/abstract-provider'
 import { ButtonConfirmed, ButtonError, ButtonLight } from 'components/Button'
 import { AutoColumn } from 'components/Column'
@@ -56,14 +56,14 @@ const UNIAmount = styled.div`
   background: radial-gradient(174.47% 188.91% at 1.84% 0%, #ff007a 0%, #2172e5 100%), #edeef2;
 `
 
-export default function InputComponent({label, token}: {label: string, token: Token}) {
+export default function InputComponent({ label, token }: { label: string, token: Token }) {
     const [isOpen, setIsOpen] = useState(false)
     const [typedValue, setTypedValue] = useState('')
     const { account, chainId } = useActiveWeb3React()
     let balance = useCurrencyBalance(account ?? undefined, token)
-    
+
     const dust = JSBI.BigInt("10000000000000000"); //TODO
-    
+
     const {
         parsedAmount,
         error: swapInputError
@@ -76,20 +76,20 @@ export default function InputComponent({label, token}: {label: string, token: To
             return new CurrencyAmount(token, BIG_INT_ZERO);
         }
         let dustToken = new CurrencyAmount(token, dust);
-        
+
         return balance.greaterThan(dust) ? balance.subtract(dustToken) : balance
     }, [balance, dust, token])
-    
+
 
     const toggleWalletModal = useWalletModalToggle()
 
     const onUserInput = useCallback((typedValue: string) => {
         setTypedValue(typedValue)
     }, [])
-    
+
     // used for max input button
-    const maxAmountInput: CurrencyAmount | undefined =  maxAmountSpend(maxBalance, chainId)
-    
+    const maxAmountInput: CurrencyAmount | undefined = maxAmountSpend(maxBalance, chainId)
+
     const atMaxAmount = Boolean(maxAmountInput && balance?.equalTo(maxAmountInput))
     const handleMax = useCallback(() => {
         maxAmountInput && onUserInput(maxAmountInput.toExact())
@@ -103,32 +103,34 @@ export default function InputComponent({label, token}: {label: string, token: To
         setHash(undefined)
         setAttempting(false)
         setIsOpen(false)
-      },[])
+    }, [])
 
     async function onStakeEnter() {
         setIsOpen(true)
         setAttempting(true)
         if (dfynChestContract && parsedAmount) {
-          if (approval === ApprovalState.APPROVED) {
-    
-            await dfynChestContract.enter(`0x${parsedAmount.raw.toString(16)}`, { gasLimit: 350000 }).then((response: TransactionResponse) => {
-              addTransaction(response, {
-                summary: `Deposit Tokens`
-              })
-              setHash(response.hash)
-            })
-              .catch((error: any) => {
+            if (approval === ApprovalState.APPROVED) {
+
+                await dfynChestContract.enter(`0x${parsedAmount.raw.toString(16)}`, { gasLimit: 350000 }).then((response: TransactionResponse) => {
+                    addTransaction(response, {
+                        summary: `Deposit Tokens`
+                    })
+                    setHash(response.hash)
+                })
+                    .catch((error: any) => {
+                        setAttempting(false)
+                        setIsOpen(false)
+                        console.log(error)
+                    })
+            } else {
                 setAttempting(false)
-                console.log(error)
-              })
-          } else {
-            setAttempting(false)
-            throw new Error('Attempting to stake without approval or a signature. Please contact support.')
-          }
+                setIsOpen(false)
+                throw new Error('Attempting to stake without approval or a signature. Please contact support.')
+            }
         }
-      }
-    
-      async function onStakeLeave() {
+    }
+
+    async function onStakeLeave() {
         setIsOpen(true)
         setAttempting(true)
         if (dfynChestContract && parsedAmount) {
@@ -138,13 +140,13 @@ export default function InputComponent({label, token}: {label: string, token: To
                 })
                 setHash(response.hash)
             })
-            .catch((error: any) => {
-                setAttempting(false)
-                console.log(error)
-            })
+                .catch((error: any) => {
+                    setAttempting(false)
+                    console.log(error)
+                })
         }
-      }
-    
+    }
+
     return (
         <BodyStyle>
             <RowBetween>
@@ -156,7 +158,7 @@ export default function InputComponent({label, token}: {label: string, token: To
                         </TYPE.white>
                     </UNIAmount>
                     <CardNoise />
-                </UNIWrapper> 
+                </UNIWrapper>
             </RowBetween>
             <InputRow>
                 <CurrencyInputPanel
@@ -171,7 +173,7 @@ export default function InputComponent({label, token}: {label: string, token: To
                     id="stake"
                 />
                 <RowBetween mt={"20px"}>
-                    {account ? 
+                    {account ?
                         (label === "Stake DFYN" ?
                             <>
                                 <ButtonConfirmed
@@ -187,40 +189,40 @@ export default function InputComponent({label, token}: {label: string, token: To
                                     disabled={!!swapInputError || (approval !== ApprovalState.APPROVED)}
                                     error={!!swapInputError && !!parsedAmount}
                                 >
-                                {swapInputError ?? 'Deposit'}
+                                    {swapInputError ?? 'Deposit'}
                                 </ButtonError>
                             </>
-                            : 
+                            :
                             <ButtonError
                                 onClick={onStakeLeave}
                                 disabled={!!swapInputError}
                                 error={!!swapInputError && !!parsedAmount}
                             >
-                            {swapInputError ?? 'Deposit'}
+                                {swapInputError ?? 'Deposit'}
                             </ButtonError>
-                            ) : 
-                    <ButtonLight onClick={toggleWalletModal}>Connect Wallet</ButtonLight> }
+                        ) :
+                        <ButtonLight onClick={toggleWalletModal}>Connect Wallet</ButtonLight>}
                 </RowBetween>
             </InputRow>
             <Modal isOpen={isOpen} onDismiss={wrappedOnDismiss} maxHeight={90}>
                 {attempting && !hash && (
                     <LoadingView onDismiss={wrappedOnDismiss}>
-                    <AutoColumn gap="12px" justify={'center'}>
-                        <TYPE.largeHeader>Depositing { label === "Stake DFYN" ? "DFYN" : "vDFYN" ?? '-'} Tokens</TYPE.largeHeader>
-                        <TYPE.body fontSize={20}>{parsedAmount?.toSignificant(4)} {label === "Stake DFYN" ? "DFYN" : "vDFYN" ?? '-'}</TYPE.body>
-                    </AutoColumn>
+                        <AutoColumn gap="12px" justify={'center'}>
+                            <TYPE.largeHeader>Depositing {label === "Stake DFYN" ? "DFYN" : "vDFYN" ?? '-'} Tokens</TYPE.largeHeader>
+                            <TYPE.body fontSize={20}>{parsedAmount?.toSignificant(4)} {label === "Stake DFYN" ? "DFYN" : "vDFYN" ?? '-'}</TYPE.body>
+                        </AutoColumn>
                     </LoadingView>
                 )}
                 {attempting && hash && (
                     <SubmittedView onDismiss={wrappedOnDismiss} hash={hash}>
-                    <AutoColumn gap="12px" justify={'center'}>
-                        <TYPE.largeHeader>Transaction Submitted</TYPE.largeHeader>
-                        <TYPE.body fontSize={20}>Deposited {parsedAmount?.toSignificant(4)} {label === "Stake DFYN" ? "DFYN" : "vDFYN" ?? '-'}</TYPE.body>
-                    </AutoColumn>
+                        <AutoColumn gap="12px" justify={'center'}>
+                            <TYPE.largeHeader>Transaction Submitted</TYPE.largeHeader>
+                            <TYPE.body fontSize={20}>Deposited {parsedAmount?.toSignificant(4)} {label === "Stake DFYN" ? "DFYN" : "vDFYN" ?? '-'}</TYPE.body>
+                        </AutoColumn>
                     </SubmittedView>
-                )}     
+                )}
             </Modal>
         </BodyStyle>
-        
+
     )
 }
