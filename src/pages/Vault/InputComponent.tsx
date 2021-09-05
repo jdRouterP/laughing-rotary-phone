@@ -1,12 +1,14 @@
 import { CurrencyAmount, JSBI, Token } from '@dfyn/sdk'
 import { TransactionResponse } from '@ethersproject/abstract-provider'
 import { ButtonConfirmed, ButtonError, ButtonLight } from 'components/Button'
-import { AutoColumn } from 'components/Column'
+import Column, { AutoColumn } from 'components/Column'
 import CurrencyInputPanel from 'components/CurrencyInputPanel'
+import ProgressSteps from 'components/ProgressSteps'
 import { CardNoise } from 'components/earn/styled'
+import Loader from 'components/Loader'
 import Modal from 'components/Modal'
 import { LoadingView, SubmittedView } from 'components/ModalViews'
-import { RowBetween } from 'components/Row'
+import { AutoRow, RowBetween } from 'components/Row'
 import { DFYN_CHEST } from 'constants/index'
 import { useActiveWeb3React } from 'hooks'
 import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
@@ -72,6 +74,12 @@ export default function InputComponent({ label, token }: { label: string, token:
     } = useStake(typedValue, token, balance)
 
     const [approval, approveCallback] = useApproveCallback(parsedAmount, DFYN_CHEST)
+    const [approvalSubmitted,] = useState<boolean>(false)
+    const showApproveFlow =
+        !swapInputError &&
+        (approval === ApprovalState.NOT_APPROVED ||
+            approval === ApprovalState.PENDING ||
+            (approvalSubmitted && approval === ApprovalState.APPROVED))
 
     const maxBalance = useMemo(() => {
         if (balance === undefined) {
@@ -156,7 +164,7 @@ export default function InputComponent({ label, token }: { label: string, token:
                 <UNIWrapper>
                     <UNIAmount>
                         <TYPE.white padding="0 2px">
-                            {`1 DFYN = ${dfynChestInfo?.DFYNtovDFYN.toSignificant(2) ?? '-'} vDFYN`}
+                            {`1 vDFYN = ${dfynChestInfo?.vDFYNtoDFYN.toSignificant(2) ?? '-'} DFYN`}
                         </TYPE.white>
                     </UNIAmount>
                     <CardNoise />
@@ -178,14 +186,21 @@ export default function InputComponent({ label, token }: { label: string, token:
                     {account ?
                         (label === "Stake DFYN" ?
                             <>
-                                <ButtonConfirmed
+                                {showApproveFlow && <ButtonConfirmed
                                     mr="0.5rem"
                                     onClick={approveCallback}
+                                    disabled={approval !== ApprovalState.NOT_APPROVED || approvalSubmitted}
+                                    altDisabledStyle={approval === ApprovalState.PENDING} // show solid button while waiting
                                     confirmed={approval === ApprovalState.APPROVED}
-                                    disabled={approval !== ApprovalState.NOT_APPROVED}
                                 >
-                                    Approve
-                                </ButtonConfirmed>
+                                    {approval === ApprovalState.PENDING ? (
+                                        <AutoRow gap="6px" justify="center">
+                                            Approving <Loader stroke="white" />
+                                        </AutoRow>
+                                    ) : (
+                                        'Approve DFYN'
+                                    )}
+                                </ButtonConfirmed>}
                                 <ButtonError
                                     onClick={onStakeEnter}
                                     disabled={!!swapInputError || (approval !== ApprovalState.APPROVED)}
@@ -193,6 +208,7 @@ export default function InputComponent({ label, token }: { label: string, token:
                                 >
                                     {swapInputError ?? 'Deposit'}
                                 </ButtonError>
+
                             </>
                             :
                             <ButtonError
@@ -205,6 +221,11 @@ export default function InputComponent({ label, token }: { label: string, token:
                         ) :
                         <ButtonLight onClick={toggleWalletModal}>Connect Wallet</ButtonLight>}
                 </RowBetween>
+                {showApproveFlow && (
+                    <Column style={{ marginTop: '1rem' }}>
+                        <ProgressSteps steps={[approval === ApprovalState.APPROVED]} />
+                    </Column>
+                )}
             </InputRow>
             <Modal isOpen={isOpen} onDismiss={wrappedOnDismiss} maxHeight={90}>
                 {attempting && !hash && (
