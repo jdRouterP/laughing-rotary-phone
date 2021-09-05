@@ -15,6 +15,7 @@ import useStake from 'pages/Predictions/hooks/useStake'
 import React, { useCallback, useMemo, useState } from 'react'
 import { useWalletModalToggle } from 'state/application/hooks'
 import { useTransactionAdder } from 'state/transactions/hooks'
+import { useDfynChestInfo } from 'state/vDfyn/hooks'
 import { useCurrencyBalance } from 'state/wallet/hooks'
 import styled from 'styled-components'
 import { TYPE } from 'theme'
@@ -61,6 +62,7 @@ export default function InputComponent({ label, token }: { label: string, token:
     const [typedValue, setTypedValue] = useState('')
     const { account, chainId } = useActiveWeb3React()
     let balance = useCurrencyBalance(account ?? undefined, token)
+    let dfynChestInfo = useDfynChestInfo();
 
     const dust = JSBI.BigInt("10000000000000000"); //TODO
 
@@ -154,7 +156,7 @@ export default function InputComponent({ label, token }: { label: string, token:
                 <UNIWrapper>
                     <UNIAmount>
                         <TYPE.white padding="0 2px">
-                            1DFYN = 1.5vDFYN
+                            {`1 DFYN = ${dfynChestInfo?.DFYNtovDFYN.toSignificant(2) ?? '-'} vDFYN`}
                         </TYPE.white>
                     </UNIAmount>
                     <CardNoise />
