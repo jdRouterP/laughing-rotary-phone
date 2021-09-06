@@ -11,6 +11,8 @@ export const PREDICTION_ADDRESS = '0x150B4fD25c7c0c65301e86B599822f2feeCC29E7'
 
 export const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000'
 
+export const DFYN_CHEST = '0xA3e6f1f3f06eEf93A86f9529368f612b793f4250'
+
 export { PRELOADED_PROPOSALS } from './proposals'
 
 // a list of tokens by chain
@@ -20,7 +22,7 @@ type ChainTokenList = {
 
 //Chainlink price feed
 export const MATIC_USD = new Token(ChainId.MATIC, '0x0000000000000000000000000000000000000000', 8, 'MATIC', 'MATIC');
-
+export const vDFYN = new Token(ChainId.MATIC, DFYN_CHEST, 18, 'vDFYN', 'vDFYN');
 export const EMPTY = new Token(ChainId.MATIC, '0x0000000000000000000000000000000000000000', 0, 'EMPTY', 'EMPTY')
 export const DAI = new Token(ChainId.MATIC, '0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063', 18, 'DAI', 'Dai Stablecoin')
 export const USDC = new Token(ChainId.MATIC, '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174', 6, 'USDC', 'USDC')
@@ -107,6 +109,7 @@ export const CHAINLINK_ADDRESS = '0xAB594600376Ec9fD91F8e885dADF0CE036862dE0'
 export const WETH_V2 = new Token(ChainId.MATIC, '0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270', 18, 'WMATIC', 'WMATIC')
 
 export const GRAPH_API_PREDICTION = "https://api.thegraph.com/subgraphs/name/iamshashvat/matic-prediction"
+export const GRAPH_API_DFYN_V5 = "https://api.thegraph.com/subgraphs/name/ss-sonic/dfyn-v5"
 //DFYN ADDRESS
 const UNI_ADDRESS = '0xC168E40227E4ebD8C1caE80F7a55a4F0e6D66C97'
 //TEST TOKEN ADDRESS

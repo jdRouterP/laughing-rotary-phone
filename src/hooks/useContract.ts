@@ -7,6 +7,7 @@ import { abi as STAKING_REWARDS_FLORA_FARMING_ABI } from '../constants/abis/stak
 import { abi as PREDICTION_MARKET_ABI } from '../constants/abis/prediction-contract.json'
 import { abi as CHAINLINK_ABI } from '../constants/abis/chainlink-contract.json'
 import { abi as VAULT_ABI } from '../constants/abis/vault.json'
+import { abi as DFYN_CHEST_ABI } from '../constants/abis/dfyn-chest.json'
 import { abi as MERKLE_DISTRIBUTOR_ABI } from '@uniswap/merkle-distributor/build/MerkleDistributor.json'
 import { ChainId, FACTORY_ADDRESS, WETH, ROUTER_ADDRESS } from '@dfyn/sdk'
 import IUniswapV2PairABI from '../constants/abis/uniswap-v2-pair.json'
@@ -14,7 +15,7 @@ import FACTORY_ABI from "../constants/abis/factory.json";
 import ROUTER_ABI from "../constants/abis/uniswap-v2-router-02.json";
 import MULTICALL2_ABI from '../constants/abis/multicall2.json';
 import { useMemo } from 'react'
-import { GOVERNANCE_ADDRESS, MERKLE_DISTRIBUTOR_ADDRESS, UNI } from '../constants'
+import { DFYN_CHEST, GOVERNANCE_ADDRESS, MERKLE_DISTRIBUTOR_ADDRESS, UNI } from '../constants'
 import {
   ARGENT_WALLET_DETECTOR_ABI,
   ARGENT_WALLET_DETECTOR_MAINNET_ADDRESS
@@ -149,6 +150,9 @@ export function useUniContract(): Contract | null {
   return useContract(chainId ? UNI[chainId].address : undefined, UNI_ABI, true)
 }
 
+export function useDfynChestContract( withSignerIfPossible?: boolean): Contract | null {
+  return useContract(DFYN_CHEST, DFYN_CHEST_ABI, withSignerIfPossible)
+}
 export function useStakingContract(stakingAddress?: string, withSignerIfPossible?: boolean): Contract | null {
   return useContract(stakingAddress, STAKING_REWARDS_ABI, withSignerIfPossible)
 }

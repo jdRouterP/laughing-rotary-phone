@@ -1,6 +1,6 @@
 //@ts-nocheck
 import { request, gql } from 'graphql-request'
-import {  GRAPH_API_PREDICTION } from '../../constants'
+import {  GRAPH_API_DFYN_V5, GRAPH_API_PREDICTION } from '../../constants'
 import { Bet, BetPosition, Market, PredictionStatus, Round, RoundData } from './types'
 // import PREDICTION_MARKET_ABI  from '../../constants/abis/prediction-contract.json'
 
@@ -247,6 +247,22 @@ export const getMarketData = async (API_INFO: string): Promise<{
     rounds: response.rounds.map(transformRoundResponse),
     market: transformMarketResponse(response.market),
   }
+}
+
+// Fetch vDFYN volume for most recent day
+export const getVDFYNVolumeUSD = async () => {
+  const response = await request(
+    GRAPH_API_DFYN_V5,
+    gql`
+      query getUniswapDayDatas {
+        uniswapDayDatas(first: 1, orderBy: date, orderDirection: desc) {
+          dailyVolumeUSD
+          date
+        }
+      }
+  `,
+  )
+  return response?.uniswapDayDatas[0]?.dailyVolumeUSD || 0
 }
 
 export const getRound = async (id: string) => {
