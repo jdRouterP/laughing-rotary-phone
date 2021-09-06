@@ -11,7 +11,7 @@ export const PREDICTION_ADDRESS = '0x150B4fD25c7c0c65301e86B599822f2feeCC29E7'
 
 export const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000'
 
-export const DFYN_CHEST = '0xBAF481F0074f49a4c72dC75F76022151f1CB8239'
+export const DFYN_CHEST = '0xA3e6f1f3f06eEf93A86f9529368f612b793f4250'
 
 export { PRELOADED_PROPOSALS } from './proposals'
 
@@ -109,6 +109,7 @@ export const CHAINLINK_ADDRESS = '0xAB594600376Ec9fD91F8e885dADF0CE036862dE0'
 export const WETH_V2 = new Token(ChainId.MATIC, '0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270', 18, 'WMATIC', 'WMATIC')
 
 export const GRAPH_API_PREDICTION = "https://api.thegraph.com/subgraphs/name/iamshashvat/matic-prediction"
+export const GRAPH_API_DFYN_V5 = "https://api.thegraph.com/subgraphs/name/ss-sonic/dfyn-v5"
 //DFYN ADDRESS
 const UNI_ADDRESS = '0xC168E40227E4ebD8C1caE80F7a55a4F0e6D66C97'
 //TEST TOKEN ADDRESS

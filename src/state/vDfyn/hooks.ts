@@ -25,18 +25,19 @@ export function useDfynChestInfo(): DfynChestInfo {
 
     const vDfynToDfyn = useSingleCallResult(dfynChest, 'vDfynForDfyn', inputs);
     const DfynTovDfyn = useSingleCallResult(dfynChest, 'DfynForVDFYN', inputs);
-
-
-
+    const ratio = useSingleCallResult(dfynChest, 'ratio');
+    const totalSupply = useSingleCallResult(dfynChest, 'totalSupply');
     return useMemo(() => {
         return (
             {
                 vDFYNtoDFYN: new TokenAmount(DFYN, JSBI.BigInt(vDfynToDfyn?.result?.[0] ?? 0)),
                 DFYNtovDFYN: new TokenAmount(vDFYN, JSBI.BigInt(DfynTovDfyn?.result?.[0] ?? 0)),
-                dfynPrice
+                dfynPrice,
+                ratio: ratio?.result || 0,
+                totalSupply: new TokenAmount(vDFYN, JSBI.BigInt(totalSupply?.result?.[0] ?? 0))
             }
         )
 
-    }, [vDfynToDfyn, DfynTovDfyn, dfynPrice])
+    }, [vDfynToDfyn, DfynTovDfyn, dfynPrice, ratio, totalSupply])
 
 }

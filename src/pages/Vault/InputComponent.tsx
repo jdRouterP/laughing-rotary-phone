@@ -4,7 +4,7 @@ import { ButtonConfirmed, ButtonError, ButtonLight } from 'components/Button'
 import Column, { AutoColumn } from 'components/Column'
 import CurrencyInputPanel from 'components/CurrencyInputPanel'
 import ProgressSteps from 'components/ProgressSteps'
-import { CardNoise } from 'components/earn/styled'
+// import { CardNoise } from 'components/earn/styled'
 import Loader from 'components/Loader'
 import Modal from 'components/Modal'
 import { LoadingView, SubmittedView } from 'components/ModalViews'
@@ -159,7 +159,6 @@ export default function InputComponent({ label, token }: { label: string, token:
                             {`1 vDFYN = ${dfynChestInfo?.vDFYNtoDFYN.toSignificant(2) ?? '-'} DFYN`}
                         </TYPE.white>
                     </UNIAmount>
-                    <CardNoise />
                 </UNIWrapper>
             </RowBetween>
             <InputRow>
