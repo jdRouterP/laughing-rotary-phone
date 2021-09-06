@@ -146,12 +146,12 @@ export default function VDFYN() {
             <TabsContainer>
                 <Tabs selectedTab={activeTab} onChange={handleChange}>
                     <Tab label="Stake DFYN" value={0}></Tab>
-                    <Tab label="Unstake DFYN" value={1}></Tab>
+                    <Tab label="Unstake vDFYN" value={1}></Tab>
                 </Tabs>
             </TabsContainer>
             <TabPanelContainer>
                 <TabPanel value={activeTab} selectedIndex={0} label="Stake DFYN" token={DFYN}></TabPanel>
-                <TabPanel value={activeTab} selectedIndex={1} label="Unstake DFYN" token={vDFYN}></TabPanel>
+                <TabPanel value={activeTab} selectedIndex={1} label="Unstake vDFYN" token={vDFYN}></TabPanel>
             </TabPanelContainer>
         </ContentBody>
     </>
