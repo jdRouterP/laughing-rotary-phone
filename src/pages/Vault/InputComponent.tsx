@@ -38,15 +38,6 @@ const BodyStyle = styled.div`
 const UNIWrapper = styled.span`
   width: fit-content;
   position: relative;
-  cursor: pointer;
-
-  :hover {
-    opacity: 0.8;
-  }
-
-  :active {
-    opacity: 0.9;
-  }
 `
 
 const UNIAmount = styled.div`
@@ -55,8 +46,9 @@ const UNIAmount = styled.div`
   margin: auto;
   padding: 4px 8px;
   font-weight: 500;
+  border: 1px solid linear-gradient(91.39deg, rgba(255, 0, 122, 0.2) -3.42%, rgba(33, 144, 229, 0.2) 120.56%);;
   background-color: ${({ theme }) => theme.bg3};
-  background: radial-gradient(174.47% 188.91% at 1.84% 0%, #ff007a 0%, #2172e5 100%), #edeef2;
+  background: linear-gradient(91.39deg, rgba(255, 0, 122, 0.2) -3.42%, rgba(33, 144, 229, 0.2) 120.56%);
 `
 
 export default function InputComponent({ label, token }: { label: string, token: Token }) {
