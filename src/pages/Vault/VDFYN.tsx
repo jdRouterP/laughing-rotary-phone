@@ -67,7 +67,8 @@ const TopSection = styled(AutoColumn)`
 
 const _calculateAPR = async (totalSupply, ratio, cb) => {
     if(ratio === 0) ratio = 1;
-    if(totalSupply === 0) totalSupply = 1;
+    if(!totalSupply || totalSupply === 0) totalSupply = 1;
+    else totalSupply = totalSupply.toSignificant(4);
     const [, dfynUsdcPair] = usePair(USDC, DFYN);
     const dfynPrice = Number(dfynUsdcPair?.priceOf(DFYN)?.toSignificant(6)) || 0
     const volumeUSD = await getVDFYNVolumeUSD() || 0;
