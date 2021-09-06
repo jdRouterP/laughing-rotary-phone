@@ -135,7 +135,7 @@ export function AddRemoveTabs({ adding, creating }: { adding: boolean; creating:
           <Icon>
             {chainId && HEADER_ACCESS.gaslessMode.includes(chainId) &&<GaslessModeElement>
               <MouseoverTooltip text={'Gasless Mode. This button will toggle Dfyn’s gasless feature for your wallet. Users with hardware wallets should keep this setting turned off.'} placement='bottom'>
-                <LocalGasStation style={{color: toggleValue ? 'green' : ''}}/>
+                <LocalGasStation style={{color: toggleValue ? '#2ecc71' : ''}}/>
               </MouseoverTooltip>
               <Toggle
                 id="toggle-gasless-mode-button"
