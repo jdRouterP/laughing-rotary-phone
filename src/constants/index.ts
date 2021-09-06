@@ -122,6 +122,7 @@ export const UNI: { [chainId in ChainId]: Token } = {
   [ChainId.KOVAN]: new Token(ChainId.KOVAN, UNI_ADDRESS, 18, 'UNI', 'Uniswap'),
   [ChainId.MATIC]: new Token(ChainId.MATIC, UNI_ADDRESS, 18, 'DFYN', 'DFYN Token'),
   [ChainId.OKEX]: new Token(ChainId.OKEX, UNI_ADDRESS, 18, 'DFYN', 'DFYN Token'),
+  [ChainId.ARBITRUM]: new Token(ChainId.ARBITRUM, UNI_ADDRESS, 18, 'DFYN', 'DFYN Token'),
 }
 
 export const REWARD_TOKENS: Token[] = [ROUTE, DFYN, ZEE, AURORA, ROYA, BOOTY, SX, EZ, UFARM, NWC, mRTK, XDO, FRM, RVF, CHART, NORD]
@@ -146,6 +147,7 @@ const WETH_ONLY: ChainTokenList = {
   [ChainId.KOVAN]: [WETH[ChainId.KOVAN]],
   [ChainId.MATIC]: [WETH[ChainId.MATIC]],
   [ChainId.OKEX]: [WETH[ChainId.OKEX]],
+  [ChainId.ARBITRUM]: [WETH[ChainId.ARBITRUM]],
 }
 
 // used to construct intermediary pairs for trading

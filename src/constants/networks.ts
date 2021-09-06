@@ -7,6 +7,7 @@ const OKEx = '/images/networks/okex-network.jpg'
 const Polygon = '/images/networks/polygon-network.jpg'
 const Rinkeby = '/images/networks/rinkeby-network.jpg'
 const Ropsten = '/images/networks/ropsten-network.jpg'
+const Arbitrum = '/images/networks/mainnet-network.jpg'
 
 export const NETWORK_ICON = {
     [ChainId.MAINNET]: Mainnet,
@@ -16,6 +17,7 @@ export const NETWORK_ICON = {
     [ChainId.KOVAN]: Kovan,
     [ChainId.MATIC]: Polygon,
     [ChainId.OKEX]: OKEx,
+    [ChainId.ARBITRUM]: Arbitrum,
 }
 
 export const NETWORK_LABEL: { [chainId in ChainId]?: string } = {
@@ -26,6 +28,7 @@ export const NETWORK_LABEL: { [chainId in ChainId]?: string } = {
     [ChainId.KOVAN]: 'Kovan',
     [ChainId.MATIC]: 'Polygon',
     [ChainId.OKEX]: 'OKExChain',
+    [ChainId.ARBITRUM]: 'Arbitrum',
 }
 
 export const RPC = {
@@ -41,6 +44,7 @@ export const RPC = {
         'https://eth-kovan.alchemyapi.io/v2/6OVAa_B_rypWWl9HqtiYK26IRxXiYqER',
     [ChainId.MATIC]: 'https://rpc-dfyn-mainnet.maticvigil.com/v1/4317c87b41879d5bfafb90308aee37d202f8ddf7',
     [ChainId.OKEX]: 'https://exchainrpc.okex.org',
+    [ChainId.ARBITRUM]: 'https://arb1.arbitrum.io/rpc',
 }
 
 export const SUPPORTED_NETWORKS: {
@@ -88,6 +92,17 @@ export const SUPPORTED_NETWORKS: {
         },
         rpcUrls: ['https://exchainrpc.okex.org'],
         blockExplorerUrls: ['https://www.oklink.com/okexchain'],
+    },
+    [ChainId.ARBITRUM]: {
+        chainId: '0xA4B1',
+        chainName: 'Arbitrum One',
+        nativeCurrency: {
+            name: 'Ethereum',
+            symbol: 'ETH',
+            decimals: 18,
+        },
+        rpcUrls: ['https://arb1.arbitrum.io/rpc'],
+        blockExplorerUrls: ['https://www.oklink.com/okexchain'],
     }
 }
 
@@ -106,6 +121,7 @@ export const CHART_URL_PREFIX = {
     [ChainId.GÖRLI]: "info",
     [ChainId.KOVAN]: "info",
     [ChainId.MATIC]: "info",
+    [ChainId.ARBITRUM]: "info",
     [ChainId.OKEX]: "info-okex"
 }
 

@@ -63,6 +63,21 @@ const explorerConfig = {
         return `${prefix}/${type}/${data}`;
     }
   },
+  arbitrum: (
+    chainName = "",
+    data: string,
+    type: "transaction" | "token" | "address" | "block"
+  ) => {
+    const prefix = "https://www.oklink.com/okexchain";
+    switch (type) {
+      case "transaction":
+        return `${prefix}/tx/${data}`;
+      case "token":
+        return `${prefix}/tokenAddr/${data}`;
+      default:
+        return `${prefix}/${type}/${data}`;
+    }
+  },
 };
 
 interface ChainObject {
@@ -104,6 +119,10 @@ const chains: ChainObject = {
   [ChainId.OKEX]: {
     chainName: "",
     builder: explorerConfig.okex,
+  },
+  [ChainId.ARBITRUM]: {
+    chainName: "",
+    builder: explorerConfig.arbitrum,
   },
 };
 
