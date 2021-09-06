@@ -102,7 +102,7 @@ export const SUPPORTED_NETWORKS: {
             decimals: 18,
         },
         rpcUrls: ['https://arb1.arbitrum.io/rpc'],
-        blockExplorerUrls: ['https://www.oklink.com/okexchain'],
+        blockExplorerUrls: ['https://arbiscan.io/'],
     }
 }
 

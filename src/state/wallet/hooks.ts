@@ -4,7 +4,7 @@ import { useMemo } from 'react'
 import ERC20_INTERFACE from '../../constants/abis/erc20'
 import { useAllTokens } from '../../hooks/Tokens'
 import { useActiveWeb3React } from '../../hooks'
-import { useMulticallContract } from '../../hooks/useContract'
+import { useMulticallV2Contract } from '../../hooks/useContract'
 import { isAddress } from '../../utils'
 import { useSingleContractMultipleData, useMultipleContractSingleData } from '../multicall/hooks'
 import { useUserUnclaimedAmount } from '../claim/hooks'
@@ -22,7 +22,7 @@ import { useTotalEcosystemUniEarned } from 'state/vanilla-stake/hooks'
 export function useETHBalances(
   uncheckedAddresses?: (string | undefined)[]
 ): { [address: string]: CurrencyAmount | undefined } {
-  const multicallContract = useMulticallContract()
+  const multicallContract = useMulticallV2Contract()
   const { chainId } = useActiveWeb3React()
   const addresses: string[] = useMemo(
     () =>

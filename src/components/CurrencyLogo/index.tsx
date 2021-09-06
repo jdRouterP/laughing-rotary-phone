@@ -6,6 +6,7 @@ import styled from 'styled-components'
 
 import MaticLogo from '../../assets/images/matic-logo.png'
 import OKExLogo from '../../assets/images/okex-logo.png'
+import EthereumLogo from '../../assets/images/ethereum-logo.png'
 import useHttpLocations from '../../hooks/useHttpLocations'
 import { WrappedTokenInfo } from '../../state/lists/hooks'
 import Logo from '../Logo'
@@ -21,6 +22,7 @@ export const getTokenLogoURL = (address: string) => {
 const logo: { readonly [chainId in ChainId]?: string } = {
   [ChainId.MATIC]: MaticLogo,
   [ChainId.OKEX]: OKExLogo,
+  [ChainId.ARBITRUM]: EthereumLogo,
 }
 
 const StyledNativeLogo = styled.img<{ size: string }>`

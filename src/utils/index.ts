@@ -68,7 +68,7 @@ const explorerConfig = {
     data: string,
     type: "transaction" | "token" | "address" | "block"
   ) => {
-    const prefix = "https://www.oklink.com/okexchain";
+    const prefix = "https://arbiscan.io/";
     switch (type) {
       case "transaction":
         return `${prefix}/tx/${data}`;
