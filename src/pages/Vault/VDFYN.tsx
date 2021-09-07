@@ -143,27 +143,27 @@ export default function VDFYN() {
                 <DataRow style={{ gap: '24px' }}>
                     <PoolData>
                         <AutoColumn gap="sm">
-                            <TYPE.body style={{ margin: 0 }}>Staking APR</TYPE.body>
-                            <TYPE.body fontSize={24} fontWeight={500}>
+                            <TYPE.body style={{ margin: 0, textAlign: 'center' }}>Staking APR</TYPE.body>
+                            <TYPE.body fontSize={20} fontWeight={500} textAlign={'center'}>
                                 {calculatedAPR.toFixed(2) || '-'} %
                             </TYPE.body>
                         </AutoColumn>
                     </PoolData>
                     <PoolData>
                         <AutoColumn gap="sm">
-                            <TYPE.body style={{ margin: 0 }}>Balance vDFYN</TYPE.body>
+                            <TYPE.body style={{ margin: 0, textAlign: 'center' }}>Balance vDFYN</TYPE.body>
                             <TYPE.body fontSize={24} fontWeight={500} style={{ display: 'flex', justifyContent: 'space-between' }}>
                                 <CurrencyLogo currency={vDFYN} style={{ margin: 'auto 0' }} />
-                                <span style={{ marginLeft: '5px' }}>{countUpValuevDfyn}</span>
+                                <span style={{ marginLeft: '5px', fontSize: '20px'}}>{countUpValuevDfyn}</span>
                             </TYPE.body>
                         </AutoColumn>
                     </PoolData>
                     <PoolData>
                         <AutoColumn gap="sm">
-                            <TYPE.body style={{ margin: 0 }}>Unstaked DFYN</TYPE.body>
+                            <TYPE.body style={{ margin: 0, textAlign: 'center' }}>Unstaked DFYN</TYPE.body>
                             <TYPE.body fontSize={24} fontWeight={500} style={{ display: 'flex', justifyContent: 'space-between' }}>
                                 <CurrencyLogo currency={DFYN} style={{ margin: 'auto 0' }} />
-                                <span style={{ marginLeft: '5px' }}>{countUpValueDfyn}</span>
+                                <span style={{ marginLeft: '5px', fontSize: '20px'}}>{countUpValueDfyn}</span>
                             </TYPE.body>
                         </AutoColumn>
                     </PoolData>

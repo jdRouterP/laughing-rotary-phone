@@ -105,6 +105,7 @@ export default function InputComponent({ label, token }: { label: string, token:
         setHash(undefined)
         setAttempting(false)
         setIsOpen(false)
+        setTypedValue('')
     }, [])
 
     async function onStakeEnter() {
