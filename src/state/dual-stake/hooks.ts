@@ -1,6 +1,6 @@
 import { ChainId, CurrencyAmount, JSBI, Token, TokenAmount, Pair } from '@dfyn/sdk'
 import { useMemo } from 'react'
-import { UNI, ROUTE, REWARD_TOKENS, EMPTY, DFYN, USDC, ZEE, AURORA, BOOTY, ROYA, SX, EZ, UFARM, NWC, mRTK, XUSD, XDO, FRM, CHART, RVF, NORD } from '../../constants'
+import { UNI, ROUTE, REWARD_TOKENS, EMPTY, DFYN, USDC, ZEE, AURORA, BOOTY, ROYA, SX, EZ, UFARM, NWC, mRTK, XUSD, XDO, FRM, CHART, RVF, NORD, RAZOR } from '../../constants'
 import { STAKING_REWARDS_DUAL_FARMS_INTERFACE } from '../../constants/abis/staking-rewards-dual-farms'
 import { useActiveWeb3React } from '../../hooks'
 import { NEVER_RELOAD, useMultipleContractSingleData } from '../multicall/hooks'
@@ -25,6 +25,15 @@ export const STAKING_REWARDS_INFO: {
   }[]
 } = {
   [ChainId.MATIC]: [
+    //v4
+    {
+      tokens: [RAZOR, DFYN],
+      rewardTokens: [RAZOR, DFYN],
+      baseToken: DFYN,
+      start: 1631021400000,
+      stakingRewardAddress: '0x00148Bd87C72fBE3E882a530F74aA74A2f1F463F',
+      version: 'v4'
+    },
     //v3
     {
       tokens: [NORD, DFYN],
