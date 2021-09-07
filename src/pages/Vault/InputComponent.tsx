@@ -213,7 +213,7 @@ export default function InputComponent({ label, token }: { label: string, token:
                         ) :
                         <ButtonLight onClick={toggleWalletModal}>Connect Wallet</ButtonLight>}
                 </RowBetween>
-                {showApproveFlow && (
+                {showApproveFlow && label === 'Stake DFYN' && (
                     <Column style={{ marginTop: '1rem' }}>
                         <ProgressSteps steps={[approval === ApprovalState.APPROVED]} />
                     </Column>
