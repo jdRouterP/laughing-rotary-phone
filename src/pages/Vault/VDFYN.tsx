@@ -26,7 +26,7 @@ const DataRow = styled(RowBetween)`
 const PoolData = styled(DataCard)`
   background: none;
   border: 1px solid ${({ theme }) => theme.bg4};
-  padding: 1rem;
+  padding: 0.7rem;
   z-index: 1;
 `
 
@@ -149,19 +149,19 @@ export default function VDFYN() {
                 </TopSection>
             </PageWrapper>
             <StyleStake>
-                <DataRow style={{ gap: '24px' }}>
+                <DataRow style={{ gap: '26px' }}>
                     <PoolData>
                         <AutoColumn gap="sm">
-                            <TYPE.body style={{ margin: 0, textAlign: 'center' }}>Staking APR</TYPE.body>
-                            <TYPE.body fontSize={20} fontWeight={500} textAlign={'center'}>
+                            <TYPE.body style={{ marginLeft: '5px', textAlign: 'left' }}>Staking APR</TYPE.body>
+                            <TYPE.body fontSize={20} fontWeight={500} marginLeft= {'5px'} textAlign={'left'}>
                                 {calculatedAPR.toFixed(2) || '-'} %
                             </TYPE.body>
                         </AutoColumn>
                     </PoolData>
                     <PoolData>
                         <AutoColumn gap="sm">
-                            <TYPE.body style={{ margin: 0, textAlign: 'center' }}>Balance vDFYN</TYPE.body>
-                            <TYPE.body fontSize={24} fontWeight={500} style={{ display: 'flex', justifyContent: 'space-between', margin: 'auto' }}>
+                            <TYPE.body style={{ marginLeft: '5px', textAlign: 'left' }}>Balance vDFYN</TYPE.body>
+                            <TYPE.body fontSize={24} fontWeight={500} style={{ display: 'flex', justifyContent: 'initial', marginLeft: '5px' }}>
                                 <CurrencyLogo currency={vDFYN} style={{ margin: 'auto 0' }} />
                                 <span style={{ marginLeft: '15px', fontSize: '20px'}}>{countUpValuevDfyn}</span>
                             </TYPE.body>
@@ -169,8 +169,8 @@ export default function VDFYN() {
                     </PoolData>
                     <PoolData>
                         <AutoColumn gap="sm">
-                            <TYPE.body style={{ margin: 0, textAlign: 'center' }}>Unstaked DFYN</TYPE.body>
-                            <TYPE.body fontSize={24} fontWeight={500} style={{ display: 'flex', justifyContent: 'space-between', margin: 'auto' }}>
+                            <TYPE.body style={{ marginLeft: '5px', textAlign: 'left' }}>Unstaked DFYN</TYPE.body>
+                            <TYPE.body fontSize={24} fontWeight={500} style={{ display: 'flex', justifyContent: 'initial', marginLeft: '5px' }}>
                                 <CurrencyLogo currency={DFYN} style={{ margin: 'auto 0' }} />
                                 <span style={{ marginLeft: '15px', fontSize: '20px'}}>{countUpValueDfyn}</span>
                             </TYPE.body>
