@@ -23,6 +23,7 @@ import styled from 'styled-components'
 import { TYPE } from 'theme'
 import { BIG_INT_ZERO } from 'utils/bigNumber'
 import { maxAmountSpend } from 'utils/maxAmountSpend'
+import { tryParseAmount } from 'state/swap/hooks'
 
 const InputRow = styled.div`
     width: 100%;
@@ -150,6 +151,12 @@ export default function InputComponent({ label, token }: { label: string, token:
         }
     }
 
+    // for Insufficeint Balance
+    const inputAmount = useMemo(() => tryParseAmount(typedValue, token), [token, typedValue])
+    const balanceValue = useMemo(() => {
+        return inputAmount && balance && !balance.lessThan(inputAmount)
+    }, [inputAmount, balance])
+
     return (
         <BodyStyle>
             <RowBetween>
@@ -198,7 +205,7 @@ export default function InputComponent({ label, token }: { label: string, token:
                                     disabled={!!swapInputError || (approval !== ApprovalState.APPROVED)}
                                     error={!!swapInputError && !!parsedAmount}
                                 >
-                                    {swapInputError ?? 'Deposit'}
+                                    {!balanceValue && balanceValue !== undefined ? 'Insufficient balance' : swapInputError ?? 'Deposit'}
                                 </ButtonError>
 
                             </>
@@ -208,7 +215,7 @@ export default function InputComponent({ label, token }: { label: string, token:
                                 disabled={!!swapInputError}
                                 error={!!swapInputError && !!parsedAmount}
                             >
-                                {swapInputError ?? 'Deposit'}
+                                {!balanceValue && balanceValue !== undefined ? 'Insufficient balance' : swapInputError ?? 'Deposit'}
                             </ButtonError>
                         ) :
                         <ButtonLight onClick={toggleWalletModal}>Connect Wallet</ButtonLight>}
