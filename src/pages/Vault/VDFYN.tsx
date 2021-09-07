@@ -66,19 +66,25 @@ const TopSection = styled(AutoColumn)`
 `
 
 const _calculateAPR = async (totalSupply, ratio, cb) => {
-    if(ratio === 0) ratio = 1;
-    if(!totalSupply || totalSupply === 0) totalSupply = 1;
+    if (ratio === 0) ratio = 1;
+    if (!totalSupply || totalSupply === 0) totalSupply = 1;
     else totalSupply = totalSupply.toSignificant(4);
     const [, dfynUsdcPair] = usePair(USDC, DFYN);
     const dfynPrice = Number(dfynUsdcPair?.priceOf(DFYN)?.toSignificant(6)) || 0
     const volumeUSD = await getVDFYNVolumeUSD() || 0;
-    // console.log(`ratio: ${ratio}`)
-    // console.log(`dfynPrice: ${dfynPrice}`)
-    // console.log(`volumeUSD: ${JSON.stringify(volumeUSD)}`)
-    let apr = (((volumeUSD * 0.05)/totalSupply) * 365) / (ratio * dfynPrice) || 0
-    apr = isNumeric(apr)? apr: 0;
+    let apr = ((((volumeUSD * 0.05) / totalSupply) * 365) / (ratio * dfynPrice)) || 0
+    apr = isNumeric(apr) ? apr : 0;
     cb(apr);
 }
+
+/*
+    //debug
+    console.log(`volumeUSD: ${JSON.stringify(volumeUSD)}`)
+    console.log(`totalSupply: ${totalSupply}`)
+    console.log(`ratio: ${ratio}`)
+    console.log(`dfynPrice: ${dfynPrice}`)
+    console.log(`eq1: ${(((volumeUSD * 0.05)/totalSupply) * 365)}`)
+*/
 
 export default function VDFYN() {
 

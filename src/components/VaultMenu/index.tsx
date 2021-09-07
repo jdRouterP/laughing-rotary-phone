@@ -91,7 +91,7 @@ export default function VaultMenu() {
     useOnClickOutside(node, open ? toggle : undefined)
     return (
         <StyledMenu ref={node as any}>
-        <StyledMenuButton onMouseOver={toggle}>
+        <StyledMenuButton onClick={toggle}>
             <span role="img" aria-label="VAULT">Vault</span>
         </StyledMenuButton>
 
