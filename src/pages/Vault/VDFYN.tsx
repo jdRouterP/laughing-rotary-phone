@@ -70,11 +70,16 @@ const _calculateAPR = async (totalSupply, ratio, cb) => {
     if (!totalSupply || totalSupply === 0) totalSupply = 1;
     else totalSupply = totalSupply.toSignificant(4);
     const [, dfynUsdcPair] = usePair(USDC, DFYN);
-    const dfynPrice = Number(dfynUsdcPair?.priceOf(DFYN)?.toSignificant(6)) || 0
-    const volumeUSD = await getVDFYNVolumeUSD() || 0;
-    let apr = ((((volumeUSD * 0.05) / totalSupply) * 365) / (ratio * dfynPrice)) || 0
-    apr = isNumeric(apr) ? apr : 0;
-    cb(apr);
+    try {
+        const dfynPrice = Number(dfynUsdcPair?.priceOf(DFYN)?.toSignificant(6)) || 0
+        const volumeUSD = await getVDFYNVolumeUSD() || 0;
+        let apr = ((((volumeUSD * 0.05) / totalSupply) * 365) / (ratio * dfynPrice)) || 0
+        apr = isNumeric(apr) ? apr : 0;
+        cb(apr);
+    } catch(err) {
+        console.error(`Error staking APR calculation: ${err}`)
+        cb(0)
+    }
 }
 
 /*
@@ -98,9 +103,13 @@ export default function VDFYN() {
     const countUpValuevDfyn = aggregateBalancevDfyn?.toFixed(4) ?? '0'
     const { totalSupply, ratio } = useDfynChestInfo();
 
-    const [calculatedAPR, setCalculatedAPR] = useState(0);
+    const [calculatedAPR, _setCalculatedAPR] = useState(0);
+    const customSetCalculateAPR = (newAPR) => {
+        if(!isNumeric(newAPR) || newAPR < 1) return;
+        _setCalculatedAPR(newAPR);
+    }
     const [activeTab, setActiveTab] = useState(0);
-    _calculateAPR(totalSupply, ratio, setCalculatedAPR)
+    _calculateAPR(totalSupply, ratio, customSetCalculateAPR)
 
     //@ts-nocheck
     const handleChange = (e, value) => {
@@ -152,18 +161,18 @@ export default function VDFYN() {
                     <PoolData>
                         <AutoColumn gap="sm">
                             <TYPE.body style={{ margin: 0, textAlign: 'center' }}>Balance vDFYN</TYPE.body>
-                            <TYPE.body fontSize={24} fontWeight={500} style={{ display: 'flex', justifyContent: 'space-between' }}>
+                            <TYPE.body fontSize={24} fontWeight={500} style={{ display: 'flex', justifyContent: 'space-between', margin: 'auto' }}>
                                 <CurrencyLogo currency={vDFYN} style={{ margin: 'auto 0' }} />
-                                <span style={{ marginLeft: '5px', fontSize: '20px'}}>{countUpValuevDfyn}</span>
+                                <span style={{ marginLeft: '15px', fontSize: '20px'}}>{countUpValuevDfyn}</span>
                             </TYPE.body>
                         </AutoColumn>
                     </PoolData>
                     <PoolData>
                         <AutoColumn gap="sm">
                             <TYPE.body style={{ margin: 0, textAlign: 'center' }}>Unstaked DFYN</TYPE.body>
-                            <TYPE.body fontSize={24} fontWeight={500} style={{ display: 'flex', justifyContent: 'space-between' }}>
+                            <TYPE.body fontSize={24} fontWeight={500} style={{ display: 'flex', justifyContent: 'space-between', margin: 'auto' }}>
                                 <CurrencyLogo currency={DFYN} style={{ margin: 'auto 0' }} />
-                                <span style={{ marginLeft: '5px', fontSize: '20px'}}>{countUpValueDfyn}</span>
+                                <span style={{ marginLeft: '15px', fontSize: '20px'}}>{countUpValueDfyn}</span>
                             </TYPE.body>
                         </AutoColumn>
                     </PoolData>
