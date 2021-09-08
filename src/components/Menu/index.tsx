@@ -1,5 +1,6 @@
+import { HowToVote } from '@material-ui/icons'
 import React, { useRef } from 'react'
-import { Info, Send, Book } from 'react-feather'
+import { Info, Send, Book, MessageCircle } from 'react-feather'
 import styled from 'styled-components'
 import { ReactComponent as MenuIcon } from '../../assets/images/menu.svg'
 // import { useActiveWeb3React } from '../../hooks'
@@ -52,7 +53,7 @@ const StyledMenu = styled.div`
 `
 
 const MenuFlyout = styled.span`
-  min-width: 8.125rem;
+  min-width: 9.5rem;
   background-color: ${({ theme }) => theme.bg3};
   box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.01), 0px 4px 8px rgba(0, 0, 0, 0.04), 0px 16px 24px rgba(0, 0, 0, 0.04),
     0px 24px 32px rgba(0, 0, 0, 0.01);
@@ -66,8 +67,8 @@ const MenuFlyout = styled.span`
   right: 0rem;
   z-index: 100;
 
-  ${({ theme }) => theme.mediaWidth.upToMedium`
-    top: -9.25rem;
+  ${({ theme }) => theme.mediaWidth.upToMediumLarge`
+    top: -14.25rem;
   `};
 `
 
@@ -115,6 +116,14 @@ export default function Menu() {
           <MenuItem id="link" href="https://t.me/Dfyn_HQ">
             <Send size={14} />
             Telegram
+          </MenuItem>
+          <MenuItem id="link" href="https://discord.com/invite/yjM2fUUHvN">
+            <MessageCircle size={14} />
+            Discord
+          </MenuItem>
+          <MenuItem id="link" href="https://governance.dfyn.network/">
+            <HowToVote style={{fontSize: "16px"}}/>
+            Governance
           </MenuItem>
           {/* <MenuItem id="link" href="https://info.dfyn.network/">
             <PieChart size={14} />
