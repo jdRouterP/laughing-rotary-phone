@@ -255,7 +255,7 @@ export const getVDFYNVolumeUSD = async () => {
     GRAPH_API_DFYN_V5,
     gql`
       query getUniswapDayDatas {
-        uniswapDayDatas(first: 1, orderBy: date, orderDirection: desc) {
+        uniswapDayDatas(first: 1, skip: 1, orderBy: date, orderDirection: desc) {
           dailyVolumeUSD
           date
         }
