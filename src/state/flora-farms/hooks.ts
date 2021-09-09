@@ -27,6 +27,151 @@ export const STAKING_REWARDS_INFO: {
   }[]
 } = {
   [ChainId.MATIC]: [
+    //v5
+    {
+      tokens: [UST, USDT],
+      baseToken: USDT,
+      startTime: 1631021400,
+      stakingRewardAddress: '0xC16b42709692BC4c32CfFAA385624CE999eF62A2',
+      version: 'v5',
+      burnRate: '35'
+    },
+    {
+      tokens: [DFYN, USDC],
+      baseToken: USDC,
+      startTime: 1631021400,
+      stakingRewardAddress: '0x162a6e5fa8b47581AD5091f6d0F3E240f5bf03a5',
+      version: 'v5',
+      burnRate: '35'
+    },
+    {
+      tokens: [DFYN, ETHER],
+      baseToken: ETHER,
+      startTime: 1631021400,
+      stakingRewardAddress: '0x58376534cc5e629f9AEBD06c190AB6dd9E288190',
+      version: 'v5',
+      burnRate: '35'
+    },
+    {
+      tokens: [WBTC, ETHER],
+      baseToken: ETHER,
+      startTime: 1631021400,
+      stakingRewardAddress: '0xD37A3e5fe23B1188C54510aAf9BeA6bbC8500Ce4',
+      version: 'v5',
+      burnRate: '35'
+    },
+    {
+      tokens: [USDT, USDC],
+      baseToken: USDC,
+      startTime: 1631021400,
+      stakingRewardAddress: '0x0EE80b2a34f760514519bFab412b45A90BE6eC0A',
+      version: 'v5',
+      burnRate: '35'
+    },
+    {
+      tokens: [USDT, DAI],
+      baseToken: USDT,
+      startTime: 1631021400,
+      stakingRewardAddress: '0xB69a17f33969a4dacC7F8a73f227B7350f39d38A',
+      version: 'v5',
+      burnRate: '35'
+    },
+    {
+      tokens: [DAI, USDC],
+      baseToken: USDC,
+      startTime: 1631021400,
+      stakingRewardAddress: '0x40E9d56b7a419b96F0C03Fdd6D6418d8B5c4cF34',
+      version: 'v5',
+      burnRate: '35'
+    },
+    {
+      tokens: [USDC, ETHER],
+      baseToken: USDC,
+      startTime: 1631021400,
+      stakingRewardAddress: '0x98397d8Cf226aD53eDe2B252bABc069F8B13d844',
+      version: 'v5',
+      burnRate: '35'
+    },
+    {
+      tokens: [USDC, ROUTE],
+      baseToken: USDC,
+      startTime: 1631021400,
+      stakingRewardAddress: '0x9a4b24822BD425554b9B4f1DfD8c3faC68ab4b9a',
+      version: 'v5',
+      burnRate: '35'
+    },
+    {
+      tokens: [ETHER, ROUTE],
+      baseToken: ETHER,
+      startTime: 1631021400,
+      stakingRewardAddress: '0xC00d7cb5D6d97B1DF834728Dc2003D8B05c4420A',
+      version: 'v5',
+      burnRate: '35'
+    },
+    {
+      tokens: [WMATIC, ETHER],
+      baseToken: WMATIC,
+      startTime: 1631021400,
+      stakingRewardAddress: '0x4b7Da0D0F0Ae06a009962C4f8c65DA81C86f2c10',
+      version: 'v5',
+      burnRate: '35'
+    },
+    {
+      tokens: [CRV, ETHER],
+      baseToken: ETHER,
+      startTime: 1631021400,
+      stakingRewardAddress: '0x40df423c4FC5C3249030bd0821E13f1E75C82A2d',
+      version: 'v5',
+      burnRate: '35'
+    },
+    {
+      tokens: [UNI_TOKEN, ETHER],
+      baseToken: ETHER,
+      startTime: 1631021400,
+      stakingRewardAddress: '0x419305970b6Ad7f737968AA9B362396b72db082c',
+      version: 'v5',
+      burnRate: '35'
+    },
+    {
+      tokens: [AAVE, ETHER],
+      baseToken: ETHER,
+      startTime: 1631021400,
+      stakingRewardAddress: '0x68ccC7B0c084B288738FEaC52b10e8D0719839fe',
+      version: 'v5',
+      burnRate: '35'
+    },
+    {
+      tokens: [LINK, ETHER],
+      baseToken: ETHER,
+      startTime: 1631021400,
+      stakingRewardAddress: '0x2685CAefCdd48cDf584C2C3A2a22012E87Ddc304',
+      version: 'v5',
+      burnRate: '35'
+    },
+    {
+      tokens: [NEXO, ETHER],
+      baseToken: ETHER,
+      startTime: 1631021400,
+      stakingRewardAddress: '0x2644EE75b7Cb5a13c0B14F81d592F093d074c01E',
+      version: 'v5',
+      burnRate: '35'
+    },
+
+  ]
+}
+
+export const INACTIVE_STAKING_REWARDS_INFO: {
+  [chainId in ChainId]?: {
+    tokens: [Token, Token]
+    baseToken?: Token
+    rewardToken?: Token
+    startTime?: number
+    stakingRewardAddress: string
+    version: string
+    burnRate: string
+  }[]
+} = {
+  [ChainId.MATIC]: [
     //v4
     {
       tokens: [UST, USDT],
@@ -164,23 +309,6 @@ export const STAKING_REWARDS_INFO: {
       version: 'v4',
       burnRate: '35'
     },
-
-  ]
-}
-
-export const INACTIVE_STAKING_REWARDS_INFO: {
-  [chainId in ChainId]?: {
-    tokens: [Token, Token]
-    baseToken?: Token
-    rewardToken?: Token
-    startTime?: number
-    stakingRewardAddress: string
-    version: string
-    burnRate: string
-  }[]
-} = {
-  [ChainId.MATIC]: [
-
     //v3
     {
       tokens: [NEXO, ETHER],

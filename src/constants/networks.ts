@@ -7,7 +7,7 @@ const OKEx = '/images/networks/okex-network.jpg'
 const Polygon = '/images/networks/polygon-network.jpg'
 const Rinkeby = '/images/networks/rinkeby-network.jpg'
 const Ropsten = '/images/networks/ropsten-network.jpg'
-const Arbitrum = '/images/networks/mainnet-network.jpg'
+const Arbitrum = '/images/networks/arbitrum-network.jpg'
 
 export const NETWORK_ICON = {
     [ChainId.MAINNET]: Mainnet,

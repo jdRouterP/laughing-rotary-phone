@@ -1,4 +1,6 @@
+import { useEffect } from 'react'
 import { ChainId, Pair, Token } from '@dfyn/sdk'
+import { HEADER_ACCESS } from 'constants/networks'
 import flatMap from 'lodash.flatmap'
 import { useCallback, useMemo } from 'react'
 import { shallowEqual, useDispatch, useSelector } from 'react-redux'
@@ -81,6 +83,13 @@ export function useIsGaslessMode(): boolean {
 export function useGaslessModeManager(): [boolean, () => void] {
   const dispatch = useDispatch<AppDispatch>()
   const gaslessMode = useIsGaslessMode()
+  const { chainId } = useActiveWeb3React()
+  useEffect(() => {
+    if (chainId && !HEADER_ACCESS.gaslessMode.includes(chainId)) {
+      dispatch(updateUserGaslessMode({ userGaslessMode: false }))
+    }
+  }, [dispatch, chainId])
+
 
   const toggleSetGaslessMode = useCallback(() => {
     dispatch(updateUserGaslessMode({ userGaslessMode: !gaslessMode }))

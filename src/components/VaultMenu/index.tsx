@@ -17,7 +17,7 @@ const StyledMenu = styled.div`
 `
 
 const StyledMenuButton = styled.div`
-  color: ${({theme}) => theme.text2};
+  color: ${({ theme }) => theme.text2};
   font-weight: 500;
   cursor: pointer;
 
@@ -85,26 +85,26 @@ const StyledNavLink = styled(NavLink).attrs({
 
 export default function VaultMenu() {
 
-    const node = useRef<HTMLDivElement>()
-    const open = useModalOpen(ApplicationModal.VAULT_MENU)
-    const toggle = useToggleModal(ApplicationModal.VAULT_MENU)
-    useOnClickOutside(node, open ? toggle : undefined)
-    return (
-        <StyledMenu ref={node as any}>
-        <StyledMenuButton onClick={toggle}>
-            <span role="img" aria-label="VAULT">Vault</span>
-        </StyledMenuButton>
+  const node = useRef<HTMLDivElement>()
+  const open = useModalOpen(ApplicationModal.VAULT_MENU)
+  const toggle = useToggleModal(ApplicationModal.VAULT_MENU)
+  useOnClickOutside(node, open ? toggle : undefined)
+  return (
+    <StyledMenu ref={node as any}>
+      <StyledMenuButton onClick={toggle}>
+        <span role="img" aria-label="VAULT">Vault</span>
+      </StyledMenuButton>
 
-        {open && (
-            <MenuFlyout>
-                <StyledNavLink id={`x-vault-nav-link`} to={'/vdfyn'}>
+      {open && (
+        <MenuFlyout>
+          {/* <StyledNavLink id={`x-vault-nav-link`} to={'/vdfyn'}>
                     vDFYN
-                </StyledNavLink>
-                <StyledNavLink id={`v-vault-nav-link`} to={'/vault'}>
-                    Single-Asset Vault
-                </StyledNavLink>
-            </MenuFlyout>
-        )}
-        </StyledMenu>
-    )
+                </StyledNavLink> */}
+          <StyledNavLink id={`v-vault-nav-link`} to={'/vault'}>
+            Single-Asset Vault
+          </StyledNavLink>
+        </MenuFlyout>
+      )}
+    </StyledMenu>
+  )
 }

@@ -1,6 +1,6 @@
 import { ChainId, CurrencyAmount, JSBI, Token, TokenAmount, Pair } from '@dfyn/sdk'
 import { useMemo } from 'react'
-import { UNI, USDC, DFYN, FISH, UFT, ANY, AGA, AGAr, NORD, BIFI, COSMIC, TITAN, ICE, WMATIC, CRV, UNI_TOKEN, AAVE, LINK, LUNA, ELE, GAJ, SILVER } from '../../constants'
+import { UNI, USDC, DFYN, FISH, UFT, ANY, AGA, AGAr, NORD, BIFI, COSMIC, TITAN, ICE, WMATIC, CRV, UNI_TOKEN, AAVE, LINK, LUNA, ELE, GAJ, SILVER, SING, RAZOR, ETHER } from '../../constants'
 import { STAKING_REWARDS_BASIC_FARMS_INTERFACE } from '../../constants/abis/staking-rewards-basic-farms'
 import { useActiveWeb3React } from '../../hooks'
 import { NEVER_RELOAD, useMultipleContractSingleData } from '../multicall/hooks'
@@ -24,7 +24,32 @@ export const STAKING_REWARDS_INFO: {
   }[]
 } = {
   [ChainId.MATIC]: [
+    //v4
+    {
+      tokens: [DFYN, SING],
+      baseToken: DFYN,
+      startTime: 1631021400,
+      stakingRewardAddress: '0x10b70CC73E3FE9fb518FA86814cEcb97e74C4376',
+      version: 'v4'
+    },
+    {
+      tokens: [DFYN, BIFI],
+      baseToken: DFYN,
+      startTime: 1631021400,
+      stakingRewardAddress: '0xa11b8DC1108692AB4A21fb780f3389e27E3DFDEA',
+      version: 'v4'
+    },
+    {
+      tokens: [RAZOR, ETHER],
+      baseToken: ETHER,
+      rewardToken: RAZOR,
+      startTime: 1631021400,
+      stakingRewardAddress: '0x07A6314C933663472C1a66b2bd4097B60625e35E',
+      version: 'v4'
+    },
+
     //v3
+
     {
       tokens: [DFYN, SILVER],
       baseToken: DFYN,
