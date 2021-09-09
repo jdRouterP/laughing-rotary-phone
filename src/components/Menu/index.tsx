@@ -1,13 +1,8 @@
-<<<<<<< Updated upstream
-import React, { useRef } from 'react'
-import { Info, Send, Book } from 'react-feather'
-=======
 import { HowToVote } from '@material-ui/icons'
 import { CHART_URL_PREFIX } from 'constants/networks'
 import { useActiveWeb3React } from 'hooks'
 import React, { useRef } from 'react'
 import { Info, Send, Book, MessageCircle, TrendingUp } from 'react-feather'
->>>>>>> Stashed changes
 import styled from 'styled-components'
 import { ReactComponent as MenuIcon } from '../../assets/images/menu.svg'
 // import { useActiveWeb3React } from '../../hooks'
@@ -82,13 +77,8 @@ const MenuFlyout = styled.span`
   right: 0rem;
   z-index: 100;
 
-<<<<<<< Updated upstream
-  ${({ theme }) => theme.mediaWidth.upToMedium`
-    top: -9.25rem;
-=======
   ${({ theme }) => theme.mediaWidth.upToMediumLarge`
     top: -16rem;
->>>>>>> Stashed changes
   `};
 `
 
@@ -137,8 +127,6 @@ export default function Menu() {
             <Send size={14} />
             Telegram
           </MenuItem>
-<<<<<<< Updated upstream
-=======
           <MenuItem id="link" href="https://discord.com/invite/yjM2fUUHvN">
             <MessageCircle size={14} />
             Discord
@@ -154,7 +142,6 @@ export default function Menu() {
             </MenuItem>
           </HideChart>
           
->>>>>>> Stashed changes
           {/* <MenuItem id="link" href="https://info.dfyn.network/">
             <PieChart size={14} />
             Analytics
