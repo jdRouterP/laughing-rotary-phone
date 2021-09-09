@@ -38,11 +38,11 @@ import FarmsMenu from 'components/FarmsMenu'
 import Web3Network from 'components/Web3Network'
 import { UNI } from './../../constants/index'
 import CurrencyLogo from 'components/CurrencyLogo'
-import VaultMenu from 'components/VaultMenu'
+// import VaultMenu from 'components/VaultMenu'
 
 const StyledAnalytics = styled.div`
   display: none;
-  ${({theme}) => theme.mediaWidth.upToMedium`
+  ${({ theme }) => theme.mediaWidth.upToMedium`
     display: block;
     position: relative;
     padding: 0.15rem 0.5rem;
@@ -62,7 +62,7 @@ const StyledAnalytics = styled.div`
 `
 
 const ButtonStyle = styled.div`
-    color: ${({theme}) => theme.text8}
+    color: ${({ theme }) => theme.text8}
 `
 
 const HeaderFrame = styled.div`
@@ -360,7 +360,7 @@ const StyledMenuButton = styled.button`
     width: 100%;
     height: 100%;
     border: none;
-    color: ${({theme}) => theme.text1};
+    color: ${({ theme }) => theme.text1};
     background-color: transparent;
     margin: 0;
     padding: 0;
@@ -413,7 +413,7 @@ export default function Header() {
   const showClaimPopup = useShowClaimPopup()
 
   const countUpValue = aggregateBalance?.toFixed(0) ?? '0'
-  
+
   const countUpValuePrevious = usePrevious(countUpValue) ?? '0'
 
   return (
@@ -452,7 +452,10 @@ export default function Header() {
           {chainId && HEADER_ACCESS.vault.includes(chainId) && <StyledNavLink id={`vault-nav-link`} to={'/prediction'}>
             Prediction
           </StyledNavLink>}
-          {chainId && HEADER_ACCESS.vault.includes(chainId) && <VaultMenu />}
+          {chainId && HEADER_ACCESS.vault.includes(chainId) && <StyledNavLink id={`vault-nav-link`} to={'/vault'}>
+            Vault
+          </StyledNavLink>}
+          {/* {chainId && HEADER_ACCESS.vault.includes(chainId) && <VaultMenu />} */}
           {/* {chainId && HEADER_ACCESS.charts.includes(chainId) && <StyledExternalLink id={`stake-nav-link`} href={`https://${CHART_URL_PREFIX[(chainId ? chainId : 1)]}.dfyn.network/home/`}>
             Charts <span style={{ fontSize: '11px' }}>↗</span>
           </StyledExternalLink>} */}
@@ -534,10 +537,10 @@ export default function Header() {
         </HeaderElement>
         <HeaderElementWrap>
           <StyledAnalytics>
-            {chainId && HEADER_ACCESS.charts.includes(chainId) && <ExternalLink href={`https://${CHART_URL_PREFIX[(chainId ? chainId : 137)]}.dfyn.network/home/`} style={{textDecoration: 'none'}}>
-            <ButtonStyle>
+            {chainId && HEADER_ACCESS.charts.includes(chainId) && <ExternalLink href={`https://${CHART_URL_PREFIX[(chainId ? chainId : 137)]}.dfyn.network/home/`} style={{ textDecoration: 'none' }}>
+              <ButtonStyle>
                 <TrendingUp size={"25px"} />
-            </ButtonStyle>
+              </ButtonStyle>
             </ExternalLink>}
           </StyledAnalytics>
           <StyledMenuButton onClick={() => toggleDarkMode()}>
