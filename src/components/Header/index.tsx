@@ -6,7 +6,7 @@ import { darken } from 'polished'
 import { useTranslation } from 'react-i18next'
 import { isAndroid, isIOS, isMobile } from 'react-device-detect'
 import styled from 'styled-components'
-import { CHART_URL_PREFIX, HEADER_ACCESS, NETWORK_LABEL } from '../../constants/networks'
+import { CHART_URL_PREFIX, HEADER_ACCESS, NETWORK_ICON, NETWORK_LABEL } from '../../constants/networks'
 import Logo from '../../assets/images/DFYN logo final.png'
 import LogoDark from '../../assets/images/DFYN logo dark.png'
 import DarkLogoMobile from '../../assets/images/logo_white.png'
@@ -58,7 +58,10 @@ const StyledAnalytics = styled.div`
     > * {
       stroke: ${({ theme }) => theme.text1};
     }
-  `};
+  `}
+  ${({theme}) => theme.mediaWidth.upToSmall`
+      display:none;
+  `}
 `
 
 const ButtonStyle = styled.div`
@@ -228,6 +231,11 @@ const HideSmall = styled.span`
     display: none;
   `};
 `
+const NetworkStyle = styled.span`
+  ${({ theme }) => theme.mediaWidth.upToMediumSmall`
+    display: none;
+  `};
+`
 
 const NetworkCard = styled(YellowCard)`
   border-radius: 12px;
@@ -246,7 +254,6 @@ const NetworkCard = styled(YellowCard)`
 
   ${({ theme }) => theme.mediaWidth.upToSmall`
     margin: 0;
-    margin-right: 0.5rem;
     width: initial;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -255,7 +262,7 @@ const NetworkCard = styled(YellowCard)`
 `
 
 const BalanceText = styled(Text)`
-  ${({ theme }) => theme.mediaWidth.upToExtraSmall`
+  ${({ theme }) => theme.mediaWidth.upToSmall`
     display: none;
   `};
 `
@@ -384,6 +391,16 @@ const StyledMenuButton = styled.button`
       stroke: ${({ theme }) => theme.text1};
     }
   `}
+  // ${({theme}) => theme.mediaWidth.upToSmall`
+  //   display: none;
+  // `}
+`
+
+const NetworkIcon = styled.span`
+    display: none;
+    ${({theme}) => theme.mediaWidth.upToMediumSmall`
+        display: block;
+    `}
 `
 
 
@@ -515,11 +532,14 @@ export default function Header() {
               <CardNoise />
             </UNIWrapper>
           )}
-          <HideSmall>
-            {library && library.provider.isMetaMask && chainId && NETWORK_LABEL[chainId] && (
+          <NetworkStyle>
+              {library && library.provider.isMetaMask && chainId && NETWORK_LABEL[chainId] && (
               <NetworkCard onClick={() => toggleNetworkModal()} title={NETWORK_LABEL[chainId]}><Web3Network /></NetworkCard>
             )}
-          </HideSmall>
+          </NetworkStyle>
+          <NetworkIcon>
+            <img src={NETWORK_ICON[chainId ?? 137]} onClick={() => toggleNetworkModal()} alt="polygon" height="36px" width="36px" style={{borderRadius: '40%', marginTop: "4px"}}/>
+          </NetworkIcon>
           <AccountElement active={!!account} style={{ pointerEvents: 'auto' }}>
             {account && userEthBalance ? (
               <BalanceText style={{ flexShrink: 0 }} pl="0.75rem" pr="0.5rem" fontWeight={500}>

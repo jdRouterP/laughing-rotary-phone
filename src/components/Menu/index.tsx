@@ -1,5 +1,13 @@
+<<<<<<< Updated upstream
 import React, { useRef } from 'react'
 import { Info, Send, Book } from 'react-feather'
+=======
+import { HowToVote } from '@material-ui/icons'
+import { CHART_URL_PREFIX } from 'constants/networks'
+import { useActiveWeb3React } from 'hooks'
+import React, { useRef } from 'react'
+import { Info, Send, Book, MessageCircle, TrendingUp } from 'react-feather'
+>>>>>>> Stashed changes
 import styled from 'styled-components'
 import { ReactComponent as MenuIcon } from '../../assets/images/menu.svg'
 // import { useActiveWeb3React } from '../../hooks'
@@ -9,6 +17,14 @@ import { useModalOpen, useToggleModal } from '../../state/application/hooks'
 
 import { ExternalLink } from '../../theme'
 // import { ButtonPrimary } from '../Button'
+
+const HideChart = styled.span`
+  display: none;
+  ${({theme}) => theme.mediaWidth.upToSmall`
+    display: block;
+    margin-top: 6px;
+  `}
+`
 
 const StyledMenuIcon = styled(MenuIcon)`
   path {
@@ -66,8 +82,13 @@ const MenuFlyout = styled.span`
   right: 0rem;
   z-index: 100;
 
+<<<<<<< Updated upstream
   ${({ theme }) => theme.mediaWidth.upToMedium`
     top: -9.25rem;
+=======
+  ${({ theme }) => theme.mediaWidth.upToMediumLarge`
+    top: -16rem;
+>>>>>>> Stashed changes
   `};
 `
 
@@ -88,7 +109,7 @@ const MenuItem = styled(ExternalLink)`
 
 export default function Menu() {
   // const { account } = useActiveWeb3React()
-
+  const { chainId} = useActiveWeb3React()
   const node = useRef<HTMLDivElement>()
   const open = useModalOpen(ApplicationModal.MENU)
   const toggle = useToggleModal(ApplicationModal.MENU)
@@ -116,6 +137,24 @@ export default function Menu() {
             <Send size={14} />
             Telegram
           </MenuItem>
+<<<<<<< Updated upstream
+=======
+          <MenuItem id="link" href="https://discord.com/invite/yjM2fUUHvN">
+            <MessageCircle size={14} />
+            Discord
+          </MenuItem>
+          <MenuItem id="link" href="https://governance.dfyn.network/">
+            <HowToVote style={{fontSize: "16px"}}/>
+            Governance
+          </MenuItem>
+          <HideChart>
+              <MenuItem id="link" href={`https://${CHART_URL_PREFIX[(chainId ? chainId : 137)]}.dfyn.network/home/`}>
+              <TrendingUp size={15}/>
+              Charts
+            </MenuItem>
+          </HideChart>
+          
+>>>>>>> Stashed changes
           {/* <MenuItem id="link" href="https://info.dfyn.network/">
             <PieChart size={14} />
             Analytics
