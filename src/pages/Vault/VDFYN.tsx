@@ -1,5 +1,6 @@
 //@ts-nocheck
 import React, { useState } from 'react'
+import { TokenAmount } from '@dfyn/sdk'
 import { AutoColumn } from '../../components/Column'
 import styled from 'styled-components'
 import { TYPE } from '../../theme'
@@ -65,7 +66,7 @@ const TopSection = styled(AutoColumn)`
   width: 100%;
 `
 
-const _calculateAPR = async (totalSupply, ratio, cb) => {
+const _calculateAPR = async (totalSupply: any, ratio: any, cb: Function) => {
     if (ratio === 0) ratio = 1;
     if (!totalSupply || totalSupply === 0) totalSupply = 1;
     else totalSupply = totalSupply.toSignificant(4);
@@ -104,15 +105,14 @@ export default function VDFYN() {
     const { totalSupply, ratio } = useDfynChestInfo();
 
     const [calculatedAPR, _setCalculatedAPR] = useState(0);
-    const customSetCalculateAPR = (newAPR) => {
+    const customSetCalculateAPR = (newAPR: number) => {
         if(!isNumeric(newAPR) || newAPR < 1) return;
         _setCalculatedAPR(newAPR);
     }
     const [activeTab, setActiveTab] = useState(0);
     _calculateAPR(totalSupply, ratio, customSetCalculateAPR)
 
-    //@ts-nocheck
-    const handleChange = (e, value) => {
+    const handleChange = (e: any, value: any) => {
         setActiveTab(value);
     };
 

@@ -23,8 +23,8 @@ export function useDfynChestInfo(): DfynChestInfo {
     const [, dfynUsdcPair] = usePair(DFYN, USDC);
     const dfynPrice = Number(dfynUsdcPair?.priceOf(DFYN)?.toSignificant(6))
 
-    const vDfynToDfyn = useSingleCallResult(dfynChest, 'vDfynForDfyn', inputs);
-    const DfynTovDfyn = useSingleCallResult(dfynChest, 'DfynForVDFYN', inputs);
+    const vDfynToDfyn = useSingleCallResult(dfynChest, 'vdfynForDfyn', inputs);
+    const DfynTovDfyn = useSingleCallResult(dfynChest, 'dfynForVdfyn', inputs);
     const ratio = useSingleCallResult(dfynChest, 'ratio');
     const totalSupply = useSingleCallResult(dfynChest, 'totalSupply');
     return useMemo(() => {
