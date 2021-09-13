@@ -230,7 +230,7 @@ export default function InputComponent({ label, token }: { label: string, token:
                 {attempting && !hash && (
                     <LoadingView onDismiss={wrappedOnDismiss}>
                         <AutoColumn gap="12px" justify={'center'}>
-                            <TYPE.largeHeader>Depositing {label === "Stake DFYN" ? "DFYN" : "vDFYN" ?? '-'} Tokens</TYPE.largeHeader>
+                            <TYPE.largeHeader>Unstaking {label === "Stake DFYN" ? "DFYN" : "vDFYN" ?? '-'} Tokens</TYPE.largeHeader>
                             <TYPE.body fontSize={20}>{parsedAmount?.toSignificant(4)} {label === "Stake DFYN" ? "DFYN" : "vDFYN" ?? '-'}</TYPE.body>
                         </AutoColumn>
                     </LoadingView>
