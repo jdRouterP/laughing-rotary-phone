@@ -72,12 +72,13 @@ const _calculateAPR = async (totalSupply: any, ratio: any, cb: Function) => {
     else totalSupply = totalSupply.toSignificant(4);
     const [, dfynUsdcPair] = usePair(USDC, DFYN);
     try {
+
         const dfynPrice = Number(dfynUsdcPair?.priceOf(DFYN)?.toSignificant(6)) || 0
         const volumeUSD = await getVDFYNVolumeUSD() || 0;
-        let apr = ((((volumeUSD * 0.05) / totalSupply) * 365) / (ratio * dfynPrice)) || 0
+        let apr = ((((volumeUSD * 0.05) / totalSupply) * 365) / (ratio.dfynAmount_?.toNumber() * dfynPrice)) || 0
         apr = isNumeric(apr) ? apr : 0;
         cb(apr);
-    } catch(err) {
+    } catch (err) {
         console.error(`Error staking APR calculation: ${err}`)
         cb(0)
     }
@@ -106,7 +107,7 @@ export default function VDFYN() {
 
     const [calculatedAPR, _setCalculatedAPR] = useState(0);
     const customSetCalculateAPR = (newAPR: number) => {
-        if(!isNumeric(newAPR) || newAPR < 1) return;
+        if (!isNumeric(newAPR) || newAPR < 1) return;
         _setCalculatedAPR(newAPR);
     }
     const [activeTab, setActiveTab] = useState(0);
@@ -131,7 +132,7 @@ export default function VDFYN() {
                                 </RowBetween>
                                 <RowBetween>
                                     <TYPE.white fontSize={14}>
-                                    Stake your Dfyn and get vDfyn tokens. Every swap on Dfyn contributes 0.05% of the swap value to the vDfyn pool. This means that by staking Dfyn in this pool, you get vDfyn tokens which are always compounding with the fees earned by Dfyn Exchange. You can now own part of the protocol and the revenue stream by holding vDfyn. vDfyn holders will also enjoy superior voting privileges in governance.
+                                        Stake your Dfyn and get vDfyn tokens. Every swap on Dfyn contributes 0.05% of the swap value to the vDfyn pool. This means that by staking Dfyn in this pool, you get vDfyn tokens which are always compounding with the fees earned by Dfyn Exchange. You can now own part of the protocol and the revenue stream by holding vDfyn. vDfyn holders will also enjoy superior voting privileges in governance.
                                     </TYPE.white>
                                 </RowBetween>{' '}
                                 {/* <ExternalLink
@@ -153,7 +154,7 @@ export default function VDFYN() {
                     <PoolData>
                         <AutoColumn gap="sm">
                             <TYPE.body style={{ marginLeft: '5px', textAlign: 'left' }}>Staking APR</TYPE.body>
-                            <TYPE.body fontSize={20} fontWeight={500} marginLeft= {'5px'} textAlign={'left'}>
+                            <TYPE.body fontSize={20} fontWeight={500} marginLeft={'5px'} textAlign={'left'}>
                                 {calculatedAPR.toFixed(2) || '-'} %
                             </TYPE.body>
                         </AutoColumn>
@@ -163,7 +164,7 @@ export default function VDFYN() {
                             <TYPE.body style={{ marginLeft: '5px', textAlign: 'left' }}>Balance vDFYN</TYPE.body>
                             <TYPE.body fontSize={24} fontWeight={500} style={{ display: 'flex', justifyContent: 'initial', marginLeft: '5px' }}>
                                 <CurrencyLogo currency={vDFYN} style={{ margin: 'auto 0' }} />
-                                <span style={{ marginLeft: '15px', fontSize: '20px'}}>{countUpValuevDfyn}</span>
+                                <span style={{ marginLeft: '15px', fontSize: '20px' }}>{countUpValuevDfyn}</span>
                             </TYPE.body>
                         </AutoColumn>
                     </PoolData>
@@ -172,7 +173,7 @@ export default function VDFYN() {
                             <TYPE.body style={{ marginLeft: '5px', textAlign: 'left' }}>Unstaked DFYN</TYPE.body>
                             <TYPE.body fontSize={24} fontWeight={500} style={{ display: 'flex', justifyContent: 'initial', marginLeft: '5px' }}>
                                 <CurrencyLogo currency={DFYN} style={{ margin: 'auto 0' }} />
-                                <span style={{ marginLeft: '15px', fontSize: '20px'}}>{countUpValueDfyn}</span>
+                                <span style={{ marginLeft: '15px', fontSize: '20px' }}>{countUpValueDfyn}</span>
                             </TYPE.body>
                         </AutoColumn>
                     </PoolData>
