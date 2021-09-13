@@ -131,7 +131,7 @@ export default function VDFYN() {
                                 </RowBetween>
                                 <RowBetween>
                                     <TYPE.white fontSize={14}>
-                                        For every swap on the exchange on every chain, 0.05% of the swap fees are distributed as DFYN proportional to your share of the DFYNBar. When your DFYN is staked into the DFYNBar, you receive vDFYN in return for voting rights and a fully composable token that can interact with other protocols. Your vDFYN is continuously compounding, when you unstake you will receive all the originally deposited DFYN and any additional from fees.
+                                    Stake your Dfyn and get vDfyn tokens. Every swap on Dfyn contributes 0.05% of the swap value to the vDfyn pool. This means that by staking Dfyn in this pool, you get vDfyn tokens which are always compounding with the fees earned by Dfyn Exchange. You can now own part of the protocol and the revenue stream by holding vDfyn. vDfyn holders will also enjoy superior voting privileges in governance.
                                     </TYPE.white>
                                 </RowBetween>{' '}
                                 {/* <ExternalLink

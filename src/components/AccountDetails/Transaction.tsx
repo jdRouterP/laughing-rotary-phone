@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { CheckCircle, Trash, Triangle } from 'react-feather'
+import { CheckCircle, Triangle } from 'react-feather'
 
 import { useActiveWeb3React } from '../../hooks'
 import { getExplorerLink } from '../../utils'
@@ -62,7 +62,7 @@ export default function Transaction({ hash }: { hash: string }) {
           <IconWrapper pending={pending} success={success}>
           {pending ? <Loader /> : success ? <CheckCircle size="16" /> : <Triangle size="16" />}
           </IconWrapper>
-          <Trash size="16" style={{marginLeft: "10px", color: 'white'}}/>
+          {/* <Trash size="16" style={{marginLeft: "10px", color: 'white'}}/> */}
         </IconStyle>
       </TransactionState>
     </TransactionWrapper>
