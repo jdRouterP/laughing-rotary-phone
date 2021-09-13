@@ -289,7 +289,7 @@ export default function Manage({
               : `Your reward will get vested!`}
           </TYPE.black>
           <GaslessModeElement>
-            {stakingInfo.active ? 
+            {stakingInfo.active &&
               <>
                 <TYPE.black fontWeight={400} fontSize={14}>
                   Vesting Mode
@@ -303,7 +303,6 @@ export default function Manage({
                   }
                 />
               </>
-              : <></>
             }
           </GaslessModeElement>
         </RowBetween>

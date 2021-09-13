@@ -289,17 +289,22 @@ export default function Manage({
               : `Your reward will get vested!`}
           </TYPE.black>
           <GaslessModeElement>
-            <TYPE.black fontWeight={400} fontSize={14}>
-              Vesting Mode
-            </TYPE.black>
-            <QuestionHelper text={`This button will toggle the vesting nature of the rewards. The final value of the toggled selection will determine whether the rewards will be linearly vested or immediately claimed (after ${stakingInfo.burnRate}% burn).`} />
-            <Toggle
-              id="toggle-vesting-mode-button"
-              isActive={vestingMode}
-              toggle={
-                () => { setShowConfirmation(!showConfirmation) }
-              }
-            />
+            {stakingInfo.active &&
+              <>
+                <TYPE.black fontWeight={400} fontSize={14}>
+                  Vesting Mode
+                </TYPE.black>
+                <QuestionHelper text={`This button will toggle the vesting nature of the rewards. The final value of the toggled selection will determine whether the rewards will be linearly vested or immediately claimed (after ${stakingInfo.burnRate}% burn).`} />
+                <Toggle
+                  id="toggle-vesting-mode-button"
+                  isActive={vestingMode}
+
+                  toggle={
+                    () => { setShowConfirmation(!showConfirmation) }
+                  }
+                />
+              </>
+            }
           </GaslessModeElement>
         </RowBetween>
       }
