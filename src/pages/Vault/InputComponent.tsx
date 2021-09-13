@@ -215,7 +215,7 @@ export default function InputComponent({ label, token }: { label: string, token:
                                 disabled={!!swapInputError}
                                 error={!!swapInputError && !!parsedAmount}
                             >
-                                {!balanceValue && balanceValue !== undefined ? 'Insufficient balance' : swapInputError ?? 'Deposit'}
+                                {!balanceValue && balanceValue !== undefined ? 'Insufficient balance' : swapInputError ?? 'Unstake'}
                             </ButtonError>
                         ) :
                         <ButtonLight onClick={toggleWalletModal}>Connect Wallet</ButtonLight>}
