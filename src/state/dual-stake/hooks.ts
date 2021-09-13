@@ -77,14 +77,6 @@ export const STAKING_REWARDS_INFO: {
       version: 'v2'
     },
     {
-      tokens: [FRM, DFYN],
-      rewardTokens: [DFYN, FRM],
-      baseToken: DFYN,
-      start: 1626183000000,
-      stakingRewardAddress: '0x038CDc7A25FEF0c7b3abD5C2a47071ba202Bbaf6',
-      version: 'v1'
-    },
-    {
       tokens: [XUSD, DFYN],
       rewardTokens: [DFYN, XDO],
       baseToken: DFYN,
@@ -106,6 +98,14 @@ export const INACTIVE_STAKING_REWARDS_INFO: {
   }[]
 } = {
   [ChainId.MATIC]: [
+    {
+      tokens: [FRM, DFYN],
+      rewardTokens: [DFYN, FRM],
+      baseToken: DFYN,
+      start: 1626183000000,
+      stakingRewardAddress: '0x038CDc7A25FEF0c7b3abD5C2a47071ba202Bbaf6',
+      version: 'v1'
+    },
     {
       tokens: [ROUTE, DFYN],
       rewardTokens: [ROUTE, DFYN],
