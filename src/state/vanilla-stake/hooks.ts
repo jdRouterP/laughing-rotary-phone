@@ -1,6 +1,6 @@
 import { ChainId, CurrencyAmount, JSBI, Token, TokenAmount, Pair } from '@dfyn/sdk'
 import { useMemo } from 'react'
-import { UNI, USDC, DFYN, FISH, UFT, ANY, AGA, AGAr, NORD, BIFI, COSMIC, TITAN, ICE, WMATIC, CRV, UNI_TOKEN, AAVE, LINK, LUNA, ELE, GAJ, SILVER, SING, RAZOR, ETHER } from '../../constants'
+import { UNI, USDC, DFYN, FISH, UFT, ANY, AGA, AGAr, NORD, BIFI, COSMIC, TITAN, ICE, WMATIC, CRV, UNI_TOKEN, AAVE, LINK, LUNA, ELE, GAJ, SILVER, SING, RAZOR, ETHER, FRM } from '../../constants'
 import { STAKING_REWARDS_BASIC_FARMS_INTERFACE } from '../../constants/abis/staking-rewards-basic-farms'
 import { useActiveWeb3React } from '../../hooks'
 import { NEVER_RELOAD, useMultipleContractSingleData } from '../multicall/hooks'
@@ -24,6 +24,35 @@ export const STAKING_REWARDS_INFO: {
   }[]
 } = {
   [ChainId.MATIC]: [
+    //v5
+    {
+      tokens: [USDC, ELE],
+      baseToken: USDC,
+      startTime: 1631538000,
+      stakingRewardAddress: '0x0185801628dC4fC0c24E83681f3f6a515E29FDE0',
+      version: 'v5'
+    },
+    {
+      tokens: [DFYN, ELE],
+      baseToken: DFYN,
+      startTime: 1631538000,
+      stakingRewardAddress: '0x0d5F036c1AAe892c4d52bC0151E9466b0edee352',
+      version: 'v5'
+    },
+    {
+      tokens: [DFYN, GAJ],
+      baseToken: DFYN,
+      startTime: 1631538000,
+      stakingRewardAddress: '0x81CB25e0ebB5b31DeA411114DAE995678582871b',
+      version: 'v5'
+    },
+    {
+      tokens: [DFYN, FRM],
+      baseToken: DFYN,
+      startTime: 1631538000,
+      stakingRewardAddress: '0x44fcF521747BA7f152d78b0b206D43580A2bdf73',
+      version: 'v5'
+    },
     //v4
     {
       tokens: [DFYN, SING],
@@ -596,7 +625,7 @@ export function useInactiveStakingInfo(pairToFilterBy?: Pair | null, version: st
         // compare period end timestamp vs current block timestamp (in seconds)
         const active =
           periodFinishSeconds && currentBlockTimestamp ? periodFinishSeconds > currentBlockTimestamp.toNumber() : true
-
+        if (!active) console.log("active: ", active, info[index]);
         memo.push({
           type: { typeOf: 'Archived Ecosystem Farms', url: 'eco-farms/archived' },
           stakingRewardAddress: rewardsAddress,
