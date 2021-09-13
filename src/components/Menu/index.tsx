@@ -1,6 +1,8 @@
 import { HowToVote } from '@material-ui/icons'
+import { CHART_URL_PREFIX } from 'constants/networks'
+import { useActiveWeb3React } from 'hooks'
 import React, { useRef } from 'react'
-import { Info, Send, Book, MessageCircle } from 'react-feather'
+import { Info, Send, Book, MessageCircle, TrendingUp } from 'react-feather'
 import styled from 'styled-components'
 import { ReactComponent as MenuIcon } from '../../assets/images/menu.svg'
 // import { useActiveWeb3React } from '../../hooks'
@@ -10,6 +12,14 @@ import { useModalOpen, useToggleModal } from '../../state/application/hooks'
 
 import { ExternalLink } from '../../theme'
 // import { ButtonPrimary } from '../Button'
+
+const HideChart = styled.span`
+  display: none;
+  ${({ theme }) => theme.mediaWidth.upToSmall`
+    display: block;
+    margin-top: 6px;
+  `}
+`
 
 const StyledMenuIcon = styled(MenuIcon)`
   path {
@@ -68,7 +78,11 @@ const MenuFlyout = styled.span`
   z-index: 100;
 
   ${({ theme }) => theme.mediaWidth.upToMediumLarge`
-    top: -14.25rem;
+    top: -14rem;
+  `};
+
+  ${({ theme }) => theme.mediaWidth.upToSmall`
+    top: -16rem;
   `};
 `
 
@@ -89,7 +103,7 @@ const MenuItem = styled(ExternalLink)`
 
 export default function Menu() {
   // const { account } = useActiveWeb3React()
-
+  const { chainId } = useActiveWeb3React()
   const node = useRef<HTMLDivElement>()
   const open = useModalOpen(ApplicationModal.MENU)
   const toggle = useToggleModal(ApplicationModal.MENU)
@@ -122,9 +136,16 @@ export default function Menu() {
             Discord
           </MenuItem>
           <MenuItem id="link" href="https://governance.dfyn.network/">
-            <HowToVote style={{fontSize: "16px"}}/>
+            <HowToVote style={{ fontSize: "16px" }} />
             Governance
           </MenuItem>
+          <HideChart>
+            <MenuItem id="link" href={`https://${CHART_URL_PREFIX[(chainId ? chainId : 137)]}.dfyn.network/home/`}>
+              <TrendingUp size={15} />
+              Charts
+            </MenuItem>
+          </HideChart>
+
           {/* <MenuItem id="link" href="https://info.dfyn.network/">
             <PieChart size={14} />
             Analytics

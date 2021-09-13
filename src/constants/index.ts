@@ -84,6 +84,7 @@ export const ELE = new Token(ChainId.MATIC, '0xAcD7B3D9c10e97d0efA418903C0c7669E
 export const CIRUS = new Token(ChainId.MATIC, '0x2a82437475a60bebd53e33997636fade77604fc2', 18, 'CIRUS', 'CIRUS')
 export const SILVER = new Token(ChainId.MATIC, '0xbc7cB585346f4F59d07121Bb9Ed7358076243539', 18, 'SILVER', 'Sliver')
 export const SING = new Token(ChainId.MATIC, '0xCB898b0eFb084Df14dd8E018dA37B4d0f06aB26D', 18, 'SING', 'Sing Token')
+export const MATRIX = new Token(ChainId.MATIC, '0x211f4e76fcb811ed2b310a232a24b3445d95e3bc', 18, 'matrix', 'Matrixswap')
 
 //OKEX
 export const WOKT = new Token(ChainId.OKEX, '0x8f8526dbfd6e38e3d8307702ca8469bae6c56c15', 18, 'OKT', 'Wrapped OKT')
@@ -123,9 +124,10 @@ export const UNI: { [chainId in ChainId]: Token } = {
   [ChainId.KOVAN]: new Token(ChainId.KOVAN, UNI_ADDRESS, 18, 'UNI', 'Uniswap'),
   [ChainId.MATIC]: new Token(ChainId.MATIC, UNI_ADDRESS, 18, 'DFYN', 'DFYN Token'),
   [ChainId.OKEX]: new Token(ChainId.OKEX, UNI_ADDRESS, 18, 'DFYN', 'DFYN Token'),
+  [ChainId.ARBITRUM]: new Token(ChainId.ARBITRUM, UNI_ADDRESS, 18, 'DFYN', 'DFYN Token'),
 }
 
-export const REWARD_TOKENS: Token[] = [ROUTE, DFYN, ZEE, AURORA, ROYA, BOOTY, SX, EZ, UFARM, NWC, mRTK, XDO, FRM, RVF, CHART, NORD]
+export const REWARD_TOKENS: Token[] = [ROUTE, DFYN, ZEE, AURORA, ROYA, BOOTY, SX, EZ, UFARM, NWC, mRTK, XDO, FRM, RVF, CHART, NORD, RAZOR]
 
 export const COMMON_CONTRACT_NAMES: { [address: string]: string } = {
   [UNI_ADDRESS]: 'DFYN',
@@ -147,6 +149,7 @@ const WETH_ONLY: ChainTokenList = {
   [ChainId.KOVAN]: [WETH[ChainId.KOVAN]],
   [ChainId.MATIC]: [WETH[ChainId.MATIC]],
   [ChainId.OKEX]: [WETH[ChainId.OKEX]],
+  [ChainId.ARBITRUM]: [WETH[ChainId.ARBITRUM]],
 }
 
 // used to construct intermediary pairs for trading

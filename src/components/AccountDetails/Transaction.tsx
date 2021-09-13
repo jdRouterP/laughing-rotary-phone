@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { CheckCircle, Triangle } from 'react-feather'
+import { CheckCircle, Trash, Triangle } from 'react-feather'
 
 import { useActiveWeb3React } from '../../hooks'
 import { getExplorerLink } from '../../utils'
@@ -10,6 +10,11 @@ import { RowFixed } from '../Row'
 import Loader from '../Loader'
 
 const TransactionWrapper = styled.div``
+
+const IconStyle = styled.div`
+  display: flex;
+  margin: auto 0;
+`
 
 const TransactionStatusText = styled.div`
   margin-right: 0.5rem;
@@ -53,9 +58,12 @@ export default function Transaction({ hash }: { hash: string }) {
         <RowFixed>
           <TransactionStatusText>{summary ?? hash} ↗</TransactionStatusText>
         </RowFixed>
-        <IconWrapper pending={pending} success={success}>
+        <IconStyle>
+          <IconWrapper pending={pending} success={success}>
           {pending ? <Loader /> : success ? <CheckCircle size="16" /> : <Triangle size="16" />}
-        </IconWrapper>
+          </IconWrapper>
+          <Trash size="16" style={{marginLeft: "10px", color: 'white'}}/>
+        </IconStyle>
       </TransactionState>
     </TransactionWrapper>
   )

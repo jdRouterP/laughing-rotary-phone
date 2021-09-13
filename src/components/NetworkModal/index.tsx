@@ -99,6 +99,7 @@ export default function NetworkModal() {
     return [
       ChainId.MATIC,
       ChainId.OKEX,
+      ChainId.ARBITRUM
     ].map((key: ChainId) => {
       const option = SUPPORTED_NETWORKS[key]
       const { ethereum } = window;

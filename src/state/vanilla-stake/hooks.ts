@@ -1,6 +1,6 @@
 import { ChainId, CurrencyAmount, JSBI, Token, TokenAmount, Pair } from '@dfyn/sdk'
 import { useMemo } from 'react'
-import { UNI, USDC, DFYN, FISH, UFT, ANY, AGA, AGAr, NORD, BIFI, COSMIC, TITAN, ICE, WMATIC, CRV, UNI_TOKEN, AAVE, LINK, LUNA, ELE, GAJ, SILVER } from '../../constants'
+import { UNI, USDC, DFYN, FISH, UFT, ANY, AGA, AGAr, NORD, BIFI, COSMIC, TITAN, ICE, WMATIC, CRV, UNI_TOKEN, AAVE, LINK, LUNA, ELE, GAJ, SILVER, SING, RAZOR, ETHER, FRM } from '../../constants'
 import { STAKING_REWARDS_BASIC_FARMS_INTERFACE } from '../../constants/abis/staking-rewards-basic-farms'
 import { useActiveWeb3React } from '../../hooks'
 import { NEVER_RELOAD, useMultipleContractSingleData } from '../multicall/hooks'
@@ -24,7 +24,61 @@ export const STAKING_REWARDS_INFO: {
   }[]
 } = {
   [ChainId.MATIC]: [
+    //v5
+    {
+      tokens: [USDC, ELE],
+      baseToken: USDC,
+      startTime: 1631538000,
+      stakingRewardAddress: '0x0185801628dC4fC0c24E83681f3f6a515E29FDE0',
+      version: 'v5'
+    },
+    {
+      tokens: [DFYN, ELE],
+      baseToken: DFYN,
+      startTime: 1631538000,
+      stakingRewardAddress: '0x0d5F036c1AAe892c4d52bC0151E9466b0edee352',
+      version: 'v5'
+    },
+    {
+      tokens: [DFYN, GAJ],
+      baseToken: DFYN,
+      startTime: 1631538000,
+      stakingRewardAddress: '0x81CB25e0ebB5b31DeA411114DAE995678582871b',
+      version: 'v5'
+    },
+    {
+      tokens: [DFYN, FRM],
+      baseToken: DFYN,
+      startTime: 1631538000,
+      stakingRewardAddress: '0x44fcF521747BA7f152d78b0b206D43580A2bdf73',
+      version: 'v5'
+    },
+    //v4
+    {
+      tokens: [DFYN, SING],
+      baseToken: DFYN,
+      startTime: 1631021400,
+      stakingRewardAddress: '0x10b70CC73E3FE9fb518FA86814cEcb97e74C4376',
+      version: 'v4'
+    },
+    {
+      tokens: [DFYN, BIFI],
+      baseToken: DFYN,
+      startTime: 1631021400,
+      stakingRewardAddress: '0xa11b8DC1108692AB4A21fb780f3389e27E3DFDEA',
+      version: 'v4'
+    },
+    {
+      tokens: [RAZOR, ETHER],
+      baseToken: ETHER,
+      rewardToken: RAZOR,
+      startTime: 1631021400,
+      stakingRewardAddress: '0x07A6314C933663472C1a66b2bd4097B60625e35E',
+      version: 'v4'
+    },
+
     //v3
+
     {
       tokens: [DFYN, SILVER],
       baseToken: DFYN,
@@ -73,49 +127,6 @@ export const STAKING_REWARDS_INFO: {
       startTime: 1629723600,
       stakingRewardAddress: '0x25D779d16021dDD15932f9f3B6EE745b4c8fd488',
       version: 'v3'
-    },
-    {
-      tokens: [AGAr, AGA],
-      baseToken: AGA,
-      rewardToken: AGA,
-      startTime: 1628940600,
-      stakingRewardAddress: '0x85E894149348c1aC5B63561462Ca6051f1aB4b72',
-      version: 'v2'
-    },
-    {
-      tokens: [DFYN, AGA],
-      baseToken: DFYN,
-      startTime: 1628857800,
-      stakingRewardAddress: '0x2CaAA00D4505aD79FA75C06c475828e47B01C042',
-      version: 'v2'
-    },
-    {
-      tokens: [DFYN, AGAr],
-      baseToken: DFYN,
-      startTime: 1628857800,
-      stakingRewardAddress: '0xf8F6cf2f6Dc86dDB471552AA33cD6BeAC495E444',
-      version: 'v2'
-    },
-    {
-      tokens: [DFYN, GAJ],
-      baseToken: DFYN,
-      startTime: 1628857800,
-      stakingRewardAddress: '0x8257383036071C57235bfA12B76778215C348528',
-      version: 'v2'
-    },
-    {
-      tokens: [USDC, ELE],
-      baseToken: USDC,
-      startTime: 1628857800,
-      stakingRewardAddress: '0xB6a316dDe99a2844C80355a3Ef165AaD5Eb7d708',
-      version: 'v2'
-    },
-    {
-      tokens: [DFYN, ELE],
-      baseToken: DFYN,
-      startTime: 1628857800,
-      stakingRewardAddress: '0x139D73E055308507b6718AFFAB679c2186b6d90e',
-      version: 'v2'
     },
 
     {
@@ -174,6 +185,49 @@ export const INACTIVE_STAKING_REWARDS_INFO: {
   }[]
 } = {
   [ChainId.MATIC]: [
+    {
+      tokens: [DFYN, GAJ],
+      baseToken: DFYN,
+      startTime: 1628857800,
+      stakingRewardAddress: '0x8257383036071C57235bfA12B76778215C348528',
+      version: 'v2'
+    },
+    {
+      tokens: [USDC, ELE],
+      baseToken: USDC,
+      startTime: 1628857800,
+      stakingRewardAddress: '0xB6a316dDe99a2844C80355a3Ef165AaD5Eb7d708',
+      version: 'v2'
+    },
+    {
+      tokens: [DFYN, ELE],
+      baseToken: DFYN,
+      startTime: 1628857800,
+      stakingRewardAddress: '0x139D73E055308507b6718AFFAB679c2186b6d90e',
+      version: 'v2'
+    },
+    {
+      tokens: [AGAr, AGA],
+      baseToken: AGA,
+      rewardToken: AGA,
+      startTime: 1628940600,
+      stakingRewardAddress: '0x85E894149348c1aC5B63561462Ca6051f1aB4b72',
+      version: 'v2'
+    },
+    {
+      tokens: [DFYN, AGA],
+      baseToken: DFYN,
+      startTime: 1628857800,
+      stakingRewardAddress: '0x2CaAA00D4505aD79FA75C06c475828e47B01C042',
+      version: 'v2'
+    },
+    {
+      tokens: [DFYN, AGAr],
+      baseToken: DFYN,
+      startTime: 1628857800,
+      stakingRewardAddress: '0xf8F6cf2f6Dc86dDB471552AA33cD6BeAC495E444',
+      version: 'v2'
+    },
     //v2
     {
       tokens: [DFYN, WMATIC],
@@ -571,7 +625,6 @@ export function useInactiveStakingInfo(pairToFilterBy?: Pair | null, version: st
         // compare period end timestamp vs current block timestamp (in seconds)
         const active =
           periodFinishSeconds && currentBlockTimestamp ? periodFinishSeconds > currentBlockTimestamp.toNumber() : true
-
         memo.push({
           type: { typeOf: 'Archived Ecosystem Farms', url: 'eco-farms/archived' },
           stakingRewardAddress: rewardsAddress,
