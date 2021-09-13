@@ -239,7 +239,7 @@ export default function InputComponent({ label, token }: { label: string, token:
                     <SubmittedView onDismiss={wrappedOnDismiss} hash={hash}>
                         <AutoColumn gap="12px" justify={'center'}>
                             <TYPE.largeHeader>Transaction Submitted</TYPE.largeHeader>
-                            <TYPE.body fontSize={20}>Deposited {parsedAmount?.toSignificant(4)} {label === "Stake DFYN" ? "DFYN" : "vDFYN" ?? '-'}</TYPE.body>
+                            <TYPE.body fontSize={20}>Unstaked {parsedAmount?.toSignificant(4)} {label === "Stake DFYN" ? "DFYN" : "vDFYN" ?? '-'}</TYPE.body>
                         </AutoColumn>
                     </SubmittedView>
                 )}
