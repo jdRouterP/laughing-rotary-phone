@@ -132,7 +132,7 @@ export default function VDFYN() {
                                 </RowBetween>
                                 <RowBetween>
                                     <TYPE.white fontSize={14}>
-                                        Stake your Dfyn and get vDfyn tokens. Every swap on Dfyn contributes 0.05% of the swap value to the vDfyn pool. This means that by staking Dfyn in this pool, you get vDfyn tokens which are always compounding with the fees earned by Dfyn Exchange. You can now own part of the protocol and the revenue stream by holding vDfyn. vDfyn holders will also enjoy superior voting privileges in governance.
+                                        Stake your Dfyn and get vDfyn tokens. Every swap on Dfyn contributes 0.05% of the swap value to the vDfyn pool. This means that by staking Dfyn in this pool, you get vDfyn tokens which are always compounding with the fees earned by Dfyn Exchange. You can now own part of the protocol by holding vDfyn. vDfyn holders will also enjoy superior voting privileges in governance.
                                     </TYPE.white>
                                 </RowBetween>{' '}
                                 {/* <ExternalLink
