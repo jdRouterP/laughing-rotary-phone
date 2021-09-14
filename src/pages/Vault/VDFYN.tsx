@@ -66,16 +66,16 @@ const TopSection = styled(AutoColumn)`
   width: 100%;
 `
 
-const _calculateAPR = async (totalSupply: any, ratio: any, cb: Function) => {
-    if (ratio === 0) ratio = 1;
+const _calculateAPR = async (totalSupply: any, dfynBalance: any, cb: Function) => {
+    if (dfynBalance === 0) dfynBalance = 1;
     if (!totalSupply || totalSupply === 0) totalSupply = 1;
     else totalSupply = totalSupply.toSignificant(4);
     const [, dfynUsdcPair] = usePair(USDC, DFYN);
     try {
-
+        debugger
         const dfynPrice = Number(dfynUsdcPair?.priceOf(DFYN)?.toSignificant(6)) || 0
         const volumeUSD = await getVDFYNVolumeUSD() || 0;
-        let apr = ((((volumeUSD * 0.05) / totalSupply) * 365) / (ratio * dfynPrice)) || 0
+        let apr = ((((volumeUSD * 0.05)) * 365) / (dfynBalance.toFixed(6) * dfynPrice)) || 0
         apr = isNumeric(apr) ? apr : 0;
         cb(apr);
     } catch (err) {
@@ -103,7 +103,7 @@ export default function VDFYN() {
 
     const aggregateBalancevDfyn: TokenAmount | undefined = useTokenBalance(account ?? undefined, vDFYN)
     const countUpValuevDfyn = aggregateBalancevDfyn?.toFixed(4) ?? '0'
-    const { totalSupply, ratio } = useDfynChestInfo();
+    const { totalSupply, dfynBalance } = useDfynChestInfo();
 
     const [calculatedAPR, _setCalculatedAPR] = useState(0);
     const customSetCalculateAPR = (newAPR: number) => {
@@ -111,7 +111,7 @@ export default function VDFYN() {
         _setCalculatedAPR(newAPR);
     }
     const [activeTab, setActiveTab] = useState(0);
-    _calculateAPR(totalSupply, ratio, customSetCalculateAPR)
+    _calculateAPR(totalSupply, dfynBalance ?? 0, customSetCalculateAPR)
 
     const handleChange = (e: any, value: any) => {
         setActiveTab(value);

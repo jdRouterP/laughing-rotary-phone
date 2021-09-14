@@ -16,6 +16,8 @@ export interface DfynChestInfo {
 
     ratio: Number
 
+    dfynBalance: TokenAmount | undefined
+
     totalSupply: TokenAmount
 }
 
@@ -41,11 +43,12 @@ export function useDfynChestInfo(): DfynChestInfo {
                 vDFYNtoDFYN: new TokenAmount(DFYN, JSBI.BigInt(vDfynToDfyn?.result?.[0] ?? 0)),
                 DFYNtovDFYN: new TokenAmount(vDFYN, JSBI.BigInt(DfynTovDfyn?.result?.[0] ?? 0)),
                 dfynPrice,
+                dfynBalance,
                 ratio,
                 totalSupply: new TokenAmount(vDFYN, JSBI.BigInt(totalSupply?.result?.[0] ?? 0))
             }
         )
 
-    }, [vDfynToDfyn, DfynTovDfyn, dfynPrice, ratio, totalSupply])
+    }, [vDfynToDfyn, DfynTovDfyn, dfynPrice, dfynBalance, ratio, totalSupply])
 
 }
