@@ -11,7 +11,6 @@ import Loader from '../Loader'
 import { useDispatch } from 'react-redux'
 import { AppDispatch } from 'state'
 import { clearCurrentTransactions } from 'state/transactions/actions'
-import { MouseoverTooltip } from 'components/Tooltip'
 
 const TransactionWrapper = styled.div`
   display: flex;
@@ -71,9 +70,9 @@ export default function Transaction({ hash }: { hash: string }) {
           {pending ? <Loader /> : success ? <CheckCircle size="16" /> : <Triangle size="16" />}
         </IconWrapper>
       </TransactionState>
-      <MouseoverTooltip text="Remove from recents">
+      <span title={"Remove from recents"}>
         <Trash size="16" onClick={clearCurrentTransactionsCallback} style={{margin: "3px 0", marginLeft: "10px", color: 'white', cursor: "pointer"}}/>
-      </MouseoverTooltip>
+      </span>
     </TransactionWrapper>
   )
 }
