@@ -72,7 +72,6 @@ const _calculateAPR = async (totalSupply: any, dfynBalance: any, cb: Function) =
     else totalSupply = totalSupply.toSignificant(4);
     const [, dfynUsdcPair] = usePair(USDC, DFYN);
     try {
-        debugger
         const dfynPrice = Number(dfynUsdcPair?.priceOf(DFYN)?.toSignificant(6)) || 0
         const volumeUSD = await getVDFYNVolumeUSD() || 0;
         let apr = ((((volumeUSD * 0.05)) * 365) / (dfynBalance.toFixed(6) * dfynPrice)) || 0
