@@ -4,6 +4,7 @@ import { DFYN, USDC, vDFYN } from '../../constants';
 import { useSingleCallResult } from 'state/multicall/hooks';
 import { useDfynChestContract } from 'hooks/useContract';
 import { usePair } from 'data/Reserves';
+import { useTokenBalance } from 'state/wallet/hooks';
 
 export interface DfynChestInfo {
 
@@ -12,6 +13,10 @@ export interface DfynChestInfo {
     DFYNtovDFYN: TokenAmount
 
     dfynPrice: Number
+
+    ratio: Number
+
+    totalSupply: TokenAmount
 }
 
 export function useDfynChestInfo(): DfynChestInfo {
@@ -25,15 +30,18 @@ export function useDfynChestInfo(): DfynChestInfo {
 
     const vDfynToDfyn = useSingleCallResult(dfynChest, 'vdfynForDfyn', inputs);
     const DfynTovDfyn = useSingleCallResult(dfynChest, 'dfynForVdfyn', inputs);
-    const ratio = useSingleCallResult(dfynChest, 'ratio');
+    // const ratio = useSingleCallResult(dfynChest, 'ratio');
+    const dfynBalance = useTokenBalance(dfynChest?.address, DFYN);
     const totalSupply = useSingleCallResult(dfynChest, 'totalSupply');
+    const vDfynTotalSupply = totalSupply?.result?.[0] ?? 0
+    const ratio = dfynBalance ? parseFloat(dfynBalance?.raw.toString()) / vDfynTotalSupply : 0;
     return useMemo(() => {
         return (
             {
                 vDFYNtoDFYN: new TokenAmount(DFYN, JSBI.BigInt(vDfynToDfyn?.result?.[0] ?? 0)),
                 DFYNtovDFYN: new TokenAmount(vDFYN, JSBI.BigInt(DfynTovDfyn?.result?.[0] ?? 0)),
                 dfynPrice,
-                ratio: ratio?.result || 0,
+                ratio,
                 totalSupply: new TokenAmount(vDFYN, JSBI.BigInt(totalSupply?.result?.[0] ?? 0))
             }
         )

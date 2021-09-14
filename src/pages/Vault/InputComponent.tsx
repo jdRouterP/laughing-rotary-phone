@@ -58,7 +58,7 @@ export default function InputComponent({ label, token }: { label: string, token:
     const { account, chainId } = useActiveWeb3React()
     let balance = useCurrencyBalance(account ?? undefined, token)
     let dfynChestInfo = useDfynChestInfo();
-
+    const staking = label === "Stake DFYN"
     const dust = JSBI.BigInt("10000000000000000"); //TODO
 
     const {
@@ -117,7 +117,7 @@ export default function InputComponent({ label, token }: { label: string, token:
 
                 await dfynChestContract.enter(`0x${parsedAmount.raw.toString(16)}`, { gasLimit: 350000 }).then((response: TransactionResponse) => {
                     addTransaction(response, {
-                        summary: `Deposit Tokens`
+                        summary: `Deposited ${parsedAmount.toSignificant(3)} DFYN`
                     })
                     setHash(response.hash)
                 })
@@ -140,12 +140,13 @@ export default function InputComponent({ label, token }: { label: string, token:
         if (dfynChestContract && parsedAmount) {
             await dfynChestContract.leave(`0x${parsedAmount.raw.toString(16)}`, { gasLimit: 350000 }).then((response: TransactionResponse) => {
                 addTransaction(response, {
-                    summary: `Deposit Tokens`
+                    summary: `Deposited ${parsedAmount.toSignificant(3)} vDFYN & Unstaked DFYN`
                 })
                 setHash(response.hash)
             })
                 .catch((error: any) => {
                     setAttempting(false)
+                    setIsOpen(false)
                     console.log(error)
                 })
         }
@@ -164,7 +165,7 @@ export default function InputComponent({ label, token }: { label: string, token:
                 <UNIWrapper>
                     <UNIAmount>
                         <TYPE.white padding="0 2px">
-                            {`1 vDFYN = ${dfynChestInfo?.vDFYNtoDFYN.toSignificant(2) ?? '-'} DFYN`}
+                            {`1 vDFYN = ${dfynChestInfo?.ratio.toFixed(2) ?? '-'} DFYN`}
                         </TYPE.white>
                     </UNIAmount>
                 </UNIWrapper>
@@ -183,7 +184,7 @@ export default function InputComponent({ label, token }: { label: string, token:
                 />
                 <RowBetween mt={"20px"}>
                     {account ?
-                        (label === "Stake DFYN" ?
+                        (staking ?
                             <>
                                 {showApproveFlow && <ButtonConfirmed
                                     mr="0.5rem"
@@ -230,8 +231,8 @@ export default function InputComponent({ label, token }: { label: string, token:
                 {attempting && !hash && (
                     <LoadingView onDismiss={wrappedOnDismiss}>
                         <AutoColumn gap="12px" justify={'center'}>
-                            <TYPE.largeHeader>Unstaking {label === "Stake DFYN" ? "DFYN" : "vDFYN" ?? '-'} Tokens</TYPE.largeHeader>
-                            <TYPE.body fontSize={20}>{parsedAmount?.toSignificant(4)} {label === "Stake DFYN" ? "DFYN" : "vDFYN" ?? '-'}</TYPE.body>
+                            <TYPE.largeHeader> {staking ? "Staking DFYN" : "Unstaking DFYN" ?? '-'} Tokens</TYPE.largeHeader>
+                            <TYPE.body fontSize={20}>{parsedAmount?.toSignificant(4)} {staking ? "DFYN" : "vDFYN" ?? '-'}</TYPE.body>
                         </AutoColumn>
                     </LoadingView>
                 )}
@@ -239,7 +240,7 @@ export default function InputComponent({ label, token }: { label: string, token:
                     <SubmittedView onDismiss={wrappedOnDismiss} hash={hash}>
                         <AutoColumn gap="12px" justify={'center'}>
                             <TYPE.largeHeader>Transaction Submitted</TYPE.largeHeader>
-                            <TYPE.body fontSize={20}>Unstaked {parsedAmount?.toSignificant(4)} {label === "Stake DFYN" ? "DFYN" : "vDFYN" ?? '-'}</TYPE.body>
+                            <TYPE.body fontSize={20}>${parsedAmount?.toSignificant(4)} {staking ? `DFYN Staked` : `vDFYN Burnt` ?? '-'}</TYPE.body>
                         </AutoColumn>
                     </SubmittedView>
                 )}

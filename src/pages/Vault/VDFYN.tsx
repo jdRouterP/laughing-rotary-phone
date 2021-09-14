@@ -75,7 +75,7 @@ const _calculateAPR = async (totalSupply: any, ratio: any, cb: Function) => {
 
         const dfynPrice = Number(dfynUsdcPair?.priceOf(DFYN)?.toSignificant(6)) || 0
         const volumeUSD = await getVDFYNVolumeUSD() || 0;
-        let apr = ((((volumeUSD * 0.05) / totalSupply) * 365) / (ratio.dfynAmount_?.toNumber() * dfynPrice)) || 0
+        let apr = ((((volumeUSD * 0.05) / totalSupply) * 365) / (ratio * dfynPrice)) || 0
         apr = isNumeric(apr) ? apr : 0;
         cb(apr);
     } catch (err) {
