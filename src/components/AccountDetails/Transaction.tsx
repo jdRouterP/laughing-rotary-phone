@@ -1,6 +1,6 @@
-import React from 'react'
+import React, {useCallback} from 'react'
 import styled from 'styled-components'
-import { CheckCircle, Triangle } from 'react-feather'
+import { CheckCircle, Trash, Triangle } from 'react-feather'
 
 import { useActiveWeb3React } from '../../hooks'
 import { getExplorerLink } from '../../utils'
@@ -8,13 +8,15 @@ import { ExternalLink } from '../../theme'
 import { useAllTransactions } from '../../state/transactions/hooks'
 import { RowFixed } from '../Row'
 import Loader from '../Loader'
+import { useDispatch } from 'react-redux'
+import { AppDispatch } from 'state'
+import { clearCurrentTransactions } from 'state/transactions/actions'
 
-const TransactionWrapper = styled.div``
-
-const IconStyle = styled.div`
+const TransactionWrapper = styled.div`
   display: flex;
-  margin: auto 0;
+  justify-content: space-between;
 `
+
 
 const TransactionStatusText = styled.div`
   margin-right: 0.5rem;
@@ -28,6 +30,7 @@ const TransactionStatusText = styled.div`
 const TransactionState = styled(ExternalLink) <{ pending: boolean; success?: boolean }>`
   display: flex;
   justify-content: space-between;
+  width: 100%;
   align-items: center;
   text-decoration: none !important;
   border-radius: 0.5rem;
@@ -44,11 +47,16 @@ const IconWrapper = styled.div<{ pending: boolean; success?: boolean }>`
 export default function Transaction({ hash }: { hash: string }) {
   const { chainId } = useActiveWeb3React()
   const allTransactions = useAllTransactions()
+  const dispatch = useDispatch<AppDispatch>()
 
   const tx = allTransactions?.[hash]
   const summary = tx?.summary
   const pending = !tx?.receipt
   const success = !pending && tx && (tx.receipt?.status === 1 || typeof tx.receipt?.status === 'undefined')
+
+  const clearCurrentTransactionsCallback = useCallback(() => {
+    if (chainId) dispatch(clearCurrentTransactions({ chainId, hash }))
+  }, [dispatch, chainId, hash])
 
   if (!chainId) return null
 
@@ -58,13 +66,11 @@ export default function Transaction({ hash }: { hash: string }) {
         <RowFixed>
           <TransactionStatusText>{summary ?? hash} ↗</TransactionStatusText>
         </RowFixed>
-        <IconStyle>
-          <IconWrapper pending={pending} success={success}>
+        <IconWrapper pending={pending} success={success}>
           {pending ? <Loader /> : success ? <CheckCircle size="16" /> : <Triangle size="16" />}
-          </IconWrapper>
-          {/* <Trash size="16" style={{marginLeft: "10px", color: 'white'}}/> */}
-        </IconStyle>
+        </IconWrapper>
       </TransactionState>
+      <Trash size="16" onClick={clearCurrentTransactionsCallback} style={{margin: "3px 0", marginLeft: "10px", color: 'white'}}/>
     </TransactionWrapper>
   )
 }
