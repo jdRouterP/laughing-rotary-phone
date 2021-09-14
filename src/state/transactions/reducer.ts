@@ -3,6 +3,7 @@ import {
   addTransaction,
   checkedTransaction,
   clearAllTransactions,
+  clearCurrentTransactions,
   finalizeTransaction,
   SerializableTransactionReceipt
 } from './actions'
@@ -42,6 +43,12 @@ export default createReducer(initialState, builder =>
     .addCase(clearAllTransactions, (transactions, { payload: { chainId } }) => {
       if (!transactions[chainId]) return
       transactions[chainId] = {}
+    })
+    .addCase(clearCurrentTransactions, (transactions, { payload: { chainId, hash } }) => {
+      let availableTxs = transactions[chainId]
+      if (!availableTxs || !availableTxs[hash]) return
+      delete availableTxs[hash]
+      transactions[chainId] = availableTxs
     })
     .addCase(checkedTransaction, (transactions, { payload: { chainId, hash, blockNumber } }) => {
       const tx = transactions[chainId]?.[hash]
