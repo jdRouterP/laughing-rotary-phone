@@ -104,7 +104,6 @@
     "build": "GENERATE_SOURCEMAP=false react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "postinstall": "rm -rf ./node_modules/@uniswap; cp -r ./forks/@uniswap ./node_modules/@uniswap",
     "integration-test": "start-server-and-test 'serve build -l 3000' http://localhost:3000 'cypress run'"
   },
   "eslintConfig": {
