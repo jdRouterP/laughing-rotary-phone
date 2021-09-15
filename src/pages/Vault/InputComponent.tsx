@@ -1,3 +1,4 @@
+
 import { CurrencyAmount, JSBI, Token } from '@dfyn/sdk'
 import { TransactionResponse } from '@ethersproject/abstract-provider'
 import { ButtonConfirmed, ButtonError, ButtonLight } from 'components/Button'
@@ -14,16 +15,17 @@ import { useActiveWeb3React } from 'hooks'
 import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
 import { useDfynChestContract } from 'hooks/useContract'
 import useStake from 'pages/Predictions/hooks/useStake'
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useCallback, useMemo, useState, useContext } from 'react'
 import { useWalletModalToggle } from 'state/application/hooks'
 import { useTransactionAdder } from 'state/transactions/hooks'
 import { useDfynChestInfo } from 'state/vDfyn/hooks'
 import { useCurrencyBalance } from 'state/wallet/hooks'
-import styled from 'styled-components'
+import styled, { ThemeContext } from 'styled-components'
 import { TYPE } from 'theme'
 import { BIG_INT_ZERO } from 'utils/bigNumber'
 import { maxAmountSpend } from 'utils/maxAmountSpend'
 import { tryParseAmount } from 'state/swap/hooks'
+import { Text } from 'rebass'
 
 const InputRow = styled.div`
     width: 100%;
@@ -52,7 +54,16 @@ const UNIAmount = styled.div`
   background: linear-gradient(91.39deg, rgba(255, 0, 122, 0.2) -3.42%, rgba(33, 144, 229, 0.2) 120.56%);
 `
 
+const StyleBalance = styled.div`
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 0.75rem 0 0.75rem 0;
+
+`
+
 export default function InputComponent({ label, token }: { label: string, token: Token }) {
+    const theme = useContext(ThemeContext)
     const [isOpen, setIsOpen] = useState(false)
     const [typedValue, setTypedValue] = useState('')
     const { account, chainId } = useActiveWeb3React()
@@ -152,6 +163,13 @@ export default function InputComponent({ label, token }: { label: string, token:
         }
     }
 
+    const {
+        ratioDfyn,
+        ratioVDfyn
+    } = useDfynChestInfo()
+
+    const value1: Number = Number(ratioDfyn) * Number(typedValue)
+    const value2: Number = Number(ratioVDfyn) * Number(typedValue)
     // for Insufficeint Balance
     const inputAmount = useMemo(() => tryParseAmount(typedValue, token), [token, typedValue])
     const balanceValue = useMemo(() => {
@@ -182,6 +200,28 @@ export default function InputComponent({ label, token }: { label: string, token:
                     customBalanceText={'Balance: '}
                     id="stake"
                 />
+                {typedValue && (label === "Stake DFYN" ?
+                    <>
+                        <StyleBalance>
+                            <Text fontWeight={500} fontSize={14} color={theme.text2}>
+                            </Text>
+                            <Text fontWeight={500} fontSize={14} color={theme.text2}>
+                                You Recieve &nbsp;&nbsp;&nbsp;~{value2.toFixed(3)} VDFYN 
+                            </Text>
+                        </StyleBalance>  
+                    </>
+                    : 
+                    <>
+                        <StyleBalance>
+                            <Text fontWeight={500} fontSize={14} color={theme.text2}>
+                            </Text>
+                            <Text fontWeight={500} fontSize={14} color={theme.text2}>
+                                You Recieve &nbsp;&nbsp;&nbsp;~{value1.toFixed(3)} DFYN
+                            </Text>
+                        </StyleBalance>  
+                    </>
+                )
+                }
                 <RowBetween mt={"20px"}>
                     {account ?
                         (staking ?

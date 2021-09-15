@@ -19,6 +19,10 @@ export interface DfynChestInfo {
     dfynBalance: TokenAmount | undefined
 
     totalSupply: TokenAmount
+
+    ratioDfyn: Number
+
+    ratioVDfyn: Number
 }
 
 export function useDfynChestInfo(): DfynChestInfo {
@@ -37,6 +41,8 @@ export function useDfynChestInfo(): DfynChestInfo {
     const totalSupply = useSingleCallResult(dfynChest, 'totalSupply');
     const vDfynTotalSupply = totalSupply?.result?.[0] ?? 0
     const ratio = dfynBalance ? parseFloat(dfynBalance?.raw.toString()) / vDfynTotalSupply : 0;
+    const ratioDfyn = dfynBalance ? parseFloat(dfynBalance?.raw.toString()) / vDfynTotalSupply : 0;
+    const ratioVDfyn = dfynBalance ? vDfynTotalSupply / parseFloat(dfynBalance?.raw.toString()) : 0;
     return useMemo(() => {
         return (
             {
@@ -45,10 +51,12 @@ export function useDfynChestInfo(): DfynChestInfo {
                 dfynPrice,
                 dfynBalance,
                 ratio,
+                ratioDfyn,
+                ratioVDfyn,
                 totalSupply: new TokenAmount(vDFYN, JSBI.BigInt(totalSupply?.result?.[0] ?? 0))
             }
         )
 
-    }, [vDfynToDfyn, DfynTovDfyn, dfynPrice, dfynBalance, ratio, totalSupply])
+    }, [vDfynToDfyn, DfynTovDfyn, dfynPrice, dfynBalance, ratio, totalSupply, ratioDfyn, ratioVDfyn ])
 
 }
