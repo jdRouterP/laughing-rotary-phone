@@ -284,7 +284,7 @@ export default function Manage({
                 </div>
                 {stakingInfo?.earnedAmount && JSBI.notEqual(BIG_INT_ZERO, stakingInfo?.earnedAmount?.raw) && (<>
                   <div hidden={stakingInfo?.ableToClaim}>
-                    <TYPE.black>{<Countdown showMessage={false} exactEnd={stakingInfo?.unlockAt} />}</TYPE.black>
+                    <TYPE.black>{<Countdown showMessage={false} exactEnd={stakingInfo?.unlockAt} color="black"/>}</TYPE.black>
                   </div>
                   {stakingInfo?.ableToClaim && <ButtonPrimary
                     padding="5px"

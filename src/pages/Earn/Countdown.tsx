@@ -7,7 +7,7 @@ const HOUR = MINUTE * 60
 const DAY = HOUR * 24
 const REWARDS_DURATION = DAY * REWARDS_DURATION_DAYS
 
-export function Countdown({ exactEnd, showMessage = true }: { exactEnd?: Date, showMessage?: boolean }) {
+export function Countdown({ exactEnd, showMessage = true, color}: { exactEnd?: Date, showMessage?: boolean, color?: string }) {
   // get end/beginning times
   const end = useMemo(() => (exactEnd ? Math.floor(exactEnd.getTime() / 1000 + REWARDS_DURATION) : STAKING_GENESIS + REWARDS_DURATION), [
     exactEnd
@@ -54,15 +54,30 @@ export function Countdown({ exactEnd, showMessage = true }: { exactEnd?: Date, s
   const seconds = timeRemaining
 
   return (
-    <TYPE.black fontWeight={400}>
-      {showMessage && message}{' '}
-      {Number.isFinite(timeRemaining) && (
-        <code>
-          {`${days}:${hours.toString().padStart(2, '0')}:${minutes
-            .toString()
-            .padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`}
-        </code>
-      )}
-    </TYPE.black>
+    <>
+      {color === "black" ? 
+        <TYPE.black fontWeight={400}>
+          {showMessage && message}{' '}
+          {Number.isFinite(timeRemaining) && (
+            <code>
+              {`${days}:${hours.toString().padStart(2, '0')}:${minutes
+                .toString()
+                .padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`}
+            </code>
+          )}
+        </TYPE.black>
+        :
+        <TYPE.white fontWeight={400}>
+          {showMessage && message}{' '}
+          {Number.isFinite(timeRemaining) && (
+            <code>
+              {`${days}:${hours.toString().padStart(2, '0')}:${minutes
+                .toString()
+                .padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`}
+            </code>
+          )}
+        </TYPE.white>
+      }
+    </>
   )
 }

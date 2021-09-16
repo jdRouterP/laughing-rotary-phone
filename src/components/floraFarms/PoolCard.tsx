@@ -137,7 +137,7 @@ export default function PoolCard({ stakingInfo, isInactive }: { stakingInfo: Sta
 
       <StatContainer>
         <RowBetween >
-          <Countdown exactEnd={stakingInfo?.periodFinish} startTime={stakingInfo?.startTime} />
+          <Countdown exactEnd={stakingInfo?.periodFinish} startTime={stakingInfo?.startTime} color="white"/>
         </RowBetween>
         <RowBetween>
           <TYPE.white> Total deposited</TYPE.white>

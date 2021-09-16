@@ -8,7 +8,7 @@ const HOUR = MINUTE * 60
 const DAY = HOUR * 24
 const REWARDS_DURATION = DAY * REWARDS_DURATION_DAYS
 
-export function Countdown({ exactEnd, startTime, showMessage = true }: { exactEnd?: Date, startTime?: number, showMessage?: boolean }) {
+export function Countdown({ exactEnd, startTime, showMessage = true, color }: { exactEnd?: Date, startTime?: number, showMessage?: boolean, color?: string }) {
   // get end/beginning times
   const end = useMemo(() => (exactEnd ? Math.floor(exactEnd.getTime() / 1000) : (startTime ?? STAKING_GENESIS) + REWARDS_DURATION), [
     exactEnd, startTime
@@ -58,18 +58,38 @@ export function Countdown({ exactEnd, startTime, showMessage = true }: { exactEn
 
   return (
     <RowBetween>
-      <TYPE.white fontWeight={400}>
-        {showMessage && message}{' '}
-      </TYPE.white>
-      <TYPE.black fontWeight={400}>
-        {Number.isFinite(timeRemaining) && (
-          <code>
-            {`${days}:${hours.toString().padStart(2, '0')}:${minutes
-              .toString()
-              .padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`}
-          </code>
-        )}
-      </TYPE.black>
+      { color === "black" ?
+        <>
+          <TYPE.black fontWeight={400}>
+            {showMessage && message}{' '}
+          </TYPE.black>
+          <TYPE.black fontWeight={400}>
+            {Number.isFinite(timeRemaining) && (
+              <code>
+                {`${days}:${hours.toString().padStart(2, '0')}:${minutes
+                  .toString()
+                  .padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`}
+              </code>
+            )}
+          </TYPE.black>
+        </>
+        :
+        <>
+          <TYPE.white fontWeight={400}>
+            {showMessage && message}{' '}
+          </TYPE.white>
+          <TYPE.white fontWeight={400}>
+            {Number.isFinite(timeRemaining) && (
+              <code>
+                {`${days}:${hours.toString().padStart(2, '0')}:${minutes
+                  .toString()
+                  .padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`}
+              </code>
+            )}
+          </TYPE.white>
+        </>
+      }
+      
     </RowBetween>
   )
 }
