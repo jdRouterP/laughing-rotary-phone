@@ -9,8 +9,8 @@ import ProgressSteps from 'components/ProgressSteps'
 import Loader from 'components/Loader'
 import Modal from 'components/Modal'
 import { LoadingView, SubmittedView } from 'components/ModalViews'
-import { AutoRow, RowBetween } from 'components/Row'
-import { DFYN_CHEST } from 'constants/index'
+import { AutoRow, RowBetween, RowFixed } from 'components/Row'
+import { DFYN_CHEST, vDFYN } from 'constants/index'
 import { useActiveWeb3React } from 'hooks'
 import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
 import { useDfynChestContract } from 'hooks/useContract'
@@ -26,6 +26,9 @@ import { BIG_INT_ZERO } from 'utils/bigNumber'
 import { maxAmountSpend } from 'utils/maxAmountSpend'
 import { tryParseAmount } from 'state/swap/hooks'
 import { Text } from 'rebass'
+import useAddTokenToMetamask from 'hooks/useAddTokenToMetamask'
+import { CheckCircle } from 'react-feather'
+import MetaMaskLogo from '../../assets/images/metamask.png'
 
 const InputRow = styled.div`
     width: 100%;
@@ -59,14 +62,19 @@ const StyleBalance = styled.div`
     display: flex;
     justify-content: space-between;
     padding: 0.75rem 0 0.75rem 0;
+`
 
+const StyledLogo = styled.img`
+  height: 16px;
+  width: 16px;
+  margin-left: 6px;
 `
 
 export default function InputComponent({ label, token }: { label: string, token: Token }) {
     const theme = useContext(ThemeContext)
     const [isOpen, setIsOpen] = useState(false)
     const [typedValue, setTypedValue] = useState('')
-    const { account, chainId } = useActiveWeb3React()
+    const { account, chainId, library } = useActiveWeb3React()
     let balance = useCurrencyBalance(account ?? undefined, token)
     let dfynChestInfo = useDfynChestInfo();
     const staking = label === "Stake DFYN"
@@ -176,6 +184,10 @@ export default function InputComponent({ label, token }: { label: string, token:
         return inputAmount && balance && !balance.lessThan(inputAmount)
     }, [inputAmount, balance])
 
+
+    //Currency add to the Metamask
+    const { addToken, success } = useAddTokenToMetamask(vDFYN)
+
     return (
         <BodyStyle>
             <RowBetween>
@@ -281,6 +293,20 @@ export default function InputComponent({ label, token }: { label: string, token:
                         <AutoColumn gap="12px" justify={'center'}>
                             <TYPE.largeHeader>Transaction Submitted</TYPE.largeHeader>
                             <TYPE.body fontSize={20}>${parsedAmount?.toSignificant(4)} {staking ? `DFYN Staked` : `vDFYN Burnt` ?? '-'}</TYPE.body>
+                            {label === "Stake DFYN" && library?.provider?.isMetaMask && (
+                                <ButtonLight mt="12px" padding="6px 12px" width="fit-content" onClick={addToken}>
+                                {!success ? (
+                                    <RowFixed>
+                                    Add {vDFYN.symbol} to Metamask <StyledLogo src={MetaMaskLogo} />
+                                    </RowFixed>
+                                ) : (
+                                    <RowFixed>
+                                    Added {vDFYN.symbol}{' '}
+                                    <CheckCircle size={'16px'} stroke={theme.green1} style={{ marginLeft: '6px' }} />
+                                    </RowFixed>
+                                )}
+                                </ButtonLight>
+                            )}
                         </AutoColumn>
                     </SubmittedView>
                 )}
