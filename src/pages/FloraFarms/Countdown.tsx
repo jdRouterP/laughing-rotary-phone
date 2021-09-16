@@ -61,7 +61,7 @@ export function Countdown({ exactEnd, startTime, showMessage = true }: { exactEn
       <TYPE.white fontWeight={400}>
         {showMessage && message}{' '}
       </TYPE.white>
-      <TYPE.white fontWeight={400}>
+      <TYPE.black fontWeight={400}>
         {Number.isFinite(timeRemaining) && (
           <code>
             {`${days}:${hours.toString().padStart(2, '0')}:${minutes
@@ -69,7 +69,7 @@ export function Countdown({ exactEnd, startTime, showMessage = true }: { exactEn
               .padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`}
           </code>
         )}
-      </TYPE.white>
+      </TYPE.black>
     </RowBetween>
   )
 }
