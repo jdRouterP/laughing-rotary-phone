@@ -42,7 +42,7 @@ import { Field } from '../../state/burn/actions'
 import { useWalletModalToggle } from '../../state/application/hooks'
 import { useUserSlippageTolerance, useGaslessModeManager } from '../../state/user/hooks'
 import { BigNumber } from '@ethersproject/bignumber'
-import { abi } from '@uniswap/v2-periphery/build/IUniswapV2Router02.json'
+import abi from '../../constants/abis/uniswap-v2-router-02.json'
 import getBiconomy from 'hooks/getBiconomy'
 
 
