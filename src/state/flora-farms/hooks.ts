@@ -71,7 +71,7 @@ export const STAKING_REWARDS_INFO: {
       tokens: [UST, USDC],
       baseToken: USDC,
       startTime: 1634916600,
-      stakingRewardAddress: '0x506aAECD6C87ae1A6081c15460909b1649023aC0',
+      stakingRewardAddress: '0xe6d2d8FDf02A7156797CdD2e611307388946a5Bb',
       version: 'v6',
       burnRate: '35'
     },
@@ -79,7 +79,7 @@ export const STAKING_REWARDS_INFO: {
       tokens: [UST, USDT],
       baseToken: USDT,
       startTime: 1634916600,
-      stakingRewardAddress: '0xe6d2d8FDf02A7156797CdD2e611307388946a5Bb',
+      stakingRewardAddress: '0x506aAECD6C87ae1A6081c15460909b1649023aC0',
       version: 'v6',
       burnRate: '35'
     },
