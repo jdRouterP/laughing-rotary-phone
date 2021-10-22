@@ -21,6 +21,7 @@ export const STAKING_REWARDS_INFO: {
     baseToken?: Token
     rewardToken?: Token
     startTime?: number
+    rate?: TokenAmount
     stakingRewardAddress: string
     version: string
     burnRate: string
@@ -34,7 +35,8 @@ export const STAKING_REWARDS_INFO: {
       startTime: 1635260400,
       stakingRewardAddress: '0xf9D70A91c9898ed8FF005A286c9F4FF8Fcc868D4',
       version: 'v1',
-      burnRate: '35'
+      burnRate: '35',
+      rate: new TokenAmount(DFYN_FANTOM, JSBI.divide(JSBI.BigInt("150000000000000000000000"), JSBI.BigInt("2592000")))
     },
     {
       tokens: [USDC_FANTOM, USDT_FANTOM],
@@ -42,7 +44,8 @@ export const STAKING_REWARDS_INFO: {
       startTime: 1635260400,
       stakingRewardAddress: '0xa8753167da15FF2A19266b99b32993f353d93F0C',
       version: 'v1',
-      burnRate: '35'
+      burnRate: '35',
+      rate: new TokenAmount(DFYN_FANTOM, JSBI.divide(JSBI.BigInt("300000000000000000000000"), JSBI.BigInt("2592000")))
     },
     {
       tokens: [WBTC_FANTOM, WETH_FANTOM],
@@ -50,7 +53,8 @@ export const STAKING_REWARDS_INFO: {
       startTime: 1635260400,
       stakingRewardAddress: '0x4E6e4D56A8EE083d763DC34edD903053b28B5267',
       version: 'v1',
-      burnRate: '35'
+      burnRate: '35',
+      rate: new TokenAmount(DFYN_FANTOM, JSBI.divide(JSBI.BigInt("300000000000000000000000"), JSBI.BigInt("2592000")))
     },
     {
       tokens: [DFYN_FANTOM, USDC_FANTOM],
@@ -58,7 +62,8 @@ export const STAKING_REWARDS_INFO: {
       startTime: 1635260400,
       stakingRewardAddress: '0x07428ee4ca8B8B39b5b3C8F02dF0867D88D96bC3',
       version: 'v1',
-      burnRate: '35'
+      burnRate: '35',
+      rate: new TokenAmount(DFYN_FANTOM, JSBI.divide(JSBI.BigInt("150000000000000000000000"), JSBI.BigInt("2592000")))
     }],
   [ChainId.MATIC]: [
     //v5
@@ -1009,7 +1014,7 @@ export function useStakingInfo(pairToFilterBy?: Pair | null, version: string = '
 
         const stakedAmount = new TokenAmount(dummyPair.liquidityToken, JSBI.BigInt(balanceState?.result?.[0] ?? 0))
         const totalStakedAmount = new TokenAmount(dummyPair.liquidityToken, JSBI.BigInt(totalSupplyState?.result?.[0] ?? 0))
-        const totalRewardRate = new TokenAmount(uni, JSBI.BigInt(rewardRateState?.result?.[0] ?? 0))
+        const totalRewardRate = new TokenAmount(uni, JSBI.BigInt(rewardRateState?.result?.[0] ?? 20))
         const totalVestedAmount = new TokenAmount(uni, JSBI.BigInt(totalVestedAmountState?.result?.[0] ?? 0))
         const totalEarnedReward = new TokenAmount(uni, JSBI.BigInt(totalEarnedRewardState?.result?.[0] ?? 0))
         const userClaimedSplit = claimedSplitsState?.result?.[0]?.toNumber() ?? 0;
@@ -1076,7 +1081,7 @@ export function useStakingInfo(pairToFilterBy?: Pair | null, version: string = '
           unclaimedAmount: unclaimedAmount,
           totalVestedAmount: totalVestedAmount,
           rewardRate: individualRewardRate,
-          totalRewardRate: totalRewardRate,
+          totalRewardRate: chainId === ChainId.FANTOM ? (info[index].rate ?? totalRewardRate) : totalRewardRate, //TODO: Fix this temp for fantom chain
           stakedAmount: stakedAmount,
           claimedSplits: userClaimedSplit,
           totalEarnedReward,
