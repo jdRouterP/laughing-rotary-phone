@@ -84,6 +84,7 @@ export const RVF = new Token(ChainId.MATIC, '0x2ce13e4199443fdfff531abb30c9b6594
 export const GAJ = new Token(ChainId.MATIC, '0xF4B0903774532AEe5ee567C02aaB681a81539e92', 18, 'GAJ', 'GAJ')
 export const ELE = new Token(ChainId.MATIC, '0xAcD7B3D9c10e97d0efA418903C0c7669E702E4C0', 18, 'ELE', 'Eleven.finance')
 export const PBR = new Token(ChainId.MATIC, '0x0d6ae2a429df13e44a07cd2969e085e4833f64a0', 18, 'PBR', 'PolkaBridge')
+export const EMON = new Token(ChainId.MATIC, '0xd6A5aB46ead26f49b03bBB1F9EB1Ad5c1767974a', 18, 'EMON', 'Ethermon Token')
 
 
 export const CIRUS = new Token(ChainId.MATIC, '0x2a82437475a60bebd53e33997636fade77604fc2', 18, 'CIRUS', 'CIRUS')
@@ -148,7 +149,7 @@ export const UNI: { [chainId in ChainId]: Token } = {
   [ChainId.BSC]: new Token(ChainId.BSC, UNI_ADDRESS, 18, 'DFYN', 'DFYN Token'),
 }
 
-export const REWARD_TOKENS: Token[] = [ROUTE, DFYN, ZEE, AURORA, ROYA, BOOTY, SX, EZ, UFARM, NWC, mRTK, XDO, FRM, RVF, CHART, NORD, RAZOR, PBR]
+export const REWARD_TOKENS: Token[] = [ROUTE, DFYN, ZEE, AURORA, ROYA, BOOTY, SX, EZ, UFARM, NWC, mRTK, XDO, FRM, RVF, CHART, NORD, RAZOR, PBR, EMON]
 
 export const COMMON_CONTRACT_NAMES: { [address: string]: string } = {
   [UNI_ADDRESS]: 'DFYN',
