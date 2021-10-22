@@ -38,7 +38,8 @@ import FarmsMenu from 'components/FarmsMenu'
 import Web3Network from 'components/Web3Network'
 import { UNI } from './../../constants/index'
 import CurrencyLogo from 'components/CurrencyLogo'
-import VaultMenu from 'components/VaultMenu'
+import AppsMenu from 'components/AppsMenu'
+// import VaultMenu from 'components/VaultMenu'
 
 const StyledAnalytics = styled.div`
   display: none;
@@ -134,35 +135,6 @@ const HeaderElement = styled.div`
     align-items: center;
   `};
 `
-
-
-// const GaslessModeElement = styled.div`
-//   display: flex;
-//   align-items: center;
-//   white-space: nowrap;
-
-//   /* addresses safari's lack of support for "gap" */
-//   & > *:not(:first-child) {
-//     margin-left: 8px;
-//   }
-
-//   ${({ theme }) => theme.mediaWidth.upToLarge`
-//     display: flex;
-//     width: 100%;
-//     margin-bottom: 110px;
-//     align-content: flex-start;
-//     text-align: center;
-//     left: 0;
-//     position: absolute;
-//     border-radius: 12px 12px 0 0;
-//     background-color:  ${({ theme }) => theme.bg3};
-//     padding: 1rem 2rem;
-//     button#toggle-gasless-mode-button {
-//       right: 1rem;
-//       position: absolute;
-//     }
-//   `};
-// `
 
 const HeaderElementWrap = styled.div`
   display: flex;
@@ -307,6 +279,7 @@ const StyledNavLink = styled(NavLink).attrs({
 
   ${({ theme }) => theme.mediaWidth.upToExtraSmall`
     margin: 0 6px;
+    font-size: 14px;
   `};
 
   &.${activeClassName} {
@@ -466,20 +439,21 @@ export default function Header() {
           >
             {t('pool')}
           </StyledNavLink>
-          {chainId && HEADER_ACCESS.vault.includes(chainId) && <StyledNavLink id={`vault-nav-link`} to={'/prediction'}>
+          {/* {chainId && HEADER_ACCESS.vault.includes(chainId) && <StyledNavLink id={`vault-nav-link`} to={'/prediction'}>
             Prediction
-          </StyledNavLink>}
-          {/* {chainId && HEADER_ACCESS.vault.includes(chainId) && <StyledNavLink id={`vault-nav-link`} to={'/vault'}>
-            Vault
           </StyledNavLink>} */}
-          {chainId && HEADER_ACCESS.vault.includes(chainId) && <VaultMenu />}
+          {chainId && HEADER_ACCESS.vault.includes(chainId) && <StyledNavLink id={`vault-nav-link`} to={'/vdfyn'}>
+            vDFYN
+          </StyledNavLink>}
+          {/* {chainId && HEADER_ACCESS.vault.includes(chainId) && <VaultMenu />} */}
           {/* {chainId && HEADER_ACCESS.charts.includes(chainId) && <StyledExternalLink id={`stake-nav-link`} href={`https://${CHART_URL_PREFIX[(chainId ? chainId : 1)]}.dfyn.network/home/`}>
             Charts <span style={{ fontSize: '11px' }}>↗</span>
           </StyledExternalLink>} */}
           {/* <StyledDocsLink id={`docs-nav-link`} href={'https://docs.dfyn.network/'}>
             Docs {!mobile && <span style={{ fontSize: '11px' }}>↗</span>}
           </StyledDocsLink> */}
-          {chainId && HEADER_ACCESS.farms.includes(chainId) && <FarmsMenu />}
+          {chainId && HEADER_ACCESS.farms.includes(chainId) &&<FarmsMenu /> }
+          {chainId && HEADER_ACCESS.more.includes(chainId) &&<AppsMenu /> }
         </HeaderLinks>
       </HeaderRow>
       <HeaderControls>

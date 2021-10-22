@@ -50,6 +50,7 @@ const UNIAmount = styled.div`
   color: white;
   border-radius: 10px;
   margin: auto;
+  font-size: 15px;
   padding: 4px 8px;
   font-weight: 500;
   border: 1px solid linear-gradient(91.39deg, rgba(255, 0, 122, 0.2) -3.42%, rgba(33, 144, 229, 0.2) 120.56%);;
@@ -195,7 +196,7 @@ export default function InputComponent({ label, token }: { label: string, token:
                 <UNIWrapper>
                     <UNIAmount>
                         <TYPE.white padding="0 2px">
-                            {`1 vDFYN = ${dfynChestInfo?.ratio.toFixed(2) ?? '-'} DFYN`}
+                            {`1 vDFYN = ${dfynChestInfo?.ratio.toFixed(4) ?? '-'} DFYN`}
                         </TYPE.white>
                     </UNIAmount>
                 </UNIWrapper>
@@ -216,19 +217,21 @@ export default function InputComponent({ label, token }: { label: string, token:
                     <>
                         <StyleBalance>
                             <Text fontWeight={500} fontSize={14} color={theme.text2}>
+                                 You Receive &nbsp;&nbsp;&nbsp;~{value2.toFixed(3)} vDFYN 
                             </Text>
                             <Text fontWeight={500} fontSize={14} color={theme.text2}>
-                                You Recieve &nbsp;&nbsp;&nbsp;~{value2.toFixed(3)} VDFYN 
+                               
                             </Text>
                         </StyleBalance>  
                     </>
                     : 
                     <>
                         <StyleBalance>
+                           
                             <Text fontWeight={500} fontSize={14} color={theme.text2}>
+                                You Receive &nbsp;&nbsp;&nbsp;~{value1.toFixed(3)} DFYN
                             </Text>
                             <Text fontWeight={500} fontSize={14} color={theme.text2}>
-                                You Recieve &nbsp;&nbsp;&nbsp;~{value1.toFixed(3)} DFYN
                             </Text>
                         </StyleBalance>  
                     </>

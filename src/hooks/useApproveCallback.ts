@@ -1,15 +1,16 @@
+//@ts-nocheck
 import { MaxUint256 } from '@ethersproject/constants'
 import { TransactionResponse } from '@ethersproject/providers'
 import { Trade, TokenAmount, CurrencyAmount, Currency } from '@dfyn/sdk'
 import { useCallback, useMemo } from 'react'
-import { useTokenAllowance } from '../data/Allowances'
+import { useTokenAllowance, useTokenAllowanceArr } from '../data/Allowances'
 import { getTradeVersion, useV1TradeExchangeAddress } from '../data/V1'
 import { META_TXN_SUPPORTED_TOKENS } from '../constants'
 import { Field } from '../state/swap/actions'
-import { useTransactionAdder, useHasPendingApproval } from '../state/transactions/hooks'
+import { useTransactionAdder, useHasPendingApproval, useHasPendingApprovalArr } from '../state/transactions/hooks'
 import { computeSlippageAdjustedAmounts } from '../utils/prices'
 import { calculateGasMargin } from '../utils'
-import { useTokenContract } from './useContract'
+import { useTokenContract, useTokenContractArr } from './useContract'
 import { useActiveWeb3React } from './index'
 import { splitSignature } from '@ethersproject/bytes'
 import { Version } from './useToggledVersion'
@@ -191,6 +192,91 @@ export function useApproveCallback(
   }, [approvalState, token, tokenContract, amountToApprove, spender, addTransaction, chainId, gaslessMode, library, account])
 
   return [approvalState, approve]
+}
+
+export function useApproveCallbackArr(
+  amountToApproveArr: (CurrencyAmount | undefined)[],
+  spender?: string
+): [ApprovalState[], (i:number) => Promise<void>] {
+  const { account, chainId } = useActiveWeb3React()
+  const tokenArr = (amountToApproveArr.map(amountToApprove=>amountToApprove instanceof TokenAmount ? amountToApprove.token : undefined))
+  const currentAllowanceArr = useTokenAllowanceArr(tokenArr, account ?? undefined, spender)
+  const pendingApprovalArr = useHasPendingApprovalArr(tokenArr.map(token =>token?.address), spender)
+
+  // check the current approval status
+  const approvalStateArr: ApprovalState[] = useMemo(() => {
+    return amountToApproveArr.map((amountToApprove,i)=>{if (!amountToApprove || !spender) {
+      return ApprovalState.UNKNOWN}
+    if (amountToApprove.currency === Currency.getNativeCurrency(chainId)) return ApprovalState.APPROVED
+    // we might not have enough data to know whether or not we need to approve
+    if (!currentAllowanceArr[i]) {
+      return ApprovalState.UNKNOWN}
+
+    // amountToApprove will be defined if currentAllowance is
+    return currentAllowanceArr[i]?.lessThan(amountToApprove)
+      ? pendingApprovalArr[i]
+        ? ApprovalState.PENDING
+        : ApprovalState.NOT_APPROVED
+      : ApprovalState.APPROVED})
+  }, [amountToApproveArr, currentAllowanceArr, pendingApprovalArr, spender, chainId])
+
+  const tokenContractArr = useTokenContractArr(tokenArr.map(token =>token?.address))
+  const addTransaction = useTransactionAdder()
+
+  const approve = useCallback(async (i:number): Promise<void> => {
+    if (approvalStateArr[i] !== ApprovalState.NOT_APPROVED) {
+      console.error('approve was called unnecessarily')
+      return
+    }
+    if (!chainId) {
+      console.error('no chainId')
+      return
+    }
+
+    if (!tokenArr[i]) {
+      console.error('no token')
+      return
+    }
+
+    if (!tokenContractArr[i]) {
+      console.error('tokenContract is null')
+      return
+    }
+
+    if (!amountToApproveArr[i]) {
+      console.error('missing amount to approve')
+      return
+    }
+
+    if (!spender) {
+      console.error('no spender')
+      return
+    }
+
+    let useExact = false
+    const estimatedGas = await tokenContractArr[i]?.estimateGas.approve(spender, MaxUint256).catch(() => {
+      // general fallback for tokens who restrict approval amounts
+      useExact = true
+      return tokenContractArr[i]?.estimateGas.approve(spender, amountToApproveArr[i]?.quotient.toString()+"")
+    })
+    
+    return tokenContractArr[i]
+      ?.approve(spender, useExact ? amountToApproveArr[i]?.quotient.toString()+"" : MaxUint256, {
+        gasLimit: calculateGasMargin(estimatedGas),
+      })
+      .then((response: TransactionResponse) => {
+        addTransaction(response, {
+          summary: 'Approve ' + amountToApproveArr[i]?.currency.symbol,
+          approval: { tokenAddress: tokenArr[i]?.address+"", spender },
+        })
+      })
+      .catch((error: Error) => {
+        console.debug('Failed to approve token', error)
+        throw error
+      })
+  }, [approvalStateArr, tokenArr, tokenContractArr, amountToApproveArr, spender, addTransaction, chainId])
+
+  return [approvalStateArr, approve]
 }
 
 // wraps useApproveCallback in the context of a swap

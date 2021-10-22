@@ -1,6 +1,6 @@
 import { ChainId, Currency, currencyEquals, JSBI, Price, WETH } from '@dfyn/sdk'
 import { useMemo } from 'react'
-import { DAI, USDC } from '../constants'
+import { DAI, USDC, USDC_FANTOM, DAI_FANTOM } from '../constants'
 import { PairState, usePairs } from '../data/Reserves'
 import { useActiveWeb3React } from '../hooks'
 import { wrappedCurrency } from './wrappedCurrency'
@@ -11,6 +11,10 @@ import { wrappedCurrency } from './wrappedCurrency'
  */
 export default function useUSDCPrice(currency?: Currency): Price | undefined {
   const { chainId } = useActiveWeb3React()
+  //TODO
+  //TEMP
+  let temp_dai = chainId === ChainId.MATIC ? DAI : DAI_FANTOM;
+  let temp_usdc = chainId === ChainId.MATIC ? USDC : USDC_FANTOM;
   const wrapped = wrappedCurrency(currency, chainId)
   const tokenPairs: [Currency | undefined, Currency | undefined][] = useMemo(
     () => [
@@ -18,11 +22,11 @@ export default function useUSDCPrice(currency?: Currency): Price | undefined {
         chainId && wrapped && currencyEquals(WETH[chainId], wrapped) ? undefined : currency,
         chainId ? WETH[chainId] : undefined
       ],
-      [wrapped?.equals(USDC) ? undefined : wrapped, chainId === ChainId.MATIC ? USDC : undefined],
-      [wrapped?.equals(DAI) ? undefined : wrapped, chainId === ChainId.MATIC ? DAI : undefined],
-      [chainId ? WETH[chainId] : undefined, chainId === ChainId.MATIC ? USDC : undefined]
+      [wrapped?.equals(temp_usdc) ? undefined : wrapped, chainId === ChainId.MATIC ? temp_usdc : temp_usdc],
+      [wrapped?.equals(temp_dai) ? undefined : wrapped, chainId === ChainId.MATIC ? temp_dai : temp_dai],
+      [chainId ? WETH[chainId] : undefined, chainId === ChainId.MATIC ? temp_usdc : temp_usdc]
     ],
-    [chainId, currency, wrapped]
+    [chainId, currency, wrapped, temp_dai, temp_usdc]
   )
   const [[ethPairState, ethPair], [usdcPairState, usdcPair], [daiPairState, daiPair], [usdcEthPairState, usdcEthPair]] = usePairs(tokenPairs)
 
@@ -34,17 +38,17 @@ export default function useUSDCPrice(currency?: Currency): Price | undefined {
     if (wrapped.equals(WETH[chainId])) {
       if (usdcPair) {
         const price = usdcPair.priceOf(WETH[chainId])
-        return new Price(currency, USDC, price.denominator, price.numerator)
+        return new Price(currency, temp_usdc, price.denominator, price.numerator)
       } else {
         return undefined
       }
     }
     // handle usdc
-    if (wrapped.equals(USDC)) {
-      return new Price(USDC, USDC, '1', '1')
+    if (wrapped.equals(temp_usdc)) {
+      return new Price(temp_usdc, temp_usdc, '1', '1')
     }
-    if (wrapped.equals(DAI)) {
-      return new Price(DAI, DAI, '1', '1')
+    if (wrapped.equals(temp_dai)) {
+      return new Price(temp_dai, temp_dai, '1', '1')
     }
 
     const ethPairETHAmount = ethPair?.reserveOf(WETH[chainId])
@@ -53,22 +57,22 @@ export default function useUSDCPrice(currency?: Currency): Price | undefined {
 
     // all other tokens
     // first try the usdc pair
-    if (usdcPairState === PairState.EXISTS && usdcPair && usdcPair.reserveOf(USDC).greaterThan(ethPairETHUSDCValue)) {
+    if (usdcPairState === PairState.EXISTS && usdcPair && usdcPair.reserveOf(temp_usdc).greaterThan(ethPairETHUSDCValue)) {
       const price = usdcPair.priceOf(wrapped)
-      return new Price(currency, USDC, price.denominator, price.numerator)
+      return new Price(currency, temp_usdc, price.denominator, price.numerator)
     }
-    if (daiPairState === PairState.EXISTS && daiPair && daiPair.reserveOf(DAI).greaterThan(ethPairETHUSDCValue)) {
+    if (daiPairState === PairState.EXISTS && daiPair && daiPair.reserveOf(temp_dai).greaterThan(ethPairETHUSDCValue)) {
       const price = daiPair.priceOf(wrapped)
-      return new Price(currency, DAI, price.denominator, price.numerator)
+      return new Price(currency, temp_dai, price.denominator, price.numerator)
     }
     if (ethPairState === PairState.EXISTS && ethPair && usdcEthPairState === PairState.EXISTS && usdcEthPair) {
-      if (usdcEthPair.reserveOf(USDC).greaterThan('0') && ethPair.reserveOf(WETH[chainId]).greaterThan('0')) {
-        const ethUsdcPrice = usdcEthPair.priceOf(USDC)
+      if (usdcEthPair.reserveOf(temp_usdc).greaterThan('0') && ethPair.reserveOf(WETH[chainId]).greaterThan('0')) {
+        const ethUsdcPrice = usdcEthPair.priceOf(temp_usdc)
         const currencyEthPrice = ethPair.priceOf(WETH[chainId])
         const usdcPrice = ethUsdcPrice.multiply(currencyEthPrice).invert()
-        return new Price(currency, USDC, usdcPrice.denominator, usdcPrice.numerator)
+        return new Price(currency, temp_usdc, usdcPrice.denominator, usdcPrice.numerator)
       }
     }
     return undefined
-  }, [chainId, currency, ethPair, ethPairState, usdcEthPair, usdcEthPairState, usdcPair, usdcPairState, wrapped, daiPair, daiPairState])
+  }, [chainId, currency, ethPair, ethPairState, usdcEthPair, usdcEthPairState, usdcPair, usdcPairState, wrapped, daiPair, daiPairState, temp_dai, temp_usdc])
 }

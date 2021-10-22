@@ -249,10 +249,10 @@ export default function Manage({
               </RowBetween>
               <ExternalLink
                 style={{ color: 'white', textDecoration: 'underline' }}
-                href="https://dfyn-network.medium.com/introducing-dfyn-yield-farming-phase-3-482498683528"
+                href="https://dfyn-network.medium.com/introducing-dfyn-yield-farming-phase-6-a6e8549eaa55"
                 target="_blank"
               >
-                <TYPE.white fontSize={14}>Read more about Dfyn Farms Phase 3</TYPE.white>
+                <TYPE.white fontSize={14}>Read more about Dfyn Farms Phase 6</TYPE.white>
               </ExternalLink>
             </AutoColumn>
           </CardSection>
@@ -313,7 +313,7 @@ export default function Manage({
                 </div>
                 {stakingInfo?.earnedAmount && JSBI.notEqual(BIG_INT_ZERO, stakingInfo?.earnedAmount?.raw) && (<>
                   <div hidden={stakingInfo?.ableToClaim}>
-                    <TYPE.black>{<Countdown showMessage={false} exactEnd={stakingInfo?.unlockAt} />}</TYPE.black>
+                    <TYPE.black>{<Countdown showMessage={false} exactEnd={stakingInfo?.unlockAt} color="black" />}</TYPE.black>
                   </div>
                   {stakingInfo?.ableToClaim && <ButtonPrimary
                     padding="5px"

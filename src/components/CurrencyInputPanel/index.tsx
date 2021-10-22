@@ -127,10 +127,12 @@ interface CurrencyInputPanelProps {
   hideBalance?: boolean
   pair?: Pair | null
   hideInput?: boolean
-  otherCurrency?: Currency | null
+  otherCurrency?: (Currency | undefined)[] | (Currency | null)
   id: string
   showCommonBases?: boolean
   customBalanceText?: string
+  lp?: boolean
+  onLPCurrencySelect?: (pair: Pair) => void
 }
 
 export default function CurrencyInputPanel({
@@ -148,7 +150,9 @@ export default function CurrencyInputPanel({
   otherCurrency,
   id,
   showCommonBases,
-  customBalanceText
+  customBalanceText,
+  lp,
+  onLPCurrencySelect
 }: CurrencyInputPanelProps) {
   const { t } = useTranslation()
 
@@ -243,6 +247,8 @@ export default function CurrencyInputPanel({
           selectedCurrency={currency}
           otherSelectedCurrency={otherCurrency}
           showCommonBases={showCommonBases}
+          lp={lp}
+          onLPCurrencySelect={onLPCurrencySelect}
         />
       )}
     </InputPanel>

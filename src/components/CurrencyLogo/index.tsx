@@ -7,6 +7,11 @@ import styled from 'styled-components'
 import MaticLogo from '../../assets/images/matic-logo.png'
 import OKExLogo from '../../assets/images/okex-logo.png'
 import EthereumLogo from '../../assets/images/ethereum-logo.png'
+import AvalancheLogo from '../../assets/images/avax.png'
+import BinanceChainLogo from '../../assets/images/bnb.png'
+import FantomLogo from '../../assets/images/ftm.png'
+import HarmonyLogo from '../../assets/images/one.png'
+import XdaiLogo from '../../assets/images/xdai.png'
 import useHttpLocations from '../../hooks/useHttpLocations'
 import { WrappedTokenInfo } from '../../state/lists/hooks'
 import Logo from '../Logo'
@@ -23,6 +28,11 @@ const logo: { readonly [chainId in ChainId]?: string } = {
   [ChainId.MATIC]: MaticLogo,
   [ChainId.OKEX]: OKExLogo,
   [ChainId.ARBITRUM]: EthereumLogo,
+  [ChainId.XDAI]: XdaiLogo,
+  [ChainId.BSC]: BinanceChainLogo,
+  [ChainId.AVALANCHE]: AvalancheLogo,
+  [ChainId.FANTOM]: FantomLogo,
+  [ChainId.HARMONY]: HarmonyLogo,
 }
 
 const StyledNativeLogo = styled.img<{ size: string }>`

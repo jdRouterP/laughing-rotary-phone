@@ -94,6 +94,7 @@ export function useTradeExactIn(currencyAmountIn?: CurrencyAmount, currencyOut?:
 
   return useMemo(() => {
     if (currencyAmountIn && currencyOut && allowedPairs.length > 0) {
+      if(currencyOut?.symbol === currencyAmountIn?.currency.symbol) return null
       if (singleHopOnly) {
         return (
           Trade.bestTradeExactIn(allowedPairs, currencyAmountIn, currencyOut, { maxHops: 1, maxNumResults: 1 })[0] ??

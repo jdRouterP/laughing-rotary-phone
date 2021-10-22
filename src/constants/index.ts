@@ -13,6 +13,9 @@ export const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000'
 
 export const DFYN_CHEST = '0x75455c3DE45dD32CBE9a5aD5E518D3D50823c976'
 
+//Blender Address
+export const BLEND_ADDRESS = '0xc3328070df8233affafbf04b973b4165cca35f99'
+
 export { PRELOADED_PROPOSALS } from './proposals'
 
 // a list of tokens by chain
@@ -80,11 +83,23 @@ export const CHART = new Token(ChainId.MATIC, '0x083c56d87ead73d6231c165ec450c6e
 export const RVF = new Token(ChainId.MATIC, '0x2ce13e4199443fdfff531abb30c9b6594446bbc7', 18, 'RVF', 'Rocket Vault')
 export const GAJ = new Token(ChainId.MATIC, '0xF4B0903774532AEe5ee567C02aaB681a81539e92', 18, 'GAJ', 'GAJ')
 export const ELE = new Token(ChainId.MATIC, '0xAcD7B3D9c10e97d0efA418903C0c7669E702E4C0', 18, 'ELE', 'Eleven.finance')
+export const PBR = new Token(ChainId.MATIC, '0x0d6ae2a429df13e44a07cd2969e085e4833f64a0', 18, 'PBR', 'PolkaBridge')
+
 
 export const CIRUS = new Token(ChainId.MATIC, '0x2a82437475a60bebd53e33997636fade77604fc2', 18, 'CIRUS', 'CIRUS')
 export const SILVER = new Token(ChainId.MATIC, '0xbc7cB585346f4F59d07121Bb9Ed7358076243539', 18, 'SILVER', 'Sliver')
 export const SING = new Token(ChainId.MATIC, '0xCB898b0eFb084Df14dd8E018dA37B4d0f06aB26D', 18, 'SING', 'Sing Token')
 export const MATRIX = new Token(ChainId.MATIC, '0x211f4e76fcb811ed2b310a232a24b3445d95e3bc', 18, 'matrix', 'Matrixswap')
+//FANTOM
+export const FTM = new Token(ChainId.FANTOM, '0x21be370D5312f44cB42ce377BC9b8a0cEF1A4C83', 18, 'WFTM', 'Wrapped FTM')
+export const USDC_FANTOM = new Token(ChainId.FANTOM, '0x04068DA6C83AFCFA0e13ba15A6696662335D5B75', 6, 'USDC', 'USDC')
+export const WBTC_FANTOM = new Token(ChainId.FANTOM, '0x321162Cd933E2Be498Cd2267a90534A804051b11', 8, 'WBTC', 'WBTC')
+export const USDT_FANTOM = new Token(ChainId.FANTOM, '0x049d68029688eAbF473097a2fC38ef61633A3C7A', 6, 'USDT', 'Frapped USDT')
+export const WETH_FANTOM = new Token(ChainId.FANTOM, '0x74b23882a30290451a17c44f4f05243b6b58c76d', 18, 'WETH', 'Wrapped ETH')
+export const DFYN_FANTOM = new Token(ChainId.FANTOM, '0x7a4b1abc1409c69c2ed71ab34dae43e2ff6f9928', 18, 'DFYN', 'DFYN Token')
+export const DAI_FANTOM = new Token(ChainId.FANTOM, '0x8D11eC38a3EB5E956B052f67Da8Bdc9bef8Abf3E', 18, 'DAI', 'DAI Stablecoin')
+
+
 
 //OKEX
 export const WOKT = new Token(ChainId.OKEX, '0x8f8526dbfd6e38e3d8307702ca8469bae6c56c15', 18, 'OKT', 'Wrapped OKT')
@@ -113,6 +128,7 @@ export const GRAPH_API_PREDICTION = "https://api.thegraph.com/subgraphs/name/iam
 export const GRAPH_API_DFYN_V5 = "https://api.thegraph.com/subgraphs/name/ss-sonic/dfyn-v5"
 //DFYN ADDRESS
 const UNI_ADDRESS = '0xC168E40227E4ebD8C1caE80F7a55a4F0e6D66C97'
+const DFYN_FANTOM_ADDRESS = '0x7a4b1abc1409c69c2ed71ab34dae43e2ff6f9928'
 //TEST TOKEN ADDRESS
 // const UNI_ADDRESS = '0xD33dcD9673e1fA99F064CB4682c6299351AD771C'
 
@@ -125,9 +141,14 @@ export const UNI: { [chainId in ChainId]: Token } = {
   [ChainId.MATIC]: new Token(ChainId.MATIC, UNI_ADDRESS, 18, 'DFYN', 'DFYN Token'),
   [ChainId.OKEX]: new Token(ChainId.OKEX, UNI_ADDRESS, 18, 'DFYN', 'DFYN Token'),
   [ChainId.ARBITRUM]: new Token(ChainId.ARBITRUM, UNI_ADDRESS, 18, 'DFYN', 'DFYN Token'),
+  [ChainId.XDAI]: new Token(ChainId.XDAI, UNI_ADDRESS, 18, 'DFYN', 'DFYN Token'),
+  [ChainId.FANTOM]: new Token(ChainId.FANTOM, DFYN_FANTOM_ADDRESS, 18, 'DFYN', 'DFYN Token'),
+  [ChainId.HARMONY]: new Token(ChainId.HARMONY, UNI_ADDRESS, 18, 'DFYN', 'DFYN Token'),
+  [ChainId.AVALANCHE]: new Token(ChainId.AVALANCHE, UNI_ADDRESS, 18, 'DFYN', 'DFYN Token'),
+  [ChainId.BSC]: new Token(ChainId.BSC, UNI_ADDRESS, 18, 'DFYN', 'DFYN Token'),
 }
 
-export const REWARD_TOKENS: Token[] = [ROUTE, DFYN, ZEE, AURORA, ROYA, BOOTY, SX, EZ, UFARM, NWC, mRTK, XDO, FRM, RVF, CHART, NORD, RAZOR]
+export const REWARD_TOKENS: Token[] = [ROUTE, DFYN, ZEE, AURORA, ROYA, BOOTY, SX, EZ, UFARM, NWC, mRTK, XDO, FRM, RVF, CHART, NORD, RAZOR, PBR]
 
 export const COMMON_CONTRACT_NAMES: { [address: string]: string } = {
   [UNI_ADDRESS]: 'DFYN',
@@ -150,6 +171,12 @@ const WETH_ONLY: ChainTokenList = {
   [ChainId.MATIC]: [WETH[ChainId.MATIC]],
   [ChainId.OKEX]: [WETH[ChainId.OKEX]],
   [ChainId.ARBITRUM]: [WETH[ChainId.ARBITRUM]],
+  [ChainId.XDAI]: [WETH[ChainId.XDAI]],
+  [ChainId.FANTOM]: [WETH[ChainId.FANTOM]],
+  [ChainId.HARMONY]: [WETH[ChainId.HARMONY]],
+  [ChainId.AVALANCHE]: [WETH[ChainId.AVALANCHE]],
+  [ChainId.BSC]: [WETH[ChainId.BSC]],
+
 }
 
 // used to construct intermediary pairs for trading
@@ -346,3 +373,5 @@ export const BLOCKED_ADDRESSES: string[] = [
   '0xA7e5d5A720f06526557c513402f2e6B5fA20b008',
   '0x8576aCC5C05D6Ce88f4e49bf65BdF0C62F91353C'
 ]
+
+export const VDFYN_MEDIUM_LINK = 'https://link.medium.com/ziSuAqNhVjb'

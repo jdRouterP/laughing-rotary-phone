@@ -8,7 +8,7 @@ import { ChainId } from '@dfyn/sdk'
 import { FortmaticConnector } from './Fortmatic'
 import { NetworkConnector } from './NetworkConnector'
 import UNISWAP_LOGO_URL from '../assets/svg/logo.svg'
-import { RPC } from 'constants/networks'
+import { RPC, SupportedChainIds } from 'constants/networks'
 
 const FORMATIC_KEY = process.env.REACT_APP_FORTMATIC_KEY
 const PORTIS_ID = process.env.REACT_APP_PORTIS_ID
@@ -26,7 +26,7 @@ export function getNetworkLibrary(): Web3Provider {
 }
 
 export const injected = new InjectedConnector({
-  supportedChainIds: [137, 66, 42161]
+  supportedChainIds: SupportedChainIds
 })
 
 // mainnet only
@@ -34,7 +34,8 @@ export const walletconnect = new WalletConnectConnector({
   rpc: { 137: RPC[ChainId.MATIC] },
   bridge: "https://bridge.walletconnect.org",
   qrcode: true,
-  pollingInterval: 15000
+  supportedChainIds: SupportedChainIds,
+  // pollingInterval: 15000
 })
 
 // mainnet only

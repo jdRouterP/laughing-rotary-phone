@@ -15,7 +15,8 @@ import {
   updateUserSlippageTolerance,
   updateUserDeadline,
   toggleURLWarning,
-  updateUserSingleHopOnly
+  updateUserSingleHopOnly,
+  toggleFarmsHelptext
 } from './actions'
 
 const currentTimestamp = () => new Date().getTime()
@@ -54,6 +55,7 @@ export interface UserState {
 
   timestamp: number
   URLWarningVisible: boolean
+  farmingTooltipVisible: boolean
 }
 
 function pairKey(token0Address: string, token1Address: string) {
@@ -71,7 +73,8 @@ export const initialState: UserState = {
   tokens: {},
   pairs: {},
   timestamp: currentTimestamp(),
-  URLWarningVisible: true
+  URLWarningVisible: true,
+  farmingTooltipVisible: true
 }
 
 export default createReducer(initialState, builder =>
@@ -155,5 +158,8 @@ export default createReducer(initialState, builder =>
     })
     .addCase(toggleURLWarning, state => {
       state.URLWarningVisible = !state.URLWarningVisible
+    })
+    .addCase(toggleFarmsHelptext, state => {
+      state.farmingTooltipVisible = !state.farmingTooltipVisible
     })
 )

@@ -7,6 +7,7 @@ import user from './user/reducer'
 import transactions from './transactions/reducer'
 import predictionsReducer from './prediction/reducer'
 import swap from './swap/reducer'
+import blend from './blend/reducer'
 import mint from './mint/reducer'
 import lists from './lists/reducer'
 import burn from './burn/reducer'
@@ -23,12 +24,13 @@ const store = configureStore({
     predictions: predictionsReducer,
     block: blockReducer,
     swap,
+    blend,
     mint,
     burn,
     multicall,
     lists
   },
-  middleware: [...getDefaultMiddleware({ thunk: true }), save({ states: PERSISTED_KEYS })],
+  middleware: [...getDefaultMiddleware({ thunk: true, serializableCheck: false }), save({ states: PERSISTED_KEYS })],
   preloadedState: load({ states: PERSISTED_KEYS })
 })
 

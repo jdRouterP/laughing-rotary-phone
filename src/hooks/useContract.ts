@@ -8,6 +8,7 @@ import { abi as PREDICTION_MARKET_ABI } from '../constants/abis/prediction-contr
 import { abi as CHAINLINK_ABI } from '../constants/abis/chainlink-contract.json'
 import { abi as VAULT_ABI } from '../constants/abis/vault.json'
 import { abi as DFYN_CHEST_ABI } from '../constants/abis/dfyn-chest.json'
+import { abi as DFYN_FUSION_ABI } from '../constants/abis/dfyn-fusion.json'
 import { abi as MERKLE_DISTRIBUTOR_ABI } from '@uniswap/merkle-distributor/build/MerkleDistributor.json'
 import { ChainId, FACTORY_ADDRESS, WETH, ROUTER_ADDRESS } from '@dfyn/sdk'
 import IUniswapV2PairABI from '../constants/abis/uniswap-v2-pair.json'
@@ -15,7 +16,7 @@ import FACTORY_ABI from "../constants/abis/factory.json";
 import ROUTER_ABI from "../constants/abis/uniswap-v2-router-02.json";
 import MULTICALL2_ABI from '../constants/abis/multicall2.json';
 import { useMemo } from 'react'
-import { DFYN_CHEST, GOVERNANCE_ADDRESS, MERKLE_DISTRIBUTOR_ADDRESS, UNI } from '../constants'
+import { BLEND_ADDRESS, DFYN_CHEST, GOVERNANCE_ADDRESS, MERKLE_DISTRIBUTOR_ADDRESS, UNI } from '../constants'
 import {
   ARGENT_WALLET_DETECTOR_ABI,
   ARGENT_WALLET_DETECTOR_MAINNET_ADDRESS
@@ -49,6 +50,27 @@ function useContract(address: string | undefined, ABI: any, withSignerIfPossible
   }, [address, ABI, library, withSignerIfPossible, account])
 }
 
+export function useContractArr(
+  addressOrAddressMapArr: (string | undefined)[],
+  ABI: any,
+  withSignerIfPossible = true
+): (Contract | null)[] {
+
+  const { library, account } = useActiveWeb3React()
+
+  return useMemo(() => {
+      return addressOrAddressMapArr?.map((addressOrAddressMap) => {
+      if (!addressOrAddressMap || !ABI || !library ) return null
+      try {
+        return getContract(addressOrAddressMap, ABI, library, withSignerIfPossible && account ? account : undefined)
+      } catch (error) {
+        console.error('Failed to get contract', error)
+        return null
+      }
+    })
+  }, [addressOrAddressMapArr, ABI, library, withSignerIfPossible, account])
+}
+
 export function useV1FactoryContract(): Contract | null {
   const { chainId } = useActiveWeb3React()
   return useContract(chainId && V1_FACTORY_ADDRESSES[chainId], V1_FACTORY_ABI, false)
@@ -76,6 +98,17 @@ export function useV1ExchangeContract(address?: string, withSignerIfPossible?: b
 
 export function useTokenContract(tokenAddress?: string, withSignerIfPossible?: boolean): Contract | null {
   return useContract(tokenAddress, ERC20_ABI, withSignerIfPossible)
+}
+
+export function useTokenContractArr(tokenAddressArr: (string | undefined)[], withSignerIfPossible?: boolean): (Contract | null)[] {
+  return useContractArr(tokenAddressArr, ERC20_ABI, withSignerIfPossible)
+}
+
+export function useBytes32TokenContractArr(
+  tokenAddressArr: (string | undefined)[],
+  withSignerIfPossible?: boolean
+): (Contract | null)[] {
+  return useContractArr(tokenAddressArr, ERC20_BYTES32_ABI, withSignerIfPossible)
 }
 
 export function useWETHContract(withSignerIfPossible?: boolean): Contract | null {
@@ -152,6 +185,9 @@ export function useUniContract(): Contract | null {
 
 export function useDfynChestContract( withSignerIfPossible?: boolean): Contract | null {
   return useContract(DFYN_CHEST, DFYN_CHEST_ABI, withSignerIfPossible)
+}
+export function useDfynFusionContract( withSignerIfPossible?: boolean): Contract | null {
+  return useContract(BLEND_ADDRESS, DFYN_FUSION_ABI, withSignerIfPossible)
 }
 export function useStakingContract(stakingAddress?: string, withSignerIfPossible?: boolean): Contract | null {
   return useContract(stakingAddress, STAKING_REWARDS_ABI, withSignerIfPossible)

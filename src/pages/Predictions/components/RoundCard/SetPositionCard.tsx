@@ -109,18 +109,6 @@ const SetPositionCard: React.FC<SetPositionCardProps> = ({ position, togglePosit
 
   const [, setPercent] = useState(0)
 
-  // const handleInputChange = (input: string) => {
-  //   if (input) {
-  //     // const percentage = Math.floor(new BigNumber(input).dividedBy(maxBalance).multipliedBy(100).toNumber())
-  //     const percentage = Math.floor(JSBI.toNumber(JSBI.multiply(JSBI.divide(JSBI.BigInt(input), maxBalance.raw), JSBI.BigInt(100))));
-  //     setPercent(Math.min(percentage, 100))
-  //   } else {
-  //     setPercent(0)
-  //   }
-  //   debugger
-  //   setValue(input)
-  // }
-
   const onUserInput = useCallback((typedValue: string) => {
     setValue(typedValue)
   }, [])
@@ -130,18 +118,6 @@ const SetPositionCard: React.FC<SetPositionCardProps> = ({ position, togglePosit
   const handleMax = useCallback(() => {
     maxAmountInput && onUserInput(maxAmountInput.toExact())
   }, [maxAmountInput, onUserInput])
-
-
-
-  // const handlePercentChange = (sliderPercent: number) => {
-  //   if (sliderPercent > 0) {
-  //     const percentageOfStakingMax = maxBalance.divide(JSBI.BigInt(100)).multiply(JSBI.BigInt(sliderPercent));
-  //     setValue(percentageOfStakingMax.toSignificant(6))
-  //   } else {
-  //     setValue('')
-  //   }
-  //   setPercent(sliderPercent)
-  // }
 
   // Clear value
   const handleGoBack = () => {

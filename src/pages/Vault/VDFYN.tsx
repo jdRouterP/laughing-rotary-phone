@@ -3,11 +3,11 @@ import React, { useState } from 'react'
 import { TokenAmount } from '@dfyn/sdk'
 import { AutoColumn } from '../../components/Column'
 import styled from 'styled-components'
-import { TYPE } from '../../theme'
+import { TYPE, ExternalLink } from '../../theme'
 import { RowBetween } from '../../components/Row'
 import { CardSection, DataCard, CardNoise, CardBGImage } from '../../components/vault/styled'
 import CurrencyLogo from 'components/CurrencyLogo'
-import { DFYN, UNI, USDC, vDFYN } from 'constants/index'
+import { DFYN, UNI, USDC, vDFYN, VDFYN_MEDIUM_LINK } from 'constants/index'
 import { Tab, TabPanel, Tabs } from './tabs/Tabs'
 import { useTokenBalance } from 'state/wallet/hooks'
 import { useActiveWeb3React } from 'hooks'
@@ -15,6 +15,8 @@ import { useDfynChestInfo } from 'state/vDfyn/hooks'
 import { usePair } from 'data/Reserves'
 import { getVDFYNVolumeUSD } from 'state/prediction/hooks'
 import isNumeric from 'utils/isNumeric'
+import { MouseoverTooltip } from 'components/Tooltip'
+import VDfynBoosterBG from '../../assets/svg/vdfyn-boosted.svg'
 
 const DataRow = styled(RowBetween)`
   justify-content: center;
@@ -27,7 +29,7 @@ const DataRow = styled(RowBetween)`
 const PoolData = styled(DataCard)`
   background: none;
   border: 1px solid ${({ theme }) => theme.bg4};
-  padding: 0.7rem;
+  padding: 0.5rem 0.7rem 1.2rem 0.7rem;
   z-index: 1;
 `
 
@@ -66,16 +68,50 @@ const TopSection = styled(AutoColumn)`
   width: 100%;
 `
 
+const MouseTooltip = styled.span`
+    margin-left: 8px;
+    margin-top: 4px;
+    padding-bottom: 0px;
+    padding-top: 1.5px;
+    cursor: pointer;
+    color: #27ae60;
+    font-weight: 600;
+    font-size: 12px;
+`
+const GreyText = styled.div`
+    display: block;
+    color: ${({ theme }) => theme.text2};
+    font-size: 0.7rem;
+    position: absolute;
+    bottom: 0;
+    text-align: center;
+    left: 0;
+    width: 92%;
+    margin: 0;
+    padding: 0;
+`
+
+let DFYN_TO_USDT_PRICE = 0;
+const _getDFYNToUSDTPrice = async()=>{
+    const [, dfynUsdcPair] = usePair(USDC, DFYN);
+    if(DFYN_TO_USDT_PRICE > 0) return DFYN_TO_USDT_PRICE;
+    const dfynPrice = Number(dfynUsdcPair?.priceOf(DFYN)?.toSignificant(6)) || 0;
+    DFYN_TO_USDT_PRICE = dfynPrice;
+    return dfynPrice;
+}
+
 const _calculateAPR = async (totalSupply: any, dfynBalance: any, cb: Function) => {
     if (dfynBalance === 0) dfynBalance = 1;
     if (!totalSupply || totalSupply === 0) totalSupply = 1;
     else totalSupply = totalSupply.toSignificant(4);
-    const [, dfynUsdcPair] = usePair(USDC, DFYN);
     try {
-        const dfynPrice = Number(dfynUsdcPair?.priceOf(DFYN)?.toSignificant(6)) || 0
+        const dfynPrice = await _getDFYNToUSDTPrice();
         const volumeUSD = await getVDFYNVolumeUSD() || 0;
         let apr = ((((volumeUSD * 0.05)) * 365) / (dfynBalance.toFixed(6) * dfynPrice)) || 0
-        apr = isNumeric(apr) ? apr : 0;
+        const bonus = 4444 * dfynPrice
+        const boostedAPR = ((((bonus * 100)) * 365) / (dfynBalance.toFixed(6) * dfynPrice)) || 0
+        const calculatedAPR = (parseFloat(apr.toFixed(2)) + parseFloat(boostedAPR.toFixed(2))).toFixed(2)
+        apr = isNumeric(calculatedAPR) ? calculatedAPR : 0;
         cb(apr);
     } catch (err) {
         console.error(`Error staking APR calculation: ${err}`)
@@ -83,14 +119,6 @@ const _calculateAPR = async (totalSupply: any, dfynBalance: any, cb: Function) =
     }
 }
 
-/*
-    //debug
-    console.log(`volumeUSD: ${JSON.stringify(volumeUSD)}`)
-    console.log(`totalSupply: ${totalSupply}`)
-    console.log(`ratio: ${ratio}`)
-    console.log(`dfynPrice: ${dfynPrice}`)
-    console.log(`eq1: ${(((volumeUSD * 0.05)/totalSupply) * 365)}`)
-*/
 
 export default function VDFYN() {
 
@@ -102,15 +130,17 @@ export default function VDFYN() {
 
     const aggregateBalancevDfyn: TokenAmount | undefined = useTokenBalance(account ?? undefined, vDFYN)
     const countUpValuevDfyn = aggregateBalancevDfyn?.toFixed(4) ?? '0'
-    const { totalSupply, dfynBalance } = useDfynChestInfo();
+    const { totalSupply, dfynBalance, ratioDfyn, ratioVDfyn } = useDfynChestInfo();
+    const vdfynToDfynValue: Number = Number(ratioDfyn) * Number(aggregateBalancevDfyn?.toExact())
+    const dfynToVDfynValue: Number = Number(ratioVDfyn) * Number(countUpValueDfyn)
 
     const [calculatedAPR, _setCalculatedAPR] = useState(0);
     const customSetCalculateAPR = (newAPR: number) => {
         if (!isNumeric(newAPR) || newAPR < 1) return;
         _setCalculatedAPR(newAPR);
     }
-    const [activeTab, setActiveTab] = useState(0);
     _calculateAPR(totalSupply, dfynBalance ?? 0, customSetCalculateAPR)
+    const [activeTab, setActiveTab] = useState(0);
 
     const handleChange = (e: any, value: any) => {
         setActiveTab(value);
@@ -131,15 +161,16 @@ export default function VDFYN() {
                                 </RowBetween>
                                 <RowBetween>
                                     <TYPE.white fontSize={14}>
-                                        Stake your Dfyn and get vDfyn tokens. Every swap on Dfyn contributes 0.05% of the swap value to the vDfyn pool. This means that by staking Dfyn in this pool, you get vDfyn tokens which are always continuously accruing with the fees earned by Dfyn Exchange. You can now own part of the protocol by holding vDfyn. vDfyn holders will also enjoy superior voting privileges in governance.
+                                        Stake your DFYN and get vDFYN tokens. Every swap on Dfyn contributes 0.05% of the swap value to the vDFYN pool. This means that by staking DFYN in this pool you get vDFYN tokens, which are continuously accruing with the fees earned by Dfyn Exchange. vDFYN holders will also enjoy superior voting privileges in governance.
+                                        Read more about vDFYN vault <ExternalLink style={{ color: 'white', textDecoration: 'underline', display: 'inline' }} href={VDFYN_MEDIUM_LINK} target="_blank"><TYPE.white style={{ display: 'inline'}} fontSize={14}>here</TYPE.white></ExternalLink>
                                     </TYPE.white>
                                 </RowBetween>{' '}
                                 {/* <ExternalLink
                         style={{ color: 'white', textDecoration: 'underline' }}
-                        href="https://dfyn-network.medium.com/introducing-dfyn-yield-farming-phase-2-7686281dd93"
+                        href="https://dfyn-network.medium.com/introducing-dfyn-yield-farming-phase-6-a6e8549eaa55"
                         target="_blank"
                     >
-                        <TYPE.white fontSize={14}>Read more about Dfyn Farms Phase 2</TYPE.white>
+                        <TYPE.white fontSize={14}>Read more about Dfyn Farms Phase 6</TYPE.white>
                     </ExternalLink> */}
                             </AutoColumn>
                         </CardSection>
@@ -149,12 +180,19 @@ export default function VDFYN() {
                 </TopSection>
             </PageWrapper>
             <StyleStake>
-                <DataRow style={{ gap: '26px' }}>
-                    <PoolData>
+                <DataRow style={{ gap: '10px' }}>
+                    <PoolData style={{background: `url(${VDfynBoosterBG})`, backgroundSize: 'cover', border: 'none', backgroundPosition: 'right' }}>
                         <AutoColumn gap="sm">
-                            <TYPE.body style={{ marginLeft: '5px', textAlign: 'left' }}>Staking APR</TYPE.body>
+                            <TYPE.body style={{ marginLeft: '5px', textAlign: 'left' }}>
+                                APR 
+                            <MouseTooltip>
+                                <MouseoverTooltip text="The booster APR is the extra APR you earn along with staking APR. Booster Rewards will be valid till 20 March 2022." placement="top">
+                                    Boosted
+                                </MouseoverTooltip>
+                            </MouseTooltip>
+                            </TYPE.body>
                             <TYPE.body fontSize={20} fontWeight={500} marginLeft={'5px'} textAlign={'left'}>
-                                {calculatedAPR.toFixed(2) || '-'} %
+                                {calculatedAPR} %
                             </TYPE.body>
                         </AutoColumn>
                     </PoolData>
@@ -164,6 +202,8 @@ export default function VDFYN() {
                             <TYPE.body fontSize={24} fontWeight={500} style={{ display: 'flex', justifyContent: 'initial', marginLeft: '5px' }}>
                                 <CurrencyLogo currency={vDFYN} style={{ margin: 'auto 0' }} />
                                 <span style={{ marginLeft: '15px', fontSize: '20px' }}>{countUpValuevDfyn}</span>
+                                {vdfynToDfynValue?<GreyText>≈{vdfynToDfynValue.toFixed(2)} DFYN</GreyText>:null}
+                            
                             </TYPE.body>
                         </AutoColumn>
                     </PoolData>
@@ -173,6 +213,8 @@ export default function VDFYN() {
                             <TYPE.body fontSize={24} fontWeight={500} style={{ display: 'flex', justifyContent: 'initial', marginLeft: '5px' }}>
                                 <CurrencyLogo currency={DFYN} style={{ margin: 'auto 0' }} />
                                 <span style={{ marginLeft: '15px', fontSize: '20px' }}>{countUpValueDfyn}</span>
+                                {dfynToVDfynValue?<GreyText>≈{dfynToVDfynValue.toFixed(2)} vDFYN</GreyText>:null}
+                            
                             </TYPE.body>
                         </AutoColumn>
                     </PoolData>
@@ -187,7 +229,7 @@ export default function VDFYN() {
                 </TabsContainer>
                 <TabPanelContainer>
                     <TabPanel value={activeTab} selectedIndex={0} label="Stake DFYN" token={DFYN}></TabPanel>
-                    <TabPanel value={activeTab} selectedIndex={1} label="Unstake DFYN" token={vDFYN}></TabPanel>
+                    <TabPanel value={activeTab} selectedIndex={1} label="Enter vDFYN" token={vDFYN}></TabPanel>
                 </TabPanelContainer>
             </ContentBody>
         </>

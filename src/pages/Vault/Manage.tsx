@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react'
 // import React, { useState } from 'react'
 import { AutoColumn } from '../../components/Column'
 import styled from 'styled-components'
-// import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 import { JSBI } from '@dfyn/sdk'
 import { RouteComponentProps } from 'react-router-dom'
@@ -97,7 +97,8 @@ export default function Manage({
   // detect existing unstaked LP position to show add button if none found
   const userLiquidityUnstaked = useTokenBalance(account ?? undefined, stakingInfo?.stakedAmount?.token)
   const showAddLiquidityButton = Boolean(stakingInfo?.stakedAmount?.equalTo('0') && userLiquidityUnstaked?.equalTo('0'))
-  const showDepositButton = stakingInfo?.totalStakedAmount && JSBI.notEqual(BIG_INT_ZERO, stakingInfo?.vaultLimit?.subtract(stakingInfo?.totalStakedAmount).raw)
+  const haveBalance = userLiquidityUnstaked?.greaterThan('0');
+  const limitReached = stakingInfo?.totalStakedAmount && JSBI.equal(BIG_INT_ZERO, stakingInfo?.vaultLimit?.subtract(stakingInfo?.totalStakedAmount).raw)
 
   // toggle for staking modal and unstaking modal
   const [showStakingModal, setShowStakingModal] = useState(false)
@@ -164,18 +165,18 @@ export default function Manage({
         </PoolData>
       </DataRow>
 
-      {/* {showAddLiquidityButton && (
+      {!limitReached && !haveBalance && (
         <VoteCard>
           <CardBGImage />
           <CardNoise />
           <CardSection>
             <AutoColumn gap="md">
               <RowBetween>
-                <TYPE.white fontWeight={600}>Step 1. Get DFYN tokens</TYPE.white>
+                <TYPE.white fontWeight={600}>{`Step 1. Get ${stakingInfo?.vaultToken?.symbol} tokens`}</TYPE.white>
               </RowBetween>
               <RowBetween style={{ marginBottom: '1rem' }}>
                 <TYPE.white fontSize={14}>
-                  {`DFYN tokens are required. You can swap it!`}
+                  {`${stakingInfo?.vaultToken?.symbol} tokens are required. You can swap it!`}
                 </TYPE.white>
               </RowBetween>
               <ButtonPrimary
@@ -185,15 +186,15 @@ export default function Manage({
                 as={Link}
                 to={`/swap`}
               >
-                {`Get DFYN Tokens`}
+                {`Get ${stakingInfo?.vaultToken?.symbol} Tokens`}
               </ButtonPrimary>
             </AutoColumn>
           </CardSection>
           <CardBGImage />
           <CardNoise />
         </VoteCard>
-      )} */}
-      {showAddLiquidityButton && (
+      )}
+      {limitReached && (
         <VoteCard>
           <CardBGImage />
           <CardNoise />
@@ -209,10 +210,10 @@ export default function Manage({
               </RowBetween>
               <ExternalLink
                 style={{ color: 'white', textDecoration: 'underline' }}
-                href="https://dfyn-network.medium.com/introducing-dfyn-yield-farming-phase-2-7686281dd93"
+                href="https://dfyn-network.medium.com/introducing-dfyn-yield-farming-phase-6-a6e8549eaa55"
                 target="_blank"
               >
-                <TYPE.white fontSize={14}>Read more about Dfyn Farms Phase 2</TYPE.white>
+                <TYPE.white fontSize={14}>Read more about Dfyn Farms Phase 6</TYPE.white>
               </ExternalLink>
             </AutoColumn>
           </CardSection>
@@ -322,7 +323,7 @@ export default function Manage({
 
 
         <DataRow style={{ marginBottom: '1rem' }}>
-          {stakingInfo && stakingInfo.active && !showAddLiquidityButton && showDepositButton && (
+          {stakingInfo && stakingInfo.active && !showAddLiquidityButton && !limitReached && (
             <ButtonPrimary padding="8px" borderRadius="8px" width="160px" onClick={handleDepositClick}>
               {stakingInfo?.stakedAmount?.greaterThan(JSBI.BigInt(0)) ? 'Deposit' : `Deposit ${stakingInfo?.vaultToken?.symbol ?? '-'}`}
             </ButtonPrimary>

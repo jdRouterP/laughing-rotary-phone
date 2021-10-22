@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react'
-import { Route, Switch } from 'react-router-dom'
+import { Route, Switch, Redirect } from 'react-router-dom'
 import styled from 'styled-components'
 import GoogleAnalyticsReporter from '../components/analytics/GoogleAnalyticsReporter'
 import AddressClaimModal from '../components/claim/AddressClaimModal'
@@ -58,6 +58,7 @@ import LaunchFarmsArchived from "./LaunchFarms/LaunchFarmsArchived"
 import Analytics from 'components/Header/Analytics'
 import ThemeChange from 'components/Header/ThemeChange'
 import VDFYN from './Vault/VDFYN'
+import Fusion from './DfynFusion/Fusion'
 
 const AppWrapper = styled.div`
   display: flex;
@@ -121,6 +122,10 @@ export default function App() {
           <Web3ReactManager>
             <Switch>
               <Route exact strict path="/swap" component={Swap} />
+              <Route exact strict path="/dfyn-fusion" component={Fusion} />
+              <Route exact strict path="/dfynFusion" component={Fusion}>
+                <Redirect to="/dfyn-fusion" />
+              </Route>
               <Route exact strict path="/claim" component={OpenClaimAddressModalAndRedirectToSwap} />
               <Route exact strict path="/swap/:outputCurrency" component={RedirectToSwap} />
               <Route exact strict path="/send" component={RedirectPathToSwapOnly} />

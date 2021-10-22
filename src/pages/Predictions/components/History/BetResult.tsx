@@ -33,10 +33,7 @@ const BetResult: React.FC<BetResultProps> = ({ bet, result }) => {
   const { chainId } = useWeb3React()
   const { isRefundable } = useIsRefundable(bet.round.epoch)
   const rewardRate = useGetRewardRate()
-  //const tokenUSDCPrice = useUSDCPrice(WETH[chainId ?? 137])
-  // const canClaim = useBetCanClaim(account ?? '', bet.round.id)
-  // debugger
-  // Winners get the payout, otherwise the claim what they put it if it was canceled
+
   const payout = result === Result.WIN ? getNetPayout(bet, rewardRate) : bet.amount
 
   const getHeaderColor = () => {

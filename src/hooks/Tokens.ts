@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { TokenAddressMap, useDefaultTokenList, useUnsupportedTokenList } from './../state/lists/hooks'
 import { parseBytes32String } from '@ethersproject/strings'
 import { Currency, Token, currencyEquals } from '@dfyn/sdk'
@@ -11,6 +12,8 @@ import { useActiveWeb3React } from './index'
 import { useBytes32TokenContract, useTokenContract } from './useContract'
 import { filterTokens } from '../components/SearchModal/filtering'
 import { arrayify } from 'ethers/lib/utils'
+import { useTradeExactIn } from './Trades'
+import { tryParseAmount } from 'state/swap/hooks'
 
 // reduce token map into standard address <-> Token mapping, optionally include user added tokens
 function useTokensFromMap(
@@ -228,11 +231,26 @@ export function useToken(tokenAddress?: string): Token | undefined | null {
 }
 
 export function useCurrency(
-  currencyId: string | undefined
+  currencyId: string | undefined | null
 ): Currency | null | undefined {
   const { chainId } = useActiveWeb3React();
   const isETH =
     currencyId?.toUpperCase() === Currency.getNativeCurrencySymbol(chainId);
   const token = useToken(isETH ? undefined : currencyId);
   return isETH ? Currency.getNativeCurrency(chainId) : token;
+}
+
+export function convertIdToCurrency(currencyIdArr: (string | undefined | null)[]): (Currency | undefined)[] {
+  let res: (Currency | undefined)[] = [];
+  res = currencyIdArr.map(cu=>useCurrency(cu))
+  return res;
+}
+
+export function useConvertInputTokenToMatic(typedValues: string, inputCurrencyArr: (Currency | null | undefined), outputCurrency: Currency):
+  (Trade | null) {
+    let res: (Trade | null);
+    const typedValue = typedValues
+    const parsedAmount = tryParseAmount(typedValue, inputCurrencyArr);
+    res = useTradeExactIn(parsedAmount, outputCurrency);
+  return res;
 }
