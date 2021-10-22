@@ -24,6 +24,42 @@ export const STAKING_REWARDS_INFO: {
   }[]
 } = {
   [ChainId.MATIC]: [
+    //v7
+    {
+      tokens: [DFYN, LUNA],
+      baseToken: DFYN,
+      startTime: 1634916600,
+      stakingRewardAddress: '0x1a91385A5EbCe3D37F1ce390fe88479154e3F032',
+      version: 'v7'
+    },
+    {
+      tokens: [DFYN, LINK],
+      baseToken: DFYN,
+      startTime: 1634916600,
+      stakingRewardAddress: '0x630476521B0c40f6F1330cf1d35C52bA37185691',
+      version: 'v7'
+    },
+    {
+      tokens: [DFYN, AAVE],
+      baseToken: DFYN,
+      startTime: 1634916600,
+      stakingRewardAddress: '0xe57058893e12BBB60a33964C6083d9aF665Bf070',
+      version: 'v7'
+    },
+    {
+      tokens: [DFYN, UNI_TOKEN],
+      baseToken: DFYN,
+      startTime: 1634916600,
+      stakingRewardAddress: '0xFE48E27F5BDd0F268Fb5Ce78F2dFF6298Ead1BaF',
+      version: 'v7'
+    },
+    {
+      tokens: [DFYN, CRV],
+      baseToken: DFYN,
+      startTime: 1634916600,
+      stakingRewardAddress: '0xf63107FC1dB63FeC65C858804f21Ee3fdee1109d',
+      version: 'v7'
+    },
     //v6
     {
       tokens: [USDC, ELE],
@@ -84,7 +120,21 @@ export const STAKING_REWARDS_INFO: {
       rewardToken: AGA,
       stakingRewardAddress: '0xF200BFb1cA8a422F2F19c9E63A61c8E53fe7c78c',
       version: 'v6'
-    },
+    }
+  ]
+}
+
+export const INACTIVE_STAKING_REWARDS_INFO: {
+  [chainId in ChainId]?: {
+    tokens: [Token, Token]
+    baseToken?: Token
+    rewardToken?: Token
+    startTime: number
+    stakingRewardAddress: string
+    version: string
+  }[]
+} = {
+  [ChainId.MATIC]: [
     {
       tokens: [DFYN, WMATIC],
       baseToken: DFYN,
@@ -233,20 +283,6 @@ export const STAKING_REWARDS_INFO: {
       stakingRewardAddress: '0x2d7c3E61430E4CF4DC091C61df03eaAB6d67cd26',
       version: 'v1'
     },
-  ]
-}
-
-export const INACTIVE_STAKING_REWARDS_INFO: {
-  [chainId in ChainId]?: {
-    tokens: [Token, Token]
-    baseToken?: Token
-    rewardToken?: Token
-    startTime: number
-    stakingRewardAddress: string
-    version: string
-  }[]
-} = {
-  [ChainId.MATIC]: [
     {
       tokens: [DFYN, WMATIC],
       baseToken: DFYN,

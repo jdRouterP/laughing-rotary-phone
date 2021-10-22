@@ -25,6 +25,23 @@ export const STAKING_REWARDS_INFO: {
   }[]
 } = {
   [ChainId.MATIC]: [
+    //v6
+    {
+      tokens: [ROUTE, DFYN],
+      rewardTokens: [ROUTE, DFYN],
+      baseToken: DFYN,
+      start: 1634916600000,
+      stakingRewardAddress: '0xa0d35c593235bA61151F0BAD89A4fB70AA5dad9f',
+      version: 'v6'
+    },
+    // {
+    //   tokens: [EMON, USDC],
+    //   rewardTokens: [EMON, DFYN],
+    //   baseToken: DFYN,
+    //   start: 1634916600000,
+    //   stakingRewardAddress: '0x0b07E945522B523d126BE9CfA8ee1B07B01C93Aa',
+    //   version: 'v6'
+    // },
     //v5
     {
       tokens: [PBR, DFYN],
@@ -51,14 +68,7 @@ export const STAKING_REWARDS_INFO: {
       stakingRewardAddress: '0x7c47Cc6F788bdac8FD647696A53e0C0165cA006e',
       version: 'v4'
     },
-    {
-      tokens: [ROUTE, DFYN],
-      rewardTokens: [ROUTE, DFYN],
-      baseToken: DFYN,
-      start: 1632315600000,
-      stakingRewardAddress: '0xe194f2cB4da23B1FB26B41Eb818d25d9FC7367f2',
-      version: 'v4'
-    },
+
     {
       tokens: [RAZOR, DFYN],
       rewardTokens: [RAZOR, DFYN],
@@ -92,6 +102,14 @@ export const INACTIVE_STAKING_REWARDS_INFO: {
   }[]
 } = {
   [ChainId.MATIC]: [
+    {
+      tokens: [ROUTE, DFYN],
+      rewardTokens: [ROUTE, DFYN],
+      baseToken: DFYN,
+      start: 1632315600000,
+      stakingRewardAddress: '0xe194f2cB4da23B1FB26B41Eb818d25d9FC7367f2',
+      version: 'v4'
+    },
     {
       tokens: [ROUTE, DFYN],
       rewardTokens: [ROUTE, DFYN],
