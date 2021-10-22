@@ -1,6 +1,6 @@
 import { useEffect, useMemo } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { AppState } from 'state'
+import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
+import { AppDispatch, AppState } from 'state'
 import { orderBy } from 'lodash'
 import { getCanClaim } from './prediction/hooks'
 import { useActiveWeb3React } from 'hooks'
@@ -95,7 +95,6 @@ export const useGetHistory = () => {
 export const useGetHistoryByAccount = (account: string | null | undefined) => {
     const bets = useGetHistory()
     if (!account) return [];
-    // debugger
     return bets ? bets[account] : []
 }
 
@@ -143,3 +142,6 @@ export const usePollBlockNumber = () => {
         return () => clearInterval(interval)
     }, [dispatch, library])
 }
+
+export const useAppDispatch = () => useDispatch<AppDispatch>()
+export const useAppSelector: TypedUseSelectorHook<AppState> = useSelector

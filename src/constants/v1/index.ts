@@ -12,6 +12,11 @@ const V1_FACTORY_ADDRESSES: { [chainId in ChainId]: string } = {
   [ChainId.MATIC]: '0x2d7882beDcbfDDce29Ba99965dd3cdF7fcB10A1e',
   [ChainId.OKEX]: '0x2d7882beDcbfDDce29Ba99965dd3cdF7fcB10A1e',
   [ChainId.ARBITRUM]: '0x2d7882beDcbfDDce29Ba99965dd3cdF7fcB10A1e',
+  [ChainId.AVALANCHE]: '0x2d7882beDcbfDDce29Ba99965dd3cdF7fcB10A1e',
+  [ChainId.FANTOM]: '0x2d7882beDcbfDDce29Ba99965dd3cdF7fcB10A1e',
+  [ChainId.XDAI]: '0x2d7882beDcbfDDce29Ba99965dd3cdF7fcB10A1e',
+  [ChainId.BSC]: '0x2d7882beDcbfDDce29Ba99965dd3cdF7fcB10A1e',
+  [ChainId.HARMONY]: '0x2d7882beDcbfDDce29Ba99965dd3cdF7fcB10A1e',
 }
 
 const V1_FACTORY_INTERFACE = new Interface(V1_FACTORY_ABI)

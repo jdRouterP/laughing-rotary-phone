@@ -15,7 +15,6 @@ export function Countdown({ exactEnd, startTime, showMessage = true, color }: { 
   ])
   // const begin = useMemo(() => end - REWARDS_DURATION, [end])
   const begin = useMemo(() => startTime ?? STAKING_GENESIS, [startTime])
-  // debugger
   // const begin = startTime
   // get current time
   const [time, setTime] = useState(() => Math.floor(Date.now() / 1000))

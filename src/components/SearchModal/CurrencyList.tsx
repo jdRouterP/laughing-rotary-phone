@@ -1,11 +1,11 @@
-import { ChainId, Currency, CurrencyAmount, currencyEquals, Token } from '@dfyn/sdk'
+import { ChainId, Currency, CurrencyAmount, currencyEquals, Pair, Token, TokenAmount } from '@dfyn/sdk'
 import React, { CSSProperties, MutableRefObject, useCallback, useMemo } from 'react'
 import { FixedSizeList } from 'react-window'
 import { Text } from 'rebass'
 import styled from 'styled-components'
 import { useActiveWeb3React } from '../../hooks'
 import { WrappedTokenInfo, useCombinedActiveList } from '../../state/lists/hooks'
-import { useCurrencyBalance } from '../../state/wallet/hooks'
+import { useCurrencyBalance, useTokenBalance } from '../../state/wallet/hooks'
 import { LinkStyledButton, TYPE } from '../../theme'
 import { useIsUserAddedToken, useAllInactiveTokens } from '../../hooks/Tokens'
 import Column from '../Column'
@@ -16,12 +16,17 @@ import { MenuItem } from './styleds'
 import Loader from '../Loader'
 import { isTokenOnList } from '../../utils'
 import ImportRow from './ImportRow'
-import { wrappedCurrency } from 'utils/wrappedCurrency'
+import { unwrappedToken, wrappedCurrency } from 'utils/wrappedCurrency'
 import { LightGreyCard } from 'components/Card'
 import TokenListLogo from '../../assets/svg/tokenlist.svg'
 import QuestionHelper from 'components/QuestionHelper'
 import useTheme from 'hooks/useTheme'
 import { PlusCircle } from 'react-feather'
+import _get from 'lodash.get'
+import DoubleCurrencyLogo from 'components/DoubleLogo'
+import { Dots } from 'components/swap/styleds'
+import { BIG_INT_ZERO } from '../../constants'
+// import { useDerivedBlendInfo } from 'state/blend/hooks'
 
 function currencyKey(currency: Currency, chainId = ChainId.MATIC): string {
   return currency instanceof Token ? currency.address : currency === Currency.getNativeCurrency(chainId) ? Currency.getNativeCurrencySymbol(chainId) || 'MATIC ' : ''
@@ -64,6 +69,20 @@ const FixedContentRow = styled.div`
   align-items: center;
 `
 
+const MenuItemLP = styled(RowBetween)`
+    padding: 4px 20px;
+    height: 56px;
+    display: grid;
+    grid-template-columns: auto minmax(auto, 1fr) auto minmax(0, 5px);
+    grid-gap: 16px;
+    cursor: ${({ disabled }) => !disabled && 'pointer'};
+    pointer-events: ${({ disabled }) => disabled && 'none'};
+    :hover {
+      background-color: ${({ theme, disabled }) => !disabled && theme.bg2};
+    }
+    opacity: ${({ disabled, selected }) => (disabled || selected ? 0.5 : 1)};
+`
+
 function Balance({ balance }: { balance: CurrencyAmount }) {
   return <StyledBalanceText title={balance.toExact()}>{balance.toSignificant(4)}</StyledBalanceText>
 }
@@ -72,6 +91,16 @@ const TagContainer = styled.div`
   display: flex;
   justify-content: flex-end;
 `
+
+interface LPPositionCardProps {
+  pair: Pair
+  showUnwrapped?: boolean
+  border?: string
+  stakingInfo?: any
+  handleLPSelect: (token: Pair)=>void
+  stakedBalance?: TokenAmount, // optional balance to indicate that liquidity is deposited in mining pool
+  hideZeroBalance?: boolean
+}
 
 const TokenListLogoWrapper = styled.img`
   height: 20px;
@@ -206,6 +235,47 @@ function CurrencyRow({
   )
 }
 
+export function LPPositionCard({ 
+  pair, 
+  border, 
+  stakedBalance, 
+  stakingInfo,
+  handleLPSelect,
+  hideZeroBalance
+}:LPPositionCardProps) {
+  const { account} = useActiveWeb3React()
+  
+  const currency0 = unwrappedToken(pair.token0)
+  const currency1 = unwrappedToken(pair.token1)
+  const userDefaultPoolBalance = useTokenBalance(account ?? undefined, pair.liquidityToken)
+  const userPoolBalance = stakedBalance ? userDefaultPoolBalance?.add(stakedBalance) : userDefaultPoolBalance
+  const showCard = hideZeroBalance? userPoolBalance?.greaterThan(BIG_INT_ZERO): true;
+
+  const handleLPMenuSelect = useCallback((pair: Pair)=>{
+    if(pair instanceof Pair) {
+      handleLPSelect(pair)
+    }
+  }, [handleLPSelect])
+  return (
+    showCard? <MenuItemLP
+      // style={style}
+      // className={`token-item-${key}`}
+      onClick={()=> handleLPMenuSelect(pair)}
+      disabled={false}
+      selected={false}
+    >
+      <DoubleCurrencyLogo currency0={currency0} currency1={currency1} size={20} />
+      <Text fontWeight={500} fontSize={20}>
+        {!currency0 || !currency1 ? <Dots>Loading</Dots> : `${currency0.symbol}/${currency1.symbol}`}
+      </Text>
+      <RowFixed style={{ justifySelf: 'flex-end' }}>
+        {userPoolBalance ? <Balance balance={userPoolBalance} /> : account ? <Loader /> : null}
+      </RowFixed>
+    </MenuItemLP>: null
+  )
+}
+
+
 export default function CurrencyList({
   height,
   currencies,
@@ -222,7 +292,7 @@ export default function CurrencyList({
   currencies: Currency[]
   selectedCurrency?: Currency | null
   onCurrencySelect: (currency: Currency) => void
-  otherCurrency?: Currency | null
+  otherCurrency?: (Currency | null) | (Currency | undefined)[]
   fixedListRef?: MutableRefObject<FixedSizeList | undefined>
   showETH: boolean
   showImportView: () => void
@@ -243,15 +313,17 @@ export default function CurrencyList({
     [address: string]: Token
   } = useAllInactiveTokens()
 
+  // const {inputCurrencyArr } = useDerivedBlendInfo()
+
   const Row = useCallback(
     ({ data, index, style }) => {
       const currency: Currency = data[index]
       const isSelected = Boolean(selectedCurrency && currencyEquals(selectedCurrency, currency))
-      const otherSelected = Boolean(otherCurrency && currencyEquals(otherCurrency, currency))
+      const otherCurrencyVal = Array.isArray(otherCurrency) ? otherCurrency.find(x=>_get(x, 'address', x?.symbol) === _get(currency, 'address', currency?.symbol)) : otherCurrency
+      const otherSelected = Boolean(otherCurrencyVal && currencyEquals(otherCurrencyVal, currency))
+      
       const handleSelect = () => onCurrencySelect(currency)
-
       const token = wrappedCurrency(currency, chainId)
-
       const showImport = inactiveTokens && token && Object.keys(inactiveTokens).includes(token.address)
 
       if (index === breakIndex || !data) {

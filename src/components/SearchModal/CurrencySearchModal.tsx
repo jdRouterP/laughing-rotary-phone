@@ -1,4 +1,4 @@
-import { Currency, Token } from '@dfyn/sdk'
+import { Currency, Pair, Token } from '@dfyn/sdk'
 import React, { useCallback, useEffect, useState } from 'react'
 import useLast from '../../hooks/useLast'
 import Modal from '../Modal'
@@ -14,8 +14,10 @@ interface CurrencySearchModalProps {
   onDismiss: () => void
   selectedCurrency?: Currency | null
   onCurrencySelect: (currency: Currency) => void
-  otherSelectedCurrency?: Currency | null
+  otherSelectedCurrency?: Currency | null | (Currency | undefined)[]
+  onLPCurrencySelect?: (pair: Pair) => void
   showCommonBases?: boolean
+  lp?: boolean
 }
 
 export enum CurrencyModalView {
@@ -31,7 +33,9 @@ export default function CurrencySearchModal({
   onCurrencySelect,
   selectedCurrency,
   otherSelectedCurrency,
-  showCommonBases = true
+  showCommonBases = true,
+  lp,
+  onLPCurrencySelect
 }: CurrencySearchModalProps) {
   const [modalView, setModalView] = useState<CurrencyModalView>(CurrencyModalView.manage)
   const lastOpen = useLast(isOpen)
@@ -76,6 +80,8 @@ export default function CurrencySearchModal({
           showImportView={() => setModalView(CurrencyModalView.importToken)}
           setImportToken={setImportToken}
           showManageView={() => setModalView(CurrencyModalView.manage)}
+          lp={lp}
+          onLPCurrencySelect={onLPCurrencySelect}
         />
       ) : modalView === CurrencyModalView.importToken && importToken ? (
         <ImportToken

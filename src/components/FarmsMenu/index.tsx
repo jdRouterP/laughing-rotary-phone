@@ -2,50 +2,48 @@ import React, { useRef } from 'react'
 // import { Info, PieChart, Send } from 'react-feather'
 import { NavLink } from 'react-router-dom'
 import styled from 'styled-components'
-// import { useActiveWeb3React } from '../../hooks'
+import { useActiveWeb3React } from '../../hooks'
 import { useOnClickOutside } from '../../hooks/useOnClickOutside'
 import { ApplicationModal } from '../../state/application/actions'
 import { useModalOpen, useToggleModal } from '../../state/application/hooks'
 import { darken } from 'polished'
 // import { ExternalLink } from '../../theme'
 // import { ButtonPrimary } from '../Button'
+import { ChevronDown, XCircle} from 'react-feather'
+import { useFarmsHelptextToggle, useFarmsHelptextVisible } from 'state/user/hooks'
+import { FARMS_ACCESS } from 'constants/networks'
 
 const StyledMenuButton = styled.button`
-  width: 100%;
-  height: 100%;
-  border: none;
-  background-color: transparent;
+height: 100%;
+width: 100%;
+border: none;
+background-color: transparent;
+padding: 0;
+height: 35px;
+border-radius: 0.5rem;
+
+font-size: 1rem;
+width: fit-content;
+font-weight: 500;
+padding: 0.15rem 0.5rem;
+color: ${({ theme }) => theme.text2};
+position: relative;
+outline: none;
+cursor: pointer;
+
+svg {
+  margin: auto;
+  position: absolute;
   margin: 0;
-  padding: 0;
-  height: 35px;
-  background-color: ${({ theme }) => theme.bg3};
-
-  padding: 0.15rem 0.5rem;
-  border-radius: 0.5rem;
-
-  color: white;
-  font-weight: 500;
-  background-color: ${({ theme }) => theme.bg3};
-  background: radial-gradient(174.47% 188.91% at 1.84% 0%, #C0657A 0%, #59ADE1 100%), #edeef2;
-
-  :hover,
-  :focus {
-    cursor: pointer;
-    outline: none;
-    background-color: ${({ theme }) => theme.bg4};
-  }
-  ${({ theme }) => theme.mediaWidth.upToMedium`
-    font-size: 0.7rem
-  `};
-  svg {
-    margin-top: 2px;
-  }
-
+  margin-top: 2px;
+  margin-left: 4px;
+  vertical-align: middle;
+  bottom: 4px;
+  margin-bottom: 3px;
   ${({ theme }) => theme.mediaWidth.upToExtraSmall`
-    font-size: 10px;
-    margin-right: 2px;
-    padding: 1px 4px;
-`};
+      margin-bottom: 1px;
+    `};
+}
 `
 
 
@@ -79,13 +77,25 @@ const StyledNavLink = styled(NavLink).attrs({
 `
 
 const StyledMenu = styled.div`
-  margin-left: 0.5rem;
   display: flex;
   justify-content: center;
   align-items: center;
   position: relative;
   border: none;
   text-align: left;
+  border-radius: 0.5rem;
+  padding: 0rem 0;
+  padding-right: 1.2rem;
+  // background-color: ${({ theme }) => theme.bg3};
+
+  cursor: pointer;
+  :hover,
+  :focus {
+    background-color: ${({ theme }) => theme.bg3};
+  }
+  ${({ theme }) => theme.mediaWidth.upToExtraSmall`
+    margin-bottom: 3px;
+  `};
 `
 
 const MenuFlyout = styled.span`
@@ -109,6 +119,62 @@ const MenuFlyout = styled.span`
   `};
 `
 
+const FarmsHelpText = styled.span`
+  color: #FFF;
+  background: #2172e5;
+  top: 100%;
+  position: absolute;
+  padding: 5px 10px;
+  margin-top: 5px;
+  width: 120px;
+  font-size: 12px;
+  text-align: center;
+  border-radius: 5px;
+  cursor: pointer;
+  z-index: -1;
+  display: inherit;
+
+  span {
+    text-align: right;
+    position: absolute;
+    right: 6px;
+    margin: auto;
+    &:hover svg{
+      color: rgb(189, 189, 189);
+    }
+  }
+  &:after{
+    content: '';
+    display: block;
+    position: absolute;
+    left: 40%;
+    bottom: 100%;
+    width: 0;
+    height: 0;
+    border-bottom: 6px solid #2172e5;
+    border-top: 6px solid transparent;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+  }
+  ${({ theme }) => theme.mediaWidth.upToMedium`
+  right: 0;
+  &:after{
+    left: 70%;
+  }
+  `};
+`
+
+const MenuText = styled.span`
+  // position: absolute;
+  margin: auto;
+  height: 100%;
+  display: inline;
+  vertical-align: middle;
+  ${({ theme }) => theme.mediaWidth.upToExtraSmall`
+    font-size: 14px;
+  `};
+`
+
 // const MenuItem = styled(ExternalLink)`
 //   flex: 1;
 //   padding: 0.5rem 0.5rem;
@@ -125,42 +191,45 @@ const MenuFlyout = styled.span`
 
 
 export default function FarmsMenu() {
-  // const { account } = useActiveWeb3React()
+  const { chainId } = useActiveWeb3React()
 
   const node = useRef<HTMLDivElement>()
   const open = useModalOpen(ApplicationModal.FARMS_MENU)
   const toggle = useToggleModal(ApplicationModal.FARMS_MENU)
   useOnClickOutside(node, open ? toggle : undefined)
   // const openClaimModal = useToggleModal(ApplicationModal.ADDRESS_CLAIM)
-
+  // const [showTooltip, setTooltip] = useState(true)
+  const toggleFarmsHelptextWarning = useFarmsHelptextToggle()
+  let farmingTooltipVisible = useFarmsHelptextVisible()
+  if (farmingTooltipVisible === undefined) farmingTooltipVisible = true
   return (
     // https://github.com/DefinitelyTyped/DefinitelyTyped/issues/30451
     <StyledMenu ref={node as any}>
-
       <StyledMenuButton onClick={toggle}>
-        <span role="img" aria-label="FARMS">⚡FARMS</span>
+        <span role="img" aria-label="FARMS"><MenuText>Farms <ChevronDown size={18}/></MenuText></span>
       </StyledMenuButton>
+      {farmingTooltipVisible && <FarmsHelpText onClick={toggleFarmsHelptextWarning}>Farms & Vault <span><XCircle size={14} /></span></FarmsHelpText>}
 
       {open && (
         <MenuFlyout>
-          <StyledNavLink id={`v-farms-nav-link`} to={'/eco-farms'}>
-            Ecosystem Farms
-          </StyledNavLink>
-          <StyledNavLink id={`f-farms-nav-link`} to={'/popular-farms'}>
-            Popular Farms
-          </StyledNavLink>
-          <StyledNavLink id={`d-farms-nav-link`} to={'/dual-farms'}>
-            Dual Farms
-          </StyledNavLink>
-          <StyledNavLink id={`stake-nav-link`} to={'/launch-farms'}>
-            Launch Farms
-          </StyledNavLink>
-          <StyledNavLink id={`stake-nav-link`} to={'/vault'}>
+          {chainId && FARMS_ACCESS.singleAssetVault.includes(chainId) && <StyledNavLink id={`stake-nav-link`} to={'/vault'}>
             Single-Asset Vault
-          </StyledNavLink>
-          <StyledNavLink id={`stake-nav-link`} to={'/dfyn'}>
+          </StyledNavLink>}
+          {chainId && FARMS_ACCESS.ecosystem.includes(chainId) && <StyledNavLink id={`v-farms-nav-link`} to={'/eco-farms'}>
+            Ecosystem Farms
+          </StyledNavLink>}
+          {chainId && FARMS_ACCESS.popular.includes(chainId) && <StyledNavLink id={`f-farms-nav-link`} to={'/popular-farms'}>
+            Popular Farms
+          </StyledNavLink>}
+          {chainId && FARMS_ACCESS.dual.includes(chainId) && <StyledNavLink id={`d-farms-nav-link`} to={'/dual-farms'}>
+            Dual Farms
+          </StyledNavLink>}
+          {chainId && FARMS_ACCESS.launch.includes(chainId) && <StyledNavLink id={`stake-nav-link`} to={'/launch-farms'}>
+            Launch Farms
+          </StyledNavLink>}
+          {chainId && FARMS_ACCESS.prestake.includes(chainId) && <StyledNavLink id={`stake-nav-link`} to={'/dfyn'}>
             Pre-Staking Farms
-          </StyledNavLink>
+          </StyledNavLink>}
         </MenuFlyout>
       )}
     </StyledMenu>

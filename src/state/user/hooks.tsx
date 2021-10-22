@@ -21,7 +21,8 @@ import {
   updateUserSlippageTolerance,
   toggleURLWarning,
   updateUserSingleHopOnly,
-  updateUserGaslessMode
+  updateUserGaslessMode,
+  toggleFarmsHelptext
 } from './actions'
 
 function serializeToken(token: Token): SerializedToken {
@@ -228,6 +229,16 @@ export function useURLWarningVisible(): boolean {
 export function useURLWarningToggle(): () => void {
   const dispatch = useDispatch()
   return useCallback(() => dispatch(toggleURLWarning()), [dispatch])
+}
+
+
+export function useFarmsHelptextVisible(): boolean {
+  return useSelector((state: AppState) => state.user.farmingTooltipVisible)
+}
+
+export function useFarmsHelptextToggle(): () => void {
+  const dispatch = useDispatch()
+  return useCallback(() => dispatch(toggleFarmsHelptext()), [dispatch])
 }
 
 /**

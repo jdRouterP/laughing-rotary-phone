@@ -106,10 +106,10 @@ export default function LaunchFarms() {
               </RowBetween>{' '}
               <ExternalLink
                 style={{ color: 'white', textDecoration: 'underline' }}
-                href="https://dfyn-network.medium.com/introducing-dfyn-yield-farming-phase-2-7686281dd93"
+                href="https://dfyn-network.medium.com/introducing-dfyn-yield-farming-phase-6-a6e8549eaa55"
                 target="_blank"
               >
-                <TYPE.white fontSize={14}>Read more about Dfyn Farms Phase 2</TYPE.white>
+                <TYPE.white fontSize={14}>Read more about Dfyn Farms Phase 6</TYPE.white>
               </ExternalLink>
             </AutoColumn>
           </CardSection>

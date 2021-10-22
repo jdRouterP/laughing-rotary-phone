@@ -250,7 +250,6 @@ export function useSwapCallback(
             })
         }
         else {
-
           const bicomony_contract = new getWeb3.eth.Contract(abi, contractAddress);
           let biconomy_nonce = await bicomony_contract.methods.getNonce(account).call();
           let gasLimit = calculateGasMargin(gasEstimate)

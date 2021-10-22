@@ -18,121 +18,118 @@ export function isAddress(value: any): string | false {
   }
 }
 
-const explorerConfig = {
-  etherscan: (
-    chainName: string,
-    data: string,
-    type: "transaction" | "token" | "address" | "block"
-  ) => {
-    const prefix = `https://${chainName ? `${chainName}.` : ""}etherscan.io`;
+const explorers = {
+  etherscan: (link: string, data: string, type: 'transaction' | 'token' | 'address' | 'block') => {
     switch (type) {
-      case "transaction":
-        return `${prefix}/tx/${data}`;
+      case 'transaction':
+        return `${link}/tx/${data}`
       default:
-        return `${prefix}/${type}/${data}`;
+        return `${link}/${type}/${data}`
     }
   },
-  matic: (
-    chainName: string,
-    data: string,
-    type: "transaction" | "token" | "address" | "block"
-  ) => {
-    // const prefix = `https://explorer-${chainName}.maticvigil.com`
-    const prefix = "https://polygonscan.com";
-    switch (type) {
-      case "transaction":
-        return `${prefix}/tx/${data}`;
-      case "token":
-        return `${prefix}/tokens/${data}`;
-      default:
-        return `${prefix}/${type}/${data}`;
-    }
-  },
-  okex: (
-    chainName = "",
-    data: string,
-    type: "transaction" | "token" | "address" | "block"
-  ) => {
-    const prefix = "https://www.oklink.com/okexchain";
-    switch (type) {
-      case "transaction":
-        return `${prefix}/tx/${data}`;
-      case "token":
-        return `${prefix}/tokenAddr/${data}`;
-      default:
-        return `${prefix}/${type}/${data}`;
-    }
-  },
-  arbitrum: (
-    chainName = "",
-    data: string,
-    type: "transaction" | "token" | "address" | "block"
-  ) => {
-    const prefix = "https://arbiscan.io/";
-    switch (type) {
-      case "transaction":
-        return `${prefix}/tx/${data}`;
-      case "token":
-        return `${prefix}/tokenAddr/${data}`;
-      default:
-        return `${prefix}/${type}/${data}`;
-    }
-  },
-};
 
+  blockscout: (link: string, data: string, type: 'transaction' | 'token' | 'address' | 'block') => {
+    switch (type) {
+      case 'transaction':
+        return `${link}/tx/${data}`
+      case 'token':
+        return `${link}/tokens/${data}`
+      default:
+        return `${link}/${type}/${data}`
+    }
+  },
+
+  harmony: (link: string, data: string, type: 'transaction' | 'token' | 'address' | 'block') => {
+    switch (type) {
+      case 'transaction':
+        return `${link}/tx/${data}`
+      case 'token':
+        return `${link}/address/${data}`
+      default:
+        return `${link}/${type}/${data}`
+    }
+  },
+
+  okex: (link: string, data: string, type: 'transaction' | 'token' | 'address' | 'block') => {
+    switch (type) {
+      case 'transaction':
+        return `${link}/tx/${data}`
+      case 'token':
+        return `${link}/tokenAddr/${data}`
+      default:
+        return `${link}/${type}/${data}`
+    }
+  },
+}
 interface ChainObject {
   [chainId: number]: {
-    chainName: string;
-    builder: (
-      chainName: string,
-      data: string,
-      type: "transaction" | "token" | "address" | "block"
-    ) => string;
-  };
+    link: string
+    builder: (chainName: string, data: string, type: 'transaction' | 'token' | 'address' | 'block') => string
+  }
 }
 
 const chains: ChainObject = {
   [ChainId.MAINNET]: {
-    chainName: "",
-    builder: explorerConfig.etherscan,
+    link: 'https://etherscan.io',
+    builder: explorers.etherscan,
   },
   [ChainId.ROPSTEN]: {
-    chainName: "ropsten",
-    builder: explorerConfig.etherscan,
+    link: 'https://ropsten.etherscan.io',
+    builder: explorers.etherscan,
   },
   [ChainId.RINKEBY]: {
-    chainName: "rinkeby",
-    builder: explorerConfig.etherscan,
+    link: 'https://rinkeby.etherscan.io',
+    builder: explorers.etherscan,
   },
   [ChainId.GÖRLI]: {
-    chainName: "goerli",
-    builder: explorerConfig.etherscan,
+    link: 'https://goerli.etherscan.io',
+    builder: explorers.etherscan,
   },
   [ChainId.KOVAN]: {
-    chainName: "kovan",
-    builder: explorerConfig.etherscan,
+    link: 'https://kovan.etherscan.io',
+    builder: explorers.etherscan,
   },
   [ChainId.MATIC]: {
-    chainName: "mainnet",
-    builder: explorerConfig.matic,
+    link: 'https://polygonscan.com',
+    builder: explorers.etherscan,
   },
-  [ChainId.OKEX]: {
-    chainName: "",
-    builder: explorerConfig.okex,
+  [ChainId.FANTOM]: {
+    link: 'https://ftmscan.com',
+    builder: explorers.etherscan,
+  },
+  [ChainId.XDAI]: {
+    link: 'https://blockscout.com/xdai/mainnet',
+    builder: explorers.blockscout,
+  },
+  [ChainId.BSC]: {
+    link: 'https://bscscan.com',
+    builder: explorers.etherscan,
   },
   [ChainId.ARBITRUM]: {
-    chainName: "",
-    builder: explorerConfig.arbitrum,
+    link: 'https://arbiscan.io',
+    builder: explorers.etherscan,
   },
-};
+  [ChainId.AVALANCHE]: {
+    link: 'https://cchain.explorer.avax.network',
+    builder: explorers.blockscout,
+  },
+  [ChainId.HARMONY]: {
+    link: 'https://beta.explorer.harmony.one/#',
+    builder: explorers.harmony,
+  },
+  [ChainId.OKEX]: {
+    link: 'https://www.oklink.com/okexchain',
+    builder: explorers.okex,
+  }
+}
 
 export function getExplorerLink(
   chainId: ChainId,
   data: string,
-  type: "transaction" | "token" | "address" | "block"
+  type: 'transaction' | 'token' | 'address' | 'block'
 ): string {
-  const chain = chains[chainId];
-  return chain.builder(chain.chainName, data, type);
+  const chain = chains[chainId]
+  return chain.builder(chain.link, data, type)
 }
 
 // shorten the checksummed version of the input address to have 0x + 4 characters at start and end

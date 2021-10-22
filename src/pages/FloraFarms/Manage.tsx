@@ -113,7 +113,6 @@ export default function Manage({
 
   const [, stakingTokenPair] = usePair(tokenA, tokenB)
   const stakingInfo = useStakingInfo(stakingTokenPair, version)?.[0]
-  // debugger
   // detect existing unstaked LP position to show add button if none found
   const userLiquidityUnstaked = useTokenBalance(account ?? undefined, stakingInfo?.stakedAmount?.token)
   const showAddLiquidityButton = Boolean(stakingInfo?.stakedAmount?.equalTo('0') && userLiquidityUnstaked?.equalTo('0'))
@@ -269,10 +268,10 @@ export default function Manage({
               </RowBetween>
               <ExternalLink
                 style={{ color: 'white', textDecoration: 'underline' }}
-                href="https://dfyn-network.medium.com/introducing-dfyn-yield-farming-phase-3-482498683528"
+                href="https://dfyn-network.medium.com/introducing-dfyn-yield-farming-phase-6-a6e8549eaa55"
                 target="_blank"
               >
-                <TYPE.white fontSize={14}>Read more about Dfyn Farms Phase 3</TYPE.white>
+                <TYPE.white fontSize={14}>Read more about Dfyn Farms Phase 6</TYPE.white>
               </ExternalLink>
             </AutoColumn>
           </CardSection>

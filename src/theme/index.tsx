@@ -49,12 +49,14 @@ export function colors(darkMode: boolean): Colors {
     text3: darkMode ? '#6C7284' : '#888D9B',
     text4: darkMode ? '#565A69' : '#C3C5CB',
     text5: darkMode ? '#2C2F36' : '#EDEEF2',
+    bannerText: darkMode ? '#FDFCE5' : '#888D9B',
     //border
     text6: darkMode ? '#575A68' : 'rgba(0,0,0,0.1)',
     //Card: tab-text
     text7: darkMode ? '#DD3679' : '#FFFFFF',
     text8: darkMode ? '#FFFFFF' : '#DD3679',
     text9: darkMode ? '#565A69' : '#FFFFFF',
+    text10: darkMode ? '#DDBEBE': '#1E5128',
 
     // backgrounds / greys
     bg1: darkMode ? '#212429' : '#FFFFFF',

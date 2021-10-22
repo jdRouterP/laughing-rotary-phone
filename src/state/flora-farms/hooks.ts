@@ -2,7 +2,7 @@
 import { ChainId, CurrencyAmount, JSBI, Token, TokenAmount, Pair } from '@dfyn/sdk'
 import { useMemo } from 'react'
 import { BigNumber } from 'ethers'
-import { ROUTE, UNI, ETHER, USDC, DFYN, WBTC, USDT, DAI, WMATIC, UNI_TOKEN, AAVE, LUNA, UST, LINK, CRV, QUICK, MATICPAD, MIMATIC, NEXO } from '../../constants'
+import { ROUTE, UNI, ETHER, USDC, DFYN, WBTC, USDT, DAI, WMATIC, UNI_TOKEN, AAVE, LUNA, UST, LINK, CRV, QUICK, MATICPAD, MIMATIC, NEXO, FTM, USDC_FANTOM, USDT_FANTOM, WBTC_FANTOM, WETH_FANTOM, DFYN_FANTOM } from '../../constants'
 import { STAKING_REWARDS_FLORA_FARMS_INTERFACE } from '../../constants/abis/staking-rewards-flora-farms'
 import { useActiveWeb3React } from '../../hooks'
 import { NEVER_RELOAD, useMultipleContractSingleData } from '../multicall/hooks'
@@ -26,8 +26,50 @@ export const STAKING_REWARDS_INFO: {
     burnRate: string
   }[]
 } = {
+  [ChainId.FANTOM]: [
+    //v1
+    {
+      tokens: [DFYN_FANTOM, FTM], //DFYN_FTM
+      baseToken: FTM,
+      startTime: 1635260400,
+      stakingRewardAddress: '0xf9D70A91c9898ed8FF005A286c9F4FF8Fcc868D4',
+      version: 'v1',
+      burnRate: '35'
+    },
+    {
+      tokens: [USDC_FANTOM, USDT_FANTOM],
+      baseToken: USDT_FANTOM,
+      startTime: 1635260400,
+      stakingRewardAddress: '0xa8753167da15FF2A19266b99b32993f353d93F0C',
+      version: 'v1',
+      burnRate: '35'
+    },
+    {
+      tokens: [WBTC_FANTOM, WETH_FANTOM],
+      baseToken: WETH_FANTOM,
+      startTime: 1635260400,
+      stakingRewardAddress: '0x4E6e4D56A8EE083d763DC34edD903053b28B5267',
+      version: 'v1',
+      burnRate: '35'
+    },
+    {
+      tokens: [DFYN_FANTOM, USDC_FANTOM],
+      baseToken: USDC_FANTOM,
+      startTime: 1635260400,
+      stakingRewardAddress: '0x07428ee4ca8B8B39b5b3C8F02dF0867D88D96bC3',
+      version: 'v1',
+      burnRate: '35'
+    }],
   [ChainId.MATIC]: [
     //v5
+    {
+      tokens: [UST, USDC],
+      baseToken: USDC,
+      startTime: 1632315600,
+      stakingRewardAddress: '0xB3e063CBbA9750142786a938d72ffF6d4a437554',
+      version: 'v5',
+      burnRate: '35'
+    },
     {
       tokens: [UST, USDT],
       baseToken: USDT,
@@ -1010,9 +1052,6 @@ export function useStakingInfo(pairToFilterBy?: Pair | null, version: string = '
         currentSplit = currentSplit > splits ? splits : currentSplit;
 
         const unlockAt = active ? periodFinishSeconds : vestingActive ? (periodFinishSeconds + (Math.floor(currentSplit + 1) * splitWindowSeconds)) : vestingEndsSeconds;
-        // debugger
-        //const unclaimedAmount = JSBI.divide(JSBI.multiply(JSBI.BigInt(totalVestedAmountState?.result?.[0] ?? 0), JSBI.BigInt((Math.floor(currentSplit + 1) - userClaimedSplit))), splits);
-        // totalvestedamount*(currentsplit-userclaimedlastsplit)/splits;
         const unclaimedSplits = BigNumber.from((Math.floor(currentSplit) - userClaimedSplit))
 
         let unclaimedAmount = BigNumber.from(totalVestedAmountState?.result?.[0] ?? 0).mul(unclaimedSplits).div(BigNumber.from(splits))
@@ -1266,9 +1305,6 @@ export function useInactiveStakingInfo(pairToFilterBy?: Pair | null, version: st
         currentSplit = currentSplit > splits ? splits : currentSplit;
 
         const unlockAt = active ? periodFinishSeconds : vestingActive ? (periodFinishSeconds + (Math.floor(currentSplit + 1) * splitWindowSeconds)) : vestingEndsSeconds;
-        // debugger
-        //const unclaimedAmount = JSBI.divide(JSBI.multiply(JSBI.BigInt(totalVestedAmountState?.result?.[0] ?? 0), JSBI.BigInt((Math.floor(currentSplit + 1) - userClaimedSplit))), splits);
-        // totalvestedamount*(currentsplit-userclaimedlastsplit)/splits;
         const unclaimedSplits = BigNumber.from((Math.floor(currentSplit) - userClaimedSplit))
 
         let unclaimedAmount = BigNumber.from(totalVestedAmountState?.result?.[0] ?? 0).mul(unclaimedSplits).div(BigNumber.from(splits))

@@ -13,12 +13,14 @@ export interface Colors {
   text3: Color
   text4: Color
   text5: Color
+  bannerText: Color
   //border
   text6: Color
   //tab text color
   text7: Color
   text8: Color
   text9: Color
+  text10: Color
 
   // backgrounds / greys
   bg1: Color
