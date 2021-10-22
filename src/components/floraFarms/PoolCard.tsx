@@ -112,7 +112,6 @@ export default function PoolCard({ stakingInfo, isInactive }: { stakingInfo: Sta
   let USDPrice = useUSDCPrice(baseToken)
   let rewardTokenUSD = Number(useUSDCPrice(stakingInfo?.rewardToken)?.toSignificant(6));
   const valueOfTotalStakedAmountInUSDC = valueOfTotalStakedAmountInBaseToken && USDPrice?.quote(valueOfTotalStakedAmountInBaseToken)
-
   const rate = stakingInfo?.totalRewardRate?.multiply(BIG_INT_SECONDS_IN_DAY).toFixed(5);
   //@ts-ignore
   const valueOfDfynGivenPerYear: any = parseFloat(rate) * rewardTokenUSD * 365;
@@ -137,7 +136,7 @@ export default function PoolCard({ stakingInfo, isInactive }: { stakingInfo: Sta
 
       <StatContainer>
         <RowBetween >
-          <Countdown exactEnd={stakingInfo?.periodFinish} startTime={stakingInfo?.startTime} color="white"/>
+          <Countdown exactEnd={stakingInfo?.periodFinish} startTime={stakingInfo?.startTime} color="white" />
         </RowBetween>
         <RowBetween>
           <TYPE.white> Total deposited</TYPE.white>
