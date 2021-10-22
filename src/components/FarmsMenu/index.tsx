@@ -131,7 +131,6 @@ const FarmsHelpText = styled.span`
   text-align: center;
   border-radius: 5px;
   cursor: pointer;
-  z-index: -1;
   display: inherit;
 
   span {
@@ -188,7 +187,12 @@ const MenuText = styled.span`
 //     margin-right: 8px;
 //   }
 // `
-
+const Icon = styled.div`
+  margin-left: 47px;
+  ${({ theme }) => theme.mediaWidth.upToExtraSmall`
+    margin-left: 38px;
+  `};
+`
 
 export default function FarmsMenu() {
   const { chainId } = useActiveWeb3React()
@@ -206,7 +210,12 @@ export default function FarmsMenu() {
     // https://github.com/DefinitelyTyped/DefinitelyTyped/issues/30451
     <StyledMenu ref={node as any}>
       <StyledMenuButton onClick={toggle}>
-        <span role="img" aria-label="FARMS"><MenuText>Farms <ChevronDown size={18}/></MenuText></span>
+        <MenuText>
+          Farms 
+          <Icon>
+            <ChevronDown size={18}/>
+          </Icon>
+        </MenuText>
       </StyledMenuButton>
       {farmingTooltipVisible && <FarmsHelpText onClick={toggleFarmsHelptextWarning}>Farms & Vault <span><XCircle size={14} /></span></FarmsHelpText>}
 

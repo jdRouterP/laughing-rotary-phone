@@ -133,6 +133,13 @@ const MenuDesc = styled.div`
   color: ${({ theme }) => theme.text10};
 `
 
+const Icon = styled.div`
+  margin-left: 40px;
+  ${({ theme }) => theme.mediaWidth.upToExtraSmall`
+    margin-left: 32px;
+  `};
+`
+
 export default function AppsMenu() {
   // const { account } = useActiveWeb3React()
 
@@ -144,7 +151,12 @@ export default function AppsMenu() {
   return (
     <StyledMenu ref={node as any}>
       <StyledMenuButton onClick={toggle}>
-        <span role="img" aria-label="Apps"><MenuText>More <ChevronDown size={18} /></MenuText></span>
+      <MenuText>
+          More 
+          <Icon>
+            <ChevronDown size={18}/>
+          </Icon>
+        </MenuText>
       </StyledMenuButton>
 
       {open && (
