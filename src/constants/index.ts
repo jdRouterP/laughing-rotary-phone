@@ -77,6 +77,8 @@ export const XUSD = new Token(ChainId.MATIC, '0x3A3e7650f8B9f667dA98F236010fBf44
 export const XDO = new Token(ChainId.MATIC, '0x3Dc7B06dD0B1f08ef9AcBbD2564f8605b4868EEA', 18, 'XDO', 'xDollar')
 export const MIMATIC = new Token(ChainId.MATIC, '0xa3fa99a148fa48d14ed51d610c367c61876997f1', 18, 'MIMATIC', 'miMatic')
 export const ICE = new Token(ChainId.MATIC, '0x4a81f8796e0c6ad4877a51c86693b0de8093f2ef', 18, 'ICE', 'Iron Finance ICE Token')
+export const IRON = new Token(ChainId.MATIC, '0xD86b5923F3AD7b585eD81B448170ae026c65ae9a', 18, 'IRON', 'Iron stable coin')
+// export const APOLLO = new Token(ChainId.MATIC, '0x13c6bf66500bdc9606dbb8ee55d5ce3e403812cc', 18, 'APOLLO', 'Apollo Token')
 export const TITAN = new Token(ChainId.MATIC, '0xaaa5b9e6c589642f98a1cda99b9d024b8407285a', 18, 'TITAN', 'Titan DAO Finance')
 export const NEXO = new Token(ChainId.MATIC, '0x41b3966b4ff7b427969ddf5da3627d6aeae9a48e', 18, 'NEXO', 'Nexo')
 export const CHART = new Token(ChainId.MATIC, '0x083c56d87ead73d6231c165ec450c6e28f3399c9', 18, 'CHART', 'ChartEx')
@@ -183,7 +185,7 @@ const WETH_ONLY: ChainTokenList = {
 // used to construct intermediary pairs for trading
 export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
   ...WETH_ONLY,
-  [ChainId.MATIC]: [...WETH_ONLY[ChainId.MATIC], DAI, USDC, USDT, mWETH, ROUTE, AAVE, UNI_TOKEN, DFYN, WBTC, UST, LUNA, FISH, LINK, CRV, QUICK]
+  [ChainId.MATIC]: [...WETH_ONLY[ChainId.MATIC], DAI, USDC, USDT, mWETH, ROUTE, ICE, IRON, AAVE, UNI_TOKEN, DFYN, WBTC, UST, LUNA, FISH, LINK, CRV, QUICK]
   // [ChainId.MATIC]: [...WETH_ONLY[ChainId.MATIC], DAI, USDC, USDT, mWETH]
 }
 
