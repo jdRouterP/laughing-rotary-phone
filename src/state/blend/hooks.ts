@@ -161,7 +161,7 @@ export function useInputToMaticToken(latestUpdatedTokenId: string | null): {
   const selLPToken: Pair | null | undefined = _get(lpTokenPairs, `${latestUpdatedTokenId}`, null) //.find(x=>x?.liquidityToken.address === latestUpdatedTokenId)
   const relevantTokenBalances = useTokenBalances(account ?? undefined, [selLPToken?.liquidityToken])
   const totalSupply = useTotalSupply(selLPToken?.liquidityToken)
-  const inputLPValue = parseFloat(selectedInputTokenValue).toFixed(4)
+  const inputLPValue = parseFloat(selectedInputTokenValue).toFixed(_get(selectedInputCurrency, 'decimals', 4))
 
   if (selLPToken && totalSupply) {
     const userLiquidity = relevantTokenBalances?.[selLPToken?.liquidityToken?.address ?? '']
