@@ -87,6 +87,7 @@ export const GAJ = new Token(ChainId.MATIC, '0xF4B0903774532AEe5ee567C02aaB681a8
 export const ELE = new Token(ChainId.MATIC, '0xAcD7B3D9c10e97d0efA418903C0c7669E702E4C0', 18, 'ELE', 'Eleven.finance')
 export const PBR = new Token(ChainId.MATIC, '0x0d6ae2a429df13e44a07cd2969e085e4833f64a0', 18, 'PBR', 'PolkaBridge')
 export const EMON = new Token(ChainId.MATIC, '0xd6A5aB46ead26f49b03bBB1F9EB1Ad5c1767974a', 18, 'EMON', 'Ethermon Token')
+export const OAI = new Token(ChainId.MATIC, '0xaBc6790673a60b8A7f588450f59D2d256b1aeF7F', 18, 'OAI', 'OMNI Token')
 
 
 export const CIRUS = new Token(ChainId.MATIC, '0x2a82437475a60bebd53e33997636fade77604fc2', 18, 'CIRUS', 'CIRUS')
