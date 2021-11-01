@@ -30,8 +30,8 @@ export const STAKING_REWARDS_INFO: {
       baseToken: USDC,
       version: 'v1',
       rewardToken: OAI,
-      startTime: 1635786000,
-      stakingRewardAddress: '0x27517d4109807b3D3736c0C9caDE188E681948f0'
+      startTime: 1635789000,
+      stakingRewardAddress: '0xC50dB7b14B6E5E0745dD4851e0a3c93dCddd894a'
     },
     {
       tokens: [MATRIX, ETHER],
