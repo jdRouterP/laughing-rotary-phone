@@ -2,7 +2,7 @@
 import { ChainId, CurrencyAmount, JSBI, Token, TokenAmount, Pair } from '@dfyn/sdk'
 import { useMemo } from 'react'
 import { BigNumber } from 'ethers'
-import { UNI, USDC, DFYN, CIRUS, MATRIX, ETHER, OAI } from '../../constants'
+import { UNI, USDC, DFYN, CIRUS, MATRIX, ETHER, OAI, NIOX } from '../../constants'
 import { STAKING_REWARDS_INTERFACE } from '../../constants/abis/staking-rewards' //same as pre-staking
 import { useActiveWeb3React } from '../../hooks'
 import { NEVER_RELOAD, useMultipleContractSingleData } from '../multicall/hooks'
@@ -25,6 +25,14 @@ export const STAKING_REWARDS_INFO: {
   }[]
 } = {
   [ChainId.MATIC]: [
+    {
+      tokens: [NIOX, USDC],
+      baseToken: USDC,
+      version: 'v1',
+      rewardToken: NIOX,
+      startTime: 1636457400,
+      stakingRewardAddress: '0xA9034fFAaECA6FeBbba8e08801Ae68a6Fc4e0146'
+    },
     {
       tokens: [OAI, USDC],
       baseToken: USDC,

@@ -88,12 +88,14 @@ export const ELE = new Token(ChainId.MATIC, '0xAcD7B3D9c10e97d0efA418903C0c7669E
 export const PBR = new Token(ChainId.MATIC, '0x0d6ae2a429df13e44a07cd2969e085e4833f64a0', 18, 'PBR', 'PolkaBridge')
 export const EMON = new Token(ChainId.MATIC, '0xd6A5aB46ead26f49b03bBB1F9EB1Ad5c1767974a', 18, 'EMON', 'Ethermon Token')
 export const OAI = new Token(ChainId.MATIC, '0xaBc6790673a60b8A7f588450f59D2d256b1aeF7F', 18, 'OAI', 'OMNI Token')
+export const NIOX = new Token(ChainId.MATIC, '0xad684e79CE4b6D464f2Ff7c3FD51646892e24b96', 4, 'NIOX', 'Autonio Token')
+export const SHIB = new Token(ChainId.MATIC, '0x6f8a06447Ff6FcF75d803135a7de15CE88C1d4ec', 18, 'SHIB', 'SHIBA INU')
 
 
 export const CIRUS = new Token(ChainId.MATIC, '0x2a82437475a60bebd53e33997636fade77604fc2', 18, 'CIRUS', 'CIRUS')
 export const SILVER = new Token(ChainId.MATIC, '0xbc7cB585346f4F59d07121Bb9Ed7358076243539', 18, 'SILVER', 'Sliver')
 export const SING = new Token(ChainId.MATIC, '0xCB898b0eFb084Df14dd8E018dA37B4d0f06aB26D', 18, 'SING', 'Sing Token')
-export const MATRIX = new Token(ChainId.MATIC, '0x211f4e76fcb811ed2b310a232a24b3445d95e3bc', 18, 'matrix', 'Matrixswap')
+export const MATRIX = new Token(ChainId.MATIC, '0x211f4e76fcb811ed2b310a232a24b3445d95e3bc', 18, 'MATRIX', 'Matrixswap')
 //FANTOM
 export const FTM = new Token(ChainId.FANTOM, '0x21be370D5312f44cB42ce377BC9b8a0cEF1A4C83', 18, 'WFTM', 'Wrapped FTM')
 export const USDC_FANTOM = new Token(ChainId.FANTOM, '0x04068DA6C83AFCFA0e13ba15A6696662335D5B75', 6, 'USDC', 'USDC')
