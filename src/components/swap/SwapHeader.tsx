@@ -32,6 +32,11 @@ const Icon = styled.div`
   width: 100%;
 `
 
+const CustomToggle = styled.div`
+  pointer-events: none;
+  opacity: 0.4;
+`
+
 const StyledSwapHeader = styled.div`
   padding: 12px 1rem 0px 1.5rem;
   margin-bottom: -4px;
@@ -56,6 +61,7 @@ export default function SwapHeader() {
               placement='bottom'>
               <LocalGasStation style={{color: toggleValue ? '#2ecc71' : '', opacity: '0.4'}}/>
             </MouseoverTooltip>
+            <CustomToggle>
             <Toggle
               id="toggle-gasless-mode-button"
               isActive={gaslessMode}
@@ -63,6 +69,7 @@ export default function SwapHeader() {
                 () => toggleSetGaslessMode()
               }
             />
+            </CustomToggle>
           </GaslessModeElement>}
           <Settings />
         </Icon>
