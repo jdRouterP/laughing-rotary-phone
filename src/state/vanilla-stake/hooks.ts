@@ -1,6 +1,6 @@
 import { ChainId, CurrencyAmount, JSBI, Token, TokenAmount, Pair } from '@dfyn/sdk'
 import { useMemo } from 'react'
-import { UNI, USDC, DFYN, FISH, UFT, ANY, AGA, AGAr, NORD, BIFI, COSMIC, TITAN, ICE, WMATIC, CRV, UNI_TOKEN, AAVE, LINK, LUNA, ELE, GAJ, SILVER, SING, RAZOR, ETHER, FRM, CIRUS, MATRIX } from '../../constants'
+import { UNI, USDC, DFYN, FISH, UFT, ANY, AGA, AGAr, NORD, BIFI, COSMIC, TITAN, ICE, WMATIC, CRV, UNI_TOKEN, AAVE, LINK, LUNA, ELE, GAJ, SILVER, SING, RAZOR, ETHER, FRM, CIRUS, MATRIX, SHIB } from '../../constants'
 import { STAKING_REWARDS_BASIC_FARMS_INTERFACE } from '../../constants/abis/staking-rewards-basic-farms'
 import { useActiveWeb3React } from '../../hooks'
 import { NEVER_RELOAD, useMultipleContractSingleData } from '../multicall/hooks'
@@ -25,6 +25,67 @@ export const STAKING_REWARDS_INFO: {
 } = {
   [ChainId.MATIC]: [
     //v7
+    {
+      tokens: [USDC, ELE],
+      baseToken: USDC,
+      startTime: 1636457400,
+      stakingRewardAddress: '0x7A626cC1B9ad2FE571Be7Fe9B6D87011b2d4C79a',
+      version: 'v7'
+    },
+    {
+      tokens: [DFYN, FRM],
+      baseToken: DFYN,
+      startTime: 1636457400,
+      stakingRewardAddress: '0xAbfaB571CD23C1134D0b4a663691b93F35CE4DB0',
+      version: 'v7'
+    },
+    {
+      tokens: [DFYN, GAJ],
+      baseToken: DFYN,
+      startTime: 1636457400,
+      stakingRewardAddress: '0x884480979471aAB4aA7266b0Eb1c4BFc3E75403E',
+      version: 'v7'
+    },
+    {
+      tokens: [RAZOR, ETHER],
+      baseToken: ETHER,
+      rewardToken: RAZOR,
+      startTime: 1636457400,
+      stakingRewardAddress: '0x31078467238C31A81d80e20419F5fc3a4a1A9FB5',
+      version: 'v7'
+    },
+    {
+      tokens: [CIRUS, DFYN],
+      baseToken: DFYN,
+      startTime: 1636457400,
+      stakingRewardAddress: '0x65de34Ed19F9Ba1d42CF9c326b739e93Da92A62b',
+      version: 'v7'
+    },
+    {
+      tokens: [MATRIX, ETHER],
+      baseToken: ETHER,
+      startTime: 1636457400,
+      rewardToken: MATRIX,
+      stakingRewardAddress: '0x6115fFc00F9c071DD808121a9c7D3a7540D41291',
+      version: 'v7'
+    },
+    {
+      tokens: [MATRIX, DFYN],
+      baseToken: DFYN,
+      startTime: 1636457400,
+      rewardToken: DFYN,
+      stakingRewardAddress: '0x641c94FcE99715F50260c3f0b6aBD97A3577f5b3',
+      version: 'v7'
+    },
+    {
+      tokens: [SHIB, ETHER],
+      baseToken: ETHER,
+      startTime: 1636457400,
+      rewardToken: DFYN,
+      stakingRewardAddress: '0x24222908eD2bD65c27E64d3304B55C310E16A11D',
+      version: 'v7'
+    },
+
     {
       tokens: [AGAr, AGA],
       baseToken: AGA,

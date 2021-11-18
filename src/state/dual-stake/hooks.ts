@@ -27,6 +27,22 @@ export const STAKING_REWARDS_INFO: {
   [ChainId.MATIC]: [
     //v6
     {
+      tokens: [RAZOR, DFYN],
+      rewardTokens: [RAZOR, DFYN],
+      baseToken: DFYN,
+      start: 1636457400000,
+      stakingRewardAddress: '0x921aC7528a81757d938f767059d826264ec2e788',
+      version: 'v6'
+    },
+    {
+      tokens: [NORD, DFYN],
+      rewardTokens: [NORD, DFYN],
+      baseToken: DFYN,
+      start: 1636457400000,
+      stakingRewardAddress: '0x6A2A790dfb20e2b005724354c97a3Bce0767A180',
+      version: 'v6'
+    },
+    {
       tokens: [ROUTE, DFYN],
       rewardTokens: [ROUTE, DFYN],
       baseToken: DFYN,
@@ -51,6 +67,32 @@ export const STAKING_REWARDS_INFO: {
       stakingRewardAddress: '0x5B2CE8dDE5B99D974EC557B53e864f9EBb80FA66',
       version: 'v5'
     },
+
+
+
+    // {
+    //   tokens: [SING, DFYN],
+    //   rewardTokens: [SING, DFYN],
+    //   baseToken: DFYN,
+    //   start: 1630330200000,
+    //   stakingRewardAddress: '0x0351F770017974A137554fF889Ff6daE6b4762e3',
+    //   version: 'v3'
+    // },
+
+  ]
+}
+
+export const INACTIVE_STAKING_REWARDS_INFO: {
+  [chainId in ChainId]?: {
+    tokens: [Token, Token]
+    rewardTokens: [Token, Token]
+    baseToken?: Token
+    start: number
+    stakingRewardAddress: string
+    version: string
+  }[]
+} = {
+  [ChainId.MATIC]: [
     {
       tokens: [RAZOR, DFYN],
       rewardTokens: [RAZOR, DFYN],
@@ -77,31 +119,6 @@ export const STAKING_REWARDS_INFO: {
       stakingRewardAddress: '0x00148Bd87C72fBE3E882a530F74aA74A2f1F463F',
       version: 'v4'
     },
-    //v3
-
-    // {
-    //   tokens: [SING, DFYN],
-    //   rewardTokens: [SING, DFYN],
-    //   baseToken: DFYN,
-    //   start: 1630330200000,
-    //   stakingRewardAddress: '0x0351F770017974A137554fF889Ff6daE6b4762e3',
-    //   version: 'v3'
-    // },
-
-  ]
-}
-
-export const INACTIVE_STAKING_REWARDS_INFO: {
-  [chainId in ChainId]?: {
-    tokens: [Token, Token]
-    rewardTokens: [Token, Token]
-    baseToken?: Token
-    start: number
-    stakingRewardAddress: string
-    version: string
-  }[]
-} = {
-  [ChainId.MATIC]: [
     {
       tokens: [ROUTE, DFYN],
       rewardTokens: [ROUTE, DFYN],

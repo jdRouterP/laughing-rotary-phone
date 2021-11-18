@@ -39,9 +39,10 @@ const StyledSwapHeader = styled.div`
   max-width: 420px;
   color: ${({ theme }) => theme.text2};
 `
-
+//text={'Gasless Mode. This button will toggle Dfyn’s gasless feature for your wallet. Users with hardware wallets should keep this setting turned off.'}
 export default function SwapHeader() {
   const [gaslessMode, toggleSetGaslessMode] = useGaslessModeManager()
+  if(gaslessMode) toggleSetGaslessMode()
   const { chainId} = useActiveWeb3React()
   const toggleValue = useIsGaslessMode()
   return (
@@ -50,8 +51,10 @@ export default function SwapHeader() {
         <TYPE.black fontWeight={500} margin={'auto 0'}>Swap</TYPE.black>
         <Icon>
           {chainId && HEADER_ACCESS.gaslessMode.includes(chainId) &&<GaslessModeElement>
-            <MouseoverTooltip text={'Gasless Mode. This button will toggle Dfyn’s gasless feature for your wallet. Users with hardware wallets should keep this setting turned off.'} placement='bottom'>
-              <LocalGasStation style={{color: toggleValue ? '#2ecc71' : ''}}/>
+            <MouseoverTooltip
+              text={'Gasless Mode is under maintenance.'}
+              placement='bottom'>
+              <LocalGasStation style={{color: toggleValue ? '#2ecc71' : '', opacity: '0.4'}}/>
             </MouseoverTooltip>
             <Toggle
               id="toggle-gasless-mode-button"

@@ -99,17 +99,20 @@ export default function LaunchFarms() {
               </RowBetween> */}
               <RowBetween>
                 <TYPE.white fontSize={14}>
-                  Launch Farms allow users to stake liquidity in the farms created by Partner Projects of Dfyn and earn rewards in the Partner tokens. The rewards for Launch Farms are sponsored by the projects and those projects which are interested in having their own Launch Farm on Dfyn
+                  Launch Farms allow users to stake liquidity in the farms created by Partner Projects of Dfyn and earn rewards in the Partner tokens.
+                  <br />
+                  <br />
+                  In this farming setup 20% of the rewards can be claimed after farming ends. The remaining rewards will be released 20% every 2 months.
                 </TYPE.white>
 
 
               </RowBetween>{' '}
               <ExternalLink
                 style={{ color: 'white', textDecoration: 'underline' }}
-                href="https://dfyn-network.medium.com/introducing-dfyn-yield-farming-phase-6-a6e8549eaa55"
+                href="https://dfyn-network.medium.com/introducing-dfyn-yield-farming-phase-7-4480eebf0fba"
                 target="_blank"
               >
-                <TYPE.white fontSize={14}>Read more about Dfyn Farms Phase 6</TYPE.white>
+                <TYPE.white fontSize={14}>Read more about Dfyn Farms Phase 7</TYPE.white>
               </ExternalLink>
             </AutoColumn>
           </CardSection>

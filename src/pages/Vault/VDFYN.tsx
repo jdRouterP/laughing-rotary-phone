@@ -167,10 +167,10 @@ export default function VDFYN() {
                                 </RowBetween>{' '}
                                 {/* <ExternalLink
                         style={{ color: 'white', textDecoration: 'underline' }}
-                        href="https://dfyn-network.medium.com/introducing-dfyn-yield-farming-phase-6-a6e8549eaa55"
+                        href="https://dfyn-network.medium.com/introducing-dfyn-yield-farming-phase-7-4480eebf0fba"
                         target="_blank"
                     >
-                        <TYPE.white fontSize={14}>Read more about Dfyn Farms Phase 6</TYPE.white>
+                        <TYPE.white fontSize={14}>Read more about Dfyn Farms Phase 7</TYPE.white>
                     </ExternalLink> */}
                             </AutoColumn>
                         </CardSection>
