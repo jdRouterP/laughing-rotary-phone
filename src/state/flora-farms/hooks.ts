@@ -2,7 +2,7 @@
 import { ChainId, CurrencyAmount, JSBI, Token, TokenAmount, Pair } from '@dfyn/sdk'
 import { useMemo } from 'react'
 import { BigNumber } from 'ethers'
-import { ROUTE, UNI, ETHER, USDC, DFYN, WBTC, USDT, DAI, WMATIC, UNI_TOKEN, AAVE, LUNA, UST, LINK, CRV, QUICK, MATICPAD, MIMATIC, NEXO, FTM, USDC_FANTOM, USDT_FANTOM, WBTC_FANTOM, WETH_FANTOM, DFYN_FANTOM } from '../../constants'
+import { ROUTE, UNI, ETHER, USDC, DFYN, WBTC, USDT, DAI, WMATIC, UNI_TOKEN, AAVE, LUNA, UST, LINK, CRV, QUICK, MATICPAD, MIMATIC, NEXO, FTM, USDC_FANTOM, USDT_FANTOM, WBTC_FANTOM, WETH_FANTOM, DFYN_FANTOM, MANA, SOL } from '../../constants'
 import { STAKING_REWARDS_FLORA_FARMS_INTERFACE } from '../../constants/abis/staking-rewards-flora-farms'
 import { useActiveWeb3React } from '../../hooks'
 import { NEVER_RELOAD, useMultipleContractSingleData } from '../multicall/hooks'
@@ -66,6 +66,113 @@ export const STAKING_REWARDS_INFO: {
       rate: new TokenAmount(DFYN_FANTOM, JSBI.divide(JSBI.BigInt("150000000000000000000000"), JSBI.BigInt("2592000")))
     }],
   [ChainId.MATIC]: [
+    //v7
+    {
+      tokens: [UST, USDT],
+      baseToken: USDT,
+      startTime: 1637510700,
+      stakingRewardAddress: '0x8C66D38032b3FF698b379d2C13Cb9A484331A732',
+      version: 'v7',
+      burnRate: '35'
+    },
+    {
+      tokens: [UST, USDC],
+      baseToken: USDC,
+      startTime: 1637510700,
+      stakingRewardAddress: '0xA9E948A5a9549883908458A1f25f046eE9793916',
+      version: 'v7',
+      burnRate: '35'
+    },
+    {
+      tokens: [DFYN, USDC],
+      baseToken: USDC,
+      startTime: 1637510700,
+      stakingRewardAddress: '0x3AfD72c0d6a6048bdA4E54f37C17A4034621DB0f',
+      version: 'v7',
+      burnRate: '35'
+    },
+    {
+      tokens: [DFYN, ETHER],
+      baseToken: ETHER,
+      startTime: 1637510700,
+      stakingRewardAddress: '0x35D21D11f3e5C6A733C18Bb39310088cd19DAc9c',
+      version: 'v7',
+      burnRate: '35'
+    },
+    {
+      tokens: [WBTC, ETHER],
+      baseToken: ETHER,
+      startTime: 1637510700,
+      stakingRewardAddress: '0xEe772bcCd4919651de4F54b5f5379c4aC9dcF32C',
+      version: 'v7',
+      burnRate: '35'
+    },
+    {
+      tokens: [USDT, USDC],
+      baseToken: USDC,
+      startTime: 1637510700,
+      stakingRewardAddress: '0x13f8674468bC60a96d7ea73038F62eE7C6f2Bf46',
+      version: 'v7',
+      burnRate: '35'
+    },
+    {
+      tokens: [USDC, ETHER],
+      baseToken: USDC,
+      startTime: 1637510700,
+      stakingRewardAddress: '0x8fbE445FCa0CD4Bf5A1646b6d405D9F7BE5Ee083',
+      version: 'v7',
+      burnRate: '35'
+    },
+    {
+      tokens: [USDC, ROUTE],
+      baseToken: USDC,
+      startTime: 1637510700,
+      stakingRewardAddress: '0x687dE006D6cB393c6Fae3c75AbBD62BFC2B92250',
+      version: 'v7',
+      burnRate: '35'
+    },
+    {
+      tokens: [ETHER, ROUTE],
+      baseToken: ETHER,
+      startTime: 1637510700,
+      stakingRewardAddress: '0x0cffcCeF81AAF39F3D5b6271F067FeFfb24DBd1b',
+      version: 'v7',
+      burnRate: '35'
+    },
+    {
+      tokens: [WMATIC, ETHER],
+      baseToken: WMATIC,
+      startTime: 1637510700,
+      stakingRewardAddress: '0x083FBd5D63a95cE0C6C33Fb66A8E5a4B65945a5C',
+      version: 'v7',
+      burnRate: '35'
+    },
+    {
+      tokens: [MANA, ETHER],
+      baseToken: ETHER,
+      startTime: 1637510700,
+      stakingRewardAddress: '0x8F0c6DdF47EecDAF02860BE82B2aC7E485bd08dF',
+      version: 'v7',
+      burnRate: '35'
+    },
+    {
+      tokens: [SOL, ETHER],
+      baseToken: ETHER,
+      startTime: 1637510700,
+      stakingRewardAddress: '0x9213ab4015F9a619c6E0f3380B4508EB310CC917',
+      version: 'v7',
+      burnRate: '35'
+    },
+    {
+      tokens: [NEXO, ETHER],
+      baseToken: ETHER,
+      startTime: 1637510700,
+      stakingRewardAddress: '0x09Fce8E9855d6DD733d2c15b918eB65ce159138D',
+      version: 'v7',
+      burnRate: '35'
+    },
+
+
     //v6
     {
       tokens: [UST, USDC],

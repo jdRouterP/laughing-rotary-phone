@@ -90,6 +90,8 @@ export const EMON = new Token(ChainId.MATIC, '0xd6A5aB46ead26f49b03bBB1F9EB1Ad5c
 export const OAI = new Token(ChainId.MATIC, '0xaBc6790673a60b8A7f588450f59D2d256b1aeF7F', 18, 'OAI', 'OMNI Token')
 export const NIOX = new Token(ChainId.MATIC, '0xad684e79CE4b6D464f2Ff7c3FD51646892e24b96', 4, 'NIOX', 'Autonio Token')
 export const SHIB = new Token(ChainId.MATIC, '0x6f8a06447Ff6FcF75d803135a7de15CE88C1d4ec', 18, 'SHIB', 'SHIBA INU')
+export const MANA = new Token(ChainId.MATIC, '0xa1c57f48f0deb89f569dfbe6e2b7f46d33606fd4', 18, 'MANA', 'Decentraland')
+export const SOL = new Token(ChainId.MATIC, '0x7DfF46370e9eA5f0Bad3C4E29711aD50062EA7A4', 18, 'SOL', 'Solana')
 
 
 export const CIRUS = new Token(ChainId.MATIC, '0x2a82437475a60bebd53e33997636fade77604fc2', 18, 'CIRUS', 'CIRUS')

@@ -25,6 +25,23 @@ export const STAKING_REWARDS_INFO: {
   }[]
 } = {
   [ChainId.MATIC]: [
+    //v7
+    {
+      tokens: [ROUTE, DFYN],
+      rewardTokens: [ROUTE, DFYN],
+      baseToken: DFYN,
+      start: 1637510700000,
+      stakingRewardAddress: '0x061dA05381F4986fD25d3A6177d7AC6119344c5E',
+      version: 'v7'
+    },
+    {
+      tokens: [EMON, USDC],
+      rewardTokens: [EMON, DFYN],
+      baseToken: USDC,
+      start: 1637510700000,
+      stakingRewardAddress: '0xD65c7cEb912a833ED1D6abBeDC96864060f68e48',
+      version: 'v7'
+    },
     //v6
     {
       tokens: [RAZOR, DFYN],

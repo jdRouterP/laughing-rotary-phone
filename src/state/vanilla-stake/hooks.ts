@@ -24,6 +24,44 @@ export const STAKING_REWARDS_INFO: {
   }[]
 } = {
   [ChainId.MATIC]: [
+    //v8
+    {
+      tokens: [DFYN, LUNA],
+      baseToken: DFYN,
+      startTime: 1637510700,
+      stakingRewardAddress: '0x2e78bBCbAcA1a2F1BE8cb3D66452173F3eD58Ce5',
+      version: 'v8'
+    },
+
+    {
+      tokens: [DFYN, LINK],
+      baseToken: DFYN,
+      startTime: 1637510700,
+      stakingRewardAddress: '0x9573E3a8A68B4D74FDC0857473E7F72100E3B9E0',
+      version: 'v8'
+    },
+    {
+      tokens: [DFYN, AAVE],
+      baseToken: DFYN,
+      startTime: 1637510700,
+      stakingRewardAddress: '0x22d34d4e8a469A3596c4D0c80CF738E34830B723',
+      version: 'v8'
+    },
+    {
+      tokens: [DFYN, UNI_TOKEN],
+      baseToken: DFYN,
+      startTime: 1637510700,
+      stakingRewardAddress: '0x0707eD36534856faEB500354AbFC5ecb5dA99e8d',
+      version: 'v8'
+    },
+    {
+      tokens: [DFYN, CRV],
+      baseToken: DFYN,
+      startTime: 1637510700,
+      stakingRewardAddress: '0x73667b79c083Fbd7d86BDbFC0A83373590a4770B',
+      version: 'v8'
+    },
+
     //v7
     {
       tokens: [USDC, ELE],
