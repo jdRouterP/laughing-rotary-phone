@@ -132,6 +132,21 @@ export const STAKING_REWARDS_INFO: {
       stakingRewardAddress: '0x1AFE2f732FeFD79e0175826B3eA8a4aC3FC26615',
       version: 'v7'
     },
+
+  ]
+}
+
+export const INACTIVE_STAKING_REWARDS_INFO: {
+  [chainId in ChainId]?: {
+    tokens: [Token, Token]
+    baseToken?: Token
+    rewardToken?: Token
+    startTime: number
+    stakingRewardAddress: string
+    version: string
+  }[]
+} = {
+  [ChainId.MATIC]: [
     {
       tokens: [DFYN, LUNA],
       baseToken: DFYN,
@@ -222,20 +237,6 @@ export const STAKING_REWARDS_INFO: {
       version: 'v6'
     },
 
-  ]
-}
-
-export const INACTIVE_STAKING_REWARDS_INFO: {
-  [chainId in ChainId]?: {
-    tokens: [Token, Token]
-    baseToken?: Token
-    rewardToken?: Token
-    startTime: number
-    stakingRewardAddress: string
-    version: string
-  }[]
-} = {
-  [ChainId.MATIC]: [
     {
       tokens: [DFYN, WMATIC],
       baseToken: DFYN,

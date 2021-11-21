@@ -173,6 +173,22 @@ export const STAKING_REWARDS_INFO: {
     },
 
 
+
+  ]
+}
+
+export const INACTIVE_STAKING_REWARDS_INFO: {
+  [chainId in ChainId]?: {
+    tokens: [Token, Token]
+    baseToken?: Token
+    rewardToken?: Token
+    startTime?: number
+    stakingRewardAddress: string
+    version: string
+    burnRate: string
+  }[]
+} = {
+  [ChainId.MATIC]: [
     //v6
     {
       tokens: [UST, USDC],
@@ -302,21 +318,6 @@ export const STAKING_REWARDS_INFO: {
       version: 'v6',
       burnRate: '35'
     },
-  ]
-}
-
-export const INACTIVE_STAKING_REWARDS_INFO: {
-  [chainId in ChainId]?: {
-    tokens: [Token, Token]
-    baseToken?: Token
-    rewardToken?: Token
-    startTime?: number
-    stakingRewardAddress: string
-    version: string
-    burnRate: string
-  }[]
-} = {
-  [ChainId.MATIC]: [
     //v5
     {
       tokens: [UST, USDC],
