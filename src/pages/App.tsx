@@ -29,6 +29,7 @@ import ManageVanillaFarms from './VanillaFarms/Manage'
 import InactiveManageVanillaFarms from './VanillaFarms/InactiveManage'
 import ManageDualFarms from './DualFarms/Manage'
 import ManageLaunchFarms from './LaunchFarms/Manage'
+import ManageMultiRewardLaunchFarms from './MultiRewardLaunchFarm/Manage'
 import InactiveManageDualFarms from './DualFarms/InactiveManage'
 import InactiveManageLaunchFarms from './LaunchFarms/InactiveManage'
 import ManageFloraFarms from './FloraFarms/Manage'
@@ -164,6 +165,7 @@ export default function App() {
               <Route exact strict path="/dual-farms/:archived/:currencyIdA/:currencyIdB/:version?" component={InactiveManageDualFarms} />
               <Route exact strict path="/dual-farms/:archived" component={DualFarmsArrchived} />
               <Route exact strict path="/launch-farms/:currencyIdA/:currencyIdB/:version?" component={ManageLaunchFarms} />
+              <Route exact strict path="/multi-reward-launch-farms/:currencyIdA/:currencyIdB/:version?" component={ManageMultiRewardLaunchFarms} />
               <Route exact strict path="/launch-farms/:archived/:currencyIdA/:currencyIdB/:version?" component={InactiveManageLaunchFarms} />
               <Route exact strict path="/launch-farms/:archived" component={LaunchFarmsArchived} />
               <Route exact strict path="/popular-farms/:currencyIdA/:currencyIdB/:version?" component={ManageFloraFarms} />

@@ -23,6 +23,7 @@ type ChainTokenList = {
   readonly [chainId in ChainId]: Token[]
 }
 
+
 //Chainlink price feed
 export const MATIC_USD = new Token(ChainId.MATIC, '0x0000000000000000000000000000000000000000', 8, 'MATIC', 'MATIC');
 export const vDFYN = new Token(ChainId.MATIC, DFYN_CHEST, 18, 'vDFYN', 'vDFYN');
@@ -154,7 +155,7 @@ export const UNI: { [chainId in ChainId]: Token } = {
   [ChainId.BSC]: new Token(ChainId.BSC, UNI_ADDRESS, 18, 'DFYN', 'DFYN Token'),
 }
 
-export const REWARD_TOKENS: Token[] = [ROUTE, DFYN, ZEE, AURORA, ROYA, BOOTY, SX, EZ, UFARM, NWC, mRTK, XDO, FRM, RVF, CHART, NORD, RAZOR, PBR, EMON]
+export const REWARD_TOKENS: Token[] = [ROUTE, DFYN, ZEE, AURORA, ROYA, BOOTY, SX, EZ, UFARM, NWC, mRTK, XDO, FRM, RVF, CHART, NORD, RAZOR, PBR, EMON, WMATIC]
 
 export const COMMON_CONTRACT_NAMES: { [address: string]: string } = {
   [UNI_ADDRESS]: 'DFYN',
