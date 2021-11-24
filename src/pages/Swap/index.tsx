@@ -570,8 +570,8 @@ export default function Swap({ history }: RouteComponentProps) {
           <BannerBox>
                 <img src={BackgroundBanner} alt={'banner'} style={{ width: "100%"}} />
                 <InnerContent>
-                  <TYPE.white fontSize="17px" fontWeight="600">The Mother of all token burns is here.</TYPE.white>
-                  <Countdown exactEnd={new Date(1637471570000)} start={new Date()} />
+                  <TYPE.white fontSize="15px" fontWeight="500">50 Million DFYN tokens will be burned in</TYPE.white>
+                  <Countdown exactEnd={new Date(1638363600000)} start={new Date()} />
                   <ExternalLink
                     style={{ color: 'white', textDecoration: 'underline'}}
                     href="https://dfyn-network.medium.com/major-tokenomics-changes-in-dfyn-token-934fda5444f1"
