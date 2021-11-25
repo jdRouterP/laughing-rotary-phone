@@ -26,6 +26,14 @@ export const STAKING_REWARDS_INFO: {
   [ChainId.MATIC]: [
     //v8
     {
+      tokens: [AGAr, AGA],
+      baseToken: AGA,
+      startTime: 1637865000,
+      rewardToken: AGA,
+      stakingRewardAddress: '0xfD2092E2ED896d010E429b4c7587f126A2b24bA3',
+      version: 'v8'
+    },
+    {
       tokens: [DFYN, LUNA],
       baseToken: DFYN,
       startTime: 1637510700,

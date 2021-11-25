@@ -28,6 +28,52 @@ export const STAKING_REWARDS_INFO: {
   }[]
 } = {
   [ChainId.FANTOM]: [
+    //v2
+    {
+      tokens: [DFYN_FANTOM, FTM], //DFYN_FTM
+      baseToken: FTM,
+      startTime: 1637865000,
+      stakingRewardAddress: '0xdC004F99AB7Bca4855b4C2F86C9C69f49bE19A1F',
+      version: 'v2',
+      burnRate: '35',
+
+    },
+    {
+      tokens: [USDC_FANTOM, USDT_FANTOM],
+      baseToken: USDT_FANTOM,
+      startTime: 1637865000,
+      stakingRewardAddress: '0xcf000fD0420Ee11fa6295F4D91218B711c836272',
+      version: 'v2',
+      burnRate: '35',
+
+    },
+    {
+      tokens: [WBTC_FANTOM, WETH_FANTOM],
+      baseToken: WETH_FANTOM,
+      startTime: 1637865000,
+      stakingRewardAddress: '0xE4ee0A03736AFFd8d330AB4929203f35C3421F8B',
+      version: 'v2',
+      burnRate: '35',
+
+    },
+    {
+      tokens: [DFYN_FANTOM, USDC_FANTOM],
+      baseToken: USDC_FANTOM,
+      startTime: 1637865000,
+      stakingRewardAddress: '0x70052896E15c4D24bA8280B9387111e25da81BfF',
+      version: 'v2',
+      burnRate: '35',
+
+    },
+    {
+      tokens: [FTM, WETH_FANTOM],
+      baseToken: WETH_FANTOM,
+      startTime: 1637865000,
+      stakingRewardAddress: '0x2B5655B443134b23d882Bc7CF5431C51662b6593',
+      version: 'v2',
+      burnRate: '35',
+
+    },
     //v1
     {
       tokens: [DFYN_FANTOM, FTM], //DFYN_FTM
@@ -36,7 +82,7 @@ export const STAKING_REWARDS_INFO: {
       stakingRewardAddress: '0xf9D70A91c9898ed8FF005A286c9F4FF8Fcc868D4',
       version: 'v1',
       burnRate: '35',
-      rate: new TokenAmount(DFYN_FANTOM, JSBI.divide(JSBI.BigInt("150000000000000000000000"), JSBI.BigInt("2592000")))
+
     },
     {
       tokens: [USDC_FANTOM, USDT_FANTOM],
@@ -45,7 +91,7 @@ export const STAKING_REWARDS_INFO: {
       stakingRewardAddress: '0xa8753167da15FF2A19266b99b32993f353d93F0C',
       version: 'v1',
       burnRate: '35',
-      rate: new TokenAmount(DFYN_FANTOM, JSBI.divide(JSBI.BigInt("300000000000000000000000"), JSBI.BigInt("2592000")))
+
     },
     {
       tokens: [WBTC_FANTOM, WETH_FANTOM],
@@ -54,7 +100,7 @@ export const STAKING_REWARDS_INFO: {
       stakingRewardAddress: '0x4E6e4D56A8EE083d763DC34edD903053b28B5267',
       version: 'v1',
       burnRate: '35',
-      rate: new TokenAmount(DFYN_FANTOM, JSBI.divide(JSBI.BigInt("300000000000000000000000"), JSBI.BigInt("2592000")))
+
     },
     {
       tokens: [DFYN_FANTOM, USDC_FANTOM],
@@ -63,8 +109,10 @@ export const STAKING_REWARDS_INFO: {
       stakingRewardAddress: '0x07428ee4ca8B8B39b5b3C8F02dF0867D88D96bC3',
       version: 'v1',
       burnRate: '35',
-      rate: new TokenAmount(DFYN_FANTOM, JSBI.divide(JSBI.BigInt("150000000000000000000000"), JSBI.BigInt("2592000")))
-    }],
+
+    },
+
+  ],
   [ChainId.MATIC]: [
     //v7
     {
@@ -183,11 +231,50 @@ export const INACTIVE_STAKING_REWARDS_INFO: {
     baseToken?: Token
     rewardToken?: Token
     startTime?: number
+    rate?: TokenAmount
     stakingRewardAddress: string
     version: string
     burnRate: string
   }[]
 } = {
+  // [ChainId.FANTOM]: [
+  //   //v1
+  //   {
+  //     tokens: [DFYN_FANTOM, FTM], //DFYN_FTM
+  //     baseToken: FTM,
+  //     startTime: 1635260400,
+  //     stakingRewardAddress: '0xf9D70A91c9898ed8FF005A286c9F4FF8Fcc868D4',
+  //     version: 'v1',
+  //     burnRate: '35',
+
+  //   },
+  //   {
+  //     tokens: [USDC_FANTOM, USDT_FANTOM],
+  //     baseToken: USDT_FANTOM,
+  //     startTime: 1635260400,
+  //     stakingRewardAddress: '0xa8753167da15FF2A19266b99b32993f353d93F0C',
+  //     version: 'v1',
+  //     burnRate: '35',
+
+  //   },
+  //   {
+  //     tokens: [WBTC_FANTOM, WETH_FANTOM],
+  //     baseToken: WETH_FANTOM,
+  //     startTime: 1635260400,
+  //     stakingRewardAddress: '0x4E6e4D56A8EE083d763DC34edD903053b28B5267',
+  //     version: 'v1',
+  //     burnRate: '35',
+
+  //   },
+  //   {
+  //     tokens: [DFYN_FANTOM, USDC_FANTOM],
+  //     baseToken: USDC_FANTOM,
+  //     startTime: 1635260400,
+  //     stakingRewardAddress: '0x07428ee4ca8B8B39b5b3C8F02dF0867D88D96bC3',
+  //     version: 'v1',
+  //     burnRate: '35',
+
+  //   }],
   [ChainId.MATIC]: [
     //v6
     {
