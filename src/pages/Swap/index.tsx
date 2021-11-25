@@ -60,7 +60,6 @@ import { Countdown } from 'components/CountDownSwap'
 const BannerBox = styled.div`
   max-width: 420px;
   width: 100%;
-  margin-top: 10px;
   textAlign: center;
   position: relative;
   box-shadow: rgb(0 0 0 / 1%) 0px 0px 1px, rgb(0 0 0 / 4%) 0px 4px 8px, rgb(0 0 0 / 4%) 0px 16px 24px, rgb(0 0 0 / 1%) 0px 24px 32px;
