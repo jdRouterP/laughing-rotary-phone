@@ -32,7 +32,7 @@ export const STAKING_REWARDS_INFO: {
     {
       tokens: [DFYN_FANTOM, FTM], //DFYN_FTM
       baseToken: FTM,
-      startTime: 1637865000,
+      startTime: 1637845200,
       stakingRewardAddress: '0xdC004F99AB7Bca4855b4C2F86C9C69f49bE19A1F',
       version: 'v2',
       burnRate: '35',
@@ -41,7 +41,7 @@ export const STAKING_REWARDS_INFO: {
     {
       tokens: [USDC_FANTOM, USDT_FANTOM],
       baseToken: USDT_FANTOM,
-      startTime: 1637865000,
+      startTime: 1637845200,
       stakingRewardAddress: '0xcf000fD0420Ee11fa6295F4D91218B711c836272',
       version: 'v2',
       burnRate: '35',
@@ -50,7 +50,7 @@ export const STAKING_REWARDS_INFO: {
     {
       tokens: [WBTC_FANTOM, WETH_FANTOM],
       baseToken: WETH_FANTOM,
-      startTime: 1637865000,
+      startTime: 1637845200,
       stakingRewardAddress: '0xE4ee0A03736AFFd8d330AB4929203f35C3421F8B',
       version: 'v2',
       burnRate: '35',
@@ -59,7 +59,7 @@ export const STAKING_REWARDS_INFO: {
     {
       tokens: [DFYN_FANTOM, USDC_FANTOM],
       baseToken: USDC_FANTOM,
-      startTime: 1637865000,
+      startTime: 1637845200,
       stakingRewardAddress: '0x70052896E15c4D24bA8280B9387111e25da81BfF',
       version: 'v2',
       burnRate: '35',
@@ -68,7 +68,7 @@ export const STAKING_REWARDS_INFO: {
     {
       tokens: [FTM, WETH_FANTOM],
       baseToken: WETH_FANTOM,
-      startTime: 1637865000,
+      startTime: 1637845200,
       stakingRewardAddress: '0x2B5655B443134b23d882Bc7CF5431C51662b6593',
       version: 'v2',
       burnRate: '35',

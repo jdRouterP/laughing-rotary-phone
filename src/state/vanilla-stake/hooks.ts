@@ -28,7 +28,7 @@ export const STAKING_REWARDS_INFO: {
     {
       tokens: [AGAr, AGA],
       baseToken: AGA,
-      startTime: 1637865000,
+      startTime: 1637845200,
       rewardToken: AGA,
       stakingRewardAddress: '0xfD2092E2ED896d010E429b4c7587f126A2b24bA3',
       version: 'v8'
