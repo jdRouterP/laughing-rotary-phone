@@ -39,7 +39,7 @@ import {
   useSwapState
 } from '../../state/swap/hooks'
 import { useExpertModeManager, useUserSlippageTolerance, useUserSingleHopOnly } from '../../state/user/hooks'
-import { LinkStyledButton, TYPE, StyledInternalLink  } from '../../theme'
+import { LinkStyledButton, TYPE, ExternalLink } from '../../theme'
 import { maxAmountSpend } from '../../utils/maxAmountSpend'
 import { computeTradePriceBreakdown, warningSeverity } from '../../utils/prices'
 import AppBody from '../AppBody'
@@ -51,31 +51,48 @@ import { isTradeBetter } from 'utils/trades'
 import { RouteComponentProps } from 'react-router-dom'
 import { getRouterAddress } from 'utils'
 import { SwapVert } from '@material-ui/icons'
-import VDFYN_LOGO from '../../assets/images/vDFYN.png'
-import { HEADER_ACCESS } from 'constants/networks'
+import BackgroundBanner from '../../assets/images/burnDfyn.png'
+// import { HEADER_ACCESS } from 'constants/networks'
+import { Countdown } from 'components/CountDownSwap'
+// import BURNDFYN from '../../assets/images/burn.png'
 
-const HighlightBanner = styled.div`
-  cursor: pointer;
-  display: flex;
-  color: #FDFCE5;
-  color: ${({ theme }) => theme.bannerText};
 
-  font-size: 14px;
-  :hover{
-    text-decoration: underline;
-  }
-  img {
-    height: 20px;
-    width: 20px;
-  }
-  span {
-    margin-left: 5px;
-    margin-top: 1px;
-  }
+const BannerBox = styled.div`
+  max-width: 420px;
+  width: 100%;
+  textAlign: center;
+  position: relative;
+  box-shadow: rgb(0 0 0 / 1%) 0px 0px 1px, rgb(0 0 0 / 4%) 0px 4px 8px, rgb(0 0 0 / 4%) 0px 16px 24px, rgb(0 0 0 / 1%) 0px 24px 32px;
+  border-radius: 30px
 `
-const DFYNTitle = styled.span`
-  color: #2172E5
+
+const InnerContent = styled.div`
+  top: 22%;
+  left: 4%;
+  position: absolute;
 `
+// const HighlightBanner = styled.div`
+//   cursor: pointer;
+//   display: flex;
+//   color: #FDFCE5;
+//   color: ${({ theme }) => theme.bannerText};
+
+//   font-size: 14px;
+//   :hover{
+//     text-decoration: underline;
+//   }
+//   img {
+//     height: 20px;
+//     width: 20px;
+//   }
+//   span {
+//     margin-left: 5px;
+//     margin-top: 1px;
+//   }
+// `
+// const DFYNTitle = styled.span`
+//   color: #2172E5
+// `
 
 export default function Swap({ history }: RouteComponentProps) {
   const loadedUrlParams = useDefaultsFromURLSearch()
@@ -326,13 +343,6 @@ export default function Swap({ history }: RouteComponentProps) {
 
   const swapIsUnsupported = useIsTransactionUnsupported(currencies?.INPUT, currencies?.OUTPUT)
   
-  function RenderBannerInfo() {
-    return <StyledInternalLink to={`/vdfyn`}>
-      <HighlightBanner>
-        <img src={VDFYN_LOGO} alt={'vDFYN logo'} /> <span>Earn more by staking in<DFYNTitle>vDFYN</DFYNTitle> with Boosted APR</span>
-      </HighlightBanner>
-    </StyledInternalLink>
-  }
 
   return (
     <>
@@ -555,7 +565,25 @@ export default function Swap({ history }: RouteComponentProps) {
       ) : (
         <UnsupportedCurrencyFooter show={swapIsUnsupported} currencies={[currencies.INPUT, currencies.OUTPUT]} />
       )}
-      { chainId && HEADER_ACCESS.vault.includes(chainId) && <RenderBannerInfo /> }
+      { 
+        <>
+          <BannerBox>
+                <img src={BackgroundBanner} alt={'banner'} style={{ width: "100%"}} />
+                <InnerContent>
+                  <TYPE.white fontSize="15px" fontWeight="500">50 Million DFYN tokens will be burned in</TYPE.white>
+                  <Countdown exactEnd={new Date(1638363600000)} start={new Date()} />
+                  <ExternalLink
+                    style={{ color: 'white', textDecoration: 'underline'}}
+                    href="https://dfyn-network.medium.com/major-tokenomics-changes-in-dfyn-token-934fda5444f1"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <TYPE.white fontSize="12px" marginTop="5px" style={{cursor: "pointer"}}>Learn More</TYPE.white>
+                  </ExternalLink>
+                </InnerContent>
+          </BannerBox>
+        </>
+      }
     </>
   )
 }
