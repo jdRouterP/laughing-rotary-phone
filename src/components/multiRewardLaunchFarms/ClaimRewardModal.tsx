@@ -46,7 +46,7 @@ export default function ClaimRewardModal({ isOpen, onDismiss, stakingInfo }: Sta
     if (stakingContract && stakingInfo?.stakedAmount) {
       setAttempting(true)
       await stakingContract
-        .getReward({ gasLimit: 350000 })
+        .getReward({ gasLimit: 400000 })
         .then((response: TransactionResponse) => {
           addTransaction(response, {
             summary: `Claim accumulated rewards`
@@ -81,7 +81,7 @@ export default function ClaimRewardModal({ isOpen, onDismiss, stakingInfo }: Sta
               <TYPE.body fontWeight={600} fontSize={36}>
                 {"20 %"}
               </TYPE.body>
-              <TYPE.body>Unclaimed {reward0?.symbol ?? 'DFYN'}</TYPE.body>
+              <TYPE.body>Unclaimed {reward0?.symbol ?? 'DFYN'} && {reward1?.symbol ?? 'DFYN'}</TYPE.body>
             </AutoColumn>
           )}
           <TYPE.subHeader style={{ textAlign: 'center' }}>

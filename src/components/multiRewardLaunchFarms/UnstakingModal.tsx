@@ -47,7 +47,7 @@ export default function UnstakingModal({ isOpen, onDismiss, stakingInfo }: Staki
     if (stakingContract && stakingInfo?.stakedAmount) {
       setAttempting(true)
       await stakingContract
-        .exit({ gasLimit: 300000 })
+        .exit({ gasLimit: 350000 })
         .then((response: TransactionResponse) => {
           addTransaction(response, {
             summary: `Withdraw deposited liquidity`
@@ -94,7 +94,7 @@ export default function UnstakingModal({ isOpen, onDismiss, stakingInfo }: Staki
             </AutoColumn>
           )} */}
           <TYPE.subHeader style={{ textAlign: 'center' }}>
-            {`When you withdraw, your vested  ${stakingInfo ? reward0.symbol : "DFYN"} && ${stakingInfo ? reward1.symbol : "DFYN"} are claimed (if claimable) and your liquidity is removed from the farming pool.`}
+            {`When you withdraw, your vested  ${stakingInfo ? reward0.symbol : "DFYN"} & ${stakingInfo ? reward1.symbol : "DFYN"} are claimed (if claimable) and your liquidity is removed from the farming pool.`}
           </TYPE.subHeader>
           <ButtonError disabled={!!error} error={!!error && !!stakingInfo?.stakedAmount} onClick={onWithdraw}>
             {error ?? 'Withdraw & Claim'}
