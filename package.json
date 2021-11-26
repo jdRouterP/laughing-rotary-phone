@@ -2,7 +2,7 @@
   "name": "@dfyn/interface",
   "description": "Dfyn Exchange",
   "homepage": ".",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "private": true,
   "devDependencies": {
     "@ethersproject/contracts": "^5.4.0",

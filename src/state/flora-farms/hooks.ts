@@ -74,44 +74,6 @@ export const STAKING_REWARDS_INFO: {
       burnRate: '35',
 
     },
-    //v1
-    {
-      tokens: [DFYN_FANTOM, FTM], //DFYN_FTM
-      baseToken: FTM,
-      startTime: 1635260400,
-      stakingRewardAddress: '0xf9D70A91c9898ed8FF005A286c9F4FF8Fcc868D4',
-      version: 'v1',
-      burnRate: '35',
-
-    },
-    {
-      tokens: [USDC_FANTOM, USDT_FANTOM],
-      baseToken: USDT_FANTOM,
-      startTime: 1635260400,
-      stakingRewardAddress: '0xa8753167da15FF2A19266b99b32993f353d93F0C',
-      version: 'v1',
-      burnRate: '35',
-
-    },
-    {
-      tokens: [WBTC_FANTOM, WETH_FANTOM],
-      baseToken: WETH_FANTOM,
-      startTime: 1635260400,
-      stakingRewardAddress: '0x4E6e4D56A8EE083d763DC34edD903053b28B5267',
-      version: 'v1',
-      burnRate: '35',
-
-    },
-    {
-      tokens: [DFYN_FANTOM, USDC_FANTOM],
-      baseToken: USDC_FANTOM,
-      startTime: 1635260400,
-      stakingRewardAddress: '0x07428ee4ca8B8B39b5b3C8F02dF0867D88D96bC3',
-      version: 'v1',
-      burnRate: '35',
-
-    },
-
   ],
   [ChainId.MATIC]: [
     //v7
@@ -237,44 +199,44 @@ export const INACTIVE_STAKING_REWARDS_INFO: {
     burnRate: string
   }[]
 } = {
-  // [ChainId.FANTOM]: [
-  //   //v1
-  //   {
-  //     tokens: [DFYN_FANTOM, FTM], //DFYN_FTM
-  //     baseToken: FTM,
-  //     startTime: 1635260400,
-  //     stakingRewardAddress: '0xf9D70A91c9898ed8FF005A286c9F4FF8Fcc868D4',
-  //     version: 'v1',
-  //     burnRate: '35',
+  [ChainId.FANTOM]: [
+    //v1
+    {
+      tokens: [DFYN_FANTOM, FTM], //DFYN_FTM
+      baseToken: FTM,
+      startTime: 1635260400,
+      stakingRewardAddress: '0xf9D70A91c9898ed8FF005A286c9F4FF8Fcc868D4',
+      version: 'v1',
+      burnRate: '35',
 
-  //   },
-  //   {
-  //     tokens: [USDC_FANTOM, USDT_FANTOM],
-  //     baseToken: USDT_FANTOM,
-  //     startTime: 1635260400,
-  //     stakingRewardAddress: '0xa8753167da15FF2A19266b99b32993f353d93F0C',
-  //     version: 'v1',
-  //     burnRate: '35',
+    },
+    {
+      tokens: [USDC_FANTOM, USDT_FANTOM],
+      baseToken: USDT_FANTOM,
+      startTime: 1635260400,
+      stakingRewardAddress: '0xa8753167da15FF2A19266b99b32993f353d93F0C',
+      version: 'v1',
+      burnRate: '35',
 
-  //   },
-  //   {
-  //     tokens: [WBTC_FANTOM, WETH_FANTOM],
-  //     baseToken: WETH_FANTOM,
-  //     startTime: 1635260400,
-  //     stakingRewardAddress: '0x4E6e4D56A8EE083d763DC34edD903053b28B5267',
-  //     version: 'v1',
-  //     burnRate: '35',
+    },
+    {
+      tokens: [WBTC_FANTOM, WETH_FANTOM],
+      baseToken: WETH_FANTOM,
+      startTime: 1635260400,
+      stakingRewardAddress: '0x4E6e4D56A8EE083d763DC34edD903053b28B5267',
+      version: 'v1',
+      burnRate: '35',
 
-  //   },
-  //   {
-  //     tokens: [DFYN_FANTOM, USDC_FANTOM],
-  //     baseToken: USDC_FANTOM,
-  //     startTime: 1635260400,
-  //     stakingRewardAddress: '0x07428ee4ca8B8B39b5b3C8F02dF0867D88D96bC3',
-  //     version: 'v1',
-  //     burnRate: '35',
+    },
+    {
+      tokens: [DFYN_FANTOM, USDC_FANTOM],
+      baseToken: USDC_FANTOM,
+      startTime: 1635260400,
+      stakingRewardAddress: '0x07428ee4ca8B8B39b5b3C8F02dF0867D88D96bC3',
+      version: 'v1',
+      burnRate: '35',
 
-  //   }],
+    }],
   [ChainId.MATIC]: [
     //v6
     {
