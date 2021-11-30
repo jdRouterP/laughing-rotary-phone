@@ -85,6 +85,11 @@ const StyledArrowLeft = styled(ArrowLeft)`
   color: ${({ theme }) => theme.text1};
 `
 
+const CustomToggle = styled.div`
+  pointer-events: none;
+  opacity: 0.4;
+`
+
 export function SwapPoolTabs({ active }: { active: 'swap' | 'pool' }) {
   const { t } = useTranslation()
   return (
@@ -134,16 +139,18 @@ export function AddRemoveTabs({ adding, creating }: { adding: boolean; creating:
           <ActiveText>{creating ? 'Create a pair' : adding ? 'Add Liquidity' : 'Remove Liquidity'}</ActiveText>
           <Icon>
             {chainId && HEADER_ACCESS.gaslessMode.includes(chainId) &&<GaslessModeElement>
-              <MouseoverTooltip text={'Gasless Mode. This button will toggle Dfyn’s gasless feature for your wallet. Users with hardware wallets should keep this setting turned off.'} placement='bottom'>
+              <MouseoverTooltip text={'Gasless Mode is under maintenance.'} placement='bottom'>
                 <LocalGasStation style={{color: toggleValue ? '#2ecc71' : ''}}/>
               </MouseoverTooltip>
-              <Toggle
-                id="toggle-gasless-mode-button"
-                isActive={gaslessMode}
-                toggle={
-                  () => toggleSetGaslessMode()
-                }
-              />
+              <CustomToggle>
+                <Toggle
+                  id="toggle-gasless-mode-button"
+                  isActive={gaslessMode}
+                  toggle={
+                    () => toggleSetGaslessMode()
+                  }
+                />
+              </CustomToggle>
             </GaslessModeElement>}
             <Settings />
           </Icon>
