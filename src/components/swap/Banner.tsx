@@ -33,7 +33,7 @@ export default function Banner() {
         <BannerBox>
             <img src={BackgroundBanner} alt={'banner'} style={{ width: "100%"}} />
             <InnerContent>
-            <TYPE.white fontSize="20px" fontWeight="500">50 Million DFYN tokens burnt</TYPE.white>
+            <TYPE.white fontSize="18px" fontWeight="500">50 Million $DFYN tokens were burnt</TYPE.white>
             
             <CustomExternalLink
                 style={{ color: 'white', textDecoration: 'underline'}}
