@@ -25,6 +25,23 @@ export const STAKING_REWARDS_INFO: {
   }[]
 } = {
   [ChainId.MATIC]: [
+    //v8
+    {
+      tokens: [RAZOR, DFYN],
+      rewardTokens: [RAZOR, DFYN],
+      baseToken: DFYN,
+      start: 1639063800000,
+      stakingRewardAddress: '0xB562019c751B377885b1334d9e58ccda94E3969f',
+      version: 'v8'
+    },
+    {
+      tokens: [NORD, DFYN],
+      rewardTokens: [NORD, DFYN],
+      baseToken: DFYN,
+      start: 1639063800000,
+      stakingRewardAddress: '0xa60DF42DF58495bf8C7e3cBAEDDB3cB346cF0db8',
+      version: 'v8'
+    },
     //v7
     {
       tokens: [ROUTE, DFYN],
@@ -42,6 +59,21 @@ export const STAKING_REWARDS_INFO: {
       stakingRewardAddress: '0xD65c7cEb912a833ED1D6abBeDC96864060f68e48',
       version: 'v7'
     },
+
+  ]
+}
+
+export const INACTIVE_STAKING_REWARDS_INFO: {
+  [chainId in ChainId]?: {
+    tokens: [Token, Token]
+    rewardTokens: [Token, Token]
+    baseToken?: Token
+    start: number
+    stakingRewardAddress: string
+    version: string
+  }[]
+} = {
+  [ChainId.MATIC]: [
     //v6
     {
       tokens: [RAZOR, DFYN],
@@ -59,20 +91,6 @@ export const STAKING_REWARDS_INFO: {
       stakingRewardAddress: '0x6A2A790dfb20e2b005724354c97a3Bce0767A180',
       version: 'v6'
     },
-  ]
-}
-
-export const INACTIVE_STAKING_REWARDS_INFO: {
-  [chainId in ChainId]?: {
-    tokens: [Token, Token]
-    rewardTokens: [Token, Token]
-    baseToken?: Token
-    start: number
-    stakingRewardAddress: string
-    version: string
-  }[]
-} = {
-  [ChainId.MATIC]: [
     {
       tokens: [ROUTE, DFYN],
       rewardTokens: [ROUTE, DFYN],
