@@ -29,6 +29,7 @@ export const STAKING_REWARDS_INFO: {
     {
       tokens: [NIOX, USDC],
       baseToken: USDC,
+      rewardToken: NIOX,
       startTime: 1639063800,
       stakingRewardAddress: '0x668D23C1F253ad5b20a74aa535c82ca04c91D2D0',
       version: 'v8'
@@ -43,6 +44,7 @@ export const STAKING_REWARDS_INFO: {
     {
       tokens: [USDC, ELE],
       baseToken: USDC,
+
       startTime: 1639063800,
       stakingRewardAddress: '0x3e9A073Cc93223a4D4fb75bC5DfC0a91D9f18Bfa',
       version: 'v8'
