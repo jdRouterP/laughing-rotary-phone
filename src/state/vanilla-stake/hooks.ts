@@ -10,7 +10,7 @@ import { usePair } from 'data/Reserves'
 
 export const STAKING_GENESIS = 1622485799
 
-export const REWARDS_DURATION_DAYS = 60
+export const REWARDS_DURATION_DAYS = 90
 
 // TODO add staking rewards addresses here
 export const STAKING_REWARDS_INFO: {
