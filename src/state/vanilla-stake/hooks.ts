@@ -792,15 +792,13 @@ export function useStakingInfo(pairToFilterBy?: Pair | null, version: string = '
           totalRewardRate: TokenAmount
         ): TokenAmount => {
           return new TokenAmount(
-            uni,
+            info[index].rewardToken ?? uni,
             JSBI.greaterThan(totalStakedAmount.raw, JSBI.BigInt(0))
               ? JSBI.divide(JSBI.multiply(totalRewardRate.raw, stakedAmount.raw), totalStakedAmount.raw)
               : JSBI.BigInt(0)
           )
         }
-
         const individualRewardRate = getHypotheticalRewardRate(stakedAmount, totalStakedAmount, totalRewardRate)
-
         const periodFinishSeconds = periodFinishState.result?.[0]?.toNumber()
         const periodFinishMs = periodFinishSeconds * 1000
 
@@ -817,7 +815,7 @@ export function useStakingInfo(pairToFilterBy?: Pair | null, version: string = '
           tokens: info[index].tokens,
           rewardToken: info[index].rewardToken ?? uni,
           periodFinish: periodFinishMs > 0 ? new Date(periodFinishMs) : undefined,
-          earnedAmount: new TokenAmount(uni, JSBI.BigInt(earnedAmountState?.result?.[0] ?? 0)),
+          earnedAmount: new TokenAmount(info[index].rewardToken ?? uni, JSBI.BigInt(earnedAmountState?.result?.[0] ?? 0)),
           rewardRate: individualRewardRate,
           totalRewardRate: totalRewardRate,
           stakedAmount: stakedAmount,
@@ -946,7 +944,7 @@ export function useInactiveStakingInfo(pairToFilterBy?: Pair | null, version: st
           totalRewardRate: TokenAmount
         ): TokenAmount => {
           return new TokenAmount(
-            uni,
+            info[index].rewardToken ?? uni,
             JSBI.greaterThan(totalStakedAmount.raw, JSBI.BigInt(0))
               ? JSBI.divide(JSBI.multiply(totalRewardRate.raw, stakedAmount.raw), totalStakedAmount.raw)
               : JSBI.BigInt(0)
@@ -970,7 +968,7 @@ export function useInactiveStakingInfo(pairToFilterBy?: Pair | null, version: st
           tokens: info[index].tokens,
           rewardToken: info[index].rewardToken ?? uni,
           periodFinish: periodFinishMs > 0 ? new Date(periodFinishMs) : undefined,
-          earnedAmount: new TokenAmount(uni, JSBI.BigInt(earnedAmountState?.result?.[0] ?? 0)),
+          earnedAmount: new TokenAmount(info[index].rewardToken ?? uni, JSBI.BigInt(earnedAmountState?.result?.[0] ?? 0)),
           rewardRate: individualRewardRate,
           totalRewardRate: totalRewardRate,
           stakedAmount: stakedAmount,

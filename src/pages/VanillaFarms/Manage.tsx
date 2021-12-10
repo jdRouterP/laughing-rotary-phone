@@ -134,7 +134,7 @@ export default function Manage({
     )
   }
 
-  const countUpAmount = stakingInfo?.earnedAmount?.toFixed(6) ?? '0'
+  const countUpAmount = stakingInfo?.earnedAmount?.toFixed(4) ?? '0'
   const countUpAmountPrevious = usePrevious(countUpAmount) ?? '0'
 
   // get the USD value of staked WETH
@@ -179,7 +179,7 @@ export default function Manage({
               {stakingInfo?.active
                 ? stakingInfo?.totalRewardRate
                   ?.multiply(BIG_INT_SECONDS_IN_WEEK)
-                  ?.toFixed(0, { groupSeparator: ',' }) ?? '-'
+                  ?.toFixed(2, { groupSeparator: ',' }) ?? '-'
                 : '0'}
               {` ${stakingInfo?.rewardToken?.symbol ?? 'DFYN'} / week`}
             </TYPE.body>

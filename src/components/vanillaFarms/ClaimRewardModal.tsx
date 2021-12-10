@@ -76,7 +76,7 @@ export default function ClaimRewardModal({ isOpen, onDismiss, stakingInfo }: Sta
           {stakingInfo?.earnedAmount && (
             <AutoColumn justify="center" gap="md">
               <TYPE.body fontWeight={600} fontSize={36}>
-                {stakingInfo?.earnedAmount?.toSignificant(6)}
+                {stakingInfo?.earnedAmount?.toSignificant(4)}
               </TYPE.body>
               <TYPE.body>Unclaimed {stakingInfo?.rewardToken?.symbol ?? 'DFYN'}</TYPE.body>
             </AutoColumn>
