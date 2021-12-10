@@ -23,6 +23,8 @@ type ChainTokenList = {
   readonly [chainId in ChainId]: Token[]
 }
 
+export const ETH_MAINNET_NATIVE_ADDRESS = new Token(ChainId.MATIC, '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE', 18, 'MATIC', 'MATIC');
+
 //Chainlink price feed
 export const MATIC_USD = new Token(ChainId.MATIC, '0x0000000000000000000000000000000000000000', 8, 'MATIC', 'MATIC');
 export const vDFYN = new Token(ChainId.MATIC, DFYN_CHEST, 18, 'vDFYN', 'vDFYN');

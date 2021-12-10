@@ -1,13 +1,13 @@
 import React from 'react'
 import styled from 'styled-components'
 import Settings from '../Settings'
-import { TYPE } from '../../theme'
 import { LocalGasStation } from '@material-ui/icons'
 import { useGaslessModeManager, useIsGaslessMode } from 'state/user/hooks'
 import Toggle from 'components/Toggle'
 import { MouseoverTooltip } from 'components/Tooltip'
 import { useActiveWeb3React } from 'hooks'
 import { HEADER_ACCESS } from 'constants/networks'
+import SwapLimitToggle from './SwapLimitToggle'
 
 
 const GaslessModeElement = styled.div`
@@ -53,8 +53,8 @@ export default function SwapHeader() {
   return (
     <StyledSwapHeader>
       <TopSection>
-        <TYPE.black fontWeight={500} margin={'auto 0'}>Swap</TYPE.black>
         <Icon>
+          <SwapLimitToggle />
           {chainId && HEADER_ACCESS.gaslessMode.includes(chainId) &&<GaslessModeElement>
 
             <MouseoverTooltip
