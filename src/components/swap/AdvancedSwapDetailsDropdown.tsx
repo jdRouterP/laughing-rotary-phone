@@ -18,6 +18,7 @@ const AdvancedDetailsFooter = styled.div<{ show: boolean }>`
 
   transform: ${({ show }) => (show ? 'translateY(0%)' : 'translateY(-100%)')};
   transition: transform 300ms ease-in-out;
+  opacity: ${({ show }) => (show ? '1' : '0')};
 `
 
 const BannerWrapper = styled.div<{ show: boolean, showValue: number }>`

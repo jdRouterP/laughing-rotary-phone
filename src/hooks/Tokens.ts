@@ -246,6 +246,12 @@ export function convertIdToCurrency(currencyIdArr: (string | undefined | null)[]
   return res;
 }
 
+export function convertIdToToken(currencyIdArr: (string | undefined | null)[]): (Token | Currency | undefined)[] {
+  let res: (Token | Currency | undefined)[] = [];
+  res = currencyIdArr.map(cu=>useToken(cu))
+  return res;
+}
+
 export function useConvertInputTokenToMatic(typedValues: string, inputCurrencyArr: (Currency | null | undefined), outputCurrency: Currency):
   (Trade | null) {
     let res: (Trade | null);
