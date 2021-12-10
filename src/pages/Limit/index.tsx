@@ -167,16 +167,18 @@ export default function LimitOrder({ history }: RouteComponentProps) {
     [Version.v2]: v2Trade
   }
   const trade = showWrap ? undefined : tradesByVersion[toggledVersion]
-
+  const tradeInputAmount = trade?.inputAmount
+  const tradeOutputAmount = trade?.outputAmount
+  
   const parsedAmounts = useMemo(() => (showWrap
     ? {
       [Field.INPUT]: parsedAmount,
       [Field.OUTPUT]: parsedAmount
     }
     : {
-      [Field.INPUT]: independentField === Field.INPUT ? parsedAmount : trade?.inputAmount,
-      [Field.OUTPUT]: independentField === Field.OUTPUT ? parsedAmount : trade?.outputAmount
-    }), [independentField, parsedAmount, showWrap, trade?.inputAmount, trade?.outputAmount])
+      [Field.INPUT]: independentField === Field.INPUT ? parsedAmount : tradeInputAmount,
+      [Field.OUTPUT]: independentField === Field.OUTPUT ? parsedAmount : tradeOutputAmount
+    }), [independentField, parsedAmount, showWrap, tradeInputAmount, tradeOutputAmount])
 
   const { onSwitchTokens, onCurrencySelection, onUserInput } = useSwapActionHandlers()
   const dependentField: Field = independentField === Field.INPUT ? Field.OUTPUT : Field.INPUT
