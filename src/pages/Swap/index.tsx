@@ -7,7 +7,6 @@ import React, {
   useState,
 } from "react";
 import { ArrowDown } from "react-feather";
-import Banner from "components/swap/Banner";
 import ReactGA from "react-ga";
 import { Text } from "rebass";
 import { ThemeContext } from "styled-components";
@@ -719,7 +718,6 @@ export default function Swap({ history }: RouteComponentProps) {
           currencies={[currencies.INPUT, currencies.OUTPUT]}
         />
       )}
-      <Banner />
     </>
   );
 }
