@@ -254,15 +254,18 @@ export default function LimitOrder({ history }: RouteComponentProps) {
     const isFormValid = validateForm()
     setSwapState({ attemptingTxn: true, showConfirm: true, swapErrorMessage: undefined, txHash: undefined })
     if (!isFormValid) return;
-    const sellToken = _get(currencies[Field.INPUT], 'address', ETH_MAINNET_NATIVE_ADDRESS.address)
-    const buyToken = _get(currencies[Field.OUTPUT], 'address', ETH_MAINNET_NATIVE_ADDRESS.address)
+    const sellToken = currencies[Field.INPUT]
+    const buyToken = currencies[Field.OUTPUT]
+    if(!sellToken || !buyToken) return;
+    const sellTokenAddress = _get(currencies[Field.INPUT], 'address', ETH_MAINNET_NATIVE_ADDRESS.address)
+    const buyTokenAddress = _get(currencies[Field.OUTPUT], 'address', ETH_MAINNET_NATIVE_ADDRESS.address)
     const inputAmount = parsedAmounts[Field.INPUT]?.toExact() || '0'
     const order = {
       chainId,
       account,
-      sellToken,
+      sellToken: sellTokenAddress,
       sellAmount: parseUnits(inputAmount, sellToken?.decimals).toString(),
-      buyToken,
+      buyToken: buyTokenAddress,
       buyAmount: parseUnits(outputAmount, buyToken?.decimals).toString()
     }
 
@@ -283,8 +286,8 @@ export default function LimitOrder({ history }: RouteComponentProps) {
           category: 'Create-LimitOrder',
           action: base,
           label: [
-            sellToken.symbol,
-            buyToken.symbol
+            sellToken?.symbol,
+            buyToken?.symbol
           ].join('/')
         })
         const fetchDataInterval = setInterval(async () => {
