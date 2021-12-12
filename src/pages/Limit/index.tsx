@@ -1,5 +1,5 @@
 import { CurrencyAmount, JSBI, Token } from '@dfyn/sdk'
-import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useContext, useMemo, useState } from 'react'
 import { AlertTriangle } from 'react-feather'
 import ReactGA from 'react-ga'
 import { Text } from 'rebass'
@@ -15,7 +15,6 @@ import SwapHeader from '../../components/swap/SwapHeader'
 import { ETH_MAINNET_NATIVE_ADDRESS } from '../../constants'
 import { useActiveWeb3React } from '../../hooks'
 import { useCurrency, useAllTokens } from '../../hooks/Tokens'
-import { ApprovalState, useApproveCallbackFromTrade } from '../../hooks/useApproveCallback'
 import useToggledVersion, { Version } from '../../hooks/useToggledVersion'
 import useWrapCallback, { WrapType } from '../../hooks/useWrapCallback'
 import { Field } from '../../state/swap/actions'
@@ -33,7 +32,6 @@ import { TYPE } from '../../theme'
 import { maxAmountSpend } from '../../utils/maxAmountSpend'
 import { BodyWrapper } from '../AppBody'
 import { RouteComponentProps } from 'react-router-dom'
-import { getRouterAddress } from 'utils'
 import { FileCopyOutlined, SwapVert } from '@material-ui/icons'
 import _get from 'lodash.get'
 import OpenOrders from './OpenOrders'
@@ -150,7 +148,7 @@ export default function LimitOrder({ history }: RouteComponentProps) {
   const [outputAmount, setOutputAmount] = useState<string>('')
 
   // swap state
-  const { independentField, typedValue, recipient } = useSwapState()
+  const { independentField, typedValue } = useSwapState()
   const {
     v1Trade,
     v2Trade,
@@ -224,19 +222,6 @@ export default function LimitOrder({ history }: RouteComponentProps) {
   }, [dependentField, independentField, parsedAmounts, showWrap, typedValue])
 
 
-  // check whether the user has approved the router on the input token
-  const [approval] = useApproveCallbackFromTrade(getRouterAddress(chainId), trade, allowedSlippage)
-
-  // check if user has gone through approval process, used to show two step buttons, reset on token change
-  const [approvalSubmitted, setApprovalSubmitted] = useState<boolean>(false)
-
-  // mark when a user has submitted an approval, reset onTokenSelection for input field
-  useEffect(() => {
-    if (approval === ApprovalState.PENDING) {
-      setApprovalSubmitted(true)
-    }
-  }, [approval, approvalSubmitted])
-
   const maxAmountInput: CurrencyAmount | undefined = maxAmountSpend(currencyBalances[Field.INPUT])
   const atMaxAmountInput = Boolean(maxAmountInput && parsedAmounts[Field.INPUT]?.equalTo(maxAmountInput))
 
@@ -254,7 +239,6 @@ export default function LimitOrder({ history }: RouteComponentProps) {
   useMemo(() => {
     fetchOrders(orderStatus)
   }, [orderStatus, fetchOrders])
-
 
   const handlePlaceLimitOrder = async () => {
     const isFormValid = validateForm()
@@ -328,24 +312,13 @@ export default function LimitOrder({ history }: RouteComponentProps) {
     }
   }, [inputAmountEnter, parsedAmounts])
 
-  // useMemo(() => {
-  //   if (inputPerOutput === '-') {
-  //     setPriceToMarket()
-  //   }
-  // }, [inputPerOutput, setPriceToMarket])
-
   const handleSetInputAmountEnter = useCallback((value: string | undefined) => {
-    // if (inputPerOutput === '-') {
-    //   handleMarketInputPerOutputConversion()
-    //   if (parsedAmounts && parsedAmounts[Field.OUTPUT]) setInputPerOutput(_get(parsedAmounts, Field.OUTPUT, 0).toFixed(6))
-    // }
     if (value === undefined) return;
     setInputAmountEnter(value)
     const outputAmountCalculated = parseFloat(value) * parseFloat(inputPerOutput);
     if (isNaN(outputAmountCalculated) || !isFinite(outputAmountCalculated)) return;
     setOutputAmount(outputAmountCalculated.toFixed(6))
   }, [inputPerOutput])
-
 
   const handleSetOutputAmont = useCallback((value: string) => {
     setOutputAmount(value)
@@ -354,8 +327,7 @@ export default function LimitOrder({ history }: RouteComponentProps) {
     if (isNaN(conversionRate) || !isFinite(conversionRate)) return;
     setInputAmountEnter(conversionRate.toFixed(6))
 
-  }, [setOutputAmount, setInputAmountEnter, formattedAmounts])
-
+  }, [setOutputAmount, setInputAmountEnter, inputPerOutput])
 
   const handleSetInputPerOutput = useCallback(inputEntered => {
     
@@ -366,10 +338,8 @@ export default function LimitOrder({ history }: RouteComponentProps) {
     setOutputAmount(outputAmountCalculated.toFixed(6))
   }, [inputAmountEnter])
 
-
   const handleInputSelect = useCallback(
     inputCurrency => {
-      setApprovalSubmitted(false) // reset 2 step UI for approvals
       onCurrencySelection(Field.INPUT, inputCurrency)
     },
     [onCurrencySelection]
@@ -384,8 +354,6 @@ export default function LimitOrder({ history }: RouteComponentProps) {
       handleMarketInputPerOutputConversion()
     }
   }, [currencies, handleMarketInputPerOutputConversion, inputPerOutput, parsedAmounts])
-
-  
 
   const validateForm = (() => {
     const sellToken = _get(currencies[Field.INPUT], 'address', ETH_MAINNET_NATIVE_ADDRESS.address)
@@ -410,9 +378,6 @@ export default function LimitOrder({ history }: RouteComponentProps) {
 
     return true
   })
-  // const handleMaxInput = useCallback(() => {
-  //   maxAmountInput && onUserInput(Field.INPUT, maxAmountInput.toExact())
-  // }, [maxAmountInput, onUserInput])
 
   const handleOutputSelect = useCallback(outputCurrency => onCurrencySelection(Field.OUTPUT, outputCurrency), [
     onCurrencySelection
@@ -440,18 +405,15 @@ export default function LimitOrder({ history }: RouteComponentProps) {
         onDismiss={handleDismissTokenWarning}
       />
       <SwapPoolTabs active={'swap'} />
-
       <BodyWrapper style={{ margin: 'auto' }}>
-
         <SwapHeader />
         <Wrapper id="swap-page">
-
           <ConfirmSwapModal
             isOpen={showConfirm}
             onAcceptChanges={handleAcceptChanges}
             attemptingTxn={attemptingTxn}
             txHash={txHash}
-            recipient={recipient}
+            recipient={null}
             allowedSlippage={allowedSlippage}
             onConfirm={handlePlaceLimitOrder}
             swapErrorMessage={swapErrorMessage}
@@ -480,7 +442,6 @@ export default function LimitOrder({ history }: RouteComponentProps) {
                   <CustomSwapVert>
                     <SwapVert
                       onClick={() => {
-                        setApprovalSubmitted(false) // reset 2 step UI for approvals
                         onSwitchTokens()
                         handleMarketInputPerOutputConversion()
                       }}
