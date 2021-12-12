@@ -1,4 +1,4 @@
-import { CurrencyAmount, Token } from '@dfyn/sdk'
+import { CurrencyAmount, JSBI, Token } from '@dfyn/sdk'
 import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { AlertTriangle } from 'react-feather'
 import ReactGA from 'react-ga'
@@ -144,6 +144,10 @@ export default function LimitOrder({ history }: RouteComponentProps) {
   const [isExpertMode] = useExpertModeManager()
   // get custom setting values for user
   const [allowedSlippage] = useUserSlippageTolerance()
+  //input token per output token rate conversion
+  const [inputPerOutput, setInputPerOutput] = useState<string>('-')
+  const [inputAmountEnter, setInputAmountEnter] = useState<string>('')
+  const [outputAmount, setOutputAmount] = useState<string>('')
 
   // swap state
   const { independentField, typedValue, recipient } = useSwapState()
@@ -238,8 +242,10 @@ export default function LimitOrder({ history }: RouteComponentProps) {
 
   const inputCurrency = currencies[Field.INPUT]
   const inputAmount = parsedAmounts[Field.INPUT]
-  const balance = useCurrencyBalance(account ?? undefined, inputCurrency)
-  let sufficientBalance = inputAmount && balance && !balance.lessThan(inputAmount)
+  const balance = useCurrencyBalance(account ?? undefined, inputCurrency)//parseUnits(inputAmountEnter, currencies[Field.INPUT].decimals)
+  const inputAmountToBigintIsh = inputAmountEnter && JSBI.BigInt(parseUnits(inputAmountEnter, currencies[Field.INPUT]?.decimals).toString())
+  const inputToJSBI = inputCurrency && new CurrencyAmount(inputCurrency, inputAmountToBigintIsh)
+  let sufficientBalance = inputAmount && inputToJSBI && balance && !balance.lessThan(inputToJSBI)
   if (sufficientBalance === undefined) sufficientBalance = true
   const addTransaction = useTransactionAdder()
 
@@ -259,7 +265,8 @@ export default function LimitOrder({ history }: RouteComponentProps) {
     if(!sellToken || !buyToken) return;
     const sellTokenAddress = _get(currencies[Field.INPUT], 'address', ETH_MAINNET_NATIVE_ADDRESS.address)
     const buyTokenAddress = _get(currencies[Field.OUTPUT], 'address', ETH_MAINNET_NATIVE_ADDRESS.address)
-    const inputAmount = parsedAmounts[Field.INPUT]?.toExact() || '0'
+    const inputAmount = inputAmountEnter || '0'
+
     const order = {
       chainId,
       account,
@@ -282,6 +289,8 @@ export default function LimitOrder({ history }: RouteComponentProps) {
         addTransaction(txnData, {
           summary: base
         })
+        setInputAmountEnter('')
+        setInputPerOutput('')
         ReactGA.event({
           category: 'Create-LimitOrder',
           action: base,
@@ -308,11 +317,6 @@ export default function LimitOrder({ history }: RouteComponentProps) {
         })
     }
   }
-
-  //input token per output token rate conversion
-  const [inputPerOutput, setInputPerOutput] = useState<string>('-')
-  const [inputAmountEnter, setInputAmountEnter] = useState<string>('')
-  const [outputAmount, setOutputAmount] = useState<string>('')
 
   const setPriceToMarket = useCallback(() => {
     if (parsedAmounts && parsedAmounts[Field.OUTPUT]) {
@@ -386,7 +390,7 @@ export default function LimitOrder({ history }: RouteComponentProps) {
   const validateForm = (() => {
     const sellToken = _get(currencies[Field.INPUT], 'address', ETH_MAINNET_NATIVE_ADDRESS.address)
     const buyToken = _get(currencies[Field.OUTPUT], 'address', ETH_MAINNET_NATIVE_ADDRESS.address)
-    const inputAmount = parsedAmounts[Field.INPUT]?.toExact() || '0'
+    const inputAmount = inputAmountEnter || '0'
     if (!sellToken) {
       return false
     }
@@ -422,8 +426,7 @@ export default function LimitOrder({ history }: RouteComponentProps) {
     setSwapState({ showConfirm: false, attemptingTxn, swapErrorMessage, txHash })
     // if there was a tx hash, we want to clear the input
     if (txHash) {
-      onUserInput(Field.INPUT, '')
-      onUserInput(Field.OUTPUT, '')
+      
       setOutputAmount('')
     }
   }, [attemptingTxn, onUserInput, swapErrorMessage, txHash])
