@@ -320,11 +320,11 @@ export default function LimitOrder({ history }: RouteComponentProps) {
 
   const setPriceToMarket = useCallback(() => {
     if (parsedAmounts && parsedAmounts[Field.OUTPUT]) {
-      const inputEntered = _get(parsedAmounts, Field.OUTPUT, 0).toFixed(4)
+      const inputEntered = _get(parsedAmounts, Field.OUTPUT, 0).toFixed(6)
       setInputPerOutput(inputEntered)
       const outputAmountCalculated = parseFloat(inputAmountEnter) * parseFloat(inputEntered)
       if (isNaN(outputAmountCalculated) || !isFinite(outputAmountCalculated)) return;
-      setOutputAmount(outputAmountCalculated.toFixed(4))
+      setOutputAmount(outputAmountCalculated.toFixed(6))
     }
   }, [inputAmountEnter, parsedAmounts])
 
@@ -337,24 +337,24 @@ export default function LimitOrder({ history }: RouteComponentProps) {
   const handleSetInputAmountEnter = useCallback((value: string | undefined) => {
     // if (inputPerOutput === '-') {
     //   handleMarketInputPerOutputConversion()
-    //   if (parsedAmounts && parsedAmounts[Field.OUTPUT]) setInputPerOutput(_get(parsedAmounts, Field.OUTPUT, 0).toFixed(4))
+    //   if (parsedAmounts && parsedAmounts[Field.OUTPUT]) setInputPerOutput(_get(parsedAmounts, Field.OUTPUT, 0).toFixed(6))
     // }
     if (value === undefined) return;
     setInputAmountEnter(value)
     const outputAmountCalculated = parseFloat(value) * parseFloat(inputPerOutput);
     if (isNaN(outputAmountCalculated) || !isFinite(outputAmountCalculated)) return;
-    setOutputAmount(outputAmountCalculated.toFixed(4))
+    setOutputAmount(outputAmountCalculated.toFixed(6))
   }, [inputPerOutput])
 
 
   const handleSetOutputAmont = useCallback((value: string) => {
     setOutputAmount(value)
     let conversionRate =
-      (parseFloat(formattedAmounts[Field.INPUT]) * parseFloat(value));
+      (parseFloat(value) / parseFloat(inputPerOutput));
     if (isNaN(conversionRate) || !isFinite(conversionRate)) return;
-    setInputPerOutput(conversionRate.toFixed(2))
+    setInputAmountEnter(conversionRate.toFixed(6))
 
-  }, [setOutputAmount, setInputPerOutput, formattedAmounts])
+  }, [setOutputAmount, setInputAmountEnter, formattedAmounts])
 
 
   const handleSetInputPerOutput = useCallback(inputEntered => {
@@ -363,7 +363,7 @@ export default function LimitOrder({ history }: RouteComponentProps) {
     setInputPerOutput(inputEntered)
     const outputAmountCalculated = parseFloat(inputAmountEnter) * parseFloat(inputEntered || 0)
     if (isNaN(outputAmountCalculated) || !isFinite(outputAmountCalculated)) return;
-    setOutputAmount(outputAmountCalculated.toFixed(4))
+    setOutputAmount(outputAmountCalculated.toFixed(6))
   }, [inputAmountEnter])
 
 
@@ -458,7 +458,8 @@ export default function LimitOrder({ history }: RouteComponentProps) {
             onDismiss={handleConfirmDismiss}
             inputAmount={inputToJSBI}
             outputAmount={outputAmount}
-            marketPrice={(parseFloat(formattedAmounts[Field.OUTPUT]) / parseFloat(formattedAmounts[Field.INPUT])).toFixed(4)}
+            limitPrice={inputPerOutput}
+            marketPrice={(parseFloat(formattedAmounts[Field.OUTPUT]) / parseFloat(formattedAmounts[Field.INPUT])).toFixed(6)}
           />
           <AutoColumn gap={'sm'}>
             <CurrencyInputPanel
