@@ -196,7 +196,7 @@ export default function OpenOrders() {
                   fetchOrders(orderStatus)
                   clearInterval(fetchDataInterval)
                 }
-              }, 3000)
+              }, 2000)
         }
     }
 

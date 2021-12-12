@@ -289,7 +289,7 @@ export default function LimitOrder({ history }: RouteComponentProps) {
             fetchOrders(orderStatus)
             clearInterval(fetchDataInterval)
           }
-        }, 3000)
+        }, 2000)
       })
         .catch(error => {
           setSwapState({
@@ -394,7 +394,7 @@ export default function LimitOrder({ history }: RouteComponentProps) {
       
       setOutputAmount('')
     }
-  }, [attemptingTxn, onUserInput, swapErrorMessage, txHash])
+  }, [attemptingTxn, swapErrorMessage, txHash])
 
   return (
     <>
