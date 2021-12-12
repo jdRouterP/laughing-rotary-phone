@@ -456,7 +456,7 @@ export default function LimitOrder({ history }: RouteComponentProps) {
             onConfirm={handlePlaceLimitOrder}
             swapErrorMessage={swapErrorMessage}
             onDismiss={handleConfirmDismiss}
-            inputAmount={inputAmount}
+            inputAmount={inputToJSBI}
             outputAmount={outputAmount}
             marketPrice={(parseFloat(formattedAmounts[Field.OUTPUT]) / parseFloat(formattedAmounts[Field.INPUT])).toFixed(4)}
           />
