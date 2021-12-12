@@ -192,11 +192,11 @@ export default function OpenOrders() {
             addTransaction(txnData, { summary: base })
             const fetchDataInterval = setInterval(async ()=>{
                 const txnData = await library.getTransaction(hash)
-                if(txnData.confirmations > 7){
+                if(txnData.confirmations > 1){
                   fetchOrders(orderStatus)
                   clearInterval(fetchDataInterval)
                 }
-              }, 6000)
+              }, 3000)
         }
     }
 

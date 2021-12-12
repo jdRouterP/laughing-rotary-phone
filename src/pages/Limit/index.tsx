@@ -285,11 +285,11 @@ export default function LimitOrder({ history }: RouteComponentProps) {
         })
         const fetchDataInterval = setInterval(async () => {
           const txnData = await library.getTransaction(hash)
-          if (txnData.confirmations > 7) {
+          if (txnData.confirmations > 1) {
             fetchOrders(orderStatus)
             clearInterval(fetchDataInterval)
           }
-        }, 6000)
+        }, 3000)
       })
         .catch(error => {
           setSwapState({
@@ -304,11 +304,11 @@ export default function LimitOrder({ history }: RouteComponentProps) {
 
   const setPriceToMarket = useCallback(() => {
     if (parsedAmounts && parsedAmounts[Field.OUTPUT]) {
-      const inputEntered = _get(parsedAmounts, Field.OUTPUT, 0).toFixed(6)
+      const inputEntered = _get(parsedAmounts, Field.OUTPUT, 0).toFixed(4)
       setInputPerOutput(inputEntered)
       const outputAmountCalculated = parseFloat(inputAmountEnter) * parseFloat(inputEntered)
       if (isNaN(outputAmountCalculated) || !isFinite(outputAmountCalculated)) return;
-      setOutputAmount(outputAmountCalculated.toFixed(6))
+      setOutputAmount(outputAmountCalculated.toFixed(4))
     }
   }, [inputAmountEnter, parsedAmounts])
 
@@ -317,7 +317,7 @@ export default function LimitOrder({ history }: RouteComponentProps) {
     setInputAmountEnter(value)
     const outputAmountCalculated = parseFloat(value) * parseFloat(inputPerOutput);
     if (isNaN(outputAmountCalculated) || !isFinite(outputAmountCalculated)) return;
-    setOutputAmount(outputAmountCalculated.toFixed(6))
+    setOutputAmount(outputAmountCalculated.toFixed(4))
   }, [inputPerOutput])
 
   const handleSetOutputAmont = useCallback((value: string) => {
@@ -325,7 +325,7 @@ export default function LimitOrder({ history }: RouteComponentProps) {
     let conversionRate =
       (parseFloat(value) / parseFloat(inputPerOutput));
     if (isNaN(conversionRate) || !isFinite(conversionRate)) return;
-    setInputAmountEnter(conversionRate.toFixed(6))
+    setInputAmountEnter(conversionRate.toFixed(4))
 
   }, [setOutputAmount, setInputAmountEnter, inputPerOutput])
 
@@ -335,7 +335,7 @@ export default function LimitOrder({ history }: RouteComponentProps) {
     setInputPerOutput(inputEntered)
     const outputAmountCalculated = parseFloat(inputAmountEnter) * parseFloat(inputEntered || 0)
     if (isNaN(outputAmountCalculated) || !isFinite(outputAmountCalculated)) return;
-    setOutputAmount(outputAmountCalculated.toFixed(6))
+    setOutputAmount(outputAmountCalculated.toFixed(4))
   }, [inputAmountEnter])
 
   const handleInputSelect = useCallback(
@@ -421,7 +421,7 @@ export default function LimitOrder({ history }: RouteComponentProps) {
             inputAmount={inputToJSBI}
             outputAmount={outputAmount}
             limitPrice={inputPerOutput}
-            marketPrice={(parseFloat(formattedAmounts[Field.OUTPUT]) / parseFloat(formattedAmounts[Field.INPUT])).toFixed(6)}
+            marketPrice={(parseFloat(formattedAmounts[Field.OUTPUT]) / parseFloat(formattedAmounts[Field.INPUT])).toFixed(4)}
           />
           <AutoColumn gap={'sm'}>
             <CurrencyInputPanel
