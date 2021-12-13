@@ -1,5 +1,5 @@
-import { CurrencyAmount, Token } from '@dfyn/sdk'
-import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react'
+import { CurrencyAmount, JSBI, Token } from '@dfyn/sdk'
+import React, { useCallback, useContext, useMemo, useState } from 'react'
 import { AlertTriangle } from 'react-feather'
 import ReactGA from 'react-ga'
 import { Text } from 'rebass'
@@ -15,7 +15,6 @@ import SwapHeader from '../../components/swap/SwapHeader'
 import { ETH_MAINNET_NATIVE_ADDRESS } from '../../constants'
 import { useActiveWeb3React } from '../../hooks'
 import { useCurrency, useAllTokens } from '../../hooks/Tokens'
-import { ApprovalState, useApproveCallbackFromTrade } from '../../hooks/useApproveCallback'
 import useToggledVersion, { Version } from '../../hooks/useToggledVersion'
 import useWrapCallback, { WrapType } from '../../hooks/useWrapCallback'
 import { Field } from '../../state/swap/actions'
@@ -33,7 +32,6 @@ import { TYPE } from '../../theme'
 import { maxAmountSpend } from '../../utils/maxAmountSpend'
 import { BodyWrapper } from '../AppBody'
 import { RouteComponentProps } from 'react-router-dom'
-import { getRouterAddress } from 'utils'
 import { FileCopyOutlined, SwapVert } from '@material-ui/icons'
 import _get from 'lodash.get'
 import OpenOrders from './OpenOrders'
@@ -144,9 +142,13 @@ export default function LimitOrder({ history }: RouteComponentProps) {
   const [isExpertMode] = useExpertModeManager()
   // get custom setting values for user
   const [allowedSlippage] = useUserSlippageTolerance()
+  //input token per output token rate conversion
+  const [inputPerOutput, setInputPerOutput] = useState<string>('-')
+  const [inputAmountEnter, setInputAmountEnter] = useState<string>('')
+  const [outputAmount, setOutputAmount] = useState<string>('')
 
   // swap state
-  const { independentField, typedValue, recipient } = useSwapState()
+  const { independentField, typedValue } = useSwapState()
   const {
     v1Trade,
     v2Trade,
@@ -220,26 +222,15 @@ export default function LimitOrder({ history }: RouteComponentProps) {
   }, [dependentField, independentField, parsedAmounts, showWrap, typedValue])
 
 
-  // check whether the user has approved the router on the input token
-  const [approval] = useApproveCallbackFromTrade(getRouterAddress(chainId), trade, allowedSlippage)
-
-  // check if user has gone through approval process, used to show two step buttons, reset on token change
-  const [approvalSubmitted, setApprovalSubmitted] = useState<boolean>(false)
-
-  // mark when a user has submitted an approval, reset onTokenSelection for input field
-  useEffect(() => {
-    if (approval === ApprovalState.PENDING) {
-      setApprovalSubmitted(true)
-    }
-  }, [approval, approvalSubmitted])
-
   const maxAmountInput: CurrencyAmount | undefined = maxAmountSpend(currencyBalances[Field.INPUT])
   const atMaxAmountInput = Boolean(maxAmountInput && parsedAmounts[Field.INPUT]?.equalTo(maxAmountInput))
 
   const inputCurrency = currencies[Field.INPUT]
   const inputAmount = parsedAmounts[Field.INPUT]
-  const balance = useCurrencyBalance(account ?? undefined, inputCurrency)
-  let sufficientBalance = inputAmount && balance && !balance.lessThan(inputAmount)
+  const balance = useCurrencyBalance(account ?? undefined, inputCurrency)//parseUnits(inputAmountEnter, currencies[Field.INPUT].decimals)
+  const inputAmountToBigintIsh = inputAmountEnter && JSBI.BigInt(parseUnits(inputAmountEnter, currencies[Field.INPUT]?.decimals).toString())
+  const inputToJSBI = inputCurrency && new CurrencyAmount(inputCurrency, inputAmountToBigintIsh)
+  let sufficientBalance = inputAmount && inputToJSBI && balance && !balance.lessThan(inputToJSBI)
   if (sufficientBalance === undefined) sufficientBalance = true
   const addTransaction = useTransactionAdder()
 
@@ -249,20 +240,23 @@ export default function LimitOrder({ history }: RouteComponentProps) {
     fetchOrders(orderStatus)
   }, [orderStatus, fetchOrders])
 
-
   const handlePlaceLimitOrder = async () => {
     const isFormValid = validateForm()
     setSwapState({ attemptingTxn: true, showConfirm: true, swapErrorMessage: undefined, txHash: undefined })
     if (!isFormValid) return;
-    const sellToken = _get(currencies[Field.INPUT], 'address', ETH_MAINNET_NATIVE_ADDRESS.address)
-    const buyToken = _get(currencies[Field.OUTPUT], 'address', ETH_MAINNET_NATIVE_ADDRESS.address)
-    const inputAmount = parsedAmounts[Field.INPUT]?.toExact() || '0'
+    const sellToken = currencies[Field.INPUT]
+    const buyToken = currencies[Field.OUTPUT]
+    if(!sellToken || !buyToken) return;
+    const sellTokenAddress = _get(currencies[Field.INPUT], 'address', ETH_MAINNET_NATIVE_ADDRESS.address)
+    const buyTokenAddress = _get(currencies[Field.OUTPUT], 'address', ETH_MAINNET_NATIVE_ADDRESS.address)
+    const inputAmount = inputAmountEnter || '0'
+
     const order = {
       chainId,
       account,
-      sellToken,
+      sellToken: sellTokenAddress,
       sellAmount: parseUnits(inputAmount, sellToken?.decimals).toString(),
-      buyToken,
+      buyToken: buyTokenAddress,
       buyAmount: parseUnits(outputAmount, buyToken?.decimals).toString()
     }
 
@@ -279,21 +273,23 @@ export default function LimitOrder({ history }: RouteComponentProps) {
         addTransaction(txnData, {
           summary: base
         })
+        setInputAmountEnter('')
+        setInputPerOutput('')
         ReactGA.event({
           category: 'Create-LimitOrder',
           action: base,
           label: [
-            sellToken.symbol,
-            buyToken.symbol
+            sellToken?.symbol,
+            buyToken?.symbol
           ].join('/')
         })
         const fetchDataInterval = setInterval(async () => {
           const txnData = await library.getTransaction(hash)
-          if (txnData.confirmations > 7) {
+          if (txnData.confirmations > 1) {
             fetchOrders(orderStatus)
             clearInterval(fetchDataInterval)
           }
-        }, 6000)
+        }, 2000)
       })
         .catch(error => {
           setSwapState({
@@ -306,11 +302,6 @@ export default function LimitOrder({ history }: RouteComponentProps) {
     }
   }
 
-  //input token per output token rate conversion
-  const [inputPerOutput, setInputPerOutput] = useState<string>('-')
-  const [inputAmountEnter, setInputAmountEnter] = useState<string>('')
-  const [outputAmount, setOutputAmount] = useState<string>('')
-
   const setPriceToMarket = useCallback(() => {
     if (parsedAmounts && parsedAmounts[Field.OUTPUT]) {
       const inputEntered = _get(parsedAmounts, Field.OUTPUT, 0).toFixed(4)
@@ -321,17 +312,7 @@ export default function LimitOrder({ history }: RouteComponentProps) {
     }
   }, [inputAmountEnter, parsedAmounts])
 
-  // useMemo(() => {
-  //   if (inputPerOutput === '-') {
-  //     setPriceToMarket()
-  //   }
-  // }, [inputPerOutput, setPriceToMarket])
-
   const handleSetInputAmountEnter = useCallback((value: string | undefined) => {
-    // if (inputPerOutput === '-') {
-    //   handleMarketInputPerOutputConversion()
-    //   if (parsedAmounts && parsedAmounts[Field.OUTPUT]) setInputPerOutput(_get(parsedAmounts, Field.OUTPUT, 0).toFixed(4))
-    // }
     if (value === undefined) return;
     setInputAmountEnter(value)
     const outputAmountCalculated = parseFloat(value) * parseFloat(inputPerOutput);
@@ -339,16 +320,14 @@ export default function LimitOrder({ history }: RouteComponentProps) {
     setOutputAmount(outputAmountCalculated.toFixed(4))
   }, [inputPerOutput])
 
-
   const handleSetOutputAmont = useCallback((value: string) => {
     setOutputAmount(value)
     let conversionRate =
-      (parseFloat(formattedAmounts[Field.INPUT]) * parseFloat(value));
+      (parseFloat(value) / parseFloat(inputPerOutput));
     if (isNaN(conversionRate) || !isFinite(conversionRate)) return;
-    setInputPerOutput(conversionRate.toFixed(2))
+    setInputAmountEnter(conversionRate.toFixed(4))
 
-  }, [setOutputAmount, setInputPerOutput, formattedAmounts])
-
+  }, [setOutputAmount, setInputAmountEnter, inputPerOutput])
 
   const handleSetInputPerOutput = useCallback(inputEntered => {
     
@@ -359,10 +338,8 @@ export default function LimitOrder({ history }: RouteComponentProps) {
     setOutputAmount(outputAmountCalculated.toFixed(4))
   }, [inputAmountEnter])
 
-
   const handleInputSelect = useCallback(
     inputCurrency => {
-      setApprovalSubmitted(false) // reset 2 step UI for approvals
       onCurrencySelection(Field.INPUT, inputCurrency)
     },
     [onCurrencySelection]
@@ -378,12 +355,10 @@ export default function LimitOrder({ history }: RouteComponentProps) {
     }
   }, [currencies, handleMarketInputPerOutputConversion, inputPerOutput, parsedAmounts])
 
-  
-
   const validateForm = (() => {
     const sellToken = _get(currencies[Field.INPUT], 'address', ETH_MAINNET_NATIVE_ADDRESS.address)
     const buyToken = _get(currencies[Field.OUTPUT], 'address', ETH_MAINNET_NATIVE_ADDRESS.address)
-    const inputAmount = parsedAmounts[Field.INPUT]?.toExact() || '0'
+    const inputAmount = inputAmountEnter || '0'
     if (!sellToken) {
       return false
     }
@@ -403,9 +378,6 @@ export default function LimitOrder({ history }: RouteComponentProps) {
 
     return true
   })
-  // const handleMaxInput = useCallback(() => {
-  //   maxAmountInput && onUserInput(Field.INPUT, maxAmountInput.toExact())
-  // }, [maxAmountInput, onUserInput])
 
   const handleOutputSelect = useCallback(outputCurrency => onCurrencySelection(Field.OUTPUT, outputCurrency), [
     onCurrencySelection
@@ -419,11 +391,10 @@ export default function LimitOrder({ history }: RouteComponentProps) {
     setSwapState({ showConfirm: false, attemptingTxn, swapErrorMessage, txHash })
     // if there was a tx hash, we want to clear the input
     if (txHash) {
-      onUserInput(Field.INPUT, '')
-      onUserInput(Field.OUTPUT, '')
+      
       setOutputAmount('')
     }
-  }, [attemptingTxn, onUserInput, swapErrorMessage, txHash])
+  }, [attemptingTxn, swapErrorMessage, txHash])
 
   return (
     <>
@@ -434,24 +405,22 @@ export default function LimitOrder({ history }: RouteComponentProps) {
         onDismiss={handleDismissTokenWarning}
       />
       <SwapPoolTabs active={'swap'} />
-
       <BodyWrapper style={{ margin: 'auto' }}>
-
         <SwapHeader />
         <Wrapper id="swap-page">
-
           <ConfirmSwapModal
             isOpen={showConfirm}
             onAcceptChanges={handleAcceptChanges}
             attemptingTxn={attemptingTxn}
             txHash={txHash}
-            recipient={recipient}
+            recipient={null}
             allowedSlippage={allowedSlippage}
             onConfirm={handlePlaceLimitOrder}
             swapErrorMessage={swapErrorMessage}
             onDismiss={handleConfirmDismiss}
-            inputAmount={inputAmount}
+            inputAmount={inputToJSBI}
             outputAmount={outputAmount}
+            limitPrice={inputPerOutput}
             marketPrice={(parseFloat(formattedAmounts[Field.OUTPUT]) / parseFloat(formattedAmounts[Field.INPUT])).toFixed(4)}
           />
           <AutoColumn gap={'sm'}>
@@ -473,7 +442,6 @@ export default function LimitOrder({ history }: RouteComponentProps) {
                   <CustomSwapVert>
                     <SwapVert
                       onClick={() => {
-                        setApprovalSubmitted(false) // reset 2 step UI for approvals
                         onSwitchTokens()
                         handleMarketInputPerOutputConversion()
                       }}

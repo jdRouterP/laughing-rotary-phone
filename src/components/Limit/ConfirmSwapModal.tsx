@@ -27,7 +27,8 @@ export default function ConfirmSwapModal({
   txHash,
   inputAmount,
   outputAmount,
-  marketPrice
+  marketPrice,
+  limitPrice
 }: {
   isOpen: boolean
   attemptingTxn: boolean
@@ -41,6 +42,7 @@ export default function ConfirmSwapModal({
   inputAmount: CurrencyAmount | undefined
   outputAmount: string
   marketPrice: string
+  limitPrice: string
 }) {
   const {
     currencies
@@ -53,9 +55,10 @@ export default function ConfirmSwapModal({
         inputAmount={inputAmount}
         outputAmount={outputAmount}
         marketPrice={marketPrice}
+        limitPrice={limitPrice}
       />
     )
-  }, [onAcceptChanges, recipient, inputAmount, outputAmount, marketPrice])
+  }, [onAcceptChanges, recipient, inputAmount, outputAmount, marketPrice, limitPrice])
 
   const modalBottom = useCallback(() => {
     return (

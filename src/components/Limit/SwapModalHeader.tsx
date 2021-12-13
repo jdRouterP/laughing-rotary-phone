@@ -17,13 +17,15 @@ export default function SwapModalHeader({
   onAcceptChanges,
   inputAmount,
   outputAmount,
-  marketPrice
+  marketPrice,
+  limitPrice
 }: {
   recipient: string | null
   onAcceptChanges: () => void
   inputAmount: CurrencyAmount | undefined
   outputAmount: string
   marketPrice: string
+  limitPrice: string
 }) {
   const {
     currencies
@@ -79,7 +81,7 @@ export default function SwapModalHeader({
           <RowFixed>
             <Text fontWeight={500} fontSize={14} color={theme.text2}>
               {outputAmount && inputAmount ? <span>
-                1 {currencies[Field.INPUT]?.symbol} = {(parseFloat(inputAmount.toExact()) / parseFloat(outputAmount)).toFixed(4)} {currencies[Field.OUTPUT]?.symbol}
+                1 {currencies[Field.INPUT]?.symbol} = {limitPrice} {currencies[Field.OUTPUT]?.symbol}
               </span> : '-'}
             </Text>
           </RowFixed>
