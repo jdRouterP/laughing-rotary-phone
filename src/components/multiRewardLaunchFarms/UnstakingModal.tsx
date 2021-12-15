@@ -47,7 +47,7 @@ export default function UnstakingModal({ isOpen, onDismiss, stakingInfo }: Staki
     if (stakingContract && stakingInfo?.stakedAmount) {
       setAttempting(true)
       await stakingContract
-        .exit({ gasLimit: 350000 })
+        .exit({ gasLimit: 500000 })
         .then((response: TransactionResponse) => {
           addTransaction(response, {
             summary: `Withdraw deposited liquidity`
@@ -105,7 +105,7 @@ export default function UnstakingModal({ isOpen, onDismiss, stakingInfo }: Staki
         <LoadingView onDismiss={wrappedOndismiss}>
           <AutoColumn gap="12px" justify={'center'}>
             <TYPE.body fontSize={20}>Withdrawing {stakingInfo?.stakedAmount?.toSignificant(4)} DFYN-V2</TYPE.body>
-            <TYPE.body fontSize={20}>Claiming {stakingInfo?.earnedAmount?.toSignificant(4)} {reward0.symbol ?? 'DFYN'} {"&&"} {reward1.symbol ?? 'DFYN'}</TYPE.body>
+            {!stakingInfo?.active && <TYPE.body fontSize={20}>Claiming {stakingInfo?.earnedAmount?.toSignificant(4)} {reward0.symbol ?? 'DFYN'} {"&&"} {reward1.symbol ?? 'DFYN'}</TYPE.body>}
           </AutoColumn>
         </LoadingView>
       )}
@@ -114,7 +114,7 @@ export default function UnstakingModal({ isOpen, onDismiss, stakingInfo }: Staki
           <AutoColumn gap="12px" justify={'center'}>
             <TYPE.largeHeader>Transaction Submitted</TYPE.largeHeader>
             <TYPE.body fontSize={20}>Withdrew LP Tokens!</TYPE.body>
-            <TYPE.body fontSize={20}>Claimed {reward0?.symbol ?? 'DFYN'} {"&&"} {reward1?.symbol}!</TYPE.body>
+            {!stakingInfo?.active && <TYPE.body fontSize={20}>Claimed {reward0?.symbol ?? 'DFYN'} {"&&"} {reward1?.symbol}!</TYPE.body>}
           </AutoColumn>
         </SubmittedView>
       )}
