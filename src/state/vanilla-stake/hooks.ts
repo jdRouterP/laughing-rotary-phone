@@ -1,6 +1,6 @@
 import { ChainId, CurrencyAmount, JSBI, Token, TokenAmount, Pair } from '@dfyn/sdk'
 import { useMemo } from 'react'
-import { UNI, USDC, DFYN, FISH, UFT, ANY, AGA, AGAr, NORD, BIFI, COSMIC, TITAN, ICE, WMATIC, CRV, UNI_TOKEN, AAVE, LINK, LUNA, ELE, GAJ, SILVER, SING, RAZOR, ETHER, FRM, CIRUS, MATRIX, SHIB } from '../../constants'
+import { UNI, USDC, DFYN, FISH, UFT, ANY, AGA, AGAr, NORD, BIFI, COSMIC, TITAN, ICE, WMATIC, CRV, UNI_TOKEN, AAVE, LINK, LUNA, ELE, GAJ, SILVER, SING, RAZOR, ETHER, FRM, CIRUS, MATRIX, SHIB, OAI } from '../../constants'
 import { STAKING_REWARDS_BASIC_FARMS_INTERFACE } from '../../constants/abis/staking-rewards-basic-farms'
 import { useActiveWeb3React } from '../../hooks'
 import { NEVER_RELOAD, useMultipleContractSingleData } from '../multicall/hooks'
@@ -24,6 +24,59 @@ export const STAKING_REWARDS_INFO: {
   }[]
 } = {
   [ChainId.MATIC]: [
+    //v8
+    {
+      tokens: [OAI, DFYN],
+      baseToken: DFYN,
+      startTime: 1638388000,
+      stakingRewardAddress: '0x18c6F325Dd741eF12594Af7046D10F721CC4e9CE',
+      version: 'v8'
+    },
+    {
+      tokens: [AGAr, AGA],
+      baseToken: AGA,
+      startTime: 1637845200,
+      rewardToken: AGA,
+      stakingRewardAddress: '0xfD2092E2ED896d010E429b4c7587f126A2b24bA3',
+      version: 'v8'
+    },
+    {
+      tokens: [DFYN, LUNA],
+      baseToken: DFYN,
+      startTime: 1637510700,
+      stakingRewardAddress: '0x2e78bBCbAcA1a2F1BE8cb3D66452173F3eD58Ce5',
+      version: 'v8'
+    },
+
+    {
+      tokens: [DFYN, LINK],
+      baseToken: DFYN,
+      startTime: 1637510700,
+      stakingRewardAddress: '0x9573E3a8A68B4D74FDC0857473E7F72100E3B9E0',
+      version: 'v8'
+    },
+    {
+      tokens: [DFYN, AAVE],
+      baseToken: DFYN,
+      startTime: 1637510700,
+      stakingRewardAddress: '0x22d34d4e8a469A3596c4D0c80CF738E34830B723',
+      version: 'v8'
+    },
+    {
+      tokens: [DFYN, UNI_TOKEN],
+      baseToken: DFYN,
+      startTime: 1637510700,
+      stakingRewardAddress: '0x0707eD36534856faEB500354AbFC5ecb5dA99e8d',
+      version: 'v8'
+    },
+    {
+      tokens: [DFYN, CRV],
+      baseToken: DFYN,
+      startTime: 1637510700,
+      stakingRewardAddress: '0x73667b79c083Fbd7d86BDbFC0A83373590a4770B',
+      version: 'v8'
+    },
+
     //v7
     {
       tokens: [USDC, ELE],
@@ -86,6 +139,22 @@ export const STAKING_REWARDS_INFO: {
       version: 'v7'
     },
 
+
+
+  ]
+}
+
+export const INACTIVE_STAKING_REWARDS_INFO: {
+  [chainId in ChainId]?: {
+    tokens: [Token, Token]
+    baseToken?: Token
+    rewardToken?: Token
+    startTime: number
+    stakingRewardAddress: string
+    version: string
+  }[]
+} = {
+  [ChainId.MATIC]: [
     {
       tokens: [AGAr, AGA],
       baseToken: AGA,
@@ -184,20 +253,6 @@ export const STAKING_REWARDS_INFO: {
       version: 'v6'
     },
 
-  ]
-}
-
-export const INACTIVE_STAKING_REWARDS_INFO: {
-  [chainId in ChainId]?: {
-    tokens: [Token, Token]
-    baseToken?: Token
-    rewardToken?: Token
-    startTime: number
-    stakingRewardAddress: string
-    version: string
-  }[]
-} = {
-  [ChainId.MATIC]: [
     {
       tokens: [DFYN, WMATIC],
       baseToken: DFYN,

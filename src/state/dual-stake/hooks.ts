@@ -25,6 +25,23 @@ export const STAKING_REWARDS_INFO: {
   }[]
 } = {
   [ChainId.MATIC]: [
+    //v7
+    {
+      tokens: [ROUTE, DFYN],
+      rewardTokens: [ROUTE, DFYN],
+      baseToken: DFYN,
+      start: 1637510700000,
+      stakingRewardAddress: '0x061dA05381F4986fD25d3A6177d7AC6119344c5E',
+      version: 'v7'
+    },
+    {
+      tokens: [EMON, USDC],
+      rewardTokens: [EMON, DFYN],
+      baseToken: USDC,
+      start: 1637510700000,
+      stakingRewardAddress: '0xD65c7cEb912a833ED1D6abBeDC96864060f68e48',
+      version: 'v7'
+    },
     //v6
     {
       tokens: [RAZOR, DFYN],
@@ -42,6 +59,20 @@ export const STAKING_REWARDS_INFO: {
       stakingRewardAddress: '0x6A2A790dfb20e2b005724354c97a3Bce0767A180',
       version: 'v6'
     },
+  ]
+}
+
+export const INACTIVE_STAKING_REWARDS_INFO: {
+  [chainId in ChainId]?: {
+    tokens: [Token, Token]
+    rewardTokens: [Token, Token]
+    baseToken?: Token
+    start: number
+    stakingRewardAddress: string
+    version: string
+  }[]
+} = {
+  [ChainId.MATIC]: [
     {
       tokens: [ROUTE, DFYN],
       rewardTokens: [ROUTE, DFYN],
@@ -67,32 +98,6 @@ export const STAKING_REWARDS_INFO: {
       stakingRewardAddress: '0x5B2CE8dDE5B99D974EC557B53e864f9EBb80FA66',
       version: 'v5'
     },
-
-
-
-    // {
-    //   tokens: [SING, DFYN],
-    //   rewardTokens: [SING, DFYN],
-    //   baseToken: DFYN,
-    //   start: 1630330200000,
-    //   stakingRewardAddress: '0x0351F770017974A137554fF889Ff6daE6b4762e3',
-    //   version: 'v3'
-    // },
-
-  ]
-}
-
-export const INACTIVE_STAKING_REWARDS_INFO: {
-  [chainId in ChainId]?: {
-    tokens: [Token, Token]
-    rewardTokens: [Token, Token]
-    baseToken?: Token
-    start: number
-    stakingRewardAddress: string
-    version: string
-  }[]
-} = {
-  [ChainId.MATIC]: [
     {
       tokens: [RAZOR, DFYN],
       rewardTokens: [RAZOR, DFYN],

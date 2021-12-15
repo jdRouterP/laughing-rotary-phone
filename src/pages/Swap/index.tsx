@@ -3,7 +3,7 @@ import React, { useCallback, useContext, useEffect, useMemo, useState } from 're
 import { ArrowDown } from 'react-feather'
 import ReactGA from 'react-ga'
 import { Text } from 'rebass'
-import styled, { ThemeContext } from 'styled-components'
+import { ThemeContext } from 'styled-components'
 import AddressInputPanel from '../../components/AddressInputPanel'
 import { ButtonError, ButtonLight, ButtonPrimary, ButtonConfirmed } from '../../components/Button'
 import Card, { GreyCard } from '../../components/Card'
@@ -39,7 +39,7 @@ import {
   useSwapState
 } from '../../state/swap/hooks'
 import { useExpertModeManager, useUserSlippageTolerance, useUserSingleHopOnly } from '../../state/user/hooks'
-import { LinkStyledButton, TYPE, StyledInternalLink  } from '../../theme'
+import { LinkStyledButton, TYPE } from '../../theme'
 import { maxAmountSpend } from '../../utils/maxAmountSpend'
 import { computeTradePriceBreakdown, warningSeverity } from '../../utils/prices'
 import AppBody from '../AppBody'
@@ -51,31 +51,29 @@ import { isTradeBetter } from 'utils/trades'
 import { RouteComponentProps } from 'react-router-dom'
 import { getRouterAddress } from 'utils'
 import { SwapVert } from '@material-ui/icons'
-import VDFYN_LOGO from '../../assets/images/vDFYN.png'
-import { HEADER_ACCESS } from 'constants/networks'
 
-const HighlightBanner = styled.div`
-  cursor: pointer;
-  display: flex;
-  color: #FDFCE5;
-  color: ${({ theme }) => theme.bannerText};
+// const HighlightBanner = styled.div`
+//   cursor: pointer;
+//   display: flex;
+//   color: #FDFCE5;
+//   color: ${({ theme }) => theme.bannerText};
 
-  font-size: 14px;
-  :hover{
-    text-decoration: underline;
-  }
-  img {
-    height: 20px;
-    width: 20px;
-  }
-  span {
-    margin-left: 5px;
-    margin-top: 1px;
-  }
-`
-const DFYNTitle = styled.span`
-  color: #2172E5
-`
+//   font-size: 14px;
+//   :hover{
+//     text-decoration: underline;
+//   }
+//   img {
+//     height: 20px;
+//     width: 20px;
+//   }
+//   span {
+//     margin-left: 5px;
+//     margin-top: 1px;
+//   }
+// `
+// const DFYNTitle = styled.span`
+//   color: #2172E5
+// `
 
 export default function Swap({ history }: RouteComponentProps) {
   const loadedUrlParams = useDefaultsFromURLSearch()
@@ -326,13 +324,6 @@ export default function Swap({ history }: RouteComponentProps) {
 
   const swapIsUnsupported = useIsTransactionUnsupported(currencies?.INPUT, currencies?.OUTPUT)
   
-  function RenderBannerInfo() {
-    return <StyledInternalLink to={`/vdfyn`}>
-      <HighlightBanner>
-        <img src={VDFYN_LOGO} alt={'vDFYN logo'} /> <span>Earn more by staking in<DFYNTitle>vDFYN</DFYNTitle> with Boosted APR</span>
-      </HighlightBanner>
-    </StyledInternalLink>
-  }
 
   return (
     <>
@@ -555,7 +546,6 @@ export default function Swap({ history }: RouteComponentProps) {
       ) : (
         <UnsupportedCurrencyFooter show={swapIsUnsupported} currencies={[currencies.INPUT, currencies.OUTPUT]} />
       )}
-      { chainId && HEADER_ACCESS.vault.includes(chainId) && <RenderBannerInfo /> }
     </>
   )
 }

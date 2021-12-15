@@ -27,7 +27,7 @@ import { useTotalSupply } from '../../data/TotalSupply'
 import { usePair } from '../../data/Reserves'
 import usePrevious from '../../hooks/usePrevious'
 import useUSDCPrice from '../../utils/useUSDCPrice'
-import { BIG_INT_ZERO, BIG_INT_SECONDS_IN_DAY, ETHER } from '../../constants'
+import { BIG_INT_ZERO, BIG_INT_SECONDS_IN_DAY, ETHER, OAI } from '../../constants'
 import { Countdown } from './Countdown'
 
 const PageWrapper = styled(AutoColumn)`
@@ -237,25 +237,39 @@ export default function Manage({
         <VoteCard>
           <CardBGImage />
           <CardNoise />
-          <CardSection>
-            <AutoColumn gap="md">
-              <RowBetween>
-                <TYPE.white fontWeight={600}>This farm has ended!</TYPE.white>
-              </RowBetween>
-              <RowBetween style={{ marginBottom: '1rem' }}>
-                <TYPE.white fontSize={14}>
-                  {`Checkout our new farms!`}
-                </TYPE.white>
-              </RowBetween>
-              <ExternalLink
-                style={{ color: 'white', textDecoration: 'underline' }}
-                href="https://dfyn-network.medium.com/introducing-dfyn-yield-farming-phase-7-4480eebf0fba"
-                target="_blank"
-              >
-                <TYPE.white fontSize={14}>Read more about Dfyn Farms Phase 7</TYPE.white>
-              </ExternalLink>
-            </AutoColumn>
-          </CardSection>
+          {
+            stakingInfo?.rewardToken === OAI ? <CardSection>
+              <AutoColumn gap="md">
+                <RowBetween>
+                  <TYPE.white fontWeight={600}>Omni Launch farm has ended!</TYPE.white>
+                </RowBetween>
+                <RowBetween style={{ marginBottom: '1rem' }}>
+                  <TYPE.white fontSize={14}>
+                    {`You can continue your journey with Omni-Dfyn farm under ecosystem farms or Omni vault under single asset vaults`}
+                  </TYPE.white>
+                </RowBetween>
+              </AutoColumn>
+            </CardSection> : <CardSection>
+              <AutoColumn gap="md">
+                <RowBetween>
+                  <TYPE.white fontWeight={600}>This farm has ended!</TYPE.white>
+                </RowBetween>
+                <RowBetween style={{ marginBottom: '1rem' }}>
+                  <TYPE.white fontSize={14}>
+                    {`Checkout our new farms!`}
+                  </TYPE.white>
+                </RowBetween>
+                <ExternalLink
+                  style={{ color: 'white', textDecoration: 'underline' }}
+                  href="https://dfyn-network.medium.com/introducing-dfyn-yield-farming-phase-7-4480eebf0fba"
+                  target="_blank"
+                >
+                  <TYPE.white fontSize={14}>Read more about Dfyn Farms Phase 7</TYPE.white>
+                </ExternalLink>
+              </AutoColumn>
+            </CardSection>
+
+          }
           <CardBGImage />
           <CardNoise />
         </VoteCard>

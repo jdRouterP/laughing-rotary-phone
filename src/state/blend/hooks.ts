@@ -154,7 +154,7 @@ export function useInputToMaticToken(latestUpdatedTokenId: string | null): {
   const nativeCurrency = Currency.getNativeCurrency(chainId)
   const selectedInputCurrencyIndex = inputCurrencyIdArr.findIndex(curr => _get(curr, 'address', curr?.symbol) === latestUpdatedTokenId)
   let selectedInputCurrency = inputCurrencyIdArr[selectedInputCurrencyIndex]
-  let selectedInputTokenValue: string | undefined = typedValues[selectedInputCurrencyIndex]
+  let selectedInputTokenValue: any = typedValues[selectedInputCurrencyIndex]
 
   let selectedInputCurrency1 = undefined
   let selectedInputTokenValue1: any = null
@@ -162,7 +162,10 @@ export function useInputToMaticToken(latestUpdatedTokenId: string | null): {
   const relevantTokenBalances = useTokenBalances(account ?? undefined, [selLPToken?.liquidityToken])
   const totalSupply = useTotalSupply(selLPToken?.liquidityToken)
   const inputLPValue = parseFloat(selectedInputTokenValue).toFixed(_get(selectedInputCurrency, 'decimals', 4))
-
+  let identifyOutputCurrency = outputCurrency || nativeCurrency
+  if (!outputCurrency && selectedInputCurrency?.symbol === nativeCurrency.symbol) {
+    identifyOutputCurrency = USDT
+  }
   if (selLPToken && totalSupply) {
     const userLiquidity = relevantTokenBalances?.[selLPToken?.liquidityToken?.address ?? '']
 
@@ -186,25 +189,34 @@ export function useInputToMaticToken(latestUpdatedTokenId: string | null): {
 
     selectedInputCurrency1 = selLPToken.token1
     selectedInputTokenValue1 = liquidityValueB && new TokenAmount(selLPToken.token1, percentToRemove.multiply(liquidityValueB?.raw).quotient).toExact()
+    
+    if(_get(selectedInputCurrency, 'address', selectedInputCurrency?.symbol) === 
+    _get(identifyOutputCurrency, 'address', identifyOutputCurrency?.symbol)) {
+      selectedInputTokenValue1*=2
+      if(selectedInputTokenValue1) selectedInputTokenValue1 = selectedInputTokenValue1.toString()
+    }
+    if((_get(selectedInputCurrency1, 'address', selectedInputCurrency1?.symbol) === 
+    _get(identifyOutputCurrency, 'address', identifyOutputCurrency?.symbol)) && selectedInputTokenValue) {
+      selectedInputTokenValue*=2
+      if(selectedInputTokenValue) selectedInputTokenValue = selectedInputTokenValue.toString()
+
+    }
   }
   // const convertToUSDC0 = parseFloat(useUSDCPrice(selectedInputCurrency || undefined)?.toSignificant() || '')*(parseFloat(selectedInputTokenValue || '0'))
   // const convertToUSDC1 = parseFloat(useUSDCPrice(selectedInputCurrency1 || undefined)?.toSignificant() || '')*(parseFloat(selectedInputTokenValue1 || '0'))
   // const usdcValue = (convertToUSDC0 || 0) + (convertToUSDC1 || 0)
 
+  
   let parsedInput = tryParseAmount(selectedInputTokenValue, selectedInputCurrency || undefined)
-  let identifyOutputCurrency = outputCurrency || nativeCurrency
-  if (!outputCurrency && selectedInputCurrency?.symbol === nativeCurrency.symbol) {
-    identifyOutputCurrency = USDT
-  }
-  const inputCurrencyToMatic: Trade | null = useTradeExactIn(parsedInput, identifyOutputCurrency)
+  let inputCurrencyToMatic: Trade | null = useTradeExactIn(parsedInput, identifyOutputCurrency)
 
   const parsedInput1 = tryParseAmount(selectedInputTokenValue1, selectedInputCurrency1 || undefined)
-  const inputCurrencyToMatic1: Trade | null = useTradeExactIn(parsedInput1, identifyOutputCurrency)
+  let inputCurrencyToMatic1: Trade | null = useTradeExactIn(parsedInput1, identifyOutputCurrency)
 
   const dispatch = useDispatch<AppDispatch>()
 
   useDeepEffect(() => {
-    if (selLPToken && selectedInputTokenValue && inputCurrencyToMatic) {
+    if (selLPToken && selectedInputTokenValue && (inputCurrencyToMatic || inputCurrencyToMatic1)) {
       dispatch(setInputLPToMaticConversion({
         updatedInputLPToMaticConversion: {
           inputLPToken: selLPToken.liquidityToken,
@@ -281,12 +293,14 @@ export function useGetOutputTokenAmount(): {
       if (val && isCurrencySelected && val.maticConversion) {
         filterActiveLPToken[lpAddress] = val
         _get(val, 'maticConversion', []).forEach(tra => {
-          totalLPMaticValue += parseFloat(_get(tra, 'outputAmount', 0).toFixed(6))
+          if(tra)
+            totalLPMaticValue += parseFloat(_get(tra, 'outputAmount', 0).toFixed(6))
         })
       }
     })
   }
   Object.values(inputToMaticConversion || {}).forEach(val => {
+    if(val) {
     const tokenAddress = _get(val, 'inputToken.address', val.inputToken?.symbol)
     const isCurrencySelected = inputCurrencyIdArr.find(inp => _get(inp, 'address', inp?.symbol) === tokenAddress)
 
@@ -294,6 +308,7 @@ export function useGetOutputTokenAmount(): {
       filterActiveTokens[tokenAddress] = val
       totalMaticValue += parseFloat(_get(val, 'maticConversion.outputAmount', 0).toSignificant())
     }
+  }
   })
   totalMaticValue += totalLPMaticValue
   const outputTokenToMatic = totalMaticValue //useTradeExactIn(parsedAmount, outputCurrency || undefined);
@@ -302,6 +317,7 @@ export function useGetOutputTokenAmount(): {
     dispatch(setOutputAmount({ outputTokenAmount: outputTokenToMatic, totalMaticValue }))
     dispatch(setAllTokens({ inputLPToMaticConversion: filterActiveLPToken, inputToMaticConversion: filterActiveTokens }))
   }, [dispatch, outputTokenToMatic, totalMaticValue])
+
   return {
     outputTokenAmount: outputTokenToMatic,
     totalMaticValue

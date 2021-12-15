@@ -2,7 +2,7 @@
 import { ChainId, CurrencyAmount, JSBI, Token, TokenAmount, Pair } from '@dfyn/sdk'
 import { useMemo } from 'react'
 import { BigNumber } from 'ethers'
-import { ROUTE, UNI, ETHER, USDC, DFYN, WBTC, USDT, DAI, WMATIC, UNI_TOKEN, AAVE, LUNA, UST, LINK, CRV, QUICK, MATICPAD, MIMATIC, NEXO, FTM, USDC_FANTOM, USDT_FANTOM, WBTC_FANTOM, WETH_FANTOM, DFYN_FANTOM } from '../../constants'
+import { ROUTE, UNI, ETHER, USDC, DFYN, WBTC, USDT, DAI, WMATIC, UNI_TOKEN, AAVE, LUNA, UST, LINK, CRV, QUICK, MATICPAD, MIMATIC, NEXO, FTM, USDC_FANTOM, USDT_FANTOM, WBTC_FANTOM, WETH_FANTOM, DFYN_FANTOM, MANA, SOL } from '../../constants'
 import { STAKING_REWARDS_FLORA_FARMS_INTERFACE } from '../../constants/abis/staking-rewards-flora-farms'
 import { useActiveWeb3React } from '../../hooks'
 import { NEVER_RELOAD, useMultipleContractSingleData } from '../multicall/hooks'
@@ -28,6 +28,178 @@ export const STAKING_REWARDS_INFO: {
   }[]
 } = {
   [ChainId.FANTOM]: [
+    //v2
+    {
+      tokens: [DFYN_FANTOM, FTM], //DFYN_FTM
+      baseToken: FTM,
+      startTime: 1637845200,
+      stakingRewardAddress: '0xdC004F99AB7Bca4855b4C2F86C9C69f49bE19A1F',
+      version: 'v2',
+      burnRate: '35',
+
+    },
+    {
+      tokens: [USDC_FANTOM, USDT_FANTOM],
+      baseToken: USDT_FANTOM,
+      startTime: 1637845200,
+      stakingRewardAddress: '0xcf000fD0420Ee11fa6295F4D91218B711c836272',
+      version: 'v2',
+      burnRate: '35',
+
+    },
+    {
+      tokens: [WBTC_FANTOM, WETH_FANTOM],
+      baseToken: WETH_FANTOM,
+      startTime: 1637845200,
+      stakingRewardAddress: '0xE4ee0A03736AFFd8d330AB4929203f35C3421F8B',
+      version: 'v2',
+      burnRate: '35',
+
+    },
+    {
+      tokens: [DFYN_FANTOM, USDC_FANTOM],
+      baseToken: USDC_FANTOM,
+      startTime: 1637845200,
+      stakingRewardAddress: '0x70052896E15c4D24bA8280B9387111e25da81BfF',
+      version: 'v2',
+      burnRate: '35',
+
+    },
+    {
+      tokens: [FTM, WETH_FANTOM],
+      baseToken: WETH_FANTOM,
+      startTime: 1637845200,
+      stakingRewardAddress: '0x2B5655B443134b23d882Bc7CF5431C51662b6593',
+      version: 'v2',
+      burnRate: '35',
+
+    },
+  ],
+  [ChainId.MATIC]: [
+    //v7
+    {
+      tokens: [UST, USDT],
+      baseToken: USDT,
+      startTime: 1637510700,
+      stakingRewardAddress: '0x8C66D38032b3FF698b379d2C13Cb9A484331A732',
+      version: 'v7',
+      burnRate: '35'
+    },
+    {
+      tokens: [UST, USDC],
+      baseToken: USDC,
+      startTime: 1637510700,
+      stakingRewardAddress: '0xA9E948A5a9549883908458A1f25f046eE9793916',
+      version: 'v7',
+      burnRate: '35'
+    },
+    {
+      tokens: [DFYN, USDC],
+      baseToken: USDC,
+      startTime: 1637510700,
+      stakingRewardAddress: '0x3AfD72c0d6a6048bdA4E54f37C17A4034621DB0f',
+      version: 'v7',
+      burnRate: '35'
+    },
+    {
+      tokens: [DFYN, ETHER],
+      baseToken: ETHER,
+      startTime: 1637510700,
+      stakingRewardAddress: '0x35D21D11f3e5C6A733C18Bb39310088cd19DAc9c',
+      version: 'v7',
+      burnRate: '35'
+    },
+    {
+      tokens: [WBTC, ETHER],
+      baseToken: ETHER,
+      startTime: 1637510700,
+      stakingRewardAddress: '0xEe772bcCd4919651de4F54b5f5379c4aC9dcF32C',
+      version: 'v7',
+      burnRate: '35'
+    },
+    {
+      tokens: [USDT, USDC],
+      baseToken: USDC,
+      startTime: 1637510700,
+      stakingRewardAddress: '0x13f8674468bC60a96d7ea73038F62eE7C6f2Bf46',
+      version: 'v7',
+      burnRate: '35'
+    },
+    {
+      tokens: [USDC, ETHER],
+      baseToken: USDC,
+      startTime: 1637510700,
+      stakingRewardAddress: '0x8fbE445FCa0CD4Bf5A1646b6d405D9F7BE5Ee083',
+      version: 'v7',
+      burnRate: '35'
+    },
+    {
+      tokens: [USDC, ROUTE],
+      baseToken: USDC,
+      startTime: 1637510700,
+      stakingRewardAddress: '0x687dE006D6cB393c6Fae3c75AbBD62BFC2B92250',
+      version: 'v7',
+      burnRate: '35'
+    },
+    {
+      tokens: [ETHER, ROUTE],
+      baseToken: ETHER,
+      startTime: 1637510700,
+      stakingRewardAddress: '0x0cffcCeF81AAF39F3D5b6271F067FeFfb24DBd1b',
+      version: 'v7',
+      burnRate: '35'
+    },
+    {
+      tokens: [WMATIC, ETHER],
+      baseToken: WMATIC,
+      startTime: 1637510700,
+      stakingRewardAddress: '0x083FBd5D63a95cE0C6C33Fb66A8E5a4B65945a5C',
+      version: 'v7',
+      burnRate: '35'
+    },
+    {
+      tokens: [MANA, ETHER],
+      baseToken: ETHER,
+      startTime: 1637510700,
+      stakingRewardAddress: '0x8F0c6DdF47EecDAF02860BE82B2aC7E485bd08dF',
+      version: 'v7',
+      burnRate: '35'
+    },
+    {
+      tokens: [SOL, ETHER],
+      baseToken: ETHER,
+      startTime: 1637510700,
+      stakingRewardAddress: '0x9213ab4015F9a619c6E0f3380B4508EB310CC917',
+      version: 'v7',
+      burnRate: '35'
+    },
+    {
+      tokens: [NEXO, ETHER],
+      baseToken: ETHER,
+      startTime: 1637510700,
+      stakingRewardAddress: '0x09Fce8E9855d6DD733d2c15b918eB65ce159138D',
+      version: 'v7',
+      burnRate: '35'
+    },
+
+
+
+  ]
+}
+
+export const INACTIVE_STAKING_REWARDS_INFO: {
+  [chainId in ChainId]?: {
+    tokens: [Token, Token]
+    baseToken?: Token
+    rewardToken?: Token
+    startTime?: number
+    rate?: TokenAmount
+    stakingRewardAddress: string
+    version: string
+    burnRate: string
+  }[]
+} = {
+  [ChainId.FANTOM]: [
     //v1
     {
       tokens: [DFYN_FANTOM, FTM], //DFYN_FTM
@@ -36,7 +208,7 @@ export const STAKING_REWARDS_INFO: {
       stakingRewardAddress: '0xf9D70A91c9898ed8FF005A286c9F4FF8Fcc868D4',
       version: 'v1',
       burnRate: '35',
-      rate: new TokenAmount(DFYN_FANTOM, JSBI.divide(JSBI.BigInt("150000000000000000000000"), JSBI.BigInt("2592000")))
+
     },
     {
       tokens: [USDC_FANTOM, USDT_FANTOM],
@@ -45,7 +217,7 @@ export const STAKING_REWARDS_INFO: {
       stakingRewardAddress: '0xa8753167da15FF2A19266b99b32993f353d93F0C',
       version: 'v1',
       burnRate: '35',
-      rate: new TokenAmount(DFYN_FANTOM, JSBI.divide(JSBI.BigInt("300000000000000000000000"), JSBI.BigInt("2592000")))
+
     },
     {
       tokens: [WBTC_FANTOM, WETH_FANTOM],
@@ -54,7 +226,7 @@ export const STAKING_REWARDS_INFO: {
       stakingRewardAddress: '0x4E6e4D56A8EE083d763DC34edD903053b28B5267',
       version: 'v1',
       burnRate: '35',
-      rate: new TokenAmount(DFYN_FANTOM, JSBI.divide(JSBI.BigInt("300000000000000000000000"), JSBI.BigInt("2592000")))
+
     },
     {
       tokens: [DFYN_FANTOM, USDC_FANTOM],
@@ -63,7 +235,7 @@ export const STAKING_REWARDS_INFO: {
       stakingRewardAddress: '0x07428ee4ca8B8B39b5b3C8F02dF0867D88D96bC3',
       version: 'v1',
       burnRate: '35',
-      rate: new TokenAmount(DFYN_FANTOM, JSBI.divide(JSBI.BigInt("150000000000000000000000"), JSBI.BigInt("2592000")))
+
     }],
   [ChainId.MATIC]: [
     //v6
@@ -195,21 +367,6 @@ export const STAKING_REWARDS_INFO: {
       version: 'v6',
       burnRate: '35'
     },
-  ]
-}
-
-export const INACTIVE_STAKING_REWARDS_INFO: {
-  [chainId in ChainId]?: {
-    tokens: [Token, Token]
-    baseToken?: Token
-    rewardToken?: Token
-    startTime?: number
-    stakingRewardAddress: string
-    version: string
-    burnRate: string
-  }[]
-} = {
-  [ChainId.MATIC]: [
     //v5
     {
       tokens: [UST, USDC],
