@@ -30,8 +30,16 @@ export const STAKING_MULTI_REWARDS_INFO: {
       baseToken: WBTC,
       version: 'v1',
       rewardToken: [WETH_V2, DFYN],
-      startTime: 1639569000,
-      stakingRewardAddress: '0x68372897e51601D8827ab4abeEbb39F7C083948d'
+      startTime: 1639576800,
+      stakingRewardAddress: '0x6F1BcAF54BC824Db40198891A41bA84c845a5031'
+    },
+    {
+      tokens: [USDC, WMATIC],
+      baseToken: USDC,
+      version: 'v1',
+      rewardToken: [WETH_V2, DFYN],
+      startTime: 1639576800,
+      stakingRewardAddress: '0xE03dD6ac19Cad8aD420B6C8F3A6C334293bDD446'
     },
   ]
 }
