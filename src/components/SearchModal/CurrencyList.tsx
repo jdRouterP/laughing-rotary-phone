@@ -10,7 +10,7 @@ import { LinkStyledButton, TYPE } from '../../theme'
 import { useIsUserAddedToken, useAllInactiveTokens } from '../../hooks/Tokens'
 import Column from '../Column'
 import { RowFixed, RowBetween } from '../Row'
-import CurrencyLogo from '../CurrencyLogo'
+import CurrencyLogo, { getCurrencyLogoUrls } from '../CurrencyLogo'
 import { MouseoverTooltip } from '../Tooltip'
 import { MenuItem } from './styleds'
 import Loader from '../Loader'
@@ -158,8 +158,7 @@ function CurrencyRow({
 
   //for Plus or add directly to the metamask
   const isMetamask = (ethereum && ethereum.isMetaMask && isOnSelectedList);
-  const addTokenToMetamask = (tokenAddress:any, tokenSymbol:any, tokenDecimals:any) => {
-    if(ethereum) {
+  const addTokenToMetamask = (tokenAddress:any, tokenSymbol:any, tokenDecimals:any) => {    if(ethereum) {
       // @ts-ignore
       ethereum.request({
         method: 'wallet_watchAsset',
@@ -169,7 +168,7 @@ function CurrencyRow({
             address: tokenAddress, // The address that the token is at.
             symbol: tokenSymbol, // A ticker symbol or shorthand, up to 5 chars.
             decimals: tokenDecimals, // The number of decimals in the token
-            // image: tokenImage // A string url of the token logo
+            image: getCurrencyLogoUrls(tokenAddress, tokenSymbol, chainId) // A string url of the token logo
           },
         },
       })

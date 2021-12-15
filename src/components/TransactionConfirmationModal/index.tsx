@@ -204,7 +204,6 @@ export default function TransactionConfirmationModal({
   const { chainId } = useActiveWeb3React()
 
   if (!chainId) return null
-
   // confirmation screen
   return (
     <Modal isOpen={isOpen} onDismiss={onDismiss} maxHeight={90}>

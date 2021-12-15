@@ -60,6 +60,7 @@ import Analytics from 'components/Header/Analytics'
 import ThemeChange from 'components/Header/ThemeChange'
 import VDFYN from './Vault/VDFYN'
 import Fusion from './DfynFusion/Fusion'
+import LimitOrder from './Limit'
 
 const AppWrapper = styled.div`
   display: flex;
@@ -124,6 +125,7 @@ export default function App() {
             <Switch>
               <Route exact strict path="/swap" component={Swap} />
               <Route exact strict path="/dfyn-fusion" component={Fusion} />
+              <Route exact strict path="/limit-order" component={LimitOrder} />
               <Route exact strict path="/dfynFusion" component={Fusion}>
                 <Redirect to="/dfyn-fusion" />
               </Route>

@@ -24,6 +24,28 @@ export const getTokenLogoURL = (address: string) => {
   return uri;
 }
 
+const getChainNameById = (chainId: ChainId) =>{
+  switch(chainId) {
+  case ChainId.MAINNET: return 'ethereum';
+  case ChainId.FANTOM: return 'fantom';
+  case ChainId.MATIC: return 'polygon';
+  case ChainId.OKEX: return 'okex';
+  default: return '';
+  }
+}
+
+
+export function getCurrencyLogoUrls(tokenAddress: string, tokenSymbol: string, chainId: ChainId | undefined) {
+  let urls = ''
+  if (!chainId) return;
+
+  urls =
+    `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/${getChainNameById(chainId)}/assets/${tokenAddress
+    }/logo.png`
+
+  return urls
+}
+
 const logo: { readonly [chainId in ChainId]?: string } = {
   [ChainId.MATIC]: MaticLogo,
   [ChainId.OKEX]: OKExLogo,

@@ -22,6 +22,7 @@ const AdvancedDetailsFooter = styled.div<{ show: boolean }>`
 
 const BannerWrapper = styled.div<{ show: boolean, showValue: number }>`
   transform: ${({ showValue, show }) => showValue === 0 ? 'translateY(-10%)' : (show ? 'translateY(5%)' : 'translateY(-90%)')};
+  width: 100%;
   transition: transform 300ms ease-in-out;
 `
 
@@ -29,7 +30,7 @@ export default function AdvancedSwapDetailsDropdown({ trade, ...rest }: Advanced
   const lastTrade = useLastTruthy(trade)
   const [showValue, setShowValue] = useState(-1)
   useEffect(() => {
-    setShowValue(x => x+1)
+    setShowValue(x => x + 1)
   }, [trade])
   return (
     <>
@@ -39,7 +40,7 @@ export default function AdvancedSwapDetailsDropdown({ trade, ...rest }: Advanced
       <BannerWrapper show={Boolean(trade)} showValue={showValue}>
         <Banner />
       </BannerWrapper>
-      
+
     </>
   )
 }

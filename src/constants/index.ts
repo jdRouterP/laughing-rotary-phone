@@ -23,6 +23,7 @@ type ChainTokenList = {
   readonly [chainId in ChainId]: Token[]
 }
 
+export const ETH_MAINNET_NATIVE_ADDRESS = new Token(ChainId.MATIC, '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE', 18, 'MATIC', 'MATIC');
 
 //Chainlink price feed
 export const MATIC_USD = new Token(ChainId.MATIC, '0x0000000000000000000000000000000000000000', 8, 'MATIC', 'MATIC');
@@ -193,7 +194,8 @@ const WETH_ONLY: ChainTokenList = {
 // used to construct intermediary pairs for trading
 export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
   ...WETH_ONLY,
-  [ChainId.MATIC]: [...WETH_ONLY[ChainId.MATIC], DAI, USDC, USDT, mWETH, ROUTE, ICE, IRON, AAVE, UNI_TOKEN, DFYN, WBTC, UST, LUNA, FISH, LINK, CRV, QUICK]
+  [ChainId.MATIC]: [...WETH_ONLY[ChainId.MATIC], DAI, USDC, USDT, mWETH, ROUTE, ICE, IRON, AAVE, UNI_TOKEN, DFYN, WBTC, UST, LUNA, FISH, LINK, CRV, QUICK],
+  [ChainId.FANTOM]: [...WETH_ONLY[ChainId.FANTOM], FTM, USDC_FANTOM, WBTC_FANTOM, USDT_FANTOM, WETH_FANTOM, DFYN_FANTOM, DAI_FANTOM]
   // [ChainId.MATIC]: [...WETH_ONLY[ChainId.MATIC], DAI, USDC, USDT, mWETH]
 }
 
