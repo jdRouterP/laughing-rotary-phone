@@ -2,7 +2,7 @@
 import { ChainId, CurrencyAmount, JSBI, Token, TokenAmount, Pair } from '@dfyn/sdk'
 import { useMemo } from 'react'
 import { BigNumber } from 'ethers'
-import { UNI, USDC, DFYN, REWARD_TOKENS, EMPTY, ETHER, WBTC, WMATIC } from '../../constants'
+import { UNI, USDC, DFYN, REWARD_TOKENS, EMPTY, WBTC, WMATIC, WETH_V2 } from '../../constants'
 import { STAKING_MULTI_REWARDS_INTERFACE } from '../../constants/abis/staking-reward-multi-reward-launch-farm' //same as pre-staking
 import { useActiveWeb3React } from '../../hooks'
 import { NEVER_RELOAD, useMultipleContractSingleData } from '../multicall/hooks'
@@ -26,12 +26,12 @@ export const STAKING_MULTI_REWARDS_INFO: {
 } = {
   [ChainId.MATIC]: [
     {
-      tokens: [WBTC, ETHER],
+      tokens: [WBTC, WMATIC],
       baseToken: WBTC,
       version: 'v1',
-      rewardToken: [WMATIC, DFYN],
-      startTime: 1636457400,
-      stakingRewardAddress: '0x17457eC6ECbeC241C54dA9a8BA7ca246D77E190B'
+      rewardToken: [WETH_V2, DFYN],
+      startTime: 1639569000,
+      stakingRewardAddress: '0x68372897e51601D8827ab4abeEbb39F7C083948d'
     },
   ]
 }
@@ -316,19 +316,19 @@ export function useMultiStakingInfo(pairToFilterBy?: Pair | null): StakingInfo[]
         // }
 
         const getHypotheticalRewardRate = (
-            rewardToken: Token,
-            stakedAmount: TokenAmount,
-            totalStakedAmount: TokenAmount,
-            totalRewardRate: TokenAmount
-          ): TokenAmount => {
-            return new TokenAmount(
-              rewardToken,
-              JSBI.greaterThan(totalStakedAmount.raw, JSBI.BigInt(0))
-                ? JSBI.divide(JSBI.multiply(totalRewardRate.raw, stakedAmount.raw), totalStakedAmount.raw)
-                : JSBI.BigInt(0)
-            )
-          }
-  
+          rewardToken: Token,
+          stakedAmount: TokenAmount,
+          totalStakedAmount: TokenAmount,
+          totalRewardRate: TokenAmount
+        ): TokenAmount => {
+          return new TokenAmount(
+            rewardToken,
+            JSBI.greaterThan(totalStakedAmount.raw, JSBI.BigInt(0))
+              ? JSBI.divide(JSBI.multiply(totalRewardRate.raw, stakedAmount.raw), totalStakedAmount.raw)
+              : JSBI.BigInt(0)
+          )
+        }
+
         const individualRewardRate = getHypotheticalRewardRate(rewardTokenOne, stakedAmount, totalStakedAmount, rewardRateTokenOne)
         const individualRewardRateTwo = getHypotheticalRewardRate(rewardTokenTwo, stakedAmount, totalStakedAmount, rewardRateTokenTwo)
 
@@ -374,22 +374,22 @@ export function useMultiStakingInfo(pairToFilterBy?: Pair | null): StakingInfo[]
           tokens: info[index].tokens,
           version: info[index].version,
           startTime: info[index].startTime ?? 0,
-        //   rewardToken: info[index].rewardToken ?? uni,
+          //   rewardToken: info[index].rewardToken ?? uni,
           periodFinish: periodFinishMs > 0 ? new Date(periodFinishMs) : undefined,
           splitWindow: splitWindowStateMs > 0 ? new Date(splitWindowStateMs) : undefined,
           vestingPeriod: vestingPeriodMs > 0 ? new Date(periodFinishMs + vestingPeriodMs) : undefined, //vesting period after period ends
-        //   earnedAmount: new TokenAmount(info[index].rewardToken ?? uni, JSBI.BigInt(earnedAmountState?.result?.[0] ?? 0)),
+          //   earnedAmount: new TokenAmount(info[index].rewardToken ?? uni, JSBI.BigInt(earnedAmountState?.result?.[0] ?? 0)),
           earnedAmount: new TokenAmount(rewardTokenOne, JSBI.BigInt(earnedAmountState?.result?.[1][0] ?? 0)),
           earnedAmountTwo: new TokenAmount(rewardTokenTwo, JSBI.BigInt(earnedAmountState?.result?.[1][1] ?? 0)),
           unclaimedAmount: unclaimedAmount,
           totalVestedAmount: totalVestedAmountOne,
           totalVestedAmountTwo: totalVestedAmountTwo,
-        //   rewardRate: individualRewardRate,
+          //   rewardRate: individualRewardRate,
           rewardRate: individualRewardRate,
           rewardRateTwo: individualRewardRateTwo,
           totalRewardRate: rewardRateTokenOne,
           totalRewardRateTwo: rewardRateTokenTwo,
-        //   totalRewardRate: totalRewardRate,
+          //   totalRewardRate: totalRewardRate,
           stakedAmount: stakedAmount,
           claimedSplits: userClaimedSplit,
           totalEarnedReward,
@@ -404,7 +404,7 @@ export function useMultiStakingInfo(pairToFilterBy?: Pair | null): StakingInfo[]
           unlockAt: unlockAt > 0 ? new Date(unlockAt * 1000) : undefined,
           vestingActive,
           active,
-          
+
         })
       }
       return memo
@@ -464,7 +464,7 @@ export function useMultiInactiveStakingInfo(pairToFilterBy?: Pair | null): Staki
   const bothRewardToken = useMemo(() => info.map(({ rewardToken }) => rewardToken), [info])
 
   // get all the info from the staking rewards contracts
-    const balances = useMultipleContractSingleData(stakingRewardAddresses, STAKING_MULTI_REWARDS_INTERFACE, 'balanceOf', accountArg)
+  const balances = useMultipleContractSingleData(stakingRewardAddresses, STAKING_MULTI_REWARDS_INTERFACE, 'balanceOf', accountArg)
   const earnedAmounts = useMultipleContractSingleData(stakingRewardAddresses, STAKING_MULTI_REWARDS_INTERFACE, 'tokensEarned', accountArg)
   const claimedSplits = useMultipleContractSingleData(stakingRewardAddresses, STAKING_MULTI_REWARDS_INTERFACE, 'claimedSplits', accountArg)
   const totalSupplies = useMultipleContractSingleData(stakingRewardAddresses, STAKING_MULTI_REWARDS_INTERFACE, 'totalSupply')
@@ -625,18 +625,18 @@ export function useMultiInactiveStakingInfo(pairToFilterBy?: Pair | null): Staki
         // }
 
         const getHypotheticalRewardRate = (
-            rewardToken: Token,
-            stakedAmount: TokenAmount,
-            totalStakedAmount: TokenAmount,
-            totalRewardRate: TokenAmount
-          ): TokenAmount => {
-            return new TokenAmount(
-              rewardToken,
-              JSBI.greaterThan(totalStakedAmount.raw, JSBI.BigInt(0))
-                ? JSBI.divide(JSBI.multiply(totalRewardRate.raw, stakedAmount.raw), totalStakedAmount.raw)
-                : JSBI.BigInt(0)
-            )
-          }
+          rewardToken: Token,
+          stakedAmount: TokenAmount,
+          totalStakedAmount: TokenAmount,
+          totalRewardRate: TokenAmount
+        ): TokenAmount => {
+          return new TokenAmount(
+            rewardToken,
+            JSBI.greaterThan(totalStakedAmount.raw, JSBI.BigInt(0))
+              ? JSBI.divide(JSBI.multiply(totalRewardRate.raw, stakedAmount.raw), totalStakedAmount.raw)
+              : JSBI.BigInt(0)
+          )
+        }
 
         const individualRewardRate = getHypotheticalRewardRate(rewardTokenOne, stakedAmount, totalStakedAmount, rewardRateTokenOne)
         const individualRewardRateTwo = getHypotheticalRewardRate(rewardTokenTwo, stakedAmount, totalStakedAmount, rewardRateTokenTwo)
@@ -673,43 +673,43 @@ export function useMultiInactiveStakingInfo(pairToFilterBy?: Pair | null): Staki
         let ableToClaim = !vestingActive || (Math.floor(Date.now() / 1000) >= periodFinishSeconds &&
           (userClaimedSplit !== Math.floor(currentSplit) ? true : !hasClaimedPartial))
         memo.push({
-            type: { typeOf: 'Launch Farms', url: 'launch-farms' },
-            rewardAddresses,
-            stakingRewardAddress: rewardsAddress,
-            baseToken: info[index].baseToken,
-            tokens: info[index].tokens,
-            version: info[index].version,
-            startTime: info[index].startTime ?? 0,
+          type: { typeOf: 'Launch Farms', url: 'launch-farms' },
+          rewardAddresses,
+          stakingRewardAddress: rewardsAddress,
+          baseToken: info[index].baseToken,
+          tokens: info[index].tokens,
+          version: info[index].version,
+          startTime: info[index].startTime ?? 0,
           //   rewardToken: info[index].rewardToken ?? uni,
-            periodFinish: periodFinishMs > 0 ? new Date(periodFinishMs) : undefined,
-            splitWindow: splitWindowStateMs > 0 ? new Date(splitWindowStateMs) : undefined,
-            vestingPeriod: vestingPeriodMs > 0 ? new Date(periodFinishMs + vestingPeriodMs) : undefined, //vesting period after period ends
+          periodFinish: periodFinishMs > 0 ? new Date(periodFinishMs) : undefined,
+          splitWindow: splitWindowStateMs > 0 ? new Date(splitWindowStateMs) : undefined,
+          vestingPeriod: vestingPeriodMs > 0 ? new Date(periodFinishMs + vestingPeriodMs) : undefined, //vesting period after period ends
           //   earnedAmount: new TokenAmount(info[index].rewardToken ?? uni, JSBI.BigInt(earnedAmountState?.result?.[0] ?? 0)),
-            earnedAmount: new TokenAmount(rewardTokenOne, JSBI.BigInt(earnedAmountState?.result?.[1][0] ?? 0)),
-            earnedAmountTwo: new TokenAmount(rewardTokenTwo, JSBI.BigInt(earnedAmountState?.result?.[1][1] ?? 0)),
-            unclaimedAmount: unclaimedAmount,
-            totalVestedAmount: totalVestedAmountOne,
-            totalVestedAmountTwo: totalVestedAmountTwo,
+          earnedAmount: new TokenAmount(rewardTokenOne, JSBI.BigInt(earnedAmountState?.result?.[1][0] ?? 0)),
+          earnedAmountTwo: new TokenAmount(rewardTokenTwo, JSBI.BigInt(earnedAmountState?.result?.[1][1] ?? 0)),
+          unclaimedAmount: unclaimedAmount,
+          totalVestedAmount: totalVestedAmountOne,
+          totalVestedAmountTwo: totalVestedAmountTwo,
           //   rewardRate: individualRewardRate,
-            rewardRate: individualRewardRate,
-            rewardRateTwo: individualRewardRateTwo,
-            totalRewardRate: rewardRateTokenOne,
-            totalRewardRateTwo: rewardRateTokenTwo,
+          rewardRate: individualRewardRate,
+          rewardRateTwo: individualRewardRateTwo,
+          totalRewardRate: rewardRateTokenOne,
+          totalRewardRateTwo: rewardRateTokenTwo,
           //   totalRewardRate: totalRewardRate,
-            stakedAmount: stakedAmount,
-            claimedSplits: userClaimedSplit,
-            totalEarnedReward,
-            totalEarnedRewardTwo,
-            ableToClaim,
-            dfynPrice,
-            hasClaimedPartial,
-            totalStakedAmount: totalStakedAmount,
-            tokenOnePrice: tokenPrices[index][0] ?? 0,
-            tokenTwoPrice: tokenPrices[index][1] ?? 0,
-            getHypotheticalRewardRate,
-            unlockAt: unlockAt > 0 ? new Date(unlockAt * 1000) : undefined,
-            vestingActive,
-            active,
+          stakedAmount: stakedAmount,
+          claimedSplits: userClaimedSplit,
+          totalEarnedReward,
+          totalEarnedRewardTwo,
+          ableToClaim,
+          dfynPrice,
+          hasClaimedPartial,
+          totalStakedAmount: totalStakedAmount,
+          tokenOnePrice: tokenPrices[index][0] ?? 0,
+          tokenTwoPrice: tokenPrices[index][1] ?? 0,
+          getHypotheticalRewardRate,
+          unlockAt: unlockAt > 0 ? new Date(unlockAt * 1000) : undefined,
+          vestingActive,
+          active,
         })
       }
       return memo
@@ -739,13 +739,13 @@ export function useMultiInactiveStakingInfo(pairToFilterBy?: Pair | null): Staki
 }
 
 const getTokenByAddress = (address: string) => {
-    const token = REWARD_TOKENS.filter(token => token.address?.toLowerCase() === address?.toLowerCase())
-    if (token.length) {
-      return token[0]
-    } else {
-      return EMPTY;
-    }
+  const token = REWARD_TOKENS.filter(token => token.address?.toLowerCase() === address?.toLowerCase())
+  if (token.length) {
+    return token[0]
+  } else {
+    return EMPTY;
   }
+}
 
 export function useTotalUniEarned(): TokenAmount | undefined {
   const { chainId } = useActiveWeb3React()
@@ -759,17 +759,17 @@ export function useTotalUniEarned(): TokenAmount | undefined {
     return (
       stakingInfos?.reduce(
         (accumulator, stakingInfo) => {
-            if (stakingInfo?.rewardAddresses.includes(DFYN)) {
-                const index = stakingInfo?.rewardAddresses.indexOf(DFYN)
-                const amount = index === 0 ? stakingInfo?.earnedAmount : stakingInfo.earnedAmountTwo
-                return accumulator.add(amount)
-              }
-              return accumulator
-            },
-            new TokenAmount(uni, '0')
-          ) ?? new TokenAmount(uni, '0')
-        )
-    }, [stakingInfos, uni])
+          if (stakingInfo?.rewardAddresses.includes(DFYN)) {
+            const index = stakingInfo?.rewardAddresses.indexOf(DFYN)
+            const amount = index === 0 ? stakingInfo?.earnedAmount : stakingInfo.earnedAmountTwo
+            return accumulator.add(amount)
+          }
+          return accumulator
+        },
+        new TokenAmount(uni, '0')
+      ) ?? new TokenAmount(uni, '0')
+    )
+  }, [stakingInfos, uni])
 }
 
 // based on typed value

@@ -209,12 +209,12 @@ export default function Manage({
                 {` ${stakingInfo ? stakingInfo?.rewardAddresses[1].symbol : ""}`}
               </TYPE.body>
             </AutoColumn> :
-            <AutoColumn gap="sm">
-              <TYPE.body style={{ margin: 0 }}>{`Total ${stakingInfo ? reward0.symbol  : ""} ${stakingInfo ? reward1.symbol  : ""} earned (includes vesting)`}</TYPE.body>
-              <TYPE.body fontSize={22} fontWeight={500}>
-                {` ${stakingInfo?.hasClaimedPartial ? totalEarnedReward : stakingInfo?.earnedAmount?.toFixed(2) ?? '0'} ${stakingInfo ? reward0.symbol : ""}`}
-              </TYPE.body>
-            </AutoColumn>
+              <AutoColumn gap="sm">
+                <TYPE.body style={{ margin: 0 }}>{`Total ${stakingInfo ? reward0.symbol : ""} ${stakingInfo ? reward1.symbol : ""} earned (includes vesting)`}</TYPE.body>
+                <TYPE.body fontSize={22} fontWeight={500}>
+                  {` ${stakingInfo?.hasClaimedPartial ? totalEarnedReward : stakingInfo?.earnedAmount?.toFixed(2) ?? '0'} ${stakingInfo ? reward0.symbol : ""}`}
+                </TYPE.body>
+              </AutoColumn>
           }
 
         </PoolData>
@@ -324,7 +324,7 @@ export default function Manage({
             <AutoColumn gap="sm">
               <RowBetween>
                 <div>
-                <TYPE.black>Your unclaimed Rewards</TYPE.black>
+                  <TYPE.black>Your unclaimed Rewards</TYPE.black>
                 </div>
                 {stakingInfo?.earnedAmount && JSBI.notEqual(BIG_INT_ZERO, stakingInfo?.earnedAmount?.raw) && (<>
                   <div hidden={stakingInfo?.ableToClaim}>
