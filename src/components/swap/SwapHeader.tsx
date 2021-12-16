@@ -56,7 +56,7 @@ export default function SwapHeader() {
       <TopSection>
         <Icon>
           {chainId && HEADER_ACCESS.limitOrders.includes(chainId)?
-            <SwapLimitToggle />: <TYPE.black fontWeight={500} margin={'auto 0'}>Swap</TYPE.black>
+            <SwapLimitToggle />: <TYPE.black fontWeight={500} margin={'auto 0'} width={'88%'}>Swap</TYPE.black>
           }
           {chainId && HEADER_ACCESS.gaslessMode.includes(chainId) &&<GaslessModeElement>
 

@@ -55,6 +55,7 @@ const ButtonGroup = styled.div`
     padding: 3px;
     border-radius: 10px;
     width: 60%;
+    max-width: 140px;
     display: flex;
     left: 0;
     right: 0;
