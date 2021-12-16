@@ -8,6 +8,7 @@ import { MouseoverTooltip } from 'components/Tooltip'
 import { useActiveWeb3React } from 'hooks'
 import { HEADER_ACCESS } from 'constants/networks'
 import SwapLimitToggle from './SwapLimitToggle'
+import { TYPE } from 'theme'
 
 
 const GaslessModeElement = styled.div`
@@ -54,7 +55,9 @@ export default function SwapHeader() {
     <StyledSwapHeader>
       <TopSection>
         <Icon>
-          <SwapLimitToggle />
+          {chainId && HEADER_ACCESS.limitOrders.includes(chainId)?
+            <SwapLimitToggle />: <TYPE.black fontWeight={500} margin={'auto 0'}>Swap</TYPE.black>
+          }
           {chainId && HEADER_ACCESS.gaslessMode.includes(chainId) &&<GaslessModeElement>
 
             <MouseoverTooltip

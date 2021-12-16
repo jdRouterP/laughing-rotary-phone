@@ -4,6 +4,15 @@ import { request, gql } from "graphql-request";
 const LIMIT_ORDERS_API = process.env.REACT_APP_UNIDEX_ORDERS;
 const UNIDEX_GRAPH_API = process.env.REACT_APP_UNIDEX_GRAPH_API;
 
+function getSupportedNetworkIdForLimitOrder(chainId: ChainId | undefined) {
+  switch(chainId) {
+    case ChainId.MATIC: return '/polygonlimitorders';
+    case ChainId.BSC:  return '/bsclimitordersresync';
+    case ChainId.FANTOM:  return '/ftm-limit-orders';
+    default:  return null;
+  }
+}
+
 export async function deleteOrder(
   order: any,
   chainId: ChainId | undefined
@@ -17,6 +26,8 @@ export async function deleteOrder(
     owner,
     witness,
   } = order;
+  const networkSyncId = getSupportedNetworkIdForLimitOrder(chainId)
+  if(!networkSyncId) return;
   let url = `${LIMIT_ORDERS_API}/orders/limit/cancel?account=${account}&chainId=${chainId}&module=${module}&inputToken=${inputToken}&outputToken=${outputToken}&minReturn=${minReturn}&owner=${owner}&witness=${witness}`;
   let response;
   try {
@@ -34,6 +45,8 @@ export async function createOrder(order: any): Promise<any> {
     account,
     chainId,
   } = order;
+  const networkSyncId = getSupportedNetworkIdForLimitOrder(chainId)
+  if(!networkSyncId) return;
   let url = `${LIMIT_ORDERS_API}/orders/limit?sellToken=${sellToken}&buyToken=${buyToken}&sellAmount=${sellAmount}&buyAmount=${buyAmount}&account=${account}&chainId=${chainId}`;
   let response;
   try {
@@ -50,10 +63,11 @@ export async function getListOpenOrders(
   status: string = "open"
 ): Promise<any> {
   const owner = address?.toLowerCase();
-  let url = `${UNIDEX_GRAPH_API}`;
-  let response;
+  const networkSyncId = getSupportedNetworkIdForLimitOrder(chainId)
+  if(!networkSyncId) return;
+  let url = `${UNIDEX_GRAPH_API}${networkSyncId}`;
   try {
-    response = await request(
+    const response = await request(
       url,
       gql`
         query GetOrdersByOwner($owner: String) {
