@@ -7,7 +7,6 @@ import { ArrowForward } from '@material-ui/icons'
 import styled from 'styled-components'
 import { TYPE } from 'theme'
 import { deleteOrder } from './api';
-import { NETWORK_CHAIN_ID } from 'connectors';
 import { useActiveWeb3React } from 'hooks';
 import { useLimitOrderState, useSwapActionHandlers } from 'state/limitOrder/hooks';
 import { RowBetween, RowFixed } from 'components/Row';
@@ -181,7 +180,7 @@ export default function OpenOrders() {
     });
     const { library, chainId } = useActiveWeb3React()
     const handleDeleteOrder = async (order: any) => {
-        const deleteOrderTxnData = await deleteOrder(order, NETWORK_CHAIN_ID)
+        const deleteOrderTxnData = await deleteOrder(order, chainId)
         if (library && library.provider.isMetaMask && library.provider.request) {
             const hash = await library.provider.request({
                 method: 'eth_sendTransaction',
