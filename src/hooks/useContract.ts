@@ -1,6 +1,7 @@
 import { Contract } from '@ethersproject/contracts'
 import { abi as GOVERNANCE_ABI } from '@uniswap/governance/build/GovernorAlpha.json'
 import { abi as UNI_ABI } from '@uniswap/governance/build/Uni.json'
+import {abi as STAKING_MULTI_REWARDS_ABI} from '../constants/abis/staking-reward-multi-reward-launch-farm.json'
 import { abi as STAKING_REWARDS_ABI } from '@uniswap/liquidity-staker/build/StakingRewards.json'
 import { abi as STAKING_REWARDS_DUAL_FARMING_ABI } from '../constants/abis/staking-rewards-dual-farms.json'
 import { abi as STAKING_REWARDS_FLORA_FARMING_ABI } from '../constants/abis/staking-rewards-flora-farms.json'
@@ -189,6 +190,11 @@ export function useDfynChestContract( withSignerIfPossible?: boolean): Contract 
 export function useDfynFusionContract( withSignerIfPossible?: boolean): Contract | null {
   return useContract(BLEND_ADDRESS, DFYN_FUSION_ABI, withSignerIfPossible)
 }
+
+export function useMultiRewardStakingContract(stakingAddress?: string, withSignerIfPossible?: boolean): Contract | null {
+  return useContract(stakingAddress, STAKING_MULTI_REWARDS_ABI, withSignerIfPossible)
+}
+
 export function useStakingContract(stakingAddress?: string, withSignerIfPossible?: boolean): Contract | null {
   return useContract(stakingAddress, STAKING_REWARDS_ABI, withSignerIfPossible)
 }

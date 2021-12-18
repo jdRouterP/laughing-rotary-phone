@@ -29,6 +29,7 @@ import ManageVanillaFarms from './VanillaFarms/Manage'
 import InactiveManageVanillaFarms from './VanillaFarms/InactiveManage'
 import ManageDualFarms from './DualFarms/Manage'
 import ManageLaunchFarms from './LaunchFarms/Manage'
+import ManageMultiRewardLaunchFarms from './MultiRewardLaunchFarm/Manage'
 import InactiveManageDualFarms from './DualFarms/InactiveManage'
 import InactiveManageLaunchFarms from './LaunchFarms/InactiveManage'
 import ManageFloraFarms from './FloraFarms/Manage'
@@ -59,6 +60,9 @@ import Analytics from 'components/Header/Analytics'
 import ThemeChange from 'components/Header/ThemeChange'
 import VDFYN from './Vault/VDFYN'
 import Fusion from './DfynFusion/Fusion'
+import LimitOrder from './Limit'
+import { useActiveWeb3React } from 'hooks'
+import { HEADER_ACCESS } from 'constants/networks'
 
 const AppWrapper = styled.div`
   display: flex;
@@ -103,6 +107,8 @@ function TopLevelModals() {
 }
 
 export default function App() {
+  const { chainId } = useActiveWeb3React();
+
   return (
     <Suspense fallback={null}>
       <Route component={GoogleAnalyticsReporter} />
@@ -123,6 +129,9 @@ export default function App() {
             <Switch>
               <Route exact strict path="/swap" component={Swap} />
               <Route exact strict path="/dfyn-fusion" component={Fusion} />
+              {chainId && HEADER_ACCESS.limitOrders.includes(chainId) &&
+                <Route exact strict path="/limit-order" component={LimitOrder} />
+              }
               <Route exact strict path="/dfynFusion" component={Fusion}>
                 <Redirect to="/dfyn-fusion" />
               </Route>
@@ -164,6 +173,7 @@ export default function App() {
               <Route exact strict path="/dual-farms/:archived/:currencyIdA/:currencyIdB/:version?" component={InactiveManageDualFarms} />
               <Route exact strict path="/dual-farms/:archived" component={DualFarmsArrchived} />
               <Route exact strict path="/launch-farms/:currencyIdA/:currencyIdB/:version?" component={ManageLaunchFarms} />
+              <Route exact strict path="/multi-reward-launch-farms/:currencyIdA/:currencyIdB/:version?" component={ManageMultiRewardLaunchFarms} />
               <Route exact strict path="/launch-farms/:archived/:currencyIdA/:currencyIdB/:version?" component={InactiveManageLaunchFarms} />
               <Route exact strict path="/launch-farms/:archived" component={LaunchFarmsArchived} />
               <Route exact strict path="/popular-farms/:currencyIdA/:currencyIdB/:version?" component={ManageFloraFarms} />

@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import { RowBetween } from '../Row'
 import { TYPE, CloseIcon } from '../../theme'
 import { ButtonError } from '../Button'
-import { StakingInfo } from '../../state/vanilla-stake/hooks'
+import { StakingInfo } from '../../state/multiRewardLaunchFarm/hooks'
 import { useStakingContract } from '../../hooks/useContract'
 import { SubmittedView, LoadingView } from '../ModalViews'
 import { TransactionResponse } from '@ethersproject/providers'
@@ -31,6 +31,9 @@ export default function ClaimRewardModal({ isOpen, onDismiss, stakingInfo }: Sta
   const [hash, setHash] = useState<string | undefined>()
   const [attempting, setAttempting] = useState(false)
 
+  const reward0 = stakingInfo?.rewardAddresses[0] || ''
+  const reward1 = stakingInfo?.rewardAddresses[1] || ''
+
   function wrappedOnDismiss() {
     setHash(undefined)
     setAttempting(false)
@@ -38,15 +41,15 @@ export default function ClaimRewardModal({ isOpen, onDismiss, stakingInfo }: Sta
   }
 
   const stakingContract = useStakingContract(stakingInfo.stakingRewardAddress)
-
+  const unClaimedAmount = stakingInfo?.unclaimedAmount?.toNumber()?.toFixed(3);
   async function onClaimReward() {
     if (stakingContract && stakingInfo?.stakedAmount) {
       setAttempting(true)
       await stakingContract
-        .getReward({ gasLimit: 350000 })
+        .getReward({ gasLimit: 500000 })
         .then((response: TransactionResponse) => {
           addTransaction(response, {
-            summary: `Claim accumulated ${stakingInfo?.rewardToken?.symbol ?? 'DFYN'} rewards`
+            summary: `Claim accumulated rewards`
           })
           setHash(response.hash)
         })
@@ -73,12 +76,12 @@ export default function ClaimRewardModal({ isOpen, onDismiss, stakingInfo }: Sta
             <TYPE.mediumHeader>Claim</TYPE.mediumHeader>
             <CloseIcon onClick={wrappedOnDismiss} />
           </RowBetween>
-          {stakingInfo?.earnedAmount && (
+          {unClaimedAmount && (
             <AutoColumn justify="center" gap="md">
               <TYPE.body fontWeight={600} fontSize={36}>
-                {stakingInfo?.earnedAmount?.toSignificant(4)}
+                {"20 %"}
               </TYPE.body>
-              <TYPE.body>Unclaimed {stakingInfo?.rewardToken?.symbol ?? 'DFYN'}</TYPE.body>
+              <TYPE.body>Unclaimed {reward0?.symbol ?? 'DFYN'} && {reward1?.symbol ?? 'DFYN'}</TYPE.body>
             </AutoColumn>
           )}
           <TYPE.subHeader style={{ textAlign: 'center' }}>
@@ -92,7 +95,10 @@ export default function ClaimRewardModal({ isOpen, onDismiss, stakingInfo }: Sta
       {attempting && !hash && (
         <LoadingView onDismiss={wrappedOnDismiss}>
           <AutoColumn gap="12px" justify={'center'}>
-            <TYPE.body fontSize={20}>Claiming {stakingInfo?.earnedAmount?.toSignificant(6)} {stakingInfo?.rewardToken?.symbol ?? 'DFYN'}</TYPE.body>
+            {/* <TYPE.body fontSize={20}>Claiming {stakingInfo?.earnedAmount?.toSignificant(6)} DFYN</TYPE.body> */}
+            {/* <TYPE.body fontSize={20}>Claiming 20 % {stakingInfo?.rewardToken?.symbol ?? 'DFYN'}</TYPE.body> */}
+            <TYPE.body fontSize={20}>Claiming 20 % {stakingInfo?.earnedAmount?.toSignificant(6)}{" "}{reward0?.symbol}</TYPE.body>
+            <TYPE.body fontSize={20}>Claiming 20 % {stakingInfo?.earnedAmountTwo?.toSignificant(6)}{" "}{reward1?.symbol}</TYPE.body>
           </AutoColumn>
         </LoadingView>
       )}
@@ -100,7 +106,8 @@ export default function ClaimRewardModal({ isOpen, onDismiss, stakingInfo }: Sta
         <SubmittedView onDismiss={wrappedOnDismiss} hash={hash}>
           <AutoColumn gap="12px" justify={'center'}>
             <TYPE.largeHeader>Transaction Submitted</TYPE.largeHeader>
-            <TYPE.body fontSize={20}>Claimed {stakingInfo?.rewardToken?.symbol ?? 'DFYN'}!</TYPE.body>
+            {/* <TYPE.body fontSize={20}>Claimed {stakingInfo?.rewardToken?.symbol ?? 'DFYN'}!</TYPE.body> */}
+            <TYPE.body fontSize={20}>Claimed Rewards!</TYPE.body>
           </AutoColumn>
         </SubmittedView>
       )}

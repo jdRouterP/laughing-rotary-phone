@@ -1,34 +1,33 @@
 import React, { useCallback, useState } from 'react'
 import { AutoColumn } from '../../components/Column'
 import styled from 'styled-components'
-import { Link } from 'react-router-dom'
-
+import { currencyId } from '../../utils/currencyId'
 import { JSBI, TokenAmount } from '@dfyn/sdk'
 import { RouteComponentProps } from 'react-router-dom'
 import DoubleCurrencyLogo from '../../components/DoubleLogo'
 import { useCurrency } from '../../hooks/Tokens'
 import { useWalletModalToggle } from '../../state/application/hooks'
-import { TYPE } from '../../theme'
-
+import { ExternalLink, TYPE } from '../../theme'
+import { Link } from 'react-router-dom'
 import { RowBetween } from '../../components/Row'
-import { CardSection, DataCard, CardNoise, CardBGImage } from '../../components/vanillaFarms/styled'
+import { CardSection, DataCard, CardNoise, CardBGImage } from '../../components/multiRewardLaunchFarms/styled'
 import { ButtonPrimary } from '../../components/Button'
-import StakingModal from '../../components/vanillaFarms/StakingModal'
-import { useStakingInfo } from '../../state/vanilla-stake/hooks'
-import UnstakingModal from '../../components/vanillaFarms/UnstakingModal'
-import ClaimRewardModal from '../../components/vanillaFarms/ClaimRewardModal'
+import StakingModal from '../../components/multiRewardLaunchFarms/StakingModal'
+import { useMultiInactiveStakingInfo } from '../../state/multiRewardLaunchFarm/hooks'
+import UnstakingModal from '../../components/multiRewardLaunchFarms/UnstakingModal'
+import ClaimRewardModal from '../../components/multiRewardLaunchFarms/ClaimRewardModal'
 import { useTokenBalance } from '../../state/wallet/hooks'
 import { useActiveWeb3React } from '../../hooks'
 import { useColor } from '../../hooks/useColor'
 import { CountUp } from 'use-count-up'
 
 import { wrappedCurrency } from '../../utils/wrappedCurrency'
-import { currencyId } from '../../utils/currencyId'
 import { useTotalSupply } from '../../data/TotalSupply'
 import { usePair } from '../../data/Reserves'
 import usePrevious from '../../hooks/usePrevious'
 import useUSDCPrice from '../../utils/useUSDCPrice'
-import { BIG_INT_ZERO, BIG_INT_SECONDS_IN_WEEK, ETHER } from '../../constants'
+import { BIG_INT_ZERO, BIG_INT_SECONDS_IN_DAY, ETHER } from '../../constants'
+import { Countdown } from '../LaunchFarms/Countdown'
 
 const PageWrapper = styled(AutoColumn)`
   max-width: 640px;
@@ -88,9 +87,9 @@ const DataRow = styled(RowBetween)`
 
 export default function Manage({
   match: {
-    params: { currencyIdA, currencyIdB, version }
+    params: { currencyIdA, currencyIdB }
   }
-}: RouteComponentProps<{ currencyIdA: string; currencyIdB: string, version: undefined | string }>) {
+}: RouteComponentProps<{ currencyIdA: string; currencyIdB: string }>) {
   const { account, chainId } = useActiveWeb3React()
 
   // get currencies and pair
@@ -99,7 +98,7 @@ export default function Manage({
   const tokenB = wrappedCurrency(currencyB ?? undefined, chainId)
 
   const [, stakingTokenPair] = usePair(tokenA, tokenB)
-  const stakingInfo = useStakingInfo(stakingTokenPair, version)?.[0]
+  const stakingInfo = useMultiInactiveStakingInfo(stakingTokenPair)?.[0]
 
   // detect existing unstaked LP position to show add button if none found
   const userLiquidityUnstaked = useTokenBalance(account ?? undefined, stakingInfo?.stakedAmount?.token)
@@ -133,14 +132,25 @@ export default function Manage({
       )
     )
   }
+  // const totalVestedAmount = stakingInfo?.totalVestedAmount?.toFixed(2) ?? '0';
+  const totalEarnedReward = stakingInfo?.totalEarnedReward?.toFixed(2) ?? '0';
+  // const unClaimedAmount = stakingInfo?.unclaimedAmount?.toNumber()?.toFixed(3);
+  // console.log
 
-  const countUpAmount = stakingInfo?.earnedAmount?.toFixed(4) ?? '0'
+  // const countUpAmount = unClaimedAmount;
+  // const countUpAmountPrevious = usePrevious(countUpAmount) ?? '0'
+  const countUpAmount = stakingInfo?.earnedAmount?.toFixed(6) ?? '0'
+  const countUpAmountTwo = stakingInfo?.earnedAmountTwo?.toFixed(6) ?? '0'
   const countUpAmountPrevious = usePrevious(countUpAmount) ?? '0'
+  const countUpAmountTwoPrevious = usePrevious(countUpAmountTwo) ?? '0'
 
+  // const vestedAmount = stakingInfo?.earnedAmount?.toFixed(2) ?? '0'
+
+  // const claimedAmount = JSBI.subtract(stakingInfo?.totalVestedAmount?.raw, stakingInfo?.earnedAmount?.raw)
+  // console.log(claimedAmount);
   // get the USD value of staked WETH
   const USDPrice = useUSDCPrice(WETH)
-  const valueOfTotalStakedAmountInUSDC =
-    valueOfTotalStakedAmountInWETH && USDPrice?.quote(valueOfTotalStakedAmountInWETH)
+  const valueOfTotalStakedAmountInUSDC = valueOfTotalStakedAmountInWETH && USDPrice?.quote(valueOfTotalStakedAmountInWETH)
 
   const toggleWalletModal = useWalletModalToggle()
 
@@ -164,30 +174,46 @@ export default function Manage({
       <DataRow style={{ gap: '24px' }}>
         <PoolData>
           <AutoColumn gap="sm">
-            <TYPE.body style={{ margin: 0 }}>Total deposits</TYPE.body>
+            <TYPE.body style={{ margin: 0 }}>Total Pool Deposits</TYPE.body>
             <TYPE.body fontSize={24} fontWeight={500}>
               {valueOfTotalStakedAmountInUSDC
                 ? `$${valueOfTotalStakedAmountInUSDC.toFixed(0, { groupSeparator: ',' })}`
-                : `${valueOfTotalStakedAmountInWETH?.toSignificant(4, { groupSeparator: ',' }) ?? '-'} MATIC`}
+                : `${valueOfTotalStakedAmountInWETH?.toSignificant(4, { groupSeparator: ',' }) ?? '-'} ETH`}
             </TYPE.body>
           </AutoColumn>
         </PoolData>
         <PoolData>
-          <AutoColumn gap="sm">
-            <TYPE.body style={{ margin: 0 }}>Pool Rate</TYPE.body>
-            <TYPE.body fontSize={24} fontWeight={500}>
-              {stakingInfo?.active
-                ? stakingInfo?.totalRewardRate
-                  ?.multiply(BIG_INT_SECONDS_IN_WEEK)
-                  ?.toFixed(2, { groupSeparator: ',' }) ?? '-'
-                : '0'}
-              {` ${stakingInfo?.rewardToken?.symbol ?? 'DFYN'} / week`}
-            </TYPE.body>
-          </AutoColumn>
+          {
+            !stakingInfo?.hasClaimedPartial || !stakingInfo?.vestingActive ? <AutoColumn gap="sm">
+              <TYPE.body style={{ margin: 0 }}>Pool Rate</TYPE.body>
+              <TYPE.body fontSize={24} fontWeight={500}>
+                {stakingInfo?.active
+                  ? stakingInfo?.totalRewardRate
+                    ?.multiply(BIG_INT_SECONDS_IN_DAY)
+                    ?.toFixed(0, { groupSeparator: ',' }) ?? '-'
+                  : '0'}
+                {` ${stakingInfo ? stakingInfo?.rewardAddresses[0].symbol : ""}`}
+                {" | "}
+                {stakingInfo?.active
+                  ? stakingInfo?.totalRewardRateTwo
+                    ?.multiply(BIG_INT_SECONDS_IN_DAY)
+                    ?.toFixed(0, { groupSeparator: ',' }) ?? '-'
+                  : '0'}
+                {` ${stakingInfo ? stakingInfo?.rewardAddresses[1].symbol : ""}`}
+              </TYPE.body>
+            </AutoColumn> :
+              <AutoColumn gap="sm">
+                <TYPE.body style={{ margin: 0 }}>{`Total ${stakingInfo ? stakingInfo?.rewardAddresses[0].symbol : ""} earned (includes vesting)`}</TYPE.body>
+                <TYPE.body fontSize={22} fontWeight={500}>
+                  {` ${stakingInfo?.hasClaimedPartial ? totalEarnedReward : stakingInfo?.earnedAmount?.toFixed(2) ?? '0'} ${stakingInfo ? stakingInfo?.rewardAddresses[0].symbol : ""}`}
+                </TYPE.body>
+              </AutoColumn>
+          }
+
         </PoolData>
       </DataRow>
 
-      {showAddLiquidityButton && (
+      {showAddLiquidityButton && (stakingInfo?.active ? (
         <VoteCard>
           <CardBGImage />
           <CardNoise />
@@ -215,7 +241,33 @@ export default function Manage({
           <CardBGImage />
           <CardNoise />
         </VoteCard>
-      )}
+      ) : (
+        <VoteCard>
+          <CardBGImage />
+          <CardNoise />
+          <CardSection>
+            <AutoColumn gap="md">
+              <RowBetween>
+                <TYPE.white fontWeight={600}>This farm has ended!</TYPE.white>
+              </RowBetween>
+              <RowBetween style={{ marginBottom: '1rem' }}>
+                <TYPE.white fontSize={14}>
+                  {`Checkout our new farms!`}
+                </TYPE.white>
+              </RowBetween>
+              <ExternalLink
+                style={{ color: 'white', textDecoration: 'underline' }}
+                href="https://dfyn-network.medium.com/introducing-dfyn-yield-farming-phase-7-4480eebf0fba"
+                target="_blank"
+              >
+                <TYPE.white fontSize={14}>Read more about Dfyn Farms Phase 7</TYPE.white>
+              </ExternalLink>
+            </AutoColumn>
+          </CardSection>
+          <CardBGImage />
+          <CardNoise />
+        </VoteCard>
+      ))}
 
       {stakingInfo && (
         <>
@@ -238,7 +290,7 @@ export default function Manage({
         </>
       )}
 
-      <PositionInfo gap="lg" justify="center" dim={showAddLiquidityButton}>
+      <PositionInfo gap="lg" justify="center" dim={!stakingInfo?.ableToClaim}>
         <BottomSection gap="lg" justify="center">
           <StyledDataCard disabled={disableTop} bgColor={backgroundColor} showBackground={!showAddLiquidityButton}>
             <CardSection>
@@ -259,27 +311,30 @@ export default function Manage({
               </AutoColumn>
             </CardSection>
           </StyledDataCard>
-          <StyledBottomCard dim={stakingInfo?.stakedAmount?.equalTo(JSBI.BigInt(0))}>
+          <StyledBottomCard dim={stakingInfo?.earnedAmount?.equalTo(JSBI.BigInt(0))}>
             <CardBGImage desaturate />
             <CardNoise />
             <AutoColumn gap="sm">
               <RowBetween>
                 <div>
-                  <TYPE.black>Your unclaimed {stakingInfo?.rewardToken?.symbol ?? 'DFYN'}</TYPE.black>
+                  <TYPE.black>Your unclaimed Rewards</TYPE.black>
                 </div>
-                {stakingInfo?.earnedAmount && JSBI.notEqual(BIG_INT_ZERO, stakingInfo?.earnedAmount?.raw) && (
-                  <ButtonPrimary
-                    padding="8px"
+                {stakingInfo?.earnedAmount && JSBI.notEqual(BIG_INT_ZERO, stakingInfo?.earnedAmount?.raw) && (<>
+                  <div hidden={stakingInfo?.ableToClaim}>
+                    <TYPE.black>{<Countdown showMessage={false} exactEnd={stakingInfo?.unlockAt} color="black" />}</TYPE.black>
+                  </div>
+                  {stakingInfo?.ableToClaim && <ButtonPrimary
+                    padding="5px"
                     borderRadius="8px"
                     width="fit-content"
                     onClick={() => setShowClaimRewardModal(true)}
                   >
                     Claim
-                  </ButtonPrimary>
-                )}
+                  </ButtonPrimary>}
+                </>)}
               </RowBetween>
               <RowBetween style={{ alignItems: 'baseline' }}>
-                <TYPE.largeHeader fontSize={36} fontWeight={600}>
+                <TYPE.largeHeader fontSize={24} fontWeight={600}>
                   <CountUp
                     key={countUpAmount}
                     isCounting
@@ -289,17 +344,40 @@ export default function Manage({
                     thousandsSeparator={','}
                     duration={1}
                   />
+                  {" "}{stakingInfo?.rewardAddresses[0].symbol}
+                  <br />
+                  <CountUp
+                    key={234}
+                    isCounting
+                    decimalPlaces={4}
+                    start={parseFloat(countUpAmountTwoPrevious)}
+                    end={parseFloat(countUpAmountTwo)}
+                    thousandsSeparator={','}
+                    duration={1}
+                  />
+                  {" "}{stakingInfo?.rewardAddresses[1].symbol}
                 </TYPE.largeHeader>
+
                 <TYPE.black fontSize={16} fontWeight={500}>
                   <span role="img" aria-label="wizard-icon" style={{ marginRight: '8px ' }}>
                     ⚡
                   </span>
                   {stakingInfo?.active
                     ? stakingInfo?.rewardRate
-                      ?.multiply(BIG_INT_SECONDS_IN_WEEK)
-                      ?.toSignificant(4, { groupSeparator: ',' }) ?? 'DFYN'
+                      ?.multiply(BIG_INT_SECONDS_IN_DAY)
+                      ?.toSignificant(4, { groupSeparator: ',' }) ?? '-'
                     : '0'}
-                  {` ${stakingInfo?.rewardToken?.symbol ?? 'DFYN'} / week`}
+                  {` ${stakingInfo ? stakingInfo?.rewardAddresses[0].symbol : ""} / day`}
+                  <br />
+                  <span role="img" aria-label="wizard-icon" style={{ marginRight: '8px ' }}>
+                    ⭐
+                  </span>
+                  {stakingInfo?.active
+                    ? stakingInfo?.rewardRateTwo
+                      ?.multiply(BIG_INT_SECONDS_IN_DAY)
+                      ?.toSignificant(4, { groupSeparator: ',' }) ?? '-'
+                    : '0'}
+                  {` ${stakingInfo ? stakingInfo?.rewardAddresses[1].symbol : ""} / day`}
                 </TYPE.black>
               </RowBetween>
             </AutoColumn>
@@ -309,7 +387,7 @@ export default function Manage({
           <span role="img" aria-label="wizard-icon" style={{ marginRight: '8px' }}>
             ⭐️
           </span>
-          When you withdraw, the contract will automagically claim {stakingInfo?.rewardToken?.symbol ?? 'DFYN'} on your behalf!
+          {`You can claim 20% of your DFYN token rewards after the farming program ends, and the remaining will be released 20% every other month!`}
         </TYPE.main>
 
         {!showAddLiquidityButton && (

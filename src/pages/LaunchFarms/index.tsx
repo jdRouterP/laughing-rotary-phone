@@ -15,6 +15,8 @@ import { BIG_INT_ZERO } from '../../constants'
 import { OutlineCard } from '../../components/Card'
 import { SearchInput } from 'components/SearchModal/styleds'
 import { ButtonPink } from 'components/Button'
+import { useMultiStakingInfo, STAKING_MULTI_REWARDS_INFO } from 'state/multiRewardLaunchFarm/hooks'
+import PoolMultiRewardCard from 'components/multiRewardLaunchFarms/PoolCard'
 
 
 const TopSectionHeader = styled.div`
@@ -58,6 +60,8 @@ export default function LaunchFarms() {
 
   // staking info for connected account
   const stakingInfos = useStakingInfo()
+  const stakingInfosMultiReward = useMultiStakingInfo()
+  
 
   /**
    * only show staking cards with balance
@@ -73,6 +77,21 @@ export default function LaunchFarms() {
 
   // toggle copy if rewards are inactive
   const stakingRewardsExist = Boolean(typeof chainId === 'number' && (STAKING_REWARDS_INFO[chainId]?.length ?? 0) > 0)
+
+
+  //staking cards with balance for multiReward Tokens Launch Farms
+
+  const stakingInfosMultiRewardWithBalance = stakingInfosMultiReward?.filter((s) => JSBI.greaterThan(s.stakedAmount.raw, BIG_INT_ZERO))
+
+  const stakingInfosMultiRewardActiveFarms = stakingInfosMultiReward?.filter((s) => s.active)
+
+  const stakingInfosMultiRewardRewards = stakingInfosMultiReward?.filter((s) => JSBI.greaterThan(s.earnedAmount.raw, BIG_INT_ZERO))
+
+  const stakingInfosMultiRewardFarms = [...new Set([...stakingInfosMultiRewardWithBalance, ...stakingInfosMultiRewardActiveFarms, ...stakingInfosMultiRewardRewards])]
+
+  //toggle copy if multi rewards are inactive
+  const stakingInfosMultiRewardRewardsExist = Boolean(typeof chainId === 'number' && (STAKING_MULTI_REWARDS_INFO[chainId]?.length ?? 0) > 0)
+
   const [searchItem, setSearchItem] = useState('')
 
   return (
@@ -134,37 +153,65 @@ export default function LaunchFarms() {
           }} />
 
         <PoolSection>
-          {stakingRewardsExist && stakingInfos?.length === 0 ? (
+          {stakingRewardsExist && stakingInfosMultiRewardRewardsExist && stakingInfos?.length === 0 ? (
             <Loader style={{ margin: 'auto' }} />
-          ) : !stakingRewardsExist ? (
+          ) : !stakingRewardsExist && !stakingInfosMultiRewardRewardsExist? (
             <OutlineCard>No active pools</OutlineCard>
-          ) : stakingFarms?.length === 0 ? (
+          ) : stakingFarms?.length === 0 && stakingInfosMultiRewardFarms?.length === 0 ? (
             <OutlineCard>No active pools</OutlineCard>
-          ) : (
-            stakingFarms?.filter(stakingInfos => {
-              if (searchItem === '') return stakingInfos
-              //for symbol
-              else if (stakingInfos?.tokens[0].symbol?.toLowerCase().includes(searchItem.toLowerCase())
-                || stakingInfos?.tokens[1].symbol?.toLowerCase().includes(searchItem.toLowerCase())
-              ) return stakingInfos
+          ) : <>
+                {
+                  stakingFarms?.filter(stakingInfos => {
+                    if (searchItem === '') return stakingInfos
+                    //for symbol
+                    else if (stakingInfos?.tokens[0].symbol?.toLowerCase().includes(searchItem.toLowerCase())
+                      || stakingInfos?.tokens[1].symbol?.toLowerCase().includes(searchItem.toLowerCase())
+                    ) return stakingInfos
 
-              //for name
-              else if (stakingInfos?.tokens[0].name?.toLowerCase().includes(searchItem.toLowerCase())
-                || stakingInfos?.tokens[1].name?.toLowerCase().includes(searchItem.toLowerCase())
-              ) return stakingInfos
+                    //for name
+                    else if (stakingInfos?.tokens[0].name?.toLowerCase().includes(searchItem.toLowerCase())
+                      || stakingInfos?.tokens[1].name?.toLowerCase().includes(searchItem.toLowerCase())
+                    ) return stakingInfos
 
-              //for address
-              else if (stakingInfos?.tokens[0].address?.toLowerCase().includes(searchItem.toLowerCase())
-                || stakingInfos?.tokens[1].address?.toLowerCase().includes(searchItem.toLowerCase())
-              ) return stakingInfos
+                    //for address
+                    else if (stakingInfos?.tokens[0].address?.toLowerCase().includes(searchItem.toLowerCase())
+                      || stakingInfos?.tokens[1].address?.toLowerCase().includes(searchItem.toLowerCase())
+                    ) return stakingInfos
 
-              //Other case
-              else return ""
-            })?.map(stakingInfo => {
-              // need to sort by added liquidity here
-              return <PoolCard key={stakingInfo.stakingRewardAddress} stakingInfo={stakingInfo} isInactive={false} />
-            })
-          )}
+                    //Other case
+                    else return ""
+                  })?.map(stakingInfo => {
+                    // need to sort by added liquidity here
+                    return <PoolCard key={stakingInfo.stakingRewardAddress} stakingInfo={stakingInfo} isInactive={false} />
+                  })
+                }
+                {
+                  stakingInfosMultiRewardFarms?.filter(stakingInfosMultiReward => {
+                    if (searchItem === '') return stakingInfosMultiReward
+                    //for symbol
+                    else if (stakingInfosMultiReward?.tokens[0].symbol?.toLowerCase().includes(searchItem.toLowerCase())
+                      || stakingInfosMultiReward?.tokens[1].symbol?.toLowerCase().includes(searchItem.toLowerCase())
+                    ) return stakingInfosMultiReward
+
+                    //for name
+                    else if (stakingInfosMultiReward?.tokens[0].name?.toLowerCase().includes(searchItem.toLowerCase())
+                      || stakingInfosMultiReward?.tokens[1].name?.toLowerCase().includes(searchItem.toLowerCase())
+                    ) return stakingInfosMultiReward
+
+                    //for address
+                    else if (stakingInfosMultiReward?.tokens[0].address?.toLowerCase().includes(searchItem.toLowerCase())
+                      || stakingInfosMultiReward?.tokens[1].address?.toLowerCase().includes(searchItem.toLowerCase())
+                    ) return stakingInfosMultiReward
+
+                    //Other case
+                    else return ""
+                    })?.map(stakingInfo => {
+                    // need to sort by added liquidity here
+                     return <PoolMultiRewardCard key={stakingInfo.stakingRewardAddress} stakingInfo={stakingInfo} isInactive={false} />
+                    })
+                  }
+              </>
+        }
         </PoolSection>
       </AutoColumn>
     </PageWrapper>

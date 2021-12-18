@@ -5,11 +5,12 @@ import styled from 'styled-components'
 import { RowBetween } from '../Row'
 import { TYPE, CloseIcon } from '../../theme'
 import { ButtonError } from '../Button'
-import { StakingInfo } from '../../state/vanilla-stake/hooks'
+import { StakingInfo } from '../../state/multiRewardLaunchFarm/hooks'
 import { useStakingContract } from '../../hooks/useContract'
 import { SubmittedView, LoadingView } from '../ModalViews'
 import { TransactionResponse } from '@ethersproject/providers'
 import { useTransactionAdder } from '../../state/transactions/hooks'
+import FormattedCurrencyAmount from '../FormattedCurrencyAmount'
 import { useActiveWeb3React } from '../../hooks'
 
 const ContentWrapper = styled(AutoColumn)`
@@ -23,7 +24,7 @@ interface StakingModalProps {
   stakingInfo: StakingInfo
 }
 
-export default function ClaimRewardModal({ isOpen, onDismiss, stakingInfo }: StakingModalProps) {
+export default function UnstakingModal({ isOpen, onDismiss, stakingInfo }: StakingModalProps) {
   const { account } = useActiveWeb3React()
 
   // monitor call to help UI loading state
@@ -31,7 +32,7 @@ export default function ClaimRewardModal({ isOpen, onDismiss, stakingInfo }: Sta
   const [hash, setHash] = useState<string | undefined>()
   const [attempting, setAttempting] = useState(false)
 
-  function wrappedOnDismiss() {
+  function wrappedOndismiss() {
     setHash(undefined)
     setAttempting(false)
     onDismiss()
@@ -39,14 +40,17 @@ export default function ClaimRewardModal({ isOpen, onDismiss, stakingInfo }: Sta
 
   const stakingContract = useStakingContract(stakingInfo.stakingRewardAddress)
 
-  async function onClaimReward() {
+  const reward0 = stakingInfo?.rewardAddresses[0] || ''
+  const reward1 = stakingInfo?.rewardAddresses[1] || ''
+
+  async function onWithdraw() {
     if (stakingContract && stakingInfo?.stakedAmount) {
       setAttempting(true)
       await stakingContract
-        .getReward({ gasLimit: 350000 })
+        .exit({ gasLimit: 500000 })
         .then((response: TransactionResponse) => {
           addTransaction(response, {
-            summary: `Claim accumulated ${stakingInfo?.rewardToken?.symbol ?? 'DFYN'} rewards`
+            summary: `Withdraw deposited liquidity`
           })
           setHash(response.hash)
         })
@@ -66,41 +70,51 @@ export default function ClaimRewardModal({ isOpen, onDismiss, stakingInfo }: Sta
   }
 
   return (
-    <Modal isOpen={isOpen} onDismiss={wrappedOnDismiss} maxHeight={90}>
+    <Modal isOpen={isOpen} onDismiss={wrappedOndismiss} maxHeight={90}>
       {!attempting && !hash && (
         <ContentWrapper gap="lg">
           <RowBetween>
-            <TYPE.mediumHeader>Claim</TYPE.mediumHeader>
-            <CloseIcon onClick={wrappedOnDismiss} />
+            <TYPE.mediumHeader>Withdraw</TYPE.mediumHeader>
+            <CloseIcon onClick={wrappedOndismiss} />
           </RowBetween>
-          {stakingInfo?.earnedAmount && (
+          {stakingInfo?.stakedAmount && (
             <AutoColumn justify="center" gap="md">
               <TYPE.body fontWeight={600} fontSize={36}>
-                {stakingInfo?.earnedAmount?.toSignificant(4)}
+                {<FormattedCurrencyAmount currencyAmount={stakingInfo.stakedAmount} />}
               </TYPE.body>
-              <TYPE.body>Unclaimed {stakingInfo?.rewardToken?.symbol ?? 'DFYN'}</TYPE.body>
+              <TYPE.body>Deposited liquidity:</TYPE.body>
             </AutoColumn>
           )}
+          {/* {stakingInfo?.earnedAmount && (
+            <AutoColumn justify="center" gap="md">
+              <TYPE.body fontWeight={600} fontSize={36}>
+                {<FormattedCurrencyAmount currencyAmount={stakingInfo?.earnedAmount} />}
+              </TYPE.body>
+              <TYPE.body>Unclaimed DFYN</TYPE.body>
+            </AutoColumn>
+          )} */}
           <TYPE.subHeader style={{ textAlign: 'center' }}>
-            When you claim without withdrawing your liquidity remains in the mining pool.
+            {`When you withdraw, your vested  ${stakingInfo ? reward0.symbol : "DFYN"} & ${stakingInfo ? reward1.symbol : "DFYN"} are claimed (if claimable) and your liquidity is removed from the farming pool.`}
           </TYPE.subHeader>
-          <ButtonError disabled={!!error} error={!!error && !!stakingInfo?.stakedAmount} onClick={onClaimReward}>
-            {error ?? 'Claim'}
+          <ButtonError disabled={!!error} error={!!error && !!stakingInfo?.stakedAmount} onClick={onWithdraw}>
+            {error ?? 'Withdraw & Claim'}
           </ButtonError>
         </ContentWrapper>
       )}
       {attempting && !hash && (
-        <LoadingView onDismiss={wrappedOnDismiss}>
+        <LoadingView onDismiss={wrappedOndismiss}>
           <AutoColumn gap="12px" justify={'center'}>
-            <TYPE.body fontSize={20}>Claiming {stakingInfo?.earnedAmount?.toSignificant(6)} {stakingInfo?.rewardToken?.symbol ?? 'DFYN'}</TYPE.body>
+            <TYPE.body fontSize={20}>Withdrawing {stakingInfo?.stakedAmount?.toSignificant(4)} DFYN-V2</TYPE.body>
+            {!stakingInfo?.active && <TYPE.body fontSize={20}>Claiming {stakingInfo?.earnedAmount?.toSignificant(4)} {reward0.symbol ?? 'DFYN'} {"&&"} {reward1.symbol ?? 'DFYN'}</TYPE.body>}
           </AutoColumn>
         </LoadingView>
       )}
       {hash && (
-        <SubmittedView onDismiss={wrappedOnDismiss} hash={hash}>
+        <SubmittedView onDismiss={wrappedOndismiss} hash={hash}>
           <AutoColumn gap="12px" justify={'center'}>
             <TYPE.largeHeader>Transaction Submitted</TYPE.largeHeader>
-            <TYPE.body fontSize={20}>Claimed {stakingInfo?.rewardToken?.symbol ?? 'DFYN'}!</TYPE.body>
+            <TYPE.body fontSize={20}>Withdrew LP Tokens!</TYPE.body>
+            {!stakingInfo?.active && <TYPE.body fontSize={20}>Claimed {reward0?.symbol ?? 'DFYN'} {"&&"} {reward1?.symbol}!</TYPE.body>}
           </AutoColumn>
         </SubmittedView>
       )}
