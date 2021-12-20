@@ -17,7 +17,7 @@ const ConfirmOrLoadingWrapper = styled.div`
 `
 
 const ConfirmedIcon = styled(ColumnCenter)`
-  padding: 60px 0;
+  padding: 30px 0 40px 0;
 `
 
 export function LoadingView({ children, onDismiss }: { children: any; onDismiss: () => void }) {
@@ -59,7 +59,7 @@ export function SubmittedView({
       <ConfirmedIcon>
         <ArrowUpCircle strokeWidth={0.5} size={90} color={theme.primary1} />
       </ConfirmedIcon>
-      <AutoColumn gap="100px" justify={'center'}>
+      <AutoColumn gap="80px" justify={'center'}>
         {children}
         {chainId && hash && (
           <ExternalLink href={getExplorerLink(chainId, hash, 'transaction')} style={{ marginLeft: '4px' }}>

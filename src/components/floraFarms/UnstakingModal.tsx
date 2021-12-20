@@ -3,8 +3,8 @@ import Modal from '../Modal'
 import { AutoColumn } from '../Column'
 import styled from 'styled-components'
 import { RowBetween } from '../Row'
-import { TYPE, CloseIcon } from '../../theme'
-import { ButtonError } from '../Button'
+import { TYPE, CloseIcon, StyledInternalLink } from '../../theme'
+import { ButtonError, ButtonPrimary } from '../Button'
 import { StakingInfo } from '../../state/flora-farms/hooks'
 import { useStakingContract } from '../../hooks/useContract'
 import { SubmittedView, LoadingView } from '../ModalViews'
@@ -119,6 +119,12 @@ export default function UnstakingModal({ isOpen, onDismiss, stakingInfo }: Staki
             <TYPE.largeHeader>Transaction Submitted</TYPE.largeHeader>
             <TYPE.body fontSize={20}>Withdrew LP Tokens!</TYPE.body>
             {!claimable && <TYPE.body fontSize={20}>{`Claimed ${stakingInfo ? stakingInfo?.rewardToken.symbol : "DFYN"}!`}</TYPE.body>}
+            <StyledInternalLink to={`/vdfyn`} style={{width: '100%', marginTop: "10px"}}>
+              <ButtonPrimary padding="18px" borderRadius="8px" fontSize="18px" fontWeight="700">
+                Stake DFYN
+              </ButtonPrimary>
+            </StyledInternalLink>
+            <TYPE.body fontSize={'12px'}>Stake your DFYN rewards in vDfyn to get extra APR</TYPE.body>
           </AutoColumn>
         </SubmittedView>
       )}
