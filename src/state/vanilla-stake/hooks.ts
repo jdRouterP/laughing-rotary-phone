@@ -1,6 +1,6 @@
 import { ChainId, CurrencyAmount, JSBI, Token, TokenAmount, Pair } from '@dfyn/sdk'
 import { useMemo } from 'react'
-import { UNI, USDC, DFYN, FISH, UFT, ANY, AGA, AGAr, NORD, BIFI, COSMIC, TITAN, ICE, WMATIC, CRV, UNI_TOKEN, AAVE, LINK, LUNA, ELE, GAJ, SILVER, SING, RAZOR, ETHER, FRM, CIRUS, MATRIX, SHIB, OAI, NIOX, MANA } from '../../constants'
+import { UNI, USDC, DFYN, FISH, UFT, ANY, AGA, AGAr, NORD, BIFI, COSMIC, TITAN, ICE, WMATIC, CRV, UNI_TOKEN, AAVE, LINK, LUNA, ELE, GAJ, SILVER, SING, RAZOR, ETHER, FRM, CIRUS, MATRIX, SHIB, OAI, NIOX, MANA, NEXO } from '../../constants'
 import { STAKING_REWARDS_BASIC_FARMS_INTERFACE } from '../../constants/abis/staking-rewards-basic-farms'
 import { useActiveWeb3React } from '../../hooks'
 import { NEVER_RELOAD, useMultipleContractSingleData } from '../multicall/hooks'
@@ -33,7 +33,7 @@ export const STAKING_REWARDS_INFO: {
       version: 'v9'
     },
     {
-      tokens: [NIOX, DFYN],
+      tokens: [NEXO, DFYN],
       baseToken: DFYN,
       startTime: 1640098800,
       stakingRewardAddress: '0x2AE6A2603A400733A7dC9b920e6ed4b3ACCAEF71',
