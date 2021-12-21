@@ -32,8 +32,8 @@ export const STAKING_REWARDS_INFO: {
     {
       tokens: [DFYN_FANTOM, FTM], //DFYN_FTM
       baseToken: FTM,
-      startTime: 1640098800,
-      stakingRewardAddress: '0x2A3758323f5420A85F2245D80b432BcEB6841205',
+      startTime: 1640102400,
+      stakingRewardAddress: '0x541d36bd9241A65539D1A2ecdd1F6bAACB346513',
       version: 'v3',
       burnRate: '35',
 
@@ -41,8 +41,8 @@ export const STAKING_REWARDS_INFO: {
     {
       tokens: [USDC_FANTOM, USDT_FANTOM],
       baseToken: USDT_FANTOM,
-      startTime: 1640098800,
-      stakingRewardAddress: '0xaabEaef1B229aF6607Ba6837C1B36F756220f637',
+      startTime: 1640102400,
+      stakingRewardAddress: '0x4233e2761b90bc68B297ba8D44Ec1EF9f0d115c4',
       version: 'v3',
       burnRate: '35',
 
@@ -50,8 +50,8 @@ export const STAKING_REWARDS_INFO: {
     {
       tokens: [WBTC_FANTOM, WETH_FANTOM],
       baseToken: WETH_FANTOM,
-      startTime: 1640098800,
-      stakingRewardAddress: '0x762af781315b1f2c5fBaF3c79ABFc83dE740A56c',
+      startTime: 1640102400,
+      stakingRewardAddress: '0xc0d45A857166d56719f8CC1A0D41C1EAC14C4461',
       version: 'v3',
       burnRate: '35',
 
@@ -59,8 +59,8 @@ export const STAKING_REWARDS_INFO: {
     {
       tokens: [DFYN_FANTOM, USDC_FANTOM],
       baseToken: USDC_FANTOM,
-      startTime: 1640098800,
-      stakingRewardAddress: '0x604C2Cc6Bd0B1E8DA895EE23f6d168dBCB606d69',
+      startTime: 1640102400,
+      stakingRewardAddress: '0x5079c527eC274F34371185DB6dDb3AB09A8bd8bd',
       version: 'v3',
       burnRate: '35',
 
@@ -68,8 +68,8 @@ export const STAKING_REWARDS_INFO: {
     {
       tokens: [FTM, WETH_FANTOM],
       baseToken: WETH_FANTOM,
-      startTime: 1640098800,
-      stakingRewardAddress: '0x9e56D4363e9Fc04f41c3B77F16824522d0776bAf',
+      startTime: 1640102400,
+      stakingRewardAddress: '0xfc24FA576b183Dbc385a553035Db9883920e985d',
       version: 'v3',
       burnRate: '35',
 
@@ -126,96 +126,96 @@ export const STAKING_REWARDS_INFO: {
     {
       tokens: [UST, USDT],
       baseToken: USDT,
-      startTime: 1640098800,
-      stakingRewardAddress: '0xd8942D2609d820e67cfFA4748Cd3E88213c64A3C',
+      startTime: 1640102400,
+      stakingRewardAddress: '0x96d6AbFB2e6A681F0eaaAeD41B097A42f3ab1B28',
       version: 'v8',
       burnRate: '35'
     },
     {
       tokens: [DFYN, USDC],
       baseToken: USDC,
-      startTime: 1640098800,
-      stakingRewardAddress: '0x74269A43b844B3Fa33FBEAb7F99BeC45490f5507',
+      startTime: 1640102400,
+      stakingRewardAddress: '0x2b46c027dCF5431b843761d92Feae6fd63D1639E',
       version: 'v8',
       burnRate: '35'
     },
     {
       tokens: [DFYN, ETHER],
       baseToken: ETHER,
-      startTime: 1640098800,
-      stakingRewardAddress: '0x5c5c6C5b9C1EDA0DaF9D13CD0829e4182D3a65C2',
+      startTime: 1640102400,
+      stakingRewardAddress: '0x7902e20ff02830DA5ed42d35388099837d9910eB',
       version: 'v8',
       burnRate: '35'
     },
     {
       tokens: [WBTC, ETHER],
       baseToken: ETHER,
-      startTime: 1640098800,
-      stakingRewardAddress: '0xd1A745cd639642B1C5831ab1f1B59b6ff1d369A0',
+      startTime: 1640102400,
+      stakingRewardAddress: '0x5f6E9B612C0F9DAc2269510c6fA90f4E0513aA1B',
       version: 'v8',
       burnRate: '35'
     },
     {
       tokens: [USDT, USDC],
       baseToken: USDC,
-      startTime: 1640098800,
-      stakingRewardAddress: '0x4A9d4789d2fb641ed59fa6b34BFAAedf820E05a9',
+      startTime: 1640102400,
+      stakingRewardAddress: '0x6e91194412DfC846C65Ca163138cA66C35c4E009',
       version: 'v8',
       burnRate: '35'
     },
     {
       tokens: [USDC, ETHER],
       baseToken: USDC,
-      startTime: 1640098800,
-      stakingRewardAddress: '0x6BE279E46788221965898B360b934b9290b320E8',
+      startTime: 1640102400,
+      stakingRewardAddress: '0xc8685B1B73518b8FC221F91E9d6c62fd79ee256A',
       version: 'v8',
       burnRate: '35'
     },
     {
       tokens: [USDC, ROUTE],
       baseToken: USDC,
-      startTime: 1640098800,
-      stakingRewardAddress: '0x644E6dF3247179564b0555FbAC944Bb7586dA5C1',
+      startTime: 1640102400,
+      stakingRewardAddress: '0xBBe74DE0B6Efe28F1c11f0BE38cc13837b5c9a33',
       version: 'v8',
       burnRate: '35'
     },
     {
       tokens: [ETHER, ROUTE],
       baseToken: ETHER,
-      startTime: 1640098800,
-      stakingRewardAddress: '0xed117d9C55CC2b2552514cBA6748fd60aC761133',
+      startTime: 1640102400,
+      stakingRewardAddress: '0x7e520dd641b0fb89820f0791688Ba98D41f683B1',
       version: 'v8',
       burnRate: '35'
     },
     {
       tokens: [WMATIC, ETHER],
       baseToken: WMATIC,
-      startTime: 1640098800,
-      stakingRewardAddress: '0xD36e5aAD9b68DFC901BBaC60eD9B2a1B0c56Cb55',
+      startTime: 1640102400,
+      stakingRewardAddress: '0xBE9Fc5723D5e7566baB24e5C37B2A86daB4279b6',
       version: 'v8',
       burnRate: '35'
     },
     {
       tokens: [MANA, ETHER],
       baseToken: ETHER,
-      startTime: 1640098800,
-      stakingRewardAddress: '0xd7c68159581e6d46B61Fd2BC1F992Ef122DbE1B4',
+      startTime: 1640102400,
+      stakingRewardAddress: '0x9BA8CAd00696D825bB00dec32F3919211A6da632',
       version: 'v8',
       burnRate: '35'
     },
     {
       tokens: [SOL, ETHER],
       baseToken: ETHER,
-      startTime: 1640098800,
-      stakingRewardAddress: '0x18b452fbe6ca592d34AB46e7FF75b7464Fc4EbfC',
+      startTime: 1640102400,
+      stakingRewardAddress: '0x8152Fb384628F9390EA631d59B18Cbd0973a7870',
       version: 'v8',
       burnRate: '35'
     },
     {
       tokens: [NEXO, ETHER],
       baseToken: ETHER,
-      startTime: 1640098800,
-      stakingRewardAddress: '0xae9b6387CaCc8D6511155E8661eF5ABB8587605f',
+      startTime: 1640102400,
+      stakingRewardAddress: '0xE6E63E64E115Bc92dffd86371D13eCe3FB3Fc38B',
       version: 'v8',
       burnRate: '35'
     },

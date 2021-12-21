@@ -28,21 +28,21 @@ export const STAKING_REWARDS_INFO: {
     {
       tokens: [MANA, DFYN],
       baseToken: DFYN,
-      startTime: 1640098800,
+      startTime: 1640102400,
       stakingRewardAddress: '0xf7f083b6226Cfef2F9bc349B46254088d1B9ADBE',
       version: 'v9'
     },
     {
       tokens: [NEXO, DFYN],
       baseToken: DFYN,
-      startTime: 1640098800,
+      startTime: 1640102400,
       stakingRewardAddress: '0x2AE6A2603A400733A7dC9b920e6ed4b3ACCAEF71',
       version: 'v9'
     },
     {
       tokens: [AGAr, AGA],
       baseToken: AGA,
-      startTime: 1640098800,
+      startTime: 1640102400,
       rewardToken: AGA,
       stakingRewardAddress: '0x3C045a183ED4784142c042070be6B25AE6D9854D',
       version: 'v9'
