@@ -28,6 +28,52 @@ export const STAKING_REWARDS_INFO: {
   }[]
 } = {
   [ChainId.FANTOM]: [
+    //v3
+    {
+      tokens: [DFYN_FANTOM, FTM], //DFYN_FTM
+      baseToken: FTM,
+      startTime: 1640098800,
+      stakingRewardAddress: '0x2A3758323f5420A85F2245D80b432BcEB6841205',
+      version: 'v3',
+      burnRate: '35',
+
+    },
+    {
+      tokens: [USDC_FANTOM, USDT_FANTOM],
+      baseToken: USDT_FANTOM,
+      startTime: 1640098800,
+      stakingRewardAddress: '0xaabEaef1B229aF6607Ba6837C1B36F756220f637',
+      version: 'v3',
+      burnRate: '35',
+
+    },
+    {
+      tokens: [WBTC_FANTOM, WETH_FANTOM],
+      baseToken: WETH_FANTOM,
+      startTime: 1640098800,
+      stakingRewardAddress: '0x762af781315b1f2c5fBaF3c79ABFc83dE740A56c',
+      version: 'v3',
+      burnRate: '35',
+
+    },
+    {
+      tokens: [DFYN_FANTOM, USDC_FANTOM],
+      baseToken: USDC_FANTOM,
+      startTime: 1640098800,
+      stakingRewardAddress: '0x604C2Cc6Bd0B1E8DA895EE23f6d168dBCB606d69',
+      version: 'v3',
+      burnRate: '35',
+
+    },
+    {
+      tokens: [FTM, WETH_FANTOM],
+      baseToken: WETH_FANTOM,
+      startTime: 1640098800,
+      stakingRewardAddress: '0x9e56D4363e9Fc04f41c3B77F16824522d0776bAf',
+      version: 'v3',
+      burnRate: '35',
+
+    },
     //v2
     {
       tokens: [DFYN_FANTOM, FTM], //DFYN_FTM
@@ -76,6 +122,103 @@ export const STAKING_REWARDS_INFO: {
     },
   ],
   [ChainId.MATIC]: [
+    //v8
+    {
+      tokens: [UST, USDT],
+      baseToken: USDT,
+      startTime: 1640098800,
+      stakingRewardAddress: '0xd8942D2609d820e67cfFA4748Cd3E88213c64A3C',
+      version: 'v8',
+      burnRate: '35'
+    },
+    {
+      tokens: [DFYN, USDC],
+      baseToken: USDC,
+      startTime: 1640098800,
+      stakingRewardAddress: '0x74269A43b844B3Fa33FBEAb7F99BeC45490f5507',
+      version: 'v8',
+      burnRate: '35'
+    },
+    {
+      tokens: [DFYN, ETHER],
+      baseToken: ETHER,
+      startTime: 1640098800,
+      stakingRewardAddress: '0x5c5c6C5b9C1EDA0DaF9D13CD0829e4182D3a65C2',
+      version: 'v8',
+      burnRate: '35'
+    },
+    {
+      tokens: [WBTC, ETHER],
+      baseToken: ETHER,
+      startTime: 1640098800,
+      stakingRewardAddress: '0xd1A745cd639642B1C5831ab1f1B59b6ff1d369A0',
+      version: 'v8',
+      burnRate: '35'
+    },
+    {
+      tokens: [USDT, USDC],
+      baseToken: USDC,
+      startTime: 1640098800,
+      stakingRewardAddress: '0x4A9d4789d2fb641ed59fa6b34BFAAedf820E05a9',
+      version: 'v8',
+      burnRate: '35'
+    },
+    {
+      tokens: [USDC, ETHER],
+      baseToken: USDC,
+      startTime: 1640098800,
+      stakingRewardAddress: '0x6BE279E46788221965898B360b934b9290b320E8',
+      version: 'v8',
+      burnRate: '35'
+    },
+    {
+      tokens: [USDC, ROUTE],
+      baseToken: USDC,
+      startTime: 1640098800,
+      stakingRewardAddress: '0x644E6dF3247179564b0555FbAC944Bb7586dA5C1',
+      version: 'v8',
+      burnRate: '35'
+    },
+    {
+      tokens: [ETHER, ROUTE],
+      baseToken: ETHER,
+      startTime: 1640098800,
+      stakingRewardAddress: '0xed117d9C55CC2b2552514cBA6748fd60aC761133',
+      version: 'v8',
+      burnRate: '35'
+    },
+    {
+      tokens: [WMATIC, ETHER],
+      baseToken: WMATIC,
+      startTime: 1640098800,
+      stakingRewardAddress: '0xD36e5aAD9b68DFC901BBaC60eD9B2a1B0c56Cb55',
+      version: 'v8',
+      burnRate: '35'
+    },
+    {
+      tokens: [MANA, ETHER],
+      baseToken: ETHER,
+      startTime: 1640098800,
+      stakingRewardAddress: '0xd7c68159581e6d46B61Fd2BC1F992Ef122DbE1B4',
+      version: 'v8',
+      burnRate: '35'
+    },
+    {
+      tokens: [SOL, ETHER],
+      baseToken: ETHER,
+      startTime: 1640098800,
+      stakingRewardAddress: '0x18b452fbe6ca592d34AB46e7FF75b7464Fc4EbfC',
+      version: 'v8',
+      burnRate: '35'
+    },
+    {
+      tokens: [NEXO, ETHER],
+      baseToken: ETHER,
+      startTime: 1640098800,
+      stakingRewardAddress: '0xae9b6387CaCc8D6511155E8661eF5ABB8587605f',
+      version: 'v8',
+      burnRate: '35'
+    },
     //v7
     {
       tokens: [UST, USDT],
