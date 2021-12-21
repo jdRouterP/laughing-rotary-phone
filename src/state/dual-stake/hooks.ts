@@ -66,6 +66,21 @@ export const STAKING_REWARDS_INFO: {
       stakingRewardAddress: '0xa60DF42DF58495bf8C7e3cBAEDDB3cB346cF0db8',
       version: 'v8'
     },
+
+  ]
+}
+
+export const INACTIVE_STAKING_REWARDS_INFO: {
+  [chainId in ChainId]?: {
+    tokens: [Token, Token]
+    rewardTokens: [Token, Token]
+    baseToken?: Token
+    start: number
+    stakingRewardAddress: string
+    version: string
+  }[]
+} = {
+  [ChainId.MATIC]: [
     //v7
     {
       tokens: [ROUTE, DFYN],
@@ -84,20 +99,6 @@ export const STAKING_REWARDS_INFO: {
       version: 'v7'
     },
 
-  ]
-}
-
-export const INACTIVE_STAKING_REWARDS_INFO: {
-  [chainId in ChainId]?: {
-    tokens: [Token, Token]
-    rewardTokens: [Token, Token]
-    baseToken?: Token
-    start: number
-    stakingRewardAddress: string
-    version: string
-  }[]
-} = {
-  [ChainId.MATIC]: [
     //v6
     {
       tokens: [RAZOR, DFYN],
