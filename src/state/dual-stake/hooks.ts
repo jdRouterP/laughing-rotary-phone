@@ -28,7 +28,7 @@ export const STAKING_REWARDS_INFO: {
     //v8
     {
       tokens: [DFYN, ROUTE],
-      rewardTokens: [DFYN, ROUTE],
+      rewardTokens: [ROUTE, DFYN],
       baseToken: DFYN,
       start: 1640102400000,
       stakingRewardAddress: '0x4b7Ce241B6E58Cef602F4EE588B8bD40f4e79066',
@@ -36,7 +36,7 @@ export const STAKING_REWARDS_INFO: {
     },
     {
       tokens: [EMON, USDC],
-      rewardTokens: [EMON, DFYN],
+      rewardTokens: [DFYN, EMON],
       baseToken: USDC,
       start: 1640102400000,
       stakingRewardAddress: '0x0656Bd61A18Fd8E4bd48F90e41D043CdfEc96aE0',
