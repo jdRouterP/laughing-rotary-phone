@@ -60,6 +60,8 @@ import Analytics from 'components/Header/Analytics'
 import ThemeChange from 'components/Header/ThemeChange'
 import VDFYN from './Vault/VDFYN'
 import Fusion from './DfynFusion/Fusion'
+import TradingLeader from 'components/TradingLeader'
+import ArchivedTradingLeader from 'components/TradingLeader/ArchivedTradingLeader'
 import LimitOrder from './Limit'
 import { useActiveWeb3React } from 'hooks'
 import { HEADER_ACCESS } from 'constants/networks'
@@ -148,6 +150,8 @@ export default function App() {
               <Route exact strict path="/vault" component={Vault} />
               <Route exact strict path="/vdfyn" component={VDFYN} />
               <Route exact strict path="/prediction" component={Predictions} />
+              <Route exact strict path="/trading-leaderboard" component={TradingLeader} />
+              <Route exact strict path="/trading-leaderboard/archived" component={ArchivedTradingLeader} />
               <Route exact strict path="/prediction/:currency/:candleSize" component={PredictionDesktop} />
               {/* <Route exact strict path="/predictionMarket" component={PredictionMarket} /> */}
               {/* <Route exact strict path="/vote" component={Vote} /> */}

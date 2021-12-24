@@ -1,0 +1,52 @@
+[
+    {
+        "tradingAddress": "0xc4545634ef8bfcfc1f7e396ede6d16ca3512ca75",
+        "tradedAmount": "148810.2436",
+        "prizeMoney": "5000"
+    },
+    {
+        "tradingAddress": "0xe8e60feada5071f20c1913a1c52419b56a2f0866",
+        "tradedAmount": "118813.2414",
+        "prizeMoney": "2000"
+    },
+    {
+        "tradingAddress": "0xc34b45a81ccd4c81286798fb2ffa70ef6e2777f2",
+        "tradedAmount": "75861.40306",
+        "prizeMoney": "1000"
+    },
+    {
+        "tradingAddress": "0x676f3d2c9f5776e09d23986adc6684fb41e9000e",
+        "tradedAmount": "29654.68988",
+        "prizeMoney": "428"
+    },
+    {
+        "tradingAddress": "0x8e0eaed56bf59229563f8da4c20ed5b2fc9e6006",
+        "tradedAmount": "118813.2414",
+        "prizeMoney": "428"
+    },
+    {
+        "tradingAddress": "0x8e0eaed56bf59229563f8da4c20ed5b2fc9e6006",
+        "tradedAmount": "118813.2414",
+        "prizeMoney": "428"
+    },
+    {
+        "tradingAddress": "0x8e0eaed56bf59229563f8da4c20ed5b2fc9e6006",
+        "tradedAmount": "118813.2414",
+        "prizeMoney": "428"
+    },
+    {
+        "tradingAddress": "0x8e0eaed56bf59229563f8da4c20ed5b2fc9e6006",
+        "tradedAmount": "118813.2414",
+        "prizeMoney": "428"
+    },
+    {
+        "tradingAddress": "0x8e0eaed56bf59229563f8da4c20ed5b2fc9e6006",
+        "tradedAmount": "118813.2414",
+        "prizeMoney": "428"
+    },
+    {
+        "tradingAddress": "0x8e0eaed56bf59229563f8da4c20ed5b2fc9e6006",
+        "tradedAmount": "118813.2414",
+        "prizeMoney": "428"
+    }
+]

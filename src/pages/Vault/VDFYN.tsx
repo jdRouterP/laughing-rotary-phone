@@ -80,7 +80,7 @@ const MouseTooltip = styled.span`
 `
 const GreyText = styled.div`
     display: block;
-    color: ${({ theme }) => theme.text2};
+    color: ${({ theme }) => theme.text1};
     font-size: 0.7rem;
     position: absolute;
     bottom: 0;
@@ -121,7 +121,6 @@ const _calculateAPR = async (totalSupply: any, dfynBalance: any, cb: Function) =
 
 
 export default function VDFYN() {
-
     const { account, chainId } = useActiveWeb3React()
 
     const uni = chainId ? UNI[chainId] : undefined
@@ -196,7 +195,7 @@ export default function VDFYN() {
                             </TYPE.body>
                         </AutoColumn>
                     </PoolData>
-                    <PoolData>
+                    <PoolData style={{ backgroundSize: 'cover', border: 'none', backgroundPosition: 'right' }}>
                         <AutoColumn gap="sm">
                             <TYPE.body style={{ marginLeft: '5px', textAlign: 'left' }}>Balance vDFYN</TYPE.body>
                             <TYPE.body fontSize={24} fontWeight={500} style={{ display: 'flex', justifyContent: 'initial', marginLeft: '5px' }}>
@@ -207,7 +206,7 @@ export default function VDFYN() {
                             </TYPE.body>
                         </AutoColumn>
                     </PoolData>
-                    <PoolData>
+                    <PoolData style={{ backgroundSize: 'cover', border: 'none', backgroundPosition: 'right' }}>
                         <AutoColumn gap="sm">
                             <TYPE.body style={{ marginLeft: '5px', textAlign: 'left' }}>Unstaked DFYN</TYPE.body>
                             <TYPE.body fontSize={24} fontWeight={500} style={{ display: 'flex', justifyContent: 'initial', marginLeft: '5px' }}>

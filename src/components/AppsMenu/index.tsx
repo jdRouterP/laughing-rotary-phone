@@ -174,6 +174,12 @@ export default function AppsMenu() {
               <TYPE.subHeader fontWeight={500} fontSize={'10px'}>Convert multiple tokens into one</TYPE.subHeader>
             </MenuDesc>
           </StyledNavLink>
+          <StyledNavLink id={`trading-nav-link`} to={'/trading-leaderboard'}>
+          <TYPE.mediumHeader fontSize={'16px'}>Trading Competition</TYPE.mediumHeader>
+            <MenuDesc>
+              <TYPE.subHeader fontWeight={500} fontSize={'10px'}>Trading Leaderboard</TYPE.subHeader>
+            </MenuDesc>
+          </StyledNavLink>
         </MenuFlyout>
       )}
     </StyledMenu>
