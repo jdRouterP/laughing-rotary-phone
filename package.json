@@ -53,18 +53,20 @@
     "eslint-plugin-react": "^7.19.0",
     "eslint-plugin-react-hooks": "^4.0.0",
     "ethers": "^5.1.4",
+    "husky": "^7.0.4",
     "i18next": "^15.0.9",
     "i18next-browser-languagedetector": "^3.0.1",
     "i18next-xhr-backend": "^2.0.1",
     "inter-ui": "^3.13.1",
     "jazzicon": "^1.5.0",
+    "lint-staged": "^12.1.4",
     "lodash.flatmap": "^4.5.0",
     "luxon": "^1.25.0",
     "multicodec": "^2.0.0",
     "multihashes": "^3.0.1",
     "node-vibrant": "^3.1.5",
     "polished": "^3.3.2",
-    "prettier": "^1.17.0",
+    "prettier": "2.5.1",
     "qs": "^6.9.4",
     "react": "^16.13.1",
     "react-confetti": "^6.0.0",
@@ -105,7 +107,8 @@
     "build": "GENERATE_SOURCEMAP=false react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "integration-test": "start-server-and-test 'serve build -l 3000' http://localhost:3000 'cypress run'"
+    "integration-test": "start-server-and-test 'serve build -l 3000' http://localhost:3000 'cypress run'",
+    "prepare": "husky install"
   },
   "eslintConfig": {
     "extends": "react-app",
@@ -149,5 +152,11 @@
     "swiper": "^6.7.0",
     "web3": "^1.5.2",
     "yup": "^0.32.9"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "prettier --write"
+    ],
+    "*.{md,css}": "prettier --write"
   }
 }
