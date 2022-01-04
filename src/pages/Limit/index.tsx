@@ -80,7 +80,7 @@ const RateConverterOutlinedInput = styled(OutlinedInput)`
   }
 `
 
-const VerticalLine = styled.div`
+const VerticalLine = styled.div<{isVisible: boolean}>`
     background: ${({ theme }) => theme.bg2};
     width: 2px;
     position: absolute;
@@ -88,7 +88,7 @@ const VerticalLine = styled.div`
     opacity: 1;
     left: calc(12% - 1px);
     z-index: 1;
-    top: 105px;
+    top: ${({ isVisible }) => (isVisible? '105px': '160px')};
 `
 const CustomMarketRateRow = styled(RowBetween)`
   font-size: 14px;
@@ -111,7 +111,23 @@ const CustomSwapVert = styled.div`
     line-height: 3.7;
 `
 
+const LimitOrderDisable = styled(AutoColumn)`
+    // background: ${({ theme }) => theme.pink1};
+    // border: 1px solid ${({ theme }) => theme.bg2};
+    padding: 10px;
+    margin: 10px auto;
+    text-align: center;
+    color: ${({ theme }) => theme.text1}
+`
+
+const CustomBodyWrapper = styled(Wrapper)<{isVisible: boolean}>`
+    opacity: ${({isVisible})=>(isVisible? '1': '0.6')};
+    pointer-events: ${({isVisible})=>(isVisible? 'initial': 'none')};
+    cursor: ${({isVisible})=>(isVisible? 'initial': 'not-allowed')};
+`;
+
 export default function LimitOrder({ history }: RouteComponentProps) {
+  const isLimitOrderEnabled = process.env.REACT_APP_ENABLE_LIMIT_ORDER==="true"? true:false
   const loadedUrlParams = useDefaultsFromURLSearch()
   const toggleWalletModal = useWalletModalToggle()
   // token warning stuff
@@ -407,7 +423,14 @@ export default function LimitOrder({ history }: RouteComponentProps) {
       <SwapPoolTabs active={'swap'} />
       <BodyWrapper style={{ margin: 'auto' }}>
         <SwapHeader />
-        <Wrapper id="swap-page">
+        <CustomBodyWrapper isVisible={isLimitOrderEnabled} id="swap-page">
+         {isLimitOrderEnabled ? null :
+            <LimitOrderDisable gap="md" justify="center">
+              <TYPE.subHeader color={theme.bannerText} fontSize={14} fontWeight={500}>
+                Limit order is under maintenance
+              </TYPE.subHeader>
+            </LimitOrderDisable>
+          }
           <ConfirmSwapModal
             isOpen={showConfirm}
             onAcceptChanges={handleAcceptChanges}
@@ -435,7 +458,7 @@ export default function LimitOrder({ history }: RouteComponentProps) {
               otherCurrency={currencies[Field.OUTPUT]}
               id="swap-currency-input"
             />
-            <VerticalLine></VerticalLine>
+            <VerticalLine isVisible={isLimitOrderEnabled}></VerticalLine>
             <AutoColumn justify="start">
               <AutoRow justify={'start'} style={{ padding: '0 0.5rem' }}>
                 <ArrowWrapper clickable style={{ width: '14%', zIndex: 2, textAlign: 'center' }}>
@@ -525,7 +548,7 @@ export default function LimitOrder({ history }: RouteComponentProps) {
               :
               <ButtonLight onClick={toggleWalletModal}>Connect Wallet</ButtonLight>
           }
-        </Wrapper>
+        </CustomBodyWrapper>
       </BodyWrapper>
       <BodyWrapper style={{ marginTop: '10px' }}>
         <OpenOrders />
