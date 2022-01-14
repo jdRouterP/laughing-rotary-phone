@@ -26,6 +26,13 @@ export const STAKING_REWARDS_INFO: {
   [ChainId.MATIC]: [
     //v9
     {
+      tokens: [OAI, DFYN],
+      baseToken: DFYN,
+      startTime: 1642161000,
+      stakingRewardAddress: '0xfcBD5C629549a180cF470E68F2c2Dd818B1fC8eD',
+      version: 'v9'
+    },
+    {
       tokens: [STACK, WMATIC],
       baseToken: WMATIC,
       startTime: 1641654900,

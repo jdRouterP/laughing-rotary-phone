@@ -34,6 +34,14 @@ export const STAKING_REWARDS_INFO: {
       stakingRewardAddress: '0xEeD363A93ecf9cFC378CFcd80D77c94E2Cb6B2F3',
       version: 'v9'
     },
+    {
+      tokens: [WMATIC, DFYN],
+      rewardTokens: [WMATIC, DFYN],
+      baseToken: DFYN,
+      start: 1639776800000,
+      stakingRewardAddress: '0x5E35F73EeE33a65B9b0f6A0d2104995890e36d06',
+      version: 'v9'
+    },
     //v8
     {
       tokens: [DFYN, ROUTE],
@@ -71,7 +79,7 @@ export const STAKING_REWARDS_INFO: {
       tokens: [NORD, DFYN],
       rewardTokens: [NORD, DFYN],
       baseToken: DFYN,
-      start: 1639063800000,
+      start: 1642161000000,
       stakingRewardAddress: '0xa60DF42DF58495bf8C7e3cBAEDDB3cB346cF0db8',
       version: 'v8'
     },

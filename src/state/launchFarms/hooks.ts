@@ -2,7 +2,7 @@
 import { ChainId, CurrencyAmount, JSBI, Token, TokenAmount, Pair } from '@dfyn/sdk'
 import { useMemo } from 'react'
 import { BigNumber } from 'ethers'
-import { UNI, USDC, DFYN, CIRUS, MATRIX, ETHER, OAI, NIOX, STACK, WMATIC } from '../../constants'
+import { UNI, USDC, DFYN, CIRUS, MATRIX, ETHER, OAI, NIOX, STACK, WMATIC, SAFLE } from '../../constants'
 import { STAKING_REWARDS_INTERFACE } from '../../constants/abis/staking-rewards' //same as pre-staking
 import { useActiveWeb3React } from '../../hooks'
 import { NEVER_RELOAD, useMultipleContractSingleData } from '../multicall/hooks'
@@ -26,6 +26,14 @@ export const STAKING_REWARDS_INFO: {
 } = {
   [ChainId.MATIC]: [
     {
+      tokens: [SAFLE, USDC],
+      baseToken: USDC,
+      version: 'v1',
+      rewardToken: SAFLE,
+      startTime: 1642161000,
+      stakingRewardAddress: '0xD8fA07309f92e1f09985D5Ae2813595fBc97ca5A'
+    },
+    {
       tokens: [STACK, WMATIC],
       baseToken: WMATIC,
       version: 'v1',
@@ -33,22 +41,7 @@ export const STAKING_REWARDS_INFO: {
       startTime: 1637847900,
       stakingRewardAddress: '0x812762bdd59Fe78b1705934A2683fb2d51BE3cA3'
     },
-    {
-      tokens: [NIOX, USDC],
-      baseToken: USDC,
-      version: 'v1',
-      rewardToken: NIOX,
-      startTime: 1636457400,
-      stakingRewardAddress: '0xA9034fFAaECA6FeBbba8e08801Ae68a6Fc4e0146'
-    },
-    {
-      tokens: [OAI, USDC],
-      baseToken: USDC,
-      version: 'v1',
-      rewardToken: OAI,
-      startTime: 1635789000,
-      stakingRewardAddress: '0xC50dB7b14B6E5E0745dD4851e0a3c93dCddd894a'
-    },
+
     {
       tokens: [MATRIX, ETHER],
       baseToken: ETHER,
@@ -80,7 +73,24 @@ export const INACTIVE_STAKING_REWARDS_INFO: {
     stakingRewardAddress: string
   }[]
 } = {
-  [ChainId.MATIC]: []
+  [ChainId.MATIC]: [
+    {
+      tokens: [NIOX, USDC],
+      baseToken: USDC,
+      version: 'v1',
+      rewardToken: NIOX,
+      startTime: 1636457400,
+      stakingRewardAddress: '0xA9034fFAaECA6FeBbba8e08801Ae68a6Fc4e0146'
+    },
+    {
+      tokens: [OAI, USDC],
+      baseToken: USDC,
+      version: 'v1',
+      rewardToken: OAI,
+      startTime: 1635789000,
+      stakingRewardAddress: '0xC50dB7b14B6E5E0745dD4851e0a3c93dCddd894a'
+    },
+  ]
 }
 interface TypeOfpools {
   typeOf: string

@@ -95,6 +95,7 @@ export const SHIB = new Token(ChainId.MATIC, '0x6f8a06447Ff6FcF75d803135a7de15CE
 export const MANA = new Token(ChainId.MATIC, '0xa1c57f48f0deb89f569dfbe6e2b7f46d33606fd4', 18, 'MANA', 'Decentraland')
 export const SOL = new Token(ChainId.MATIC, '0x7DfF46370e9eA5f0Bad3C4E29711aD50062EA7A4', 18, 'SOL', 'Solana')
 export const STACK = new Token(ChainId.MATIC, '0x980111ae1b84e50222c8843e3a7a038f36fecd2b', 18, 'STACK', 'StackOS')
+export const SAFLE = new Token(ChainId.MATIC, '0x04b33078ea1aef29bf3fb29c6ab7b200c58ea126', 18, 'SAFLE', 'Safle')
 
 
 
