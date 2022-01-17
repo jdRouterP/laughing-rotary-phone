@@ -112,12 +112,13 @@ const CustomSwapVert = styled.div`
 `
 
 const LimitOrderDisable = styled(AutoColumn)`
-    // background: ${({ theme }) => theme.pink1};
+    background: ${({ theme }) => theme.bgAlert};
     // border: 1px solid ${({ theme }) => theme.bg2};
     padding: 10px;
+    border-radius: 10px;
     margin: 10px auto;
     text-align: center;
-    color: ${({ theme }) => theme.text1}
+    color: ${({ theme }) => theme.textAlert}
 `
 
 const CustomBodyWrapper = styled(Wrapper)<{isVisible: boolean}>`
@@ -426,7 +427,7 @@ export default function LimitOrder({ history }: RouteComponentProps) {
         <CustomBodyWrapper isVisible={isLimitOrderEnabled} id="swap-page">
          {isLimitOrderEnabled ? null :
             <LimitOrderDisable gap="md" justify="center">
-              <TYPE.subHeader color={theme.bannerText} fontSize={14} fontWeight={500}>
+              <TYPE.subHeader color={theme.textAlert} fontSize={14} fontWeight={500}>
                 Limit order is under maintenance
               </TYPE.subHeader>
             </LimitOrderDisable>

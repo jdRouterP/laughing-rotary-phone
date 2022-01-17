@@ -50,6 +50,7 @@ export function colors(darkMode: boolean): Colors {
     text4: darkMode ? '#565A69' : '#C3C5CB',
     text5: darkMode ? '#2C2F36' : '#EDEEF2',
     bannerText: darkMode ? '#FDFCE5' : '#888D9B',
+    textAlert: darkMode? 'rgb(255, 226, 183)': 'rgb(1, 67, 97)',
     //border
     text6: darkMode ? '#575A68' : 'rgba(0,0,0,0.1)',
     //Card: tab-text
@@ -72,6 +73,7 @@ export function colors(darkMode: boolean): Colors {
     bg10: darkMode ? '#17181F' : '#FFFFFF',
     bg11: darkMode ? 'linear-gradient(165deg, #2c3545 0%,rgb(44 47 54) 100%)' : '#FFFFFF',
 
+    bgAlert: darkMode? 'rgb(7, 19, 24)':'rgb(229, 246, 253)',
     //specialty colors
     modalBG: darkMode ? 'rgba(0,0,0,.425)' : 'rgba(0,0,0,0.3)',
     advancedBG: darkMode ? 'rgba(0,0,0,0.1)' : 'rgba(255,255,255,0.6)',
