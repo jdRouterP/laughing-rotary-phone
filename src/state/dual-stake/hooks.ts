@@ -27,6 +27,14 @@ export const STAKING_REWARDS_INFO: {
   [ChainId.MATIC]: [
     //v9
     {
+      tokens: [DFYN, ROUTE],
+      rewardTokens: [ROUTE, DFYN],
+      baseToken: DFYN,
+      start: 1642681800000,
+      stakingRewardAddress: '0xb5F4d160F2D5baB04312F6817D5265F5cE75822C',
+      version: 'v9'
+    },
+    {
       tokens: [NORD, DFYN],
       rewardTokens: [NORD, DFYN],
       baseToken: DFYN,
