@@ -65,6 +65,7 @@ import ArchivedTradingLeader from 'components/TradingLeader/ArchivedTradingLeade
 import LimitOrder from './Limit'
 import { useActiveWeb3React } from 'hooks'
 import { HEADER_ACCESS } from 'constants/networks'
+import ExternalCohortPartnersInfo from 'components/TradingLeader/ExternalCohortPartnersInfo'
 
 const AppWrapper = styled.div`
   display: flex;
@@ -150,8 +151,13 @@ export default function App() {
               <Route exact strict path="/vault" component={Vault} />
               <Route exact strict path="/vdfyn" component={VDFYN} />
               <Route exact strict path="/prediction" component={Predictions} />
-              <Route exact strict path="/trading-leaderboard" component={TradingLeader} />
-              <Route exact strict path="/trading-leaderboard/archived" component={ArchivedTradingLeader} />
+              {chainId && HEADER_ACCESS.tradingCompetitions.includes(chainId) &&
+                <>
+                  <Route exact strict path="/trading-leaderboard" component={TradingLeader} />
+                  <Route exact strict path="/trading-leaderboard/external-cohort/:partnerName/:id" component={ExternalCohortPartnersInfo} />
+                  <Route exact strict path="/trading-leaderboard/archived" component={ArchivedTradingLeader} />
+                </>
+              }
               <Route exact strict path="/prediction/:currency/:candleSize" component={PredictionDesktop} />
               {/* <Route exact strict path="/predictionMarket" component={PredictionMarket} /> */}
               {/* <Route exact strict path="/vote" component={Vote} /> */}

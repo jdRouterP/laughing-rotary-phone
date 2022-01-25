@@ -1,35 +1,16 @@
-import { Base } from 'components/Button'
-// import { ButtonTab, ButtonTabItem } from 'components/ButtonTab'
-import { AutoColumn } from 'components/Column'
-import { CardBGImage, CardNoise, CardSection, DataCard } from 'components/dualFarms/styled'
-import Loader from 'components/Loader'
-import Row from 'components/Row'
-import { darken } from 'polished'
-import React, {useState, useEffect} from 'react'
-// import { useTranslation } from 'react-i18next'
-import styled from 'styled-components'
-import { ExternalLink, StyledInternalLink, TYPE } from 'theme'
-import InternalExternalCohort from './InternalExternalCohort'
+import { Base } from 'components/Button';
+import { AutoColumn } from 'components/Column';
+import { CardBGImage, CardNoise, CardSection, DataCard } from 'components/dualFarms/styled';
+import Loader from 'components/Loader';
+import Row from 'components/Row';
+import { darken } from 'polished';
+import React, { useEffect, useState } from 'react';
+import { RouteComponentProps } from 'react-router-dom';
+import styled from 'styled-components';
+import { ExternalLink, StyledInternalLink, TYPE } from 'theme';
+import InternalExternalCohort from './InternalExternalCohort';
+import Partners from './Partners';
 
-// const TRADING_LEADERBOARD_API = process.env.REACT_TRADING_LEADERBOARD_API;
-// const TRADING_LEADERBOARD_INFO_API = process.env.REACT_TRADING_LEADERBOARD_INFO_API;
-
-const MainContent = styled.div`
-    display: flex;
-    flex-direction: column;
-    max-width: 720px;
-    width: 100%;
-`
-
-const Header = styled.div`
-    display: grid;
-    grid-template-columns: 1fr 200px;
-    width: 100%;
-    font-weight: 600;
-    ${({theme}) => theme.mediaWidth.upToExtraSmall`
-        grid-template-columns: 1fr 170px;
-    `}
-`
 
 const LeaderBoard = styled.div`
     width: 100%;
@@ -70,9 +51,6 @@ const RowBetween = styled(Row)`
   justify-content: center;
 `
 
-const RowBetween1 = styled(Row)`
-  justify-content: start;
-`
 const PageWrapper = styled(AutoColumn)`
   max-width: 720px;
   width: 100%;
@@ -101,6 +79,38 @@ const LoaderStyle = styled.div`
     margin-top: 30px;
 `
 
+const MainContent = styled.div`
+    display: flex;
+    flex-direction: column;
+    max-width: 720px;
+    width: 100%;
+`
+
+const Header = styled.div`
+    display: grid;
+    grid-template-columns: 1fr 200px;
+    width: 100%;
+    font-weight: 600;
+    ${({theme}) => theme.mediaWidth.upToExtraSmall`
+        grid-template-columns: 1fr 170px;
+    `}
+`
+
+const RowBetween1 = styled(Row)`
+  justify-content: start;
+`
+
+// const ButtonMenuContainer = styled.div`
+//   width: 100%;
+//   margin-bottom: 35px;
+//   & > div {
+//     width: 100%;
+//   }
+
+//   & button {
+//     width: 100%;
+//   }
+// `
 
 const InternalContent = styled.div`
     background: ${({ theme }) => theme.bg1};
@@ -108,6 +118,10 @@ const InternalContent = styled.div`
     border-radius: 10px;
 `
 
+const HeadersStyle = styled.div`
+    display: flex;
+    justify-content: space-between;
+`
 const TextHeader = styled.span`
     text-align: center;
     font-size: 25px;
@@ -139,14 +153,20 @@ const ButtonPink = styled(Base)`
     cursor: auto;
   }
 `
-export default function TradingLeader() {
-    const [data1, setData1] = useState([])
-    const [info, setInfo] = useState<any>({})
+
+export default function ExternalCohortPartnersInfo({
+    match: {
+      params: {partnerName, id }
+    }
+    }: RouteComponentProps<{partnerName: string; id: string; }>) {
+    const [data, setData] = useState<any>([])
+    const [info1, setInfo1] = useState<any>({})
+    const [infoPairs, setInfoPairs] = useState<any>([])
     const [loader, setLoader] = useState(true)
     const [errorHandle, setErrorHandle] = useState(undefined)
     const url = 'https://api.trading-competition.dfyn.network'
     useEffect(() => {
-        fetch(`${url}/data/internal_cohort`)
+        fetch(`${url}/data/external_cohort/${id}`)
         .then(response => {
             if(response.ok){
                 return response.json()
@@ -154,16 +174,16 @@ export default function TradingLeader() {
             throw response
         })
         .then(data => {
-            setData1(data)
+            setData(data)
             setLoader(false)
         })
         .catch(error => {
-            console.log("Error in fetching data", error);
             setErrorHandle(error)
+            console.log("Error in fetching data", error);
         })
-    }, [])
+    }, [id])
     useEffect(() => {
-        fetch(`${url}/info/internal_cohort`)
+        fetch(`${url}/pairs/external_cohort`)
         .then(response => {
             if(response.ok){
                 return response.json()
@@ -171,21 +191,35 @@ export default function TradingLeader() {
             throw response
         })
         .then(data => {
-            setInfo(data)
+            setInfoPairs(data)
         })
         .catch(error => {
             console.log("Error in fetching data", error);
         })
     }, [])
-    
-    // const [activeTab, setActiveTab] = useState(0)
-    // const switchTab = async (tabIndex: number) => {
-    //     setActiveTab(tabIndex)
-    // }
-    return (
+    useEffect(() => {
+        fetch(`${url}/info/external_cohort`)
+        .then(response => {
+            if(response.ok){
+                return response.json()
+            }
+            throw response
+        })
+        .then(data => {
+            setInfo1(data)
+        })
+        .catch(error => {
+            console.log("Error in fetching data", error);
+        })
+    }, [])
+    return(
         <MainContent>
             <InternalContent>
-                <InternalExternalCohort />
+                <HeadersStyle>
+                    <InternalExternalCohort />
+                    <Partners partnerName={infoPairs.filter((i:any) => i.name.toLowerCase() === partnerName)[0]?.name} />
+                </HeadersStyle>
+                
                 {/* <ButtonMenuContainer>
                     <ButtonTab activeIndex={activeTab} onItemClick={switchTab}>
                         <ButtonTabItem width="50%" mr="5px">{t('Internal Cohort')}</ButtonTabItem>
@@ -197,9 +231,9 @@ export default function TradingLeader() {
                         <TextHeader>Leaderboard</TextHeader>
                     </RowBetween1>
                     <StyledInternalLink to={`/trading-leaderboard/archived`} style={{ width: '100%', color: '#ff007a', margin: 'auto 0'}}>
-                        <ButtonPink padding="8px" borderRadius="8px">
-                            Archived Leaderboard
-                        </ButtonPink>
+                    <ButtonPink padding="8px" borderRadius="8px">
+                        Archived Leaderboard
+                    </ButtonPink>
                     </StyledInternalLink>
                 </Header>
             </InternalContent>
@@ -212,21 +246,21 @@ export default function TradingLeader() {
                         <AutoColumn gap="md">
                             <TopSectionHeader>
                                 <RowBetween>
-                                    <TYPE.white fontWeight={600} fontSize={"17px"}>Trading Competition {info.version ?? ''}</TYPE.white>
+                                    <TYPE.white fontWeight={600} fontSize={"17px"}>Trading Competition {info1.version ?? ''}</TYPE.white>
                                 </RowBetween>
                             </TopSectionHeader>
-                            <TYPE.black fontSize={"15px"}>From: {info.from ?? ''}</TYPE.black>
-                            <TYPE.black fontSize={"15px"}>To: {info.to ?? ''}</TYPE.black>
-                            <TYPE.black fontSize={"15px"}>Pairs:  {info.pairs}</TYPE.black>
-                            <TYPE.black fontSize={"15px"}>Prize Pool: {info.prize}</TYPE.black>
+                            <TYPE.black fontSize={"15px"}>From: {info1.from ?? ''}</TYPE.black>
+                            <TYPE.black fontSize={"15px"}>To: {info1.to ?? ''}</TYPE.black>
+                            <TYPE.black fontSize={"15px"}>Pairs:  {infoPairs.filter((i:any) => i.name.toLowerCase() === partnerName)[0]?.pairs}</TYPE.black>
+                            <TYPE.black fontSize={"15px"}>Prize Pool: {infoPairs.filter((i:any) => i.name.toLowerCase() === partnerName)[0]?.prize}</TYPE.black>
                             <ExternalLink
                                 style={{ color: 'white', textDecoration: 'underline' }}
-                                href={info.link}
+                                href={info1.link}
                                 target="_blank"
                             >
                                 <TYPE.white fontSize={14}>Register Here For Trading Competition</TYPE.white>
                             </ExternalLink>
-                            <TYPE.black fontSize={"14px"}>Note: Kindly turn off the gasless mode while executing trades for Trading Competition.</TYPE.black>
+                            <TYPE.black fontSize={"14px"}>Note: Kindly turn off the gasless mode while executing trades for Trading Competition</TYPE.black>
                         </AutoColumn>
                     </CardSection>
                     <CardBGImage />
@@ -245,16 +279,16 @@ export default function TradingLeader() {
                     </TheadStyle>
                         {
                             loader ?
+                                <LoaderStyle>
+                                    <Loader size="50px" /> 
+                                </LoaderStyle>
+                            : !loader && data.length === 0 && !!errorHandle ? 
                             <LoaderStyle>
-                                <Loader size="50px" /> 
+                                <span style={{fontSize: "20px"}}>No data found.</span> 
                             </LoaderStyle>
-                        : !loader && data1.length === 0 && !!errorHandle ? 
-                        <LoaderStyle>
-                            <span style={{fontSize: "20px"}}>No data found.</span> 
-                        </LoaderStyle>
-                        :
+                            :
                         <TbodyStyle>{
-                            data1.map((i: any, j: any) => (
+                            data.map((i: any, j: any) => (
                                 <TrStyle key={i.from}>
                                     <TdStyle>{j+1}{"."}</TdStyle>
                                     <TdStyle>{i.from}</TdStyle>
@@ -264,8 +298,7 @@ export default function TradingLeader() {
                         </TbodyStyle>
                         }
                 </TableStyle>
-            </LeaderBoard>               
-            
+            </LeaderBoard>
         </MainContent>
-    )
+    );
 }

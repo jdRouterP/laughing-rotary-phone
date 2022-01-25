@@ -204,7 +204,8 @@ export const HEADER_ACCESS = {
   prediction: [ChainId.MATIC],
   gaslessMode: [ChainId.MATIC],
   more: [ChainId.MATIC],
-  limitOrders: [ChainId.MATIC, ChainId.BSC, ChainId.FANTOM]
+  limitOrders: [ChainId.MATIC, ChainId.BSC, ChainId.FANTOM],
+  tradingCompetitions: [ChainId.MATIC]
 }
 
 export const FARMS_ACCESS = {
