@@ -152,11 +152,13 @@ export default function App() {
               <Route exact strict path="/vdfyn" component={VDFYN} />
               <Route exact strict path="/prediction" component={Predictions} />
               {chainId && HEADER_ACCESS.tradingCompetitions.includes(chainId) &&
-                <>
-                  <Route exact strict path="/trading-leaderboard" component={TradingLeader} />
-                  <Route exact strict path="/trading-leaderboard/external-cohort/:partnerName/:id" component={ExternalCohortPartnersInfo} />
-                  <Route exact strict path="/trading-leaderboard/archived" component={ArchivedTradingLeader} />
-                </>
+                <Route exact strict path="/trading-leaderboard" component={TradingLeader} />
+              }
+              {chainId && HEADER_ACCESS.tradingCompetitions.includes(chainId) &&
+                <Route exact strict path="/trading-leaderboard/external-cohort/:partnerName/:id" component={ExternalCohortPartnersInfo} />
+              }
+              {chainId && HEADER_ACCESS.tradingCompetitions.includes(chainId) &&
+                <Route exact strict path="/trading-leaderboard/archived" component={ArchivedTradingLeader} />
               }
               <Route exact strict path="/prediction/:currency/:candleSize" component={PredictionDesktop} />
               {/* <Route exact strict path="/predictionMarket" component={PredictionMarket} /> */}
