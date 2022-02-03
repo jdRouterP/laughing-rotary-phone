@@ -173,7 +173,7 @@ export default function PreStakingFarmsArchived() {
                   else return ""
                   })?.map(stakingInfo => {
                   // need to sort by added liquidity here
-                    return <PoolCard key={stakingInfo.stakingRewardAddress} stakingInfo={stakingInfo} isInactive={false} />
+                    return <PoolCard key={stakingInfo.stakingRewardAddress} stakingInfo={stakingInfo} isInactive={true} />
                   })
                 }
                 {
@@ -198,7 +198,7 @@ export default function PreStakingFarmsArchived() {
                     else return ""
                     })?.map(stakingInfo => {
                     // need to sort by added liquidity here
-                     return <PoolMultiRewardCard key={stakingInfo.stakingRewardAddress} stakingInfo={stakingInfo} isInactive={false} />
+                     return <PoolMultiRewardCard key={stakingInfo.stakingRewardAddress} stakingInfo={stakingInfo} isInactive={true} />
                   })
                 }
             </>

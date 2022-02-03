@@ -139,8 +139,8 @@ export default function Manage({
 
   // const countUpAmount = unClaimedAmount;
   // const countUpAmountPrevious = usePrevious(countUpAmount) ?? '0'
-  const countUpAmount = stakingInfo?.earnedAmount?.toFixed(6) ?? '0'
-  const countUpAmountTwo = stakingInfo?.earnedAmountTwo?.toFixed(6) ?? '0'
+  const countUpAmount = stakingInfo?.earnedAmount?.toFixed(4) ?? '0'
+  const countUpAmountTwo = stakingInfo?.earnedAmountTwo?.toFixed(4) ?? '0'
   const countUpAmountPrevious = usePrevious(countUpAmount) ?? '0'
   const countUpAmountTwoPrevious = usePrevious(countUpAmountTwo) ?? '0'
 
