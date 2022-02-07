@@ -132,6 +132,7 @@ interface CurrencyInputPanelProps {
   showCommonBases?: boolean
   customBalanceText?: string
   lp?: boolean
+  lpByof?: boolean
   onLPCurrencySelect?: (pair: Pair) => void
 }
 
@@ -152,6 +153,7 @@ export default function CurrencyInputPanel({
   showCommonBases,
   customBalanceText,
   lp,
+  lpByof,
   onLPCurrencySelect
 }: CurrencyInputPanelProps) {
   const { t } = useTranslation()
@@ -192,7 +194,7 @@ export default function CurrencyInputPanel({
           </LabelRow>
         )}
         <InputRow style={hideInput ? { padding: '0', borderRadius: '8px' } : {}} selected={disableCurrencySelect}>
-          {!hideInput && (
+          {!hideInput && !lpByof && (
             <>
               <NumericalInput
                 className="token-amount-input"

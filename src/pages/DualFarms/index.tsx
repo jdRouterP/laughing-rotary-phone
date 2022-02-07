@@ -14,6 +14,9 @@ import { BIG_INT_ZERO } from '../../constants'
 import { OutlineCard } from '../../components/Card'
 import { SearchInput } from 'components/SearchModal/styleds'
 import { ButtonPink } from 'components/Button'
+import { useStakingDualFarmInfo } from 'state/custom-dual-farm-stake/hooks'
+import useCustomFarmInfo from 'state/custom-farm/hook'
+import PoolCardDualFarm from 'components/customdualfarms/PoolCard'
 
 
 const TopSectionHeader = styled.div`
@@ -55,9 +58,11 @@ flex-direction: column;
 export default function DualFarms() {
   const { chainId } = useActiveWeb3React()
 
-  // staking info for connected account
+  const {dualFarms} = useCustomFarmInfo()
   // staking info for connected account
   const stakingInfos = useStakingInfo();
+  const stakingDualFarmInfos = useStakingDualFarmInfo();
+
   /**
    * only show staking cards with balance
    * @todo only account for this if rewards are inactive
@@ -73,6 +78,19 @@ export default function DualFarms() {
 
   // toggle copy if rewards are inactive
   const stakingRewardsExist = Boolean(typeof chainId === 'number' && (STAKING_REWARDS_INFO[chainId]?.length ?? 0) > 0)
+
+  // for custom Dual farms
+  const stakingDualFarmInfosWithBalance = stakingDualFarmInfos?.filter((s) => JSBI.greaterThan(s.stakedAmount.raw, BIG_INT_ZERO))
+
+  const activeDualFarmFarms = stakingDualFarmInfos?.filter((s) => s.active);
+
+  const stakingDualFarmInfosWithRewards = stakingDualFarmInfos?.filter((s) => JSBI.greaterThan(s.earnedAmount.raw, BIG_INT_ZERO))
+
+  const stakingDualFarmFarms = [...new Set([...stakingDualFarmInfosWithBalance, ...activeDualFarmFarms, ...stakingDualFarmInfosWithRewards])]
+
+
+  // toggle copy if rewards are inactive
+  const stakingDualFarmRewardsExist = Boolean(typeof chainId === 'number' && (dualFarms?.length ?? 0) > 0)
   const [searchItem, setSearchItem] = useState('')
 
   return (
@@ -125,37 +143,66 @@ export default function DualFarms() {
           }} />
 
         <PoolSection>
-          {stakingRewardsExist && stakingInfos?.length === 0 ? (
+          {stakingRewardsExist && stakingDualFarmRewardsExist && stakingInfos?.length === 0 && stakingDualFarmInfos?.length === 0 ? (
             <Loader style={{ margin: 'auto' }} />
-          ) : !stakingRewardsExist ? (
+          ) : !stakingRewardsExist && !stakingDualFarmRewardsExist ? (
             <OutlineCard>No active pools</OutlineCard>
-          ) : stakingFarms?.length === 0 ? (
+          ) : stakingFarms?.length === 0 && stakingDualFarmFarms?.length === 0 ? (
             <OutlineCard>No active pools</OutlineCard>
-          ) : (
-            stakingFarms?.filter(stakingInfos => {
-              if (searchItem === '') return stakingInfos
-              //for symbol
-              else if (stakingInfos?.tokens[0].symbol?.toLowerCase().includes(searchItem.toLowerCase())
-                || stakingInfos?.tokens[1].symbol?.toLowerCase().includes(searchItem.toLowerCase())
-              ) return stakingInfos
+          ) : 
+            <>
+              {
+                stakingFarms?.filter(stakingInfos => {
+                if (searchItem === '') return stakingInfos
+                //for symbol
+                else if (stakingInfos?.tokens[0].symbol?.toLowerCase().includes(searchItem.toLowerCase())
+                  || stakingInfos?.tokens[1].symbol?.toLowerCase().includes(searchItem.toLowerCase())
+                ) return stakingInfos
 
-              //for name
-              else if (stakingInfos?.tokens[0].name?.toLowerCase().includes(searchItem.toLowerCase())
-                || stakingInfos?.tokens[1].name?.toLowerCase().includes(searchItem.toLowerCase())
-              ) return stakingInfos
+                //for name
+                else if (stakingInfos?.tokens[0].name?.toLowerCase().includes(searchItem.toLowerCase())
+                  || stakingInfos?.tokens[1].name?.toLowerCase().includes(searchItem.toLowerCase())
+                ) return stakingInfos
 
-              //for address
-              else if (stakingInfos?.tokens[0].address?.toLowerCase().includes(searchItem.toLowerCase())
-                || stakingInfos?.tokens[1].address?.toLowerCase().includes(searchItem.toLowerCase())
-              ) return stakingInfos
+                //for address
+                else if (stakingInfos?.tokens[0].address?.toLowerCase().includes(searchItem.toLowerCase())
+                  || stakingInfos?.tokens[1].address?.toLowerCase().includes(searchItem.toLowerCase())
+                ) return stakingInfos
 
-              //Other case
-              else return ""
-            })?.map(stakingInfo => {
-              // need to sort by added liquidity here
-              return <PoolCard key={stakingInfo.stakingRewardAddress} stakingInfo={stakingInfo} isInactive={false} />
-            })
-          )}
+                //Other case
+                else return ""
+                })?.map(stakingInfo => {
+                  // need to sort by added liquidity here
+                  return <PoolCard key={stakingInfo.stakingRewardAddress} stakingInfo={stakingInfo} isInactive={false} />
+                })
+              }
+              {
+                stakingDualFarmFarms?.filter(stakingInfos => {
+                  if (searchItem === '') return stakingInfos
+                  //for symbol
+                  else if (stakingInfos?.tokens[0].symbol?.toLowerCase().includes(searchItem.toLowerCase())
+                    || stakingInfos?.tokens[1].symbol?.toLowerCase().includes(searchItem.toLowerCase())
+                  ) return stakingInfos
+  
+                  //for name
+                  else if (stakingInfos?.tokens[0].name?.toLowerCase().includes(searchItem.toLowerCase())
+                    || stakingInfos?.tokens[1].name?.toLowerCase().includes(searchItem.toLowerCase())
+                  ) return stakingInfos
+  
+                  //for address
+                  else if (stakingInfos?.tokens[0].address?.toLowerCase().includes(searchItem.toLowerCase())
+                    || stakingInfos?.tokens[1].address?.toLowerCase().includes(searchItem.toLowerCase())
+                  ) return stakingInfos
+  
+                  //Other case
+                  else return ""
+                  })?.map(stakingInfo => {
+                    // need to sort by added liquidity here
+                    return <PoolCardDualFarm key={stakingInfo.stakingRewardAddress} stakingInfo={stakingInfo} isInactive={false} />
+                  })
+              }
+            </>
+          }
         </PoolSection>
       </AutoColumn>
     </PageWrapper>

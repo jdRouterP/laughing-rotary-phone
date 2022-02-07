@@ -10,6 +10,10 @@ import { abi as CHAINLINK_ABI } from '../constants/abis/chainlink-contract.json'
 import { abi as VAULT_ABI } from '../constants/abis/vault.json'
 import { abi as DFYN_CHEST_ABI } from '../constants/abis/dfyn-chest.json'
 import { abi as DFYN_FUSION_ABI } from '../constants/abis/dfyn-fusion.json'
+import { abi as BYOF_FACTORY_ABI } from '../constants/abis/byof.json'
+import { abi as BYOF_DUAL_FARM_ABI } from '../constants/abis/dual-farm-byof.json'
+import { abi as BYOF_FLORA_FARM_ABI } from '../constants/abis/flora-farm-byof.json'
+import { abi as BYOF_LAUNCH_FARM_ABI } from '../constants/abis/launch-farm-byof.json'
 import { abi as MERKLE_DISTRIBUTOR_ABI } from '@uniswap/merkle-distributor/build/MerkleDistributor.json'
 import { ChainId, FACTORY_ADDRESS, WETH, ROUTER_ADDRESS } from '@dfyn/sdk'
 import IUniswapV2PairABI from '../constants/abis/uniswap-v2-pair.json'
@@ -17,7 +21,7 @@ import FACTORY_ABI from "../constants/abis/factory.json";
 import ROUTER_ABI from "../constants/abis/uniswap-v2-router-02.json";
 import MULTICALL2_ABI from '../constants/abis/multicall2.json';
 import { useMemo } from 'react'
-import { BLEND_ADDRESS, DFYN_CHEST, GOVERNANCE_ADDRESS, MERKLE_DISTRIBUTOR_ADDRESS, UNI } from '../constants'
+import { BLEND_ADDRESS, BYOF_FACTORY_ADDRESS, DFYN_CHEST, GOVERNANCE_ADDRESS, MERKLE_DISTRIBUTOR_ADDRESS, UNI } from '../constants'
 import {
   ARGENT_WALLET_DETECTOR_ABI,
   ARGENT_WALLET_DETECTOR_MAINNET_ADDRESS
@@ -189,6 +193,21 @@ export function useDfynChestContract( withSignerIfPossible?: boolean): Contract 
 }
 export function useDfynFusionContract( withSignerIfPossible?: boolean): Contract | null {
   return useContract(BLEND_ADDRESS, DFYN_FUSION_ABI, withSignerIfPossible)
+}
+export function useDfynByofContract( withSignerIfPossible?: boolean): Contract | null {
+  return useContract(BYOF_FACTORY_ADDRESS, BYOF_FACTORY_ABI, withSignerIfPossible)
+}
+
+export function useBYOFDualFarmsContract(stakingAddress?: string, withSignerIfPossible?: boolean): Contract | null {
+  return useContract(stakingAddress, BYOF_DUAL_FARM_ABI, withSignerIfPossible)
+}
+
+export function useBYOFLaunchFarmsContract(stakingAddress?: string, withSignerIfPossible?: boolean): Contract | null {
+  return useContract(stakingAddress, BYOF_LAUNCH_FARM_ABI, withSignerIfPossible)
+}
+
+export function useBYOFFloraFarmsContract(stakingAddress?: string, withSignerIfPossible?: boolean): Contract | null {
+  return useContract(stakingAddress, BYOF_FLORA_FARM_ABI, withSignerIfPossible)
 }
 
 export function useMultiRewardStakingContract(stakingAddress?: string, withSignerIfPossible?: boolean): Contract | null {

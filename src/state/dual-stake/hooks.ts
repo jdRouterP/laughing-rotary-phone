@@ -1,12 +1,13 @@
 import { ChainId, CurrencyAmount, JSBI, Token, TokenAmount, Pair } from '@dfyn/sdk'
 import { useMemo } from 'react'
-import { UNI, ROUTE, REWARD_TOKENS, EMPTY, DFYN, USDC, ZEE, AURORA, BOOTY, ROYA, SX, EZ, UFARM, NWC, mRTK, XUSD, XDO, FRM, CHART, RVF, NORD, RAZOR, PBR, EMON, WMATIC } from '../../constants'
+import { UNI, ROUTE, DFYN, USDC, ZEE, AURORA, BOOTY, ROYA, SX, EZ, UFARM, NWC, mRTK, XUSD, XDO, FRM, CHART, RVF, NORD, RAZOR, PBR, EMON, WMATIC } from '../../constants'
 import { STAKING_REWARDS_DUAL_FARMS_INTERFACE } from '../../constants/abis/staking-rewards-dual-farms'
 import { useActiveWeb3React } from '../../hooks'
 import { NEVER_RELOAD, useMultipleContractSingleData } from '../multicall/hooks'
 import { tryParseAmount } from '../swap/hooks'
 import useCurrentBlockTimestamp from 'hooks/useCurrentBlockTimestamp'
 import { usePairsWithBaseToken } from 'data/Reserves'
+import { useCombinedActiveList } from 'state/lists/hooks'
 
 
 export const STAKING_GENESIS = 1622124960
@@ -388,6 +389,8 @@ export function useStakingInfo(pairToFilterBy?: Pair | null, version: string = '
   const { chainId, account } = useActiveWeb3React()
   // detect if staking is ended
   const currentBlockTimestamp = useCurrentBlockTimestamp()
+  const allTokens = useCombinedActiveList();
+  const allTokensList = Object.values(allTokens[137]).map(i => i.token)
 
   const info = useMemo(
     () =>
@@ -449,7 +452,6 @@ export function useStakingInfo(pairToFilterBy?: Pair | null, version: string = '
     undefined,
     NEVER_RELOAD
   )
-
   return useMemo(() => {
     if (!chainId || !uni) return []
 
@@ -494,8 +496,8 @@ export function useStakingInfo(pairToFilterBy?: Pair | null, version: string = '
         const dummyPair = new Pair(new TokenAmount(tokens[0], '0'), new TokenAmount(tokens[1], '0'))
 
         // check for account, if no account set to 0
-        const rewardTokenOne = getTokenByAddress(rewardRateState.result?.[0][0])
-        const rewardTokenTwo = getTokenByAddress(rewardRateState.result?.[0][1])
+        const rewardTokenOne = allTokensList.filter(token => token.address.toLowerCase() === rewardRateState.result?.[0][0].toLowerCase())[0]
+        const rewardTokenTwo = allTokensList.filter(token => token.address.toLowerCase() === rewardRateState.result?.[0][1].toLowerCase())[0]
         const stakedAmount = new TokenAmount(dummyPair.liquidityToken, JSBI.BigInt(balanceState?.result?.[0] ?? 0))
         const totalStakedAmount = new TokenAmount(dummyPair.liquidityToken, JSBI.BigInt(totalSupplyState.result?.[0]))
         const rewardRateTokenOne = new TokenAmount(rewardTokenOne, JSBI.BigInt(rewardRateState.result?.[1][0]))
@@ -560,7 +562,8 @@ export function useStakingInfo(pairToFilterBy?: Pair | null, version: string = '
     uni,
     bothRewardToken,
     start,
-    tokenPrices
+    tokenPrices,
+    allTokensList
   ])
 }
 
@@ -568,7 +571,9 @@ export function useInactiveStakingInfo(pairToFilterBy?: Pair | null, version: st
   const { chainId, account } = useActiveWeb3React()
   // detect if staking is ended
   const currentBlockTimestamp = useCurrentBlockTimestamp()
-
+  const allTokens = useCombinedActiveList();
+  const allTokensList = Object.values(allTokens[137]).map(i => i.token)
+  
   const info = useMemo(
     () =>
       chainId
@@ -674,8 +679,8 @@ export function useInactiveStakingInfo(pairToFilterBy?: Pair | null, version: st
         const dummyPair = new Pair(new TokenAmount(tokens[0], '0'), new TokenAmount(tokens[1], '0'))
 
         // check for account, if no account set to 0
-        const rewardTokenOne = getTokenByAddress(rewardRateState.result?.[0][0])
-        const rewardTokenTwo = getTokenByAddress(rewardRateState.result?.[0][1])
+        const rewardTokenOne = allTokensList.filter(token => token.address.toLowerCase() === rewardRateState.result?.[0][0].toLowerCase())[0]
+        const rewardTokenTwo = allTokensList.filter(token => token.address.toLowerCase() === rewardRateState.result?.[0][1].toLowerCase())[0]
         const stakedAmount = new TokenAmount(dummyPair.liquidityToken, JSBI.BigInt(balanceState?.result?.[0] ?? 0))
         const totalStakedAmount = new TokenAmount(dummyPair.liquidityToken, JSBI.BigInt(totalSupplyState.result?.[0]))
         const rewardRateTokenOne = new TokenAmount(rewardTokenOne, JSBI.BigInt(rewardRateState.result?.[1][0]))
@@ -740,18 +745,19 @@ export function useInactiveStakingInfo(pairToFilterBy?: Pair | null, version: st
     uni,
     bothRewardToken,
     start,
-    tokenPrices
+    tokenPrices,
+    allTokensList
   ])
 }
 
-const getTokenByAddress = (address: string) => {
-  const token = REWARD_TOKENS.filter(token => token.address?.toLowerCase() === address?.toLowerCase())
-  if (token.length) {
-    return token[0]
-  } else {
-    return EMPTY;
-  }
-}
+// const getTokenByAddress = (address: string) => {
+//   const token = REWARD_TOKENS.filter(token => token.address?.toLowerCase() === address?.toLowerCase())
+//   if (token.length) {
+//     return token[0]
+//   } else {
+//     return EMPTY;
+//   }
+// }
 
 export function useTotalDualFarmUniEarned(): TokenAmount | undefined {
   const { chainId } = useActiveWeb3React()

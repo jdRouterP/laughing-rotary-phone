@@ -180,6 +180,12 @@ export default function AppsMenu() {
               <TYPE.subHeader fontWeight={500} fontSize={'10px'}>Trading Leaderboard</TYPE.subHeader>
             </MenuDesc>
           </StyledNavLink>
+          <StyledNavLink id={`trading-nav-link`} to={'/byof'}>
+          <TYPE.mediumHeader fontSize={'16px'}>BYOF</TYPE.mediumHeader>
+            <MenuDesc>
+              <TYPE.subHeader fontWeight={500} fontSize={'10px'}>Build your own farm</TYPE.subHeader>
+            </MenuDesc>
+          </StyledNavLink>
         </MenuFlyout>
       )}
     </StyledMenu>

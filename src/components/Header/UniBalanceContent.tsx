@@ -22,6 +22,9 @@ import { useTotalMultiVaultUniEarned } from 'state/multiTokenVault/hooks'
 import { useTotalFloraUniEarned } from 'state/flora-farms/hooks'
 import { useTotalDualFarmUniEarned } from 'state/dual-stake/hooks'
 import { useTotalEcosystemUniEarned } from 'state/vanilla-stake/hooks'
+import { useTotalCustomDualFarmUniEarned } from 'state/custom-dual-farm-stake/hooks'
+import { useTotalCustomEcosystemUniEarned } from 'state/custom-vanilla-stake/hooks'
+import { useTotalFloraCustomUniEarned } from 'state/custom-flora-farm-stake/hooks'
 
 const ContentWrapper = styled(AutoColumn)`
   width: 100%;
@@ -53,14 +56,22 @@ export default function UniBalanceContent({ setShowUniBalanceModal }: { setShowU
   const uniBalance: TokenAmount | undefined = useTokenBalance(account ?? undefined, uni)
   const uniToClaimPreStake: TokenAmount | undefined = useTotalUniEarned()
   const uniToClaimDualFarms: TokenAmount | undefined = useTotalDualFarmUniEarned()
+  const uniToClaimCustomDualFarms: TokenAmount | undefined = useTotalCustomDualFarmUniEarned()
+  const totaluniToClaimDualFarm: TokenAmount | undefined = uniToClaimDualFarms && uniToClaimCustomDualFarms && uniToClaimDualFarms.add(uniToClaimCustomDualFarms)
   //Adding vault rewards
   const uniToClaimMultiVault: TokenAmount | undefined = useTotalMultiVaultUniEarned()
   const uniToClaimVault: TokenAmount | undefined = useTotalVaultUniEarned()
   const totalUniToClaimVault: TokenAmount | undefined = uniToClaimMultiVault ? uniToClaimVault?.add(uniToClaimMultiVault) : uniToClaimVault
   const uniToClaimFlora: TokenAmount | undefined = useTotalFloraUniEarned()
+  const uniToClaimCustomFlora: TokenAmount | undefined = useTotalFloraCustomUniEarned()
+  const totaluniToClaimFlora: TokenAmount | undefined = uniToClaimFlora && uniToClaimCustomFlora && uniToClaimFlora.add(uniToClaimCustomFlora)
   const uniToClaimEcosystem: TokenAmount | undefined = useTotalEcosystemUniEarned()
+  const uniToClaimCustomEcosystem: TokenAmount | undefined = useTotalCustomEcosystemUniEarned()
+  const totaluniToClaimEcosystem: TokenAmount | undefined = uniToClaimEcosystem && uniToClaimCustomEcosystem && uniToClaimEcosystem.add(uniToClaimCustomEcosystem)
 
   const uniPrice = useUSDCPrice(uni)
+
+  
   // const totalSupply: TokenAmount | undefined = useTotalSupply(uni)
   // const blockTimestamp = useCurrentBlockTimestamp()
   // const unclaimedUni = useTokenBalance(useMerkleDistributorContract()?.address, uni)
@@ -127,7 +138,7 @@ export default function UniBalanceContent({ setShowUniBalanceModal }: { setShowU
                 <RowBetween>
                   <TYPE.white color="white">• Popular Farms:</TYPE.white>
                   <TYPE.white color="white">
-                    {uniToClaimFlora?.toFixed(4, { groupSeparator: ',' })}{' '}
+                    {totaluniToClaimFlora?.toFixed(4, { groupSeparator: ',' })}{' '}
                     {/* {uniToClaim && uniToClaim.greaterThan('0') && (
                       <StyledInternalLink onClick={() => setShowUniBalanceModal(false)} to="/dfyn">
                         (claim)
@@ -138,7 +149,7 @@ export default function UniBalanceContent({ setShowUniBalanceModal }: { setShowU
                 <RowBetween>
                   <TYPE.white color="white">• Ecosystem Farms:</TYPE.white>
                   <TYPE.white color="white">
-                    {uniToClaimEcosystem?.toFixed(4, { groupSeparator: ',' })}{' '}
+                    {totaluniToClaimEcosystem?.toFixed(4, { groupSeparator: ',' })}{' '}
                     {/* {uniToClaim && uniToClaim.greaterThan('0') && (
                       <StyledInternalLink onClick={() => setShowUniBalanceModal(false)} to="/dfyn">
                         (claim)
@@ -149,7 +160,7 @@ export default function UniBalanceContent({ setShowUniBalanceModal }: { setShowU
                 <RowBetween>
                   <TYPE.white color="white">• Dual Farms:</TYPE.white>
                   <TYPE.white color="white">
-                    {uniToClaimDualFarms?.toFixed(4, { groupSeparator: ',' })}{' '}
+                    {totaluniToClaimDualFarm?.toFixed(4, { groupSeparator: ',' })}{' '}
                     {/* {uniToClaim && uniToClaim.greaterThan('0') && (
                       <StyledInternalLink onClick={() => setShowUniBalanceModal(false)} to="/dfyn">
                         (claim)

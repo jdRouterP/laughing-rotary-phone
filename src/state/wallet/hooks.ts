@@ -13,6 +13,9 @@ import { useTotalVaultUniEarned } from 'state/vault/hooks'
 import { useTotalFloraUniEarned } from 'state/flora-farms/hooks'
 import { useTotalDualFarmUniEarned } from 'state/dual-stake/hooks'
 import { useTotalEcosystemUniEarned } from 'state/vanilla-stake/hooks'
+import { useTotalCustomDualFarmUniEarned } from 'state/custom-dual-farm-stake/hooks'
+import { useTotalCustomEcosystemUniEarned } from 'state/custom-vanilla-stake/hooks'
+import { useTotalFloraCustomUniEarned } from 'state/custom-flora-farm-stake/hooks'
 // import { useTotalEcosystemUniEarned } from 'state/vanilla-stake/hooks'
 // import { useTotalDualFarmUniEarned } from 'state/dual-stake/hooks'
 
@@ -152,10 +155,12 @@ export function useAggregateUniBalance(): TokenAmount | undefined {
   const uniToClaimPreStake: TokenAmount | undefined = useTotalUniEarned()
   const uniToClaimVault: TokenAmount | undefined = useTotalVaultUniEarned()
   const uniToClaimFlora: TokenAmount | undefined = useTotalFloraUniEarned()
+  const uniToClaimCustomFlora: TokenAmount | undefined = useTotalFloraCustomUniEarned()
   const uniToClaimEcosystem: TokenAmount | undefined = useTotalEcosystemUniEarned()
+  const uniToClaimCustomEcosystem: TokenAmount | undefined = useTotalCustomEcosystemUniEarned()
   const uniToClaimDualFarms: TokenAmount | undefined = useTotalDualFarmUniEarned()
-  const uniUnHarvested: TokenAmount | undefined = uniToClaimPreStake && uniToClaimFlora && uniToClaimVault && uniToClaimEcosystem && uniToClaimDualFarms && uniToClaimPreStake.add(uniToClaimVault).add(uniToClaimFlora).add(uniToClaimEcosystem).add(uniToClaimDualFarms)
-
+  const uniToClaimCustomDualFarms: TokenAmount | undefined = useTotalCustomDualFarmUniEarned()
+  const uniUnHarvested: TokenAmount | undefined = uniToClaimPreStake && uniToClaimFlora && uniToClaimVault && uniToClaimEcosystem && uniToClaimDualFarms && uniToClaimCustomDualFarms && uniToClaimCustomEcosystem && uniToClaimCustomFlora && uniToClaimPreStake.add(uniToClaimVault).add(uniToClaimFlora).add(uniToClaimEcosystem).add(uniToClaimDualFarms).add(uniToClaimCustomDualFarms).add(uniToClaimCustomEcosystem).add(uniToClaimCustomFlora)
   if (!uni) return undefined
 
   return new TokenAmount(

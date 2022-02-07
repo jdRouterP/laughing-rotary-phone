@@ -239,6 +239,9 @@ export default function FarmsMenu() {
           {chainId && FARMS_ACCESS.prestake.includes(chainId) && <StyledNavLink id={`stake-nav-link`} to={'/dfyn'}>
             Pre-Staking Farms
           </StyledNavLink>}
+          {/* {chainId && FARMS_ACCESS.customFarms.includes(chainId) && <StyledNavLink id={`stake-nav-link`} to={'/custom-dual-farms'}>
+            Custom Farms
+          </StyledNavLink>} */}
         </MenuFlyout>
       )}
     </StyledMenu>

@@ -214,7 +214,8 @@ export const FARMS_ACCESS = {
   popular: [ChainId.MATIC, ChainId.FANTOM],
   launch: [ChainId.MATIC],
   dual: [ChainId.MATIC],
-  prestake: [ChainId.MATIC]
+  prestake: [ChainId.MATIC],
+  customFarms: [ChainId.MATIC]
 }
 
 export const CHART_URL_PREFIX = {

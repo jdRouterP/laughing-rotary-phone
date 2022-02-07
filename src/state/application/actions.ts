@@ -37,6 +37,7 @@ export enum ApplicationModal {
   VOTE,
   NETWORK,
   APPS_MENU,
+  CUSTOM_FARM_MENU,
   PARTNERS_MENU
 }
 

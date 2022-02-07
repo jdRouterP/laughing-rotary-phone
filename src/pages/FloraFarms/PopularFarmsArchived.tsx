@@ -13,6 +13,9 @@ import { BIG_INT_ZERO } from '../../constants'
 import { useActiveWeb3React } from '../../hooks'
 import { INACTIVE_STAKING_REWARDS_INFO, useInactiveStakingInfo } from 'state/flora-farms/hooks'
 import { ButtonPink } from 'components/Button'
+import { useInactiveStakingCustomFloraFarmInfo } from 'state/custom-flora-farm-stake/hooks'
+import useCustomFarmInfo from 'state/custom-farm/hook'
+import PoolCardCustomFloraFarm from 'components/customFloraFarms/PoolCard'
 
 const TopSectionHeader = styled.div`
   display: grid;
@@ -52,9 +55,11 @@ flex-direction: column;
 
 export default function PopularFarmsArchived() {
   const { chainId } = useActiveWeb3React()
+  const {inactiveFloraFarms} = useCustomFarmInfo()
 
   // staking info for connected account
   const stakingInfos = useInactiveStakingInfo();
+  const stakingCustomFloraFarmInfos = useInactiveStakingCustomFloraFarmInfo();
   /**
    * only show staking cards with balance
    * @todo only account for this if rewards are inactive
@@ -68,6 +73,17 @@ export default function PopularFarmsArchived() {
   const stakingFarms = [...new Set([...stakingInfosWithBalance, ...activeFarms, ...stakingInfosWithRewards])]
 
   const stakingRewardsExist = Boolean(typeof chainId === 'number' && (INACTIVE_STAKING_REWARDS_INFO[chainId]?.length ?? 0) > 0)
+
+  //for custom Popular farms
+  const stakingCustomFloraFarmInfosWithBalance = stakingCustomFloraFarmInfos?.filter((s) => JSBI.greaterThan(s.stakedAmount.raw, BIG_INT_ZERO))
+
+  const activeCustomFloraFarmFarms = stakingCustomFloraFarmInfos?.filter((s) => s.active);
+
+  const stakingCustomFloraFarmInfosWithRewards = stakingCustomFloraFarmInfos?.filter((s) => JSBI.greaterThan(s?.earnedAmount[0]?.raw ?? BIG_INT_ZERO, BIG_INT_ZERO))
+
+  const stakingCustomFloraFarmFarms = [...new Set([...stakingCustomFloraFarmInfosWithBalance, ...activeCustomFloraFarmFarms, ...stakingCustomFloraFarmInfosWithRewards])]
+
+  const stakingCustomFloraFarmRewardsExist = Boolean(typeof chainId === 'number' && (inactiveFloraFarms.length ?? 0) > 0)
 
   const [searchItem, setSearchItem] = useState('')
 
@@ -122,37 +138,66 @@ export default function PopularFarmsArchived() {
           }} />
 
         <PoolSection>
-          {stakingRewardsExist && stakingInfos?.length === 0 ? (
+          {stakingRewardsExist && stakingCustomFloraFarmRewardsExist && stakingInfos?.length === 0 && stakingCustomFloraFarmInfos?.length === 0 ? (
             <Loader style={{ margin: 'auto' }} />
-          ) : !stakingRewardsExist ? (
+          ) : !stakingRewardsExist && !stakingCustomFloraFarmRewardsExist ? (
             <OutlineCard>No active pools</OutlineCard>
-          ) : stakingFarms?.length === 0 ? (
+          ) : stakingFarms?.length === 0 && stakingCustomFloraFarmFarms?.length === 0 ? (
             <OutlineCard>No archived pools</OutlineCard>
-          ) : (
-            stakingFarms?.filter(stakingInfos => {
-              if (searchItem === '') return stakingInfos
-              //for symbol
-              else if (stakingInfos?.tokens[0].symbol?.toLowerCase().includes(searchItem.toLowerCase())
-                || stakingInfos?.tokens[1].symbol?.toLowerCase().includes(searchItem.toLowerCase())
-              ) return stakingInfos
+          ) : 
+            <>
+              {
+                stakingFarms?.filter(stakingInfos => {
+                  if (searchItem === '') return stakingInfos
+                  //for symbol
+                  else if (stakingInfos?.tokens[0].symbol?.toLowerCase().includes(searchItem.toLowerCase())
+                    || stakingInfos?.tokens[1].symbol?.toLowerCase().includes(searchItem.toLowerCase())
+                  ) return stakingInfos
 
-              //for name
-              else if (stakingInfos?.tokens[0].name?.toLowerCase().includes(searchItem.toLowerCase())
-                || stakingInfos?.tokens[1].name?.toLowerCase().includes(searchItem.toLowerCase())
-              ) return stakingInfos
+                  //for name
+                  else if (stakingInfos?.tokens[0].name?.toLowerCase().includes(searchItem.toLowerCase())
+                    || stakingInfos?.tokens[1].name?.toLowerCase().includes(searchItem.toLowerCase())
+                  ) return stakingInfos
 
-              //for address
-              else if (stakingInfos?.tokens[0].address?.toLowerCase().includes(searchItem.toLowerCase())
-                || stakingInfos?.tokens[1].address?.toLowerCase().includes(searchItem.toLowerCase())
-              ) return stakingInfos
+                  //for address
+                  else if (stakingInfos?.tokens[0].address?.toLowerCase().includes(searchItem.toLowerCase())
+                    || stakingInfos?.tokens[1].address?.toLowerCase().includes(searchItem.toLowerCase())
+                  ) return stakingInfos
 
-              //Other case
-              else return ""
-            })?.map(stakingInfo => {
-              // need to sort by added liquidity here
-              return <PoolCard key={stakingInfo.stakingRewardAddress} stakingInfo={stakingInfo} isInactive={true} />
-            })
-          )}
+                  //Other case
+                  else return ""
+                })?.map(stakingInfo => {
+                  // need to sort by added liquidity here
+                  return <PoolCard key={stakingInfo.stakingRewardAddress} stakingInfo={stakingInfo} isInactive={true} />
+                })
+              }
+              {
+                stakingCustomFloraFarmFarms?.filter(stakingInfos => {
+                  if (searchItem === '') return stakingInfos
+                  //for symbol
+                  else if (stakingInfos?.tokens[0].symbol?.toLowerCase().includes(searchItem.toLowerCase())
+                    || stakingInfos?.tokens[1].symbol?.toLowerCase().includes(searchItem.toLowerCase())
+                  ) return stakingInfos
+
+                  //for name
+                  else if (stakingInfos?.tokens[0].name?.toLowerCase().includes(searchItem.toLowerCase())
+                    || stakingInfos?.tokens[1].name?.toLowerCase().includes(searchItem.toLowerCase())
+                  ) return stakingInfos
+
+                  //for address
+                  else if (stakingInfos?.tokens[0].address?.toLowerCase().includes(searchItem.toLowerCase())
+                    || stakingInfos?.tokens[1].address?.toLowerCase().includes(searchItem.toLowerCase())
+                  ) return stakingInfos
+
+                  //Other case
+                  else return ""
+                })?.map(stakingInfo => {
+                  // need to sort by added liquidity here
+                  return <PoolCardCustomFloraFarm key={stakingInfo.stakingRewardAddress} stakingInfo={stakingInfo} isInactive={true} />
+                })
+              }
+            </>
+          }
         </PoolSection>
       </AutoColumn>
     </PageWrapper>

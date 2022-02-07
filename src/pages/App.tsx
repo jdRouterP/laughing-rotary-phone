@@ -60,6 +60,25 @@ import Analytics from 'components/Header/Analytics'
 import ThemeChange from 'components/Header/ThemeChange'
 import VDFYN from './Vault/VDFYN'
 import Fusion from './DfynFusion/Fusion'
+import BuildFarm1 from './CreateFarm'
+
+import InactiveCustomManageDualFarms from './CustomDualFarms/InactiveManage'
+import InactiveCustomManageVanillaFarms from './CustomVanillaFarms/InactiveManage'
+import InactiveCustomManagePopularFarms from './CustomPopularFarms/InactiveManage'
+import InactiveCustomManageLaunchFarms from './CustomLaunchFarms/InactiveManage'
+import ManageCustomDualFarms from './CustomDualFarms/Manage'
+import ManageCustomEcoSyatemFarms from './CustomVanillaFarms/Manage'
+import ManageCustomPopularFarms from './CustomPopularFarms/Manage'
+import ManageCustomLaunchFarms from './CustomLaunchFarms/Manage'
+import CustomDualFarmsArrchived from './CustomDualFarms/DualFarmsArchived'
+import CustomEcoSystemArrchived from './CustomVanillaFarms/EcoSystemArchived'
+import CustomPopularFarmArrchived from './CustomPopularFarms/PopularFarmsArchived'
+import CustomLaunchFarmArrchived from './CustomLaunchFarms/LaunchFarmsArchived'
+import CustomVanillaFarms from './CustomVanillaFarms'
+import CustomDualFarms from './CustomDualFarms'
+import CustomFloraFarms from './CustomPopularFarms'
+import CustomLaunchFarms from './CustomLaunchFarms'
+
 import TradingLeader from 'components/TradingLeader'
 import ArchivedTradingLeader from 'components/TradingLeader/ArchivedTradingLeader'
 import LimitOrder from './Limit'
@@ -132,6 +151,7 @@ export default function App() {
             <Switch>
               <Route exact strict path="/swap" component={Swap} />
               <Route exact strict path="/dfyn-fusion" component={Fusion} />
+              <Route exact strict path="/byof" component={BuildFarm1} />
               {chainId && HEADER_ACCESS.limitOrders.includes(chainId) &&
                 <Route exact strict path="/limit-order" component={LimitOrder} />
               }
@@ -163,6 +183,22 @@ export default function App() {
               <Route exact strict path="/prediction/:currency/:candleSize" component={PredictionDesktop} />
               {/* <Route exact strict path="/predictionMarket" component={PredictionMarket} /> */}
               {/* <Route exact strict path="/vote" component={Vote} /> */}
+              <Route exact strict path="/custom-eco-farms" component={CustomVanillaFarms} />
+              <Route exact strict path="/custom-eco-farms/archived" component={CustomEcoSystemArrchived} />
+              <Route exact strict path="/custom-eco-farms/:stakingAddress" component={ManageCustomEcoSyatemFarms} />
+              <Route exact strict path="/custom-eco-farms/:archived/:stakingAddress" component={InactiveCustomManageVanillaFarms} />
+              <Route exact strict path="/custom-dual-farms" component={CustomDualFarms} />
+              <Route exact strict path="/custom-dual-farms/archived" component={CustomDualFarmsArrchived} />
+              <Route exact strict path="/custom-dual-farms/:stakingAddress" component={ManageCustomDualFarms} />
+              <Route exact strict path="/custom-dual-farms/:archived/:stakingAddress" component={InactiveCustomManageDualFarms} />
+              <Route exact strict path="/custom-popular-farms" component={CustomFloraFarms} />
+              <Route exact strict path="/custom-popular-farms/archived" component={CustomPopularFarmArrchived} />
+              <Route exact strict path="/custom-popular-farms/:stakingAddress" component={ManageCustomPopularFarms} />
+              <Route exact strict path="/custom-popular-farms/:archived/:stakingAddress" component={InactiveCustomManagePopularFarms} />
+              <Route exact strict path="/custom-launch-farms" component={CustomLaunchFarms} />
+              <Route exact strict path="/custom-launch-farms/archived" component={CustomLaunchFarmArrchived} />
+              <Route exact strict path="/custom-launch-farms/:stakingAddress" component={ManageCustomLaunchFarms} />
+              <Route exact strict path="/custom-launch-farms/:archived/:stakingAddress" component={InactiveCustomManageLaunchFarms} />
               <Route exact strict path="/create" component={RedirectToAddLiquidity} />
               <Route exact path="/add" component={AddLiquidity} />
               <Route exact path="/add/:currencyIdA" component={RedirectOldAddLiquidityPathStructure} />

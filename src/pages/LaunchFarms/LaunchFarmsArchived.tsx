@@ -15,6 +15,9 @@ import { useActiveWeb3React } from 'hooks'
 import { ButtonPink } from 'components/Button'
 import { INACTIVE_STAKING_MULTI_REWARDS_INFO, useMultiInactiveStakingInfo } from 'state/multiRewardLaunchFarm/hooks'
 import PoolMultiRewardCard from 'components/multiRewardLaunchFarms/PoolCard'
+import useCustomFarmInfo from 'state/custom-farm/hook'
+import { useInactiveStakingCustomLaunchFarmInfo } from 'state/custom-launch-farm-stake/hooks'
+import PoolCardCustomLaunchFarm from 'components/customLaunchFarms/PoolCard'
 
 const TopSectionHeader = styled.div`
   display: grid;
@@ -55,10 +58,13 @@ flex-direction: column;
 export default function PreStakingFarmsArchived() {
   const { chainId } = useActiveWeb3React()
 
+  const {inactiveLaunchFarms} = useCustomFarmInfo()
+
   // staking info for connected account
   const stakingInfos = useInactiveStakingInfo();
 
   const stakingInfosMultiReward = useMultiInactiveStakingInfo()
+  const stakingCustomLaunchFarmInfos = useInactiveStakingCustomLaunchFarmInfo()
   /**
    * only show staking cards with balance
    * @todo only account for this if rewards are inactive
@@ -83,10 +89,21 @@ export default function PreStakingFarmsArchived() {
   const stakingInfosMultiRewardFarms = [...new Set([...stakingInfosMultiRewardWithBalance, ...stakingInfosMultiRewardActiveFarms, ...stakingInfosMultiRewardRewards])]
 
   const stakingInfosMultiRewardRewardsExist = Boolean(typeof chainId === 'number' && (INACTIVE_STAKING_MULTI_REWARDS_INFO[chainId]?.length ?? 0) > 0)
+
+  //for custom launch farms
+  const stakingCustomLaunchFarmInfosWithBalance = stakingCustomLaunchFarmInfos?.filter((s) => JSBI.greaterThan(s.stakedAmount.raw, BIG_INT_ZERO))
+
+  const activeCustomLaunchFarmFarms = stakingCustomLaunchFarmInfos?.filter((s) => s.active);
+
+  const stakingCustomLaunchFarmInfosWithRewards = stakingCustomLaunchFarmInfos?.filter((s) => JSBI.greaterThan(s?.earnedAmount[0]?.raw ?? BIG_INT_ZERO, BIG_INT_ZERO))
+
+  const stakingCustomLaunchFarmFarms = [...new Set([...stakingCustomLaunchFarmInfosWithBalance, ...activeCustomLaunchFarmFarms, ...stakingCustomLaunchFarmInfosWithRewards])]
+
+  // toggle copy if rewards are inactive
+  const stakingCustomLaunchFarmRewardsExist = Boolean(typeof chainId === 'number' && (inactiveLaunchFarms?.length ?? 0) > 0)
   
   const [searchItem, setSearchItem] = useState('')
-
-
+  
   return (
     <PageWrapper gap="lg" justify="center">
       <TopSection gap="md">
@@ -143,11 +160,11 @@ export default function PreStakingFarmsArchived() {
           }} />
 
         <PoolSection>
-          {stakingRewardsExist && stakingInfosMultiRewardRewardsExist && stakingInfos?.length === 0 ? (
+          {stakingRewardsExist && stakingInfosMultiRewardRewardsExist && stakingCustomLaunchFarmRewardsExist && stakingInfos?.length === 0 && stakingCustomLaunchFarmInfos?.length === 0 ? (
             <Loader style={{ margin: 'auto' }} />
-          ) : !stakingRewardsExist ? (
+          ) : !stakingRewardsExist && !stakingInfosMultiRewardRewardsExist && !stakingCustomLaunchFarmRewardsExist ? (
             <OutlineCard>No active pools</OutlineCard>
-          ) : stakingFarms?.length === 0 ? (
+          ) : stakingFarms?.length === 0 && stakingCustomLaunchFarmFarms?.length === 0 ? (
             <OutlineCard>No active pools</OutlineCard>
           ) : 
             <>
@@ -200,6 +217,31 @@ export default function PreStakingFarmsArchived() {
                     // need to sort by added liquidity here
                      return <PoolMultiRewardCard key={stakingInfo.stakingRewardAddress} stakingInfo={stakingInfo} isInactive={true} />
                   })
+                }
+                {
+                  stakingCustomLaunchFarmFarms?.filter(stakingInfos => {
+                    if (searchItem === '') return stakingInfos
+                    //for symbol
+                    else if (stakingInfos?.tokens[0].symbol?.toLowerCase().includes(searchItem.toLowerCase())
+                      || stakingInfos?.tokens[1].symbol?.toLowerCase().includes(searchItem.toLowerCase())
+                    ) return stakingInfos
+  
+                    //for name
+                    else if (stakingInfos?.tokens[0].name?.toLowerCase().includes(searchItem.toLowerCase())
+                      || stakingInfos?.tokens[1].name?.toLowerCase().includes(searchItem.toLowerCase())
+                    ) return stakingInfos
+  
+                    //for address
+                    else if (stakingInfos?.tokens[0].address?.toLowerCase().includes(searchItem.toLowerCase())
+                      || stakingInfos?.tokens[1].address?.toLowerCase().includes(searchItem.toLowerCase())
+                    ) return stakingInfos
+  
+                    //Other case
+                    else return ""
+                    })?.map(stakingInfo => {
+                    // need to sort by added liquidity here
+                      return <PoolCardCustomLaunchFarm key={stakingInfo.stakingRewardAddress} stakingInfo={stakingInfo} isInactive={true} />
+                    })
                 }
             </>
           }

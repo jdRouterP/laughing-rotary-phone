@@ -13,6 +13,9 @@ export const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000'
 
 export const DFYN_CHEST = '0x75455c3DE45dD32CBE9a5aD5E518D3D50823c976'
 
+//byof address
+export const BYOF_FACTORY_ADDRESS = '0x4d1B9C73A9bA07FB69cE9e295652A5dB4106eB21'
+
 //Blender Address
 export const BLEND_ADDRESS = '0xc3328070df8233affafbf04b973b4165cca35f99'
 
@@ -161,7 +164,7 @@ export const UNI: { [chainId in ChainId]: Token } = {
   [ChainId.BSC]: new Token(ChainId.BSC, UNI_ADDRESS, 18, 'DFYN', 'DFYN Token'),
 }
 
-export const REWARD_TOKENS: Token[] = [ROUTE, DFYN, ZEE, AURORA, ROYA, BOOTY, SX, EZ, UFARM, NWC, mRTK, XDO, FRM, RVF, CHART, NORD, RAZOR, PBR, EMON, WMATIC, WETH_V2]
+export const REWARD_TOKENS: Token[] = [ROUTE, DFYN, ZEE, AURORA, ROYA, BOOTY, SX, EZ, UFARM, NWC, mRTK, XDO, FRM, RVF, CHART, NORD, RAZOR, PBR, EMON, WMATIC, WETH_V2, UST, STACK, SHIB, ICE]
 
 export const COMMON_CONTRACT_NAMES: { [address: string]: string } = {
   [UNI_ADDRESS]: 'DFYN',
@@ -218,7 +221,7 @@ export const SUGGESTED_BASES: ChainTokenList = {
 // used to construct the list of all pairs we consider by default in the frontend
 export const BASES_TO_TRACK_LIQUIDITY_FOR: ChainTokenList = {
   ...WETH_ONLY,
-  [ChainId.MATIC]: [...WETH_ONLY[ChainId.MATIC], DAI, USDC, USDT, mWETH, ROUTE, OM, EASY, IGG, RAZOR, QUICK]
+  [ChainId.MATIC]: [...WETH_ONLY[ChainId.MATIC], DAI, USDC, USDT, mWETH, ROUTE, OM, EASY, IGG, RAZOR, QUICK, CIRUS, MATRIX, STACK, NIOX, FRM]
   // [ChainId.MATIC]: [...WETH_ONLY[ChainId.MATIC], DAI, USDC, USDT, mWETH]
 }
 

@@ -13,6 +13,7 @@ import lists from './lists/reducer'
 import burn from './burn/reducer'
 import multicall from './multicall/reducer'
 import blockReducer from './block'
+import farmForm from './createFarm/reducer'
 import limitOrder from './limitOrder/reducer'
 
 const PERSISTED_KEYS: string[] = ['user', 'transactions', 'lists']
@@ -30,6 +31,7 @@ const store = configureStore({
     burn,
     multicall,
     lists,
+    farmForm,
     limitOrder
   },
   middleware: [...getDefaultMiddleware({ thunk: true, serializableCheck: false }), save({ states: PERSISTED_KEYS })],
