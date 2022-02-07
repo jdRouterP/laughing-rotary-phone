@@ -29,6 +29,7 @@ export const STAKING_REWARDS_INFO: {
       tokens: [STACK, USDC],
       baseToken: USDC,
       startTime: 1644243400,
+      rewardToken: STACK,
       stakingRewardAddress: '0x57aA426965A36e15C516B5C592dBd64dF5105706',
       version: 'v9'
     },
