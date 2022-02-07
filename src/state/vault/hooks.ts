@@ -1,6 +1,6 @@
 import { ChainId, CurrencyAmount, JSBI, Token, TokenAmount } from '@dfyn/sdk'
 import { useMemo } from 'react'
-import { DFYN, MATRIX, NIOX, OAI, ROUTE, UNI } from '../../constants'
+import { DFYN, MATRIX, NIOX, OAI, ROUTE, SAFLE, UNI } from '../../constants'
 import { VAULT_INTERFACE } from '../../constants/abis/vault'
 import { useActiveWeb3React } from '../../hooks'
 import { NEVER_RELOAD, useMultipleContractSingleData } from '../multicall/hooks'
@@ -22,6 +22,13 @@ export const STAKING_REWARDS_INFO: {
   }[]
 } = {
   [ChainId.MATIC]: [
+    {
+      vaultName: 'SAFLE 6-month vault',
+      vaultAddress: '0x3b02672eBc09e432c17d9fAA641981aA5c5E2107',
+      vaultToken: SAFLE,
+      multiplier: 2,
+      startedOn: 1644243400
+    },
     {
       vaultName: 'NIOX 6-month vault',
       vaultAddress: '0xA1eB5Fb7c1b2d7b49c79ad1E3A0476205915Fd90',

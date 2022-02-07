@@ -10,7 +10,7 @@ import { usePair } from 'data/Reserves'
 
 export const STAKING_GENESIS = 1622485799
 
-export const REWARDS_DURATION_DAYS = 30
+export const REWARDS_DURATION_DAYS = 60
 
 // TODO add staking rewards addresses here
 export const STAKING_REWARDS_INFO: {
@@ -25,6 +25,13 @@ export const STAKING_REWARDS_INFO: {
 } = {
   [ChainId.MATIC]: [
     //v9
+    {
+      tokens: [STACK, USDC],
+      baseToken: USDC,
+      startTime: 1644243400,
+      stakingRewardAddress: '0x57aA426965A36e15C516B5C592dBd64dF5105706',
+      version: 'v9'
+    },
     {
       tokens: [OAI, DFYN],
       baseToken: DFYN,
