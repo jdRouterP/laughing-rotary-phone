@@ -6,6 +6,7 @@ import styled from 'styled-components'
 import { ExternalLink } from 'theme'
 
 const AnalyticsStyled = styled.div`
+    z-index: 999;
     position: fixed;
     display: flex;
     left: 12px;

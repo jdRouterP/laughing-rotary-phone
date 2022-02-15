@@ -7,6 +7,7 @@ import { getExplorerLink } from '../../utils'
 import { useActiveWeb3React } from '../../hooks'
 
 const StyledPolling = styled.div`
+  z-index: 999;
   position: fixed;
   display: flex;
   right: 54px;

@@ -26,6 +26,7 @@ const StyledMenuButton = styled.button`
 `
 
 const HeaderElementWrap = styled.div`
+  z-index: 999;
   display: flex;
   position: fixed;
   right: 0;
