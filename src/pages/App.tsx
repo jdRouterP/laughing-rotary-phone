@@ -48,9 +48,9 @@ import { OpenClaimAddressModalAndRedirectToSwap, RedirectPathToSwapOnly, Redirec
 // import Vote from './Vote'
 import VotePage from './Vote/VotePage'
 // import PredictionMarket from './PredictionMarket'
-import Predictions from './Predictions'
+// import Predictions from './Predictions'
 import BetaWarning from './Predictions/components/BetaWarning'
-import PredictionDesktop from './Predictions/PredictionDesktop'
+// import PredictionDesktop from './Predictions/PredictionDesktop'
 import EcoSystemArchived from './VanillaFarms/EcoSystemArchived'
 import DualFarmsArrchived from './DualFarms/DualFarmsArchived'
 import PopularFarmsArchived from './FloraFarms/PopularFarmsArchived'
@@ -170,7 +170,7 @@ export default function App() {
               <Route exact strict path="/popular-farms" component={FloraFarms} />
               <Route exact strict path="/vault" component={Vault} />
               <Route exact strict path="/vdfyn" component={VDFYN} />
-              <Route exact strict path="/prediction" component={Predictions} />
+              {/* <Route exact strict path="/prediction" component={Predictions} /> */}
               {chainId && HEADER_ACCESS.tradingCompetitions.includes(chainId) &&
                 <Route exact strict path="/trading-leaderboard" component={TradingLeader} />
               }
@@ -180,7 +180,7 @@ export default function App() {
               {chainId && HEADER_ACCESS.tradingCompetitions.includes(chainId) &&
                 <Route exact strict path="/trading-leaderboard/archived" component={ArchivedTradingLeader} />
               }
-              <Route exact strict path="/prediction/:currency/:candleSize" component={PredictionDesktop} />
+              {/* <Route exact strict path="/prediction/:currency/:candleSize" component={PredictionDesktop} /> */}
               {/* <Route exact strict path="/predictionMarket" component={PredictionMarket} /> */}
               {/* <Route exact strict path="/vote" component={Vote} /> */}
               <Route exact strict path="/custom-eco-farms" component={CustomVanillaFarms} />

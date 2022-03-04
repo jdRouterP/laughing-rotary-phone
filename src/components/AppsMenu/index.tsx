@@ -161,13 +161,13 @@ export default function AppsMenu() {
 
       {open && (
         <MenuFlyout>
-          <StyledNavLink id={`stake-nav-link`} to={'/prediction'}>
+          {/* <StyledNavLink id={`stake-nav-link`} to={'/prediction'}>
             <TYPE.mediumHeader fontSize={'16px'}>Prediction Markets</TYPE.mediumHeader>
             <MenuDesc>
               <TYPE.subHeader fontWeight={500} fontSize={'10px'}>Predict & earn</TYPE.subHeader>
             </MenuDesc>
 
-          </StyledNavLink>
+          </StyledNavLink> */}
           <StyledNavLink id={`v-farms-nav-link`} to={'/dfyn-fusion'}>
           <TYPE.mediumHeader fontSize={'16px'}>Dfyn Fusion</TYPE.mediumHeader>
             <MenuDesc>
