@@ -547,6 +547,7 @@ export default function BuildFarm() {
 
     const customSetBurnRate = (burnType: string) => {
         if(burnType === "30") setBurnRate(30)
+        else if(burnType === "35") setBurnRate(35)
         else if(burnType === "40") setBurnRate(40)
         else if(burnType === "50") setBurnRate(50)
     }
@@ -577,7 +578,7 @@ export default function BuildFarm() {
         if(duration === 15 && vestingPeriod === 60) setSplitWindow(4)
         else if(duration === 15 && vestingPeriod === 30) setSplitWindow(8)
         else if(duration === 30 && vestingPeriod === 120) setSplitWindow(4)
-        else if(duration === 30 && vestingPeriod === 60) setSplitWindow(8)
+        else if(duration === 30 && vestingPeriod === 60) setSplitWindow(4)
         else if(duration === 60 && vestingPeriod === 240) setSplitWindow(4)
         else if(duration === 60 && vestingPeriod === 120) setSplitWindow(8)
 
@@ -1112,6 +1113,7 @@ export default function BuildFarm() {
                                     onChange={(e) => customSetBurnRate(e.target.value)}
                                 >
                                     <option value="30">30</option>
+                                    <option value="35">35</option>
                                     <option value="40">40</option>
                                     <option value="50">50</option>
                                 </select>
