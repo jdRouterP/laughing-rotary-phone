@@ -321,7 +321,7 @@ export function useStakingCustomFloraFarmInfo(pairToFilterBy?: string): StakingI
         let ableToClaim = !vestingActive || (Math.floor(Date.now() / 1000) >= periodFinishSeconds &&
           (userClaimedSplit !== Math.floor(currentSplit) ? true : !hasClaimedPartial))
         memo.push({
-          type: { typeOf: 'Popular Farms', url: 'popular-farms' },
+          type: { typeOf: 'Popular Farms', url: 'custom-popular-farms' },
           stakingRewardAddress: rewardsAddress,
           baseToken: info[index].baseToken,
           burnRate: info[index].burnRate.toString(),
@@ -610,7 +610,7 @@ export function useInactiveStakingCustomFloraFarmInfo(pairToFilterBy?: string): 
         let ableToClaim = !vestingActive || (Math.floor(Date.now() / 1000) >= periodFinishSeconds &&
           (userClaimedSplit !== Math.floor(currentSplit) ? true : !hasClaimedPartial))
         memo.push({
-          type: { typeOf: 'Popular Farms', url: 'popular-farms/archived' },
+          type: { typeOf: 'Popular Farms', url: 'custom-popular-farms/archived' },
           stakingRewardAddress: rewardsAddress,
           baseToken: info[index].baseToken,
           burnRate: info[index].burnRate.toString(),

@@ -314,7 +314,7 @@ export function useStakingCustomLaunchFarmInfo(pairToFilterBy?: string): Staking
         let ableToClaim = !vestingActive || (Math.floor(Date.now() / 1000) >= periodFinishSeconds &&
           (userClaimedSplit !== Math.floor(currentSplit) ? true : !hasClaimedPartial))
         memo.push({
-          type: { typeOf: 'Launch Farms', url: 'launch-farms' },
+          type: { typeOf: 'Launch Farms', url: 'custom-launch-farms' },
           stakingRewardAddress: rewardsAddress,
           baseToken: info[index].baseToken,
           tokens: info[index].tokens,
@@ -605,7 +605,7 @@ export function useInactiveStakingCustomLaunchFarmInfo(pairToFilterBy?: string):
         let ableToClaim = !vestingActive || (Math.floor(Date.now() / 1000) >= periodFinishSeconds &&
           (userClaimedSplit !== Math.floor(currentSplit) ? true : !hasClaimedPartial))
         memo.push({
-          type: { typeOf: 'Launch Farms', url: 'launch-farms/archived' },
+          type: { typeOf: 'Launch Farms', url: 'custom-launch-farms/archived' },
           stakingRewardAddress: rewardsAddress,
           baseToken: info[index].baseToken,
           tokens: info[index].tokens,

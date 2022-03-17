@@ -195,7 +195,6 @@ export default function FullPositionCard({ pair, border, stakedBalance, stakingI
       : [undefined, undefined]
 
   const backgroundColor = useColor(pair?.token0)
-
   return (
     <StyledPositionCard border={border} bgColor={backgroundColor}>
       <CardNoise />
@@ -339,17 +338,31 @@ export default function FullPositionCard({ pair, border, stakedBalance, stakingI
                 </ButtonPrimary>
               </RowBetween>
             )}
-            {stakedBalance && JSBI.greaterThan(stakedBalance.raw, BIG_INT_ZERO) && (<>
+            {stakedBalance && JSBI.greaterThan(stakedBalance.raw, BIG_INT_ZERO) && 
+              ((stakingInfo.type.url === 'custom-eco-farms' || stakingInfo.type.url === 'custom-popular-farms' || stakingInfo.type.url === 'custom-dual-farms' || stakingInfo.type.url === 'custom-launch-farm'
+                || stakingInfo.type.url === 'custom-eco-farms/archived' || stakingInfo.type.url === 'custom-popular-farms/archived' || stakingInfo.type.url === 'custom-dual-farms/archived' || stakingInfo.type.url === 'custom-launch-farm/archived'
+              ) ? (<>
               <ButtonPrimary
                 padding="8px"
                 borderRadius="8px"
                 as={Link}
-                to={`/${stakingInfo ? stakingInfo.type.url : "flora-farms"}/${currencyId(currency0, chainId)}/${currencyId(currency1, chainId)}${stakingInfo.version ? `/${stakingInfo.version}` : ''}`}
+                to={`/${stakingInfo ? stakingInfo.type.url : ""}/${stakingInfo.stakingRewardAddress}`}
                 width="100%"
               >
                 {`Manage Liquidity in ${stakingInfo ? stakingInfo.type.typeOf : "flora-farms"}`}
               </ButtonPrimary>
-            </>)}
+            </>)
+            :(<>
+              <ButtonPrimary
+                padding="8px"
+                borderRadius="8px"
+                as={Link}
+                to={`/${stakingInfo ? stakingInfo.type.url : "flora-farms"}/${currencyId(currency0, chainId)}/${currencyId(currency1, chainId)}${stakingInfo?.version ? `/${stakingInfo?.version}` : ''}`}
+                width="100%"
+              >
+                {`Manage Liquidity in ${stakingInfo ? stakingInfo.type.typeOf : "flora-farms"}`}
+              </ButtonPrimary>
+            </>))}
           </AutoColumn>
         )}
       </AutoColumn>

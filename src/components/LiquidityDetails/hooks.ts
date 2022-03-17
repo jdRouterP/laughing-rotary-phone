@@ -14,6 +14,8 @@ import { useInactiveStakingInfo as useInactiveDualStakingInfo } from '../../stat
 import { useInactiveStakingInfo as useInactivePreStakingInfo } from '../../state/stake/hooks'
 import { useInactiveStakingInfo as useInactiveVanillaStakingInfo } from '../../state/vanilla-stake/hooks'
 import { BIG_INT_ZERO } from '../../constants' 
+import useByofLpDetails from './useByofLpPool'
+
 
 export default function useGetLP(): {
     balances: (StakingInfo | StakingInfo | StakingInfo)[]
@@ -32,7 +34,10 @@ export default function useGetLP(): {
     const liquidityTokens = useMemo(() => tokenPairsWithLiquidityTokens.map(tpwlt => tpwlt.liquidityToken), [
       tokenPairsWithLiquidityTokens
     ])
-  
+    
+    //byofStaked Lp
+    const {lpByofDetails} = useByofLpDetails()
+    
     const [v2PairsBalances, fetchingV2PairBalances] = useTokenBalancesWithLoadingIndicator(
       account ?? undefined,
       liquidityTokens
@@ -51,45 +56,72 @@ export default function useGetLP(): {
      
     const allV2PairsWithLiquidity = v2Pairs.map(([, pair]) => pair).filter((v2Pair): v2Pair is Pair => Boolean(v2Pair))
   
-      // show liquidity even if its deposited in rewards contract
-      const vanillaStakingInfo = useVanillaStakingInfo()
-      const vanillaStakingInfosWithBalance = vanillaStakingInfo?.filter(pool => JSBI.greaterThan(pool.stakedAmount.raw, BIG_INT_ZERO))
-      const preStakingInfo = usePreStakingInfo()
-      const preStakingsWithBalance = preStakingInfo?.filter(pool => JSBI.greaterThan(pool.stakedAmount.raw, BIG_INT_ZERO))
-      const dualStakingInfo = useDualStakingInfo()
-      const dualStakingInfosWithBalance = dualStakingInfo?.filter(pool => JSBI.greaterThan(pool.stakedAmount.raw, BIG_INT_ZERO))
-      const floraStakingInfo = useFloraStakingInfo()
-      const floraStakingInfosWithBalance = floraStakingInfo?.filter(pool => JSBI.greaterThan(pool.stakedAmount.raw, BIG_INT_ZERO))
-      // show liquidity even if its deposited in inactive rewards contract
-      const inactiveVanillaStakingInfo = useInactiveVanillaStakingInfo()
-      const inactiveVanillaStakingInfosWithBalance = inactiveVanillaStakingInfo?.filter(pool => JSBI.greaterThan(pool.stakedAmount.raw, BIG_INT_ZERO))
-      const inactivePreStakingInfo = useInactivePreStakingInfo()
-      const inactivePreStakingsWithBalance = inactivePreStakingInfo?.filter(pool => JSBI.greaterThan(pool.stakedAmount.raw, BIG_INT_ZERO))
-      const inactiveDualStakingInfo = useInactiveDualStakingInfo()
-      const inactiveDualStakingInfosWithBalance = inactiveDualStakingInfo?.filter(pool => JSBI.greaterThan(pool.stakedAmount.raw, BIG_INT_ZERO))
-      const inactiveFloraStakingInfo = useInactiveFloraStakingInfo()
-      const inactiveFloraStakingInfosWithBalance = inactiveFloraStakingInfo?.filter(pool => JSBI.greaterThan(pool.stakedAmount.raw, BIG_INT_ZERO))
-      //ORDER MATTERS
-      let stakingPairs = [
-        ...usePairs(vanillaStakingInfosWithBalance?.map(stakingInfo => stakingInfo.tokens)),
-        ...usePairs(inactiveVanillaStakingInfosWithBalance?.map(stakingInfo => stakingInfo.tokens)),
-        ...usePairs(preStakingsWithBalance?.map(stakingInfo => stakingInfo.tokens)),
-        ...usePairs(inactivePreStakingsWithBalance?.map(stakingInfo => stakingInfo.tokens)),
-        ...usePairs(dualStakingInfosWithBalance?.map(stakingInfo => stakingInfo.tokens)),
-        ...usePairs(inactiveDualStakingInfosWithBalance?.map(stakingInfo => stakingInfo.tokens)),
-        ...usePairs(floraStakingInfosWithBalance?.map(stakingInfo => stakingInfo.tokens)),
-        ...usePairs(inactiveFloraStakingInfosWithBalance?.map(stakingInfo => stakingInfo.tokens))
-      ]
-      let balances = [
-        ...vanillaStakingInfosWithBalance,
-        ...inactiveVanillaStakingInfosWithBalance,
-        ...preStakingsWithBalance,
-        ...inactivePreStakingsWithBalance,
-        ...dualStakingInfosWithBalance,
-        ...inactiveDualStakingInfosWithBalance,
-        ...floraStakingInfosWithBalance,
-        ...inactiveFloraStakingInfosWithBalance,
-      ];
+    // show liquidity even if its deposited in rewards contract
+    const vanillaStakingInfo = useVanillaStakingInfo()
+    const vanillaStakingInfosWithBalance = vanillaStakingInfo?.filter(pool => JSBI.greaterThan(pool.stakedAmount.raw, BIG_INT_ZERO))
+    const preStakingInfo = usePreStakingInfo()
+    const preStakingsWithBalance = preStakingInfo?.filter(pool => JSBI.greaterThan(pool.stakedAmount.raw, BIG_INT_ZERO))
+    const dualStakingInfo = useDualStakingInfo()
+    const dualStakingInfosWithBalance = dualStakingInfo?.filter(pool => JSBI.greaterThan(pool.stakedAmount.raw, BIG_INT_ZERO))
+    const floraStakingInfo = useFloraStakingInfo()
+    const floraStakingInfosWithBalance = floraStakingInfo?.filter(pool => JSBI.greaterThan(pool.stakedAmount.raw, BIG_INT_ZERO))
+    // show liquidity even if its deposited in inactive rewards contract
+    const inactiveVanillaStakingInfo = useInactiveVanillaStakingInfo()
+    const inactiveVanillaStakingInfosWithBalance = inactiveVanillaStakingInfo?.filter(pool => JSBI.greaterThan(pool.stakedAmount.raw, BIG_INT_ZERO))
+    const inactivePreStakingInfo = useInactivePreStakingInfo()
+    const inactivePreStakingsWithBalance = inactivePreStakingInfo?.filter(pool => JSBI.greaterThan(pool.stakedAmount.raw, BIG_INT_ZERO))
+    const inactiveDualStakingInfo = useInactiveDualStakingInfo()
+    const inactiveDualStakingInfosWithBalance = inactiveDualStakingInfo?.filter(pool => JSBI.greaterThan(pool.stakedAmount.raw, BIG_INT_ZERO))
+    const inactiveFloraStakingInfo = useInactiveFloraStakingInfo()
+    const inactiveFloraStakingInfosWithBalance = inactiveFloraStakingInfo?.filter(pool => JSBI.greaterThan(pool.stakedAmount.raw, BIG_INT_ZERO))
+
+    // // show byof liquidity even if its deposited in rewards contract
+    const byofVanillaStakingInfosWithBalance = lpByofDetails?.filter(i => i.type.url === "custom-eco-farms").filter(pool => JSBI.greaterThan(pool.stakedAmount.raw, BIG_INT_ZERO))
+    const byofFloraStakingInfosWithBalance = lpByofDetails?.filter(i => i.type.url === "custom-popular-farms").filter(pool => JSBI.greaterThan(pool.stakedAmount.raw, BIG_INT_ZERO))
+    const byofDualStakingInfosWithBalance = lpByofDetails?.filter(i => i.type.url === "custom-dual-farms").filter(pool => JSBI.greaterThan(pool.stakedAmount.raw, BIG_INT_ZERO))
+    const byofPreStakingInfosWithBalance = lpByofDetails?.filter(i => i.type.url === "custom-launch-farms").filter(pool => JSBI.greaterThan(pool.stakedAmount.raw, BIG_INT_ZERO))
+    const inactiveByofVanillaStakingInfosWithBalance = lpByofDetails?.filter(i => i.type.url === "custom-eco-farms/archived").filter(pool => JSBI.greaterThan(pool.stakedAmount.raw, BIG_INT_ZERO))
+    const inactiveByofFloraStakingInfosWithBalance = lpByofDetails?.filter(i => i.type.url === "custom-popular-farms/archived").filter(pool => JSBI.greaterThan(pool.stakedAmount.raw, BIG_INT_ZERO))
+    const inactiveByofDualStakingInfosWithBalance = lpByofDetails?.filter(i => i.type.url === "custom-dual-farms/archived").filter(pool => JSBI.greaterThan(pool.stakedAmount.raw, BIG_INT_ZERO))
+    const inactiveByofPreStakingInfosWithBalance = lpByofDetails?.filter(i => i.type.url === "custom-launch-farms/archived").filter(pool => JSBI.greaterThan(pool.stakedAmount.raw, BIG_INT_ZERO))
+
+    //ORDER MATTERS
+    let stakingPairs = [
+      ...usePairs(vanillaStakingInfosWithBalance?.map(stakingInfo => stakingInfo.tokens)),
+      ...usePairs(inactiveVanillaStakingInfosWithBalance?.map(stakingInfo => stakingInfo.tokens)),
+      ...usePairs(preStakingsWithBalance?.map(stakingInfo => stakingInfo.tokens)),
+      ...usePairs(inactivePreStakingsWithBalance?.map(stakingInfo => stakingInfo.tokens)),
+      ...usePairs(dualStakingInfosWithBalance?.map(stakingInfo => stakingInfo.tokens)),
+      ...usePairs(inactiveDualStakingInfosWithBalance?.map(stakingInfo => stakingInfo.tokens)),
+      ...usePairs(floraStakingInfosWithBalance?.map(stakingInfo => stakingInfo.tokens)),
+      ...usePairs(inactiveFloraStakingInfosWithBalance?.map(stakingInfo => stakingInfo.tokens)),
+      ...usePairs(byofVanillaStakingInfosWithBalance?.map(stakingInfo => stakingInfo.tokens)),
+      ...usePairs(byofFloraStakingInfosWithBalance?.map(stakingfInfo => stakingfInfo.tokens)),
+      ...usePairs(byofDualStakingInfosWithBalance?.map(stakingInfo => stakingInfo.tokens)),
+      ...usePairs(byofPreStakingInfosWithBalance?.map(stakingfInfo => stakingfInfo.tokens)),
+      ...usePairs(inactiveByofVanillaStakingInfosWithBalance?.map(stakingInfo => stakingInfo.tokens)),
+      ...usePairs(inactiveByofFloraStakingInfosWithBalance?.map(stakingfInfo => stakingfInfo.tokens)),
+      ...usePairs(inactiveByofDualStakingInfosWithBalance?.map(stakingInfo => stakingInfo.tokens)),
+      ...usePairs(inactiveByofPreStakingInfosWithBalance?.map(stakingfInfo => stakingfInfo.tokens))
+    ]
+    let balances = [
+      ...vanillaStakingInfosWithBalance,
+      ...inactiveVanillaStakingInfosWithBalance,
+      ...preStakingsWithBalance,
+      ...inactivePreStakingsWithBalance,
+      ...dualStakingInfosWithBalance,
+      ...inactiveDualStakingInfosWithBalance,
+      ...floraStakingInfosWithBalance,
+      ...inactiveFloraStakingInfosWithBalance,
+      ...byofVanillaStakingInfosWithBalance,
+      ...byofFloraStakingInfosWithBalance,
+      ...byofDualStakingInfosWithBalance,
+      ...byofPreStakingInfosWithBalance,
+      ...inactiveByofVanillaStakingInfosWithBalance,
+      ...inactiveByofFloraStakingInfosWithBalance,
+      ...inactiveByofDualStakingInfosWithBalance,
+      ...inactiveByofPreStakingInfosWithBalance,
+    ];
     const v2PairsWithoutStakedAmount = allV2PairsWithLiquidity.filter(v2Pair => {
       return (
         stakingPairs

@@ -164,7 +164,7 @@ export function useCustomVanillaStakingInfo(pairToFilterBy?: string): StakingInf
         const active =
         periodFinishSeconds && currentBlockTimestamp ? periodFinishSeconds > currentBlockTimestamp.toNumber() : true
         memo.push({
-          type: { typeOf: 'Ecosystem Farms', url: 'eco-farms' },
+          type: { typeOf: 'Ecosystem Farms', url: 'custom-eco-farms' },
           stakingRewardAddress: rewardsAddress,
           baseToken: info[index].baseToken,
           startTime: info[index].startDate ?? 0,
@@ -320,7 +320,7 @@ export function useInactiveCustomVanillaStakingInfo(pairToFilterBy?: string): St
         const active =
         periodFinishSeconds && currentBlockTimestamp ? periodFinishSeconds > currentBlockTimestamp.toNumber() : true
         memo.push({
-          type: { typeOf: 'Ecosystem Farms', url: 'eco-farms/archived' },
+          type: { typeOf: 'Ecosystem Farms', url: 'custom-eco-farms/archived' },
           stakingRewardAddress: rewardsAddress,
           baseToken: info[index].baseToken,
           startTime: info[index].startDate ?? 0,

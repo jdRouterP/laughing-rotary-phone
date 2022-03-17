@@ -189,7 +189,7 @@ export function useStakingDualFarmInfo(pairToFilterBy?: string): StakingInfo[] {
         const active =
           periodFinishSeconds && currentBlockTimestamp ? periodFinishSeconds > currentBlockTimestamp.toNumber() : true
         memo.push({
-          type: { typeOf: 'Dual Farms', url: 'dual-farms' },
+          type: { typeOf: 'Dual Farms', url: 'custom-dual-farms' },
           rewardAddresses,
           stakingRewardAddress: rewardsAddress,
           baseToken:  info[index].baseToken,
@@ -370,7 +370,7 @@ export function useInactiveStakingDualFarmInfo(pairToFilterBy?: string): Staking
         const active =
           periodFinishSeconds && currentBlockTimestamp ? periodFinishSeconds > currentBlockTimestamp.toNumber() : true
         memo.push({
-          type: { typeOf: 'Dual Farms', url: 'dual-farms/archived' },
+          type: { typeOf: 'Dual Farms', url: 'custom-dual-farms/archived' },
           rewardAddresses,
           stakingRewardAddress: rewardsAddress,
           baseToken: info[index].baseToken,
