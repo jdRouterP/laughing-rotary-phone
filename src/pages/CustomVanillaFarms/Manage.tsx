@@ -149,9 +149,8 @@ export default function Manage({
     )
   }
 
-  const countUpAmount = stakingInfo?.earnedAmount?.toFixed(6) ?? '0'
+  const countUpAmount = stakingInfo?.earnedAmount?.currency?.decimals >= 6 ? stakingInfo?.earnedAmount?.toFixed(6) : stakingInfo?.earnedAmount?.toFixed(4) ?? '0'
   const countUpAmountPrevious = usePrevious(countUpAmount) ?? '0'
-
   // get the USD value of staked WETH
   const USDPrice = useUSDCPrice(WETH)
   const valueOfTotalStakedAmountInUSDC =
