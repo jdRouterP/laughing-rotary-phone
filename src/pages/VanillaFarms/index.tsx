@@ -147,7 +147,7 @@ export default function VanillaFarms() {
             <Loader style={{ margin: 'auto' }} />
           ) : !stakingRewardsExist && !stakingCustomVanillaRewardsExist ? (
             <OutlineCard>No active pools</OutlineCard>
-          ) : stakingFarms?.length === 0 && stakingCustomVanillaFarms?.length ? (
+          ) : stakingFarms?.length === 0 && stakingCustomVanillaFarms?.length === 0 ? (
             <OutlineCard>No active pools</OutlineCard>
           ) : 
             <>
