@@ -256,7 +256,7 @@ export function useStakingCustomFloraFarmInfo(pairToFilterBy?: string): StakingI
         const totalEarnedRewardArr = []
         const individualRewardRateArr = []
         const earnedAmountArr = []
-        for(let i = 0; i < earnedAmountState?.result?.[0].length; i++){
+        for(let i = 0; i < info[index].rewardToken.length; i++){
           const tokenArr = allTokensList.filter(token => token.address.toLowerCase() === (rewardRateState.result?.[0][i]).toLowerCase())[0]
           const rewardRateToken = new TokenAmount(tokenArr, JSBI.BigInt(rewardRateState.result?.[1][i]))
           const totalVestedAmount = new TokenAmount(tokenArr ?? uni, JSBI.BigInt(totalVestedAmountState?.result?.[1][i] ?? 0))
@@ -548,7 +548,7 @@ export function useInactiveStakingCustomFloraFarmInfo(pairToFilterBy?: string): 
         const totalEarnedRewardArr = []
         const individualRewardRateArr = []
         const earnedAmountArr = []
-        for(let i = 0; i < earnedAmountState?.result?.[0].length; i++){
+        for(let i = 0; i < info[index].rewardToken.length; i++){
           const tokenArr = allTokensList.filter(token => token.address.toLowerCase() === (rewardRateState.result?.[0][i]).toLowerCase())[0]
           const rewardRateToken = new TokenAmount(tokenArr, JSBI.BigInt(rewardRateState.result?.[1][i]))
           const totalVestedAmount = new TokenAmount(tokenArr ?? uni, JSBI.BigInt(totalVestedAmountState?.result?.[1][i] ?? 0))
