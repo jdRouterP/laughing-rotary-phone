@@ -19,6 +19,9 @@ export const BYOF_FACTORY_ADDRESS = '0x4d1B9C73A9bA07FB69cE9e295652A5dB4106eB21'
 //Blender Address
 export const BLEND_ADDRESS = '0xc3328070df8233affafbf04b973b4165cca35f99'
 
+//router-mainnet-metadata
+export const WALLCHAIN_ADDRESS = '0xC123F196aaD0a34e27075f5b491C69908C386A13'
+
 export { PRELOADED_PROPOSALS } from './proposals'
 
 // a list of tokens by chain

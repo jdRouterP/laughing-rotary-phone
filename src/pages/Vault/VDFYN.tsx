@@ -195,7 +195,7 @@ export default function VDFYN() {
                             </TYPE.body>
                         </AutoColumn>
                     </PoolData>
-                    <PoolData style={{ backgroundSize: 'cover', border: 'none', backgroundPosition: 'right' }}>
+                    <PoolData style={{ backgroundSize: 'cover', backgroundPosition: 'right' }}>
                         <AutoColumn gap="sm">
                             <TYPE.body style={{ marginLeft: '5px', textAlign: 'left' }}>Balance vDFYN</TYPE.body>
                             <TYPE.body fontSize={24} fontWeight={500} style={{ display: 'flex', justifyContent: 'initial', marginLeft: '5px' }}>
@@ -206,7 +206,7 @@ export default function VDFYN() {
                             </TYPE.body>
                         </AutoColumn>
                     </PoolData>
-                    <PoolData style={{ backgroundSize: 'cover', border: 'none', backgroundPosition: 'right' }}>
+                    <PoolData style={{ backgroundSize: 'cover', backgroundPosition: 'right' }}>
                         <AutoColumn gap="sm">
                             <TYPE.body style={{ marginLeft: '5px', textAlign: 'left' }}>Unstaked DFYN</TYPE.body>
                             <TYPE.body fontSize={24} fontWeight={500} style={{ display: 'flex', justifyContent: 'initial', marginLeft: '5px' }}>

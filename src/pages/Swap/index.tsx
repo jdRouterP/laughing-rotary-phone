@@ -1,4 +1,4 @@
-import { CurrencyAmount, JSBI, Token, Trade } from "@dfyn/sdk";
+import { Currency, CurrencyAmount, JSBI, Percent, Router, Token, Trade } from "@dfyn/sdk";
 import React, {
   useCallback,
   useContext,
@@ -39,12 +39,13 @@ import TokenWarningModal from "../../components/TokenWarningModal";
 import ProgressSteps from "../../components/ProgressSteps";
 import SwapHeader from "../../components/swap/SwapHeader";
 
-import { INITIAL_ALLOWED_SLIPPAGE } from "../../constants";
+import { BIPS_BASE, INITIAL_ALLOWED_SLIPPAGE, WALLCHAIN_ADDRESS } from "../../constants";
 import { getTradeVersion } from "../../data/V1";
 import { useActiveWeb3React } from "../../hooks";
 import { useCurrency, useAllTokens } from "../../hooks/Tokens";
 import {
   ApprovalState,
+  useApproveCallback,
   useApproveCallbackFromTrade,
 } from "../../hooks/useApproveCallback";
 import useENSAddress from "../../hooks/useENSAddress";
@@ -68,7 +69,7 @@ import {
 import {
   useExpertModeManager,
   useUserSlippageTolerance,
-  useUserSingleHopOnly,
+  useUserSingleHopOnly
 } from "../../state/user/hooks";
 import { LinkStyledButton, TYPE } from "../../theme";
 import { maxAmountSpend } from "../../utils/maxAmountSpend";
@@ -85,6 +86,13 @@ import { isTradeBetter } from "utils/trades";
 import { RouteComponentProps } from "react-router-dom";
 import { getRouterAddress } from "utils";
 import { SwapVert } from "@material-ui/icons";
+import useTransactionDeadline from "hooks/useTransactionDeadline";
+import { getNetworkLibrary } from "connectors";
+import ROUTER_ABI from "constants/abis/uniswap-v2-router-02.json";
+import isZero from "utils/isZero";
+import getWallChainTxn from "utils/getWallChainTxn";
+
+const Web3 = require("web3");
 
 // const HighlightBanner = styled.div`
 //   cursor: pointer;
@@ -141,6 +149,9 @@ export default function Swap({ history }: RouteComponentProps) {
 
   const { account, chainId } = useActiveWeb3React();
   const theme = useContext(ThemeContext);
+
+  //state for wallchain 
+  const [wallchainResponse, setWallchainResponse] = useState<any>({})
 
   // toggle wallet when disconnected
   const toggleWalletModal = useWalletModalToggle();
@@ -272,6 +283,8 @@ export default function Swap({ history }: RouteComponentProps) {
 
   // check if user has gone through approval process, used to show two step buttons, reset on token change
   const [approvalSubmitted, setApprovalSubmitted] = useState<boolean>(false);
+  const [approvalSubmittedWallchain, setApprovalSubmittedWallchain] = useState<boolean>(false);
+  // const [loaderWallchain, setLoaderWallchain] = useState<boolean>(false)
 
   // mark when a user has submitted an approval, reset onTokenSelection for input field
   useEffect(() => {
@@ -291,7 +304,8 @@ export default function Swap({ history }: RouteComponentProps) {
   const { callback: swapCallback, error: swapCallbackError } = useSwapCallback(
     trade,
     allowedSlippage,
-    recipient
+    recipient,
+    wallchainResponse
   );
 
   const { priceImpactWithoutFee } = computeTradePriceBreakdown(trade);
@@ -409,7 +423,8 @@ export default function Swap({ history }: RouteComponentProps) {
 
   const handleInputSelect = useCallback(
     (inputCurrency) => {
-      setApprovalSubmitted(false); // reset 2 step UI for approvals
+      setApprovalSubmitted(false);
+      setApprovalSubmittedWallchain(false) // reset 2 step UI for approvals
       onCurrencySelection(Field.INPUT, inputCurrency);
     },
     [onCurrencySelection]
@@ -429,6 +444,84 @@ export default function Swap({ history }: RouteComponentProps) {
     currencies?.OUTPUT
   );
 
+  //wallchain Integration
+  const [approvalWallchain, approveCallbackWallchain] = useApproveCallback(trade?.inputAmount, WALLCHAIN_ADDRESS)
+
+  const recipientWallchain = recipient === null ? account : recipientAddress
+  const deadline = useTransactionDeadline()
+
+  const methodNameWallchain = trade && Router.swapCallParameters(trade, {
+      feeOnTransfer: false,
+      allowedSlippage: new Percent(JSBI.BigInt(allowedSlippage), BIPS_BASE),
+      recipient: recipientWallchain ?? '',
+      deadline: deadline ? deadline.toNumber() : 0
+  })
+  
+  const [wallchainTypedValue, setWallchainTypedValue] = useState<string>('')
+  const [loaderWallchain, setLoaderWallchain] = useState<boolean>(false)
+  const [inputCurrency, setInputCurrency] = useState<Currency | undefined>(currencies[Field.INPUT])
+  const [outputCurrency, setOutputCurrency] = useState<Currency | undefined>(currencies[Field.OUTPUT])
+  const [flowSwap, setFlowSwap] = useState<boolean>(false)
+  
+  //call wallchain here
+  useEffect(() => {
+    const promiseTimeout = new Promise((resolve) => (setTimeout(() => resolve(false), 4000)))
+    const fetchData = async () => {
+      if(methodNameWallchain && account && (inputCurrency !== currencies[Field.INPUT] || outputCurrency !== currencies[Field.OUTPUT] || formattedAmounts[Field.INPUT] !== wallchainTypedValue)){
+        const web3 = new Web3(getNetworkLibrary())
+        const fnMethodSchema = ROUTER_ABI.find(fnSchema => fnSchema.name === methodNameWallchain.methodName)
+        const data = web3.eth.abi.encodeFunctionCall(fnMethodSchema, methodNameWallchain.args)
+        setLoaderWallchain(false)
+        setWallchainTypedValue(formattedAmounts[Field.INPUT])
+        setInputCurrency(currencies[Field.INPUT])
+        setOutputCurrency(currencies[Field.OUTPUT])
+        const wallChainResponse = await Promise.race([promiseTimeout, getWallChainTxn(data, account, chainId ?? 137, isZero(methodNameWallchain.value)? '0' : BigInt(methodNameWallchain.value).toString())])
+        if(!wallChainResponse){
+          setFlowSwap(true)
+        }
+        setLoaderWallchain(true)
+        setWallchainResponse(wallChainResponse)
+      }
+    }
+    const timer = setTimeout(() => {
+      fetchData()
+      .catch(console.error);
+    }, 1000)
+    return () => clearTimeout(timer);
+  }, [account, chainId, methodNameWallchain, formattedAmounts, wallchainTypedValue, currencies, inputCurrency, outputCurrency])
+
+  const showApproveFlowWallchain =
+    !swapInputError &&
+    (approvalWallchain === ApprovalState.NOT_APPROVED ||
+      approvalWallchain === ApprovalState.PENDING ||
+      (approvalSubmittedWallchain && approvalWallchain === ApprovalState.APPROVED)) &&
+    !(priceImpactSeverity > 3 && !isExpertMode);
+
+  useEffect(() => {
+    if (approvalWallchain === ApprovalState.PENDING) {
+      setApprovalSubmittedWallchain(true);
+    }
+  }, [approvalWallchain, approvalSubmittedWallchain]);
+
+  useEffect(() => {
+    if(currencies[Field.INPUT] !== inputCurrency){
+      setLoaderWallchain(false)
+      setFlowSwap(false)
+    }
+    if(currencies[Field.OUTPUT] !== outputCurrency){
+      setLoaderWallchain(false)
+      setFlowSwap(false)
+    }
+  }, [currencies, inputCurrency, outputCurrency])
+
+
+  useEffect(() => {
+    if(formattedAmounts[Field.INPUT] !== wallchainTypedValue){
+      setLoaderWallchain(false)
+      setFlowSwap(false)
+    }
+  }, [formattedAmounts, wallchainTypedValue])
+  
   return (
     <>
       <TokenWarningModal
@@ -479,7 +572,8 @@ export default function Swap({ history }: RouteComponentProps) {
                 <ArrowWrapper clickable>
                   <SwapVert
                     onClick={() => {
-                      setApprovalSubmitted(false); // reset 2 step UI for approvals
+                      setApprovalSubmitted(false);
+                      setApprovalSubmittedWallchain(false) // reset 2 step UI for approvals
                       onSwitchTokens();
                     }}
                     style={{
@@ -608,28 +702,149 @@ export default function Swap({ history }: RouteComponentProps) {
                   <TYPE.main mb="4px">Try enabling multi-hop trades.</TYPE.main>
                 )}
               </GreyCard>
-            ) : showApproveFlow ? (
-              <RowBetween>
-                <ButtonConfirmed
-                  onClick={approveCallback}
-                  disabled={
-                    approval !== ApprovalState.NOT_APPROVED || approvalSubmitted
-                  }
-                  width="48%"
-                  altDisabledStyle={approval === ApprovalState.PENDING} // show solid button while waiting
-                  confirmed={approval === ApprovalState.APPROVED}
-                >
-                  {approval === ApprovalState.PENDING ? (
-                    <AutoRow gap="6px" justify="center">
-                      Approving <Loader stroke="white" />
-                    </AutoRow>
-                  ) : approvalSubmitted &&
-                    approval === ApprovalState.APPROVED ? (
-                    "Approved"
-                  ) : (
-                    "Approve " + currencies[Field.INPUT]?.symbol
-                  )}
-                </ButtonConfirmed>
+            ) : (flowSwap || wallchainResponse) && (
+                  wallchainResponse?.pathFound ?
+                    showApproveFlowWallchain && loaderWallchain ?
+                    (
+                      <RowBetween>
+                        <ButtonConfirmed
+                          onClick={approveCallbackWallchain}
+                          disabled={
+                            approvalWallchain !== ApprovalState.NOT_APPROVED || approvalSubmittedWallchain
+                          }
+                          width="48%"
+                          altDisabledStyle={approvalWallchain === ApprovalState.PENDING} // show solid button while waiting
+                          confirmed={approvalWallchain === ApprovalState.APPROVED}
+                        >
+                          {approvalWallchain === ApprovalState.PENDING ? (
+                            <AutoRow gap="6px" justify="center">
+                              Approving <Loader stroke="white" />
+                            </AutoRow>
+                          ) : approvalSubmittedWallchain &&
+                            approvalWallchain === ApprovalState.APPROVED ? (
+                            "Approved"
+                          ) : (
+                            "Approve " + currencies[Field.INPUT]?.symbol
+                          )}
+                        </ButtonConfirmed>
+                        <ButtonError
+                          onClick={() => {
+                            if (isExpertMode) {
+                              handleSwap();
+                            } else {
+                              setSwapState({
+                                tradeToConfirm: trade,
+                                attemptingTxn: false,
+                                swapErrorMessage: undefined,
+                                showConfirm: true,
+                                txHash: undefined,
+                              });
+                            }
+                          }}
+                          width="48%"
+                          id="swap-button"
+                          disabled={
+                            !isValid ||
+                            approvalWallchain !== ApprovalState.APPROVED ||
+                            (priceImpactSeverity > 3 && !isExpertMode)
+                          }
+                          error={isValid && priceImpactSeverity > 2}
+                        >
+                          <Text fontSize={16} fontWeight={500}>
+                            {priceImpactSeverity > 3 && !isExpertMode
+                              ? `Price Impact High`
+                              : `Swap${priceImpactSeverity > 2 ? " Anyway" : ""}`}
+                          </Text>
+                        </ButtonError>
+                      </RowBetween>
+                    )
+                  :
+                    (
+                      <ButtonError
+                        onClick={() => {
+                          if (isExpertMode) {
+                            handleSwap();
+                          } else {
+                            setSwapState({
+                              tradeToConfirm: trade,
+                              attemptingTxn: false,
+                              swapErrorMessage: undefined,
+                              showConfirm: true,
+                              txHash: undefined,
+                            });
+                          }
+                        }}
+                        id="swap-button"
+                        disabled={
+                          !loaderWallchain || !isValid ||
+                          (priceImpactSeverity > 3 && !isExpertMode) ||
+                          !!swapCallbackError
+                        }
+                        error={isValid && priceImpactSeverity > 2 && !swapCallbackError}
+                      >
+                        <Text fontSize={20} fontWeight={500}>
+                          {swapInputError
+                            ? swapInputError
+                            : priceImpactSeverity > 3 && !isExpertMode
+                            ? `Price Impact Too High`
+                            : `Swap${priceImpactSeverity > 2 ? " Anyway" : ""}`}
+                        </Text>
+                      </ButtonError>
+                    )
+                :
+                showApproveFlow ? (
+                <RowBetween>
+                  <ButtonConfirmed
+                    onClick={approveCallback}
+                    disabled={
+                      approval !== ApprovalState.NOT_APPROVED || approvalSubmitted
+                    }
+                    width="48%"
+                    altDisabledStyle={approval === ApprovalState.PENDING} // show solid button while waiting
+                    confirmed={approval === ApprovalState.APPROVED}
+                  >
+                    {approval === ApprovalState.PENDING ? (
+                      <AutoRow gap="6px" justify="center">
+                        Approving <Loader stroke="white" />
+                      </AutoRow>
+                    ) : approvalSubmitted &&
+                      approval === ApprovalState.APPROVED ? (
+                      "Approved"
+                    ) : (
+                      "Approve " + currencies[Field.INPUT]?.symbol
+                    )}
+                  </ButtonConfirmed>
+                  <ButtonError
+                    onClick={() => {
+                      if (isExpertMode) {
+                        handleSwap();
+                      } else {
+                        setSwapState({
+                          tradeToConfirm: trade,
+                          attemptingTxn: false,
+                          swapErrorMessage: undefined,
+                          showConfirm: true,
+                          txHash: undefined,
+                        });
+                      }
+                    }}
+                    width="48%"
+                    id="swap-button"
+                    disabled={
+                      !isValid ||
+                      approval !== ApprovalState.APPROVED ||
+                      (priceImpactSeverity > 3 && !isExpertMode)
+                    }
+                    error={isValid && priceImpactSeverity > 2}
+                  >
+                    <Text fontSize={16} fontWeight={500}>
+                      {priceImpactSeverity > 3 && !isExpertMode
+                        ? `Price Impact High`
+                        : `Swap${priceImpactSeverity > 2 ? " Anyway" : ""}`}
+                    </Text>
+                  </ButtonError>
+                </RowBetween>
+              ) : (
                 <ButtonError
                   onClick={() => {
                     if (isExpertMode) {
@@ -644,54 +859,23 @@ export default function Swap({ history }: RouteComponentProps) {
                       });
                     }
                   }}
-                  width="48%"
                   id="swap-button"
                   disabled={
-                    !isValid ||
-                    approval !== ApprovalState.APPROVED ||
-                    (priceImpactSeverity > 3 && !isExpertMode)
+                    !loaderWallchain || !isValid ||
+                    (priceImpactSeverity > 3 && !isExpertMode) ||
+                    !!swapCallbackError
                   }
-                  error={isValid && priceImpactSeverity > 2}
+                  error={isValid && priceImpactSeverity > 2 && !swapCallbackError}
                 >
-                  <Text fontSize={16} fontWeight={500}>
-                    {priceImpactSeverity > 3 && !isExpertMode
-                      ? `Price Impact High`
+                  <Text fontSize={20} fontWeight={500}>
+                    {swapInputError
+                      ? swapInputError
+                      : priceImpactSeverity > 3 && !isExpertMode
+                      ? `Price Impact Too High`
                       : `Swap${priceImpactSeverity > 2 ? " Anyway" : ""}`}
                   </Text>
                 </ButtonError>
-              </RowBetween>
-            ) : (
-              <ButtonError
-                onClick={() => {
-                  if (isExpertMode) {
-                    handleSwap();
-                  } else {
-                    setSwapState({
-                      tradeToConfirm: trade,
-                      attemptingTxn: false,
-                      swapErrorMessage: undefined,
-                      showConfirm: true,
-                      txHash: undefined,
-                    });
-                  }
-                }}
-                id="swap-button"
-                disabled={
-                  !isValid ||
-                  (priceImpactSeverity > 3 && !isExpertMode) ||
-                  !!swapCallbackError
-                }
-                error={isValid && priceImpactSeverity > 2 && !swapCallbackError}
-              >
-                <Text fontSize={20} fontWeight={500}>
-                  {swapInputError
-                    ? swapInputError
-                    : priceImpactSeverity > 3 && !isExpertMode
-                    ? `Price Impact Too High`
-                    : `Swap${priceImpactSeverity > 2 ? " Anyway" : ""}`}
-                </Text>
-              </ButtonError>
-            )}
+              ))}
             {showApproveFlow && (
               <Column style={{ marginTop: "1rem" }}>
                 <ProgressSteps steps={[approval === ApprovalState.APPROVED]} />

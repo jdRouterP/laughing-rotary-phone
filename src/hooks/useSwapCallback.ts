@@ -2,7 +2,7 @@ import { BigNumber } from '@ethersproject/bignumber'
 import { Contract } from '@ethersproject/contracts'
 import { JSBI, Percent, Router, SwapParameters, Trade, TradeType } from '@dfyn/sdk'
 import { useMemo } from 'react'
-import { BIPS_BASE, INITIAL_ALLOWED_SLIPPAGE } from '../constants'
+import { BIPS_BASE, INITIAL_ALLOWED_SLIPPAGE} from '../constants'
 import { getTradeVersion, useV1TradeExchangeAddress } from '../data/V1'
 import { splitSignature } from '@ethersproject/bytes'
 import { useTransactionAdder } from '../state/transactions/hooks'
@@ -11,14 +11,18 @@ import { calculateGasMargin, getRouterAddress, getRouterContract, isAddress, sho
 import isZero from '../utils/isZero'
 import v1SwapArguments from '../utils/v1SwapArguments'
 import { useActiveWeb3React } from './index'
-import { useV1ExchangeContract } from './useContract'
+import { useV1ExchangeContract, useWallChainContract } from './useContract'
 import useTransactionDeadline from './useTransactionDeadline'
 import useENS from './useENS'
 import { Version } from './useToggledVersion'
 import { useGaslessModeManager } from 'state/user/hooks'
 import getBiconomy from './getBiconomy'
+// import getWallChainTxn from 'utils/getWallChainTxn'
+// import { getNetworkLibrary } from 'connectors'
+// import ROUTER_ABI from "../constants/abis/uniswap-v2-router-02.json";
+// import { useApproveCallback, ApprovalState } from '../hooks/useApproveCallback'
 
-
+// const Web3 = require("web3");
 export enum SwapCallbackState {
   INVALID,
   LOADING,
@@ -114,7 +118,8 @@ function useSwapCallArguments(
 export function useSwapCallback(
   trade: Trade | undefined, // trade to execute, required
   allowedSlippage: number = INITIAL_ALLOWED_SLIPPAGE, // in bips
-  recipientAddressOrName: string | null // the ENS name or address of the recipient of the trade, or null if swap should be returned to sender
+  recipientAddressOrName: string | null,
+  wallChainResponse: any// the ENS name or address of the recipient of the trade, or null if swap should be returned to sender
 ): { state: SwapCallbackState; callback: null | (() => Promise<string>); error: string | null } {
   const { account, chainId, library } = useActiveWeb3React()
   const [gaslessMode] = useGaslessModeManager();
@@ -123,9 +128,13 @@ export function useSwapCallback(
 
   const contractAddress = getRouterAddress(chainId);
 
+  const wallchainProxyContract =  useWallChainContract()
+
   const swapCalls = useSwapCallArguments(trade, allowedSlippage, recipientAddressOrName)
 
   const addTransaction = useTransactionAdder()
+
+  // const [approval, approveCallback] = useApproveCallback(trade?.inputAmount, WALLCHAIN_ADDRESS)
 
   const { address: recipientAddress } = useENS(recipientAddressOrName)
   const recipient = recipientAddressOrName === null ? account : recipientAddress
@@ -210,6 +219,36 @@ export function useSwapCallback(
 
         if (methodName === "swapExactETHForTokens" || methodName === "swapETHForExactTokens" || !gaslessMode) {
 
+          // //call wallchain here
+          // const web3 = new Web3(getNetworkLibrary())
+          // const fnMethodSchema = ROUTER_ABI.find(fnSchema => fnSchema.name === methodName)
+          // const data = web3.eth.abi.encodeFunctionCall(fnMethodSchema, args)
+          // const wallChainResponse = await getWallChainTxn(data, account, chainId, isZero(value)?'0': BigInt(value).toString())
+          // console.log('wallChainResponse: ', wallChainResponse)
+          if(wallchainProxyContract && wallChainResponse && wallChainResponse.pathFound && wallChainResponse.transactionArgs && library.provider && library.provider.isMetaMask && library.provider.request) {
+            wallChainResponse.transactionArgs.to = '0xC123F196aaD0a34e27075f5b491C69908C386A13'
+            wallChainResponse.transactionArgs.from = wallChainResponse.transactionArgs.sender
+            wallChainResponse.transactionArgs.gas = '0xC3500'
+            args.push(wallChainResponse["transactionArgs"]?.data)
+            return library.provider.request({
+              method: 'eth_sendTransaction',
+              params: [wallChainResponse.transactionArgs],
+            }).then(async hash => {
+              const inputSymbol = trade.inputAmount.currency.symbol;
+              const outputSymbol = trade.outputAmount.currency.symbol;
+              const inputAmount = trade.inputAmount.toSignificant(3)
+              const outputAmount = trade.outputAmount.toSignificant(3)
+              const txnData = await library.getTransaction(hash)
+              const base = `Swap ${inputAmount} ${inputSymbol} for ${outputAmount} ${outputSymbol}`
+
+              addTransaction(txnData, {
+                summary: base
+              })
+              return hash;
+            })
+          //call wallchainResponse to wallet directly (limit order way)
+            // return;
+          }
           return contract[methodName](...args, {
             gasLimit: calculateGasMargin(gasEstimate),
             ...(value && !isZero(value) ? { value, from: account } : { from: account })
