@@ -450,10 +450,10 @@ export default function Swap({ history }: RouteComponentProps) {
   const recipientWallchain = recipient === null ? account : recipientAddress
   const deadline = useTransactionDeadline()
 
-  const methodNameWallchain = trade && Router.swapCallParameters(trade, {
+  const methodNameWallchain = trade && recipientWallchain && Router.swapCallParameters(trade, {
       feeOnTransfer: false,
       allowedSlippage: new Percent(JSBI.BigInt(allowedSlippage), BIPS_BASE),
-      recipient: recipientWallchain ?? '',
+      recipient: recipientWallchain,
       deadline: deadline ? deadline.toNumber() : 0
   })
   
