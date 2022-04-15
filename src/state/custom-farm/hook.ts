@@ -624,7 +624,7 @@ export default function useCustomFarmInfo(
             }
             else return {}
         })
-        // console.log("All Farms", allFarms);
+        console.log("All Farms", allFarms);
         // console.log("AllEcoFarms", allEcoFarms);
         // console.log("AllDualFarms", allDualFarms)
         // console.log("AllFloraFarms", allPopularFarms);
