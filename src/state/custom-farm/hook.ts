@@ -405,7 +405,8 @@ export default function useCustomFarmInfo(
         var flagPF = 0
         var flagLF = 0
         const allFarms = farmsArray.map((i: any, j: any) => {
-            if(i[2] === FarmStrategy.ECF ){
+            const addressExist = tokenPairsWithLiquidityTokens.filter(i => i.liquidityToken.address === decodeValues[j][0])
+            if(i[2] === FarmStrategy.ECF && addressExist[0]){
                 const endDateValue = decodeValues[j][2].toNumber()
                 const  currenctEpoch = Math.floor(new Date().getTime()/1000)
                 if(endDateValue > currenctEpoch){
@@ -451,7 +452,7 @@ export default function useCustomFarmInfo(
                     return farms
                 }
             } 
-            else if(i[2] === FarmStrategy.DF){
+            else if(i[2] === FarmStrategy.DF && addressExist[0]){
                 const endDateValue = decodeValues[j][2].toNumber()
                 const  currenctEpoch = Math.floor(new Date().getTime()/1000)
                 if(endDateValue > currenctEpoch){
@@ -497,7 +498,7 @@ export default function useCustomFarmInfo(
                     return farms
                 }
             }
-            else if(i[2] === FarmStrategy.PF){
+            else if(i[2] === FarmStrategy.PF && addressExist[0]){
                 const endDateValue = decodeValues[j][2].toNumber()
                 const currenctEpoch = Math.floor(new Date().getTime()/1000)
                 if(endDateValue > currenctEpoch){
@@ -561,7 +562,7 @@ export default function useCustomFarmInfo(
                     return farms
                 }
             }
-            else{
+            else if(i[2] === FarmStrategy.LF && addressExist[0]){
                 const endDateValue = decodeValues[j][2].toNumber()
                 const currenctEpoch = Math.floor(new Date().getTime()/1000)
                 if(endDateValue > currenctEpoch){
@@ -621,8 +622,9 @@ export default function useCustomFarmInfo(
                     return farms
                 }
             }
+            else return {}
         })
-        // console.log("All Farms", allFarms);
+        console.log("All Farms", allFarms);
         // console.log("AllEcoFarms", allEcoFarms);
         // console.log("AllDualFarms", allDualFarms)
         // console.log("AllFloraFarms", allPopularFarms);
