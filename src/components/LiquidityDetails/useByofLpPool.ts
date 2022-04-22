@@ -34,7 +34,7 @@ export default function useByofLpDetails():{
     }[]
     farmsDataArray: []
 } {
-    const {account} = useActiveWeb3React()
+    const {account, chainId} = useActiveWeb3React()
     const[farmsData, setFarmsData] = useState({})
     
     useEffect(() => {
@@ -106,7 +106,7 @@ export default function useByofLpDetails():{
       }
       rewardsDuration: number
     }[] = []
-    const farmsDataArray = farmsArray?.map((i: any) =>{
+    const farmsDataArray = chainId === '137' && farmsArray?.map((i: any) =>{
         const bothTokens: [Token, Token] = tokenPairsWithLiquidityTokens.filter(j => j.liquidityToken.address === utils.getAddress(i.farm.stakingToken)).map(k => k.tokens)[0]
         const dummyPair = new Pair(new TokenAmount(bothTokens[0] , '0'), new TokenAmount(bothTokens[1], '0'))
         i.farm.totalSupply = BigNumber.from(i.farm.totalSupply)
