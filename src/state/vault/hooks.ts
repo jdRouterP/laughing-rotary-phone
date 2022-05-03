@@ -1,6 +1,6 @@
 import { ChainId, CurrencyAmount, JSBI, Token, TokenAmount } from '@dfyn/sdk'
 import { useMemo } from 'react'
-import { DFYN, MATRIX, NIOX, OAI, ROUTE, SAFLE, UNI } from '../../constants'
+import { CNW, DFYN, MATRIX, NIOX, OAI, ROUTE, SAFLE, UNI } from '../../constants'
 import { VAULT_INTERFACE } from '../../constants/abis/vault'
 import { useActiveWeb3React } from '../../hooks'
 import { NEVER_RELOAD, useMultipleContractSingleData } from '../multicall/hooks'
@@ -112,6 +112,13 @@ export const STAKING_REWARDS_INFO: {
       vaultToken: DFYN,
       multiplier: 3,
       startedOn: 1621941297
+    },
+    {
+      vaultName: 'CNW 6-month vault',
+      vaultAddress: '0x356fE56801Fdb5bb44f63023F4Ac3e26588A3723',
+      vaultToken: CNW,
+      multiplier: 2,
+      startedOn: 1651510936
     },
   ]
 }

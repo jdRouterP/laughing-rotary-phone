@@ -109,6 +109,7 @@ export const CIRUS = new Token(ChainId.MATIC, '0x2a82437475a60bebd53e33997636fad
 export const SILVER = new Token(ChainId.MATIC, '0xbc7cB585346f4F59d07121Bb9Ed7358076243539', 18, 'SILVER', 'Sliver')
 export const SING = new Token(ChainId.MATIC, '0xCB898b0eFb084Df14dd8E018dA37B4d0f06aB26D', 18, 'SING', 'Sing Token')
 export const MATRIX = new Token(ChainId.MATIC, '0x211f4e76fcb811ed2b310a232a24b3445d95e3bc', 18, 'MATRIX', 'Matrixswap')
+export const CNW = new Token(ChainId.MATIC, '0x0a307bd521701f9d70fb29bfa9e2e36dc998dadb', 6, 'CNW', 'CoinWealth')
 //FANTOM
 export const FTM = new Token(ChainId.FANTOM, '0x21be370D5312f44cB42ce377BC9b8a0cEF1A4C83', 18, 'WFTM', 'Wrapped FTM')
 export const USDC_FANTOM = new Token(ChainId.FANTOM, '0x04068DA6C83AFCFA0e13ba15A6696662335D5B75', 6, 'USDC', 'USDC')
