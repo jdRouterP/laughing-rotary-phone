@@ -1,10 +1,11 @@
 import { ChainId } from "@dfyn/sdk";
 import { getRouterAddress } from "utils";
 
+const WALLCHAIN_API = process.env.REACT_APP_WALLCHAIN_API;
 export default function getWallChainTxn(data: string, senderAddress: string, chainId: ChainId, value: string): any {
   const contractAddress = getRouterAddress(chainId);
   
-  return fetch('https://matic.wallchain.xyz/upgrade_txn/?key=3a48884a-a490-4ad8-9c31-681ed704292c', {
+  return fetch(`${WALLCHAIN_API}/upgrade_txn/?key=3a48884a-a490-4ad8-9c31-681ed704292c`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
