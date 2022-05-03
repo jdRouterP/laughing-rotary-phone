@@ -23,6 +23,13 @@ export const STAKING_REWARDS_INFO: {
 } = {
   [ChainId.MATIC]: [
     {
+      vaultName: 'CNW 6-month vault',
+      vaultAddress: '0x356fE56801Fdb5bb44f63023F4Ac3e26588A3723',
+      vaultToken: CNW,
+      multiplier: 2,
+      startedOn: 1651510936
+    },
+    {
       vaultName: 'SAFLE 6-month vault',
       vaultAddress: '0x3b02672eBc09e432c17d9fAA641981aA5c5E2107',
       vaultToken: SAFLE,
