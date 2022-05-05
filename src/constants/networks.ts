@@ -47,19 +47,24 @@ export const NETWORK_LABEL: { [chainId in ChainId]?: string } = {
 }
 
 export const RPC = {
-  // [ChainId.MAINNET]: 'https://eth-mainnet.alchemyapi.io/v2/q1gSNoSMEzJms47Qn93f9-9Xg5clkmEC',
-  // [ChainId.ROPSTEN]: 'https://eth-ropsten.alchemyapi.io/v2/cidKix2Xr-snU3f6f6Zjq_rYdalKKHmW',
-  // [ChainId.RINKEBY]: 'https://eth-rinkeby.alchemyapi.io/v2/XVLwDlhGP6ApBXFz_lfv0aZ6VmurWhYD',
-  // [ChainId.GÖRLI]: 'https://eth-goerli.alchemyapi.io/v2/Dkk5d02QjttYEoGmhZnJG37rKt8Yl3Im',
-  // [ChainId.KOVAN]: 'https://eth-kovan.alchemyapi.io/v2/6OVAa_B_rypWWl9HqtiYK26IRxXiYqER',
-  [ChainId.MATIC]: process.env.REACT_APP_POLYGON_RPC ?? '',
-  [ChainId.OKEX]: process.env.REACT_APP_OKEX_RPC ?? '',
-  [ChainId.ARBITRUM]: process.env.REACT_APP_ARBITRUM_RPC ?? '',
-  // [ChainId.XDAI]: 'https://rpc.xdaichain.com',
-  [ChainId.FANTOM]: process.env.REACT_APP_FANTOM_RPC ?? '',
-  // [ChainId.HARMONY]: 'https://api.harmony.one',
-  // [ChainId.AVALANCHE]: 'https://api.avax.network/ext/bc/C/rpc',
-  // [ChainId.BSC]: 'https://bsc-dataseed.binance.org',
+  [ChainId.MAINNET]:
+    'https://eth-mainnet.alchemyapi.io/v2/q1gSNoSMEzJms47Qn93f9-9Xg5clkmEC',
+  [ChainId.ROPSTEN]:
+    'https://eth-ropsten.alchemyapi.io/v2/cidKix2Xr-snU3f6f6Zjq_rYdalKKHmW',
+  [ChainId.RINKEBY]:
+    'https://eth-rinkeby.alchemyapi.io/v2/XVLwDlhGP6ApBXFz_lfv0aZ6VmurWhYD',
+  [ChainId.GÖRLI]:
+    'https://eth-goerli.alchemyapi.io/v2/Dkk5d02QjttYEoGmhZnJG37rKt8Yl3Im',
+  [ChainId.KOVAN]:
+    'https://eth-kovan.alchemyapi.io/v2/6OVAa_B_rypWWl9HqtiYK26IRxXiYqER',
+  [ChainId.MATIC]: 'https://rpc-dfyn-mainnet.maticvigil.com/v1/4317c87b41879d5bfafb90308aee37d202f8ddf7',
+  [ChainId.OKEX]: 'https://exchainrpc.okex.org',
+  [ChainId.ARBITRUM]: 'https://arb1.arbitrum.io/rpc',
+  [ChainId.XDAI]: 'https://rpc.xdaichain.com',
+  [ChainId.FANTOM]: 'https://rpc.ftm.tools',
+  [ChainId.HARMONY]: 'https://api.harmony.one',
+  [ChainId.AVALANCHE]: 'https://api.avax.network/ext/bc/C/rpc',
+  [ChainId.BSC]: 'https://bsc-dataseed.binance.org',
 }
 
 export const SUPPORTED_NETWORKS: {
@@ -200,7 +205,7 @@ export const HEADER_ACCESS = {
   gaslessMode: [ChainId.MATIC],
   more: [ChainId.MATIC],
   limitOrders: [ChainId.MATIC, ChainId.BSC, ChainId.FANTOM],
-  tradingCompetitions: [ChainId.MATIC],
+  tradingCompetitions: [ChainId.MATIC]
 }
 
 export const FARMS_ACCESS = {
@@ -210,18 +215,18 @@ export const FARMS_ACCESS = {
   launch: [ChainId.MATIC],
   dual: [ChainId.MATIC],
   prestake: [ChainId.MATIC],
-  customFarms: [ChainId.MATIC],
+  customFarms: [ChainId.MATIC]
 }
 
 export const CHART_URL_PREFIX = {
-  [ChainId.MAINNET]: 'info',
-  [ChainId.ROPSTEN]: 'info',
-  [ChainId.RINKEBY]: 'info',
-  [ChainId.GÖRLI]: 'info',
-  [ChainId.KOVAN]: 'info',
-  [ChainId.MATIC]: 'info',
-  [ChainId.ARBITRUM]: 'info',
-  [ChainId.OKEX]: 'info-okex',
+  [ChainId.MAINNET]: "info",
+  [ChainId.ROPSTEN]: "info",
+  [ChainId.RINKEBY]: "info",
+  [ChainId.GÖRLI]: "info",
+  [ChainId.KOVAN]: "info",
+  [ChainId.MATIC]: "info",
+  [ChainId.ARBITRUM]: "info",
+  [ChainId.OKEX]: "info-okex",
   [ChainId.XDAI]: 'info',
   [ChainId.FANTOM]: 'info-fantom',
   [ChainId.HARMONY]: 'info',

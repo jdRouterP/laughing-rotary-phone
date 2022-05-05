@@ -94,7 +94,7 @@ interface RewardsCurrencyInputPanelProps {
   label?: string
   onCurrencySelect?: (currency: Currency) => void
   currency?: Currency | null
-  disableCurrencySelect?: boolean
+  disableCurrencySelect: boolean
   hideBalance?: boolean
   pair?: Pair | null
   hideInput?: boolean
@@ -112,7 +112,7 @@ export default function RewardsCurrencyInputPanel({
   label = 'Input',
   onCurrencySelect,
   currency,
-  disableCurrencySelect = false,
+  disableCurrencySelect,
   hideBalance = false,
   pair = null, // used for double token logo
   hideInput = false,

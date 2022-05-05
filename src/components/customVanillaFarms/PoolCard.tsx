@@ -135,7 +135,7 @@ export default function PoolCardCustomVanilla({ stakingInfo, isInactive }: { sta
 
       <StatContainer>
         <RowBetween >
-          <Countdown exactEnd={stakingInfo?.periodFinish} startTime={new Date(stakingInfo?.startTime)} />
+          <Countdown exactEnd={stakingInfo?.periodFinish} startTime={new Date(Number(stakingInfo?.startTime)*1000)} />
         </RowBetween>
         <RowBetween>
           <TYPE.white> Total deposited</TYPE.white>

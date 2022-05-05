@@ -85,6 +85,8 @@ import LimitOrder from './Limit'
 import { useActiveWeb3React } from 'hooks'
 import { HEADER_ACCESS } from 'constants/networks'
 import ExternalCohortPartnersInfo from 'components/TradingLeader/ExternalCohortPartnersInfo'
+import MyFarms from './CreateFarm/MyFarms'
+import RenewFarms from './CreateFarm/RenewFarms'
 
 const AppWrapper = styled.div`
   display: flex;
@@ -152,6 +154,8 @@ export default function App() {
               <Route exact strict path="/swap" component={Swap} />
               <Route exact strict path="/dfyn-fusion" component={Fusion} />
               <Route exact strict path="/byof" component={BuildFarm1} />
+              <Route exact strict path="/myFarms" component={MyFarms} />
+              <Route exact strict path="/renewFarm/:stakingAddress" component={RenewFarms} />
               {chainId && HEADER_ACCESS.limitOrders.includes(chainId) &&
                 <Route exact strict path="/limit-order" component={LimitOrder} />
               }

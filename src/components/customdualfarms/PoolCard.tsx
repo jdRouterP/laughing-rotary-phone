@@ -124,7 +124,6 @@ export default function PoolCardDualFarm({ stakingInfo, isInactive }: { stakingI
   //@ts-ignore
   const valueOfToken2GivenPerYear: any = parseFloat(rateTwo) * stakingInfo?.tokenTwoPrice * 365
   const apr = valueOfTotalStakedAmountInUSDC && (valueOfToken1GivenPerYear + valueOfToken2GivenPerYear) / Number(valueOfTotalStakedAmountInUSDC?.toSignificant(6)) * 100;
-  
   return (
     <Wrapper showBackground={isStaking} bgColor={backgroundColor}>
       <CardBGImage desaturate />
@@ -145,7 +144,7 @@ export default function PoolCardDualFarm({ stakingInfo, isInactive }: { stakingI
 
       <StatContainer>
         <RowBetween >
-          <Countdown exactEnd={stakingInfo?.periodFinish} start={new Date(stakingInfo?.start)} />
+          <Countdown exactEnd={stakingInfo?.periodFinish} start={new Date(Number(stakingInfo?.start)*1000)} />
         </RowBetween>
         <RowBetween>
           <TYPE.white> Total deposited</TYPE.white>

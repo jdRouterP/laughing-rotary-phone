@@ -32,9 +32,6 @@ import { useSingleCallResult } from 'state/multicall/hooks'
 import { CheckCircle } from '@material-ui/icons'
 import { MouseoverTooltip } from 'components/Tooltip'
 import { wrappedCurrency } from 'utils/wrappedCurrency'
-// import { useDispatch } from 'react-redux'
-// import { AppDispatch } from 'state'
-// import { useSingleCallResult } from 'state/multicall/hooks'
 
 enum FarmStrategy {
     ECF = '1',
@@ -357,22 +354,6 @@ const SearchStyled = styled.div`
     flex-direction: column;
 `
 
-// const TextStyled = styled.text<{ existAddress: boolean }>`
-//     text-align: start;
-//     padding: ${({existAddress}) => existAddress ? '0 0 8px 8px' : '0'};
-//     color: ${({existAddress}) => existAddress ? 'red' : 'green'};
-// `
-
-// const TextStyle = styled.text`
-//     margin: auto 10px;
-//     ${({ theme }) => theme.mediaWidth.upToSmall`
-//         margin: 10px auto;
-//     `}
-// `
-// const CheckedStyle = styled.div`
-//     display: flex;
-// `
-
 const SingleLineStyle = styled.div`
     display: flex;
     margin-bottom: 20px;
@@ -523,15 +504,6 @@ export default function BuildFarm() {
         return {}
     }
 
-    // const maxLengthCheck = (object: any) => {
-    //     if (object.target.value.length > object.target.maxLength) {
-    //     object.target.value = object.target.value.slice(0, object.target.maxLength)
-    //     }
-    //     if(object.target.value < '-'){
-    //         object.target.value = ''
-    //     }
-    // }
-
     function gettingRewardAmount(){
         if(!isValidTypedValues() || !isValidParsedValues()) return null
         const rewardAmounts = typedValues.map((i, j) => {
@@ -618,10 +590,6 @@ export default function BuildFarm() {
         onCurrencySelection(Field.INPUT2, inputCurrency, 0) // last param is 0 because there will be only one TO token
     }, [onCurrencySelection])
 
-    // const handleLPCurrencySelect = useCallback((pair) => {
-    //     onCurrencySelection(Field.INPUT1, pair.liquidityToken, 0)
-    //     dispatch(setSelectedInputLPToken({ lpTokenPair: pair || null }))
-    // }, [onCurrencySelection, dispatch])
 
     async function buildYourOwnFarms(){
         setIsOpen(true)
@@ -690,10 +658,10 @@ export default function BuildFarm() {
         else if(duration === 30) setVestingPeriod(60)
         else if(duration === 60) setVestingPeriod(120)
     }, [duration])
-    // console.log("Duration:", duration)
-    // console.log("Duration Eco:", durationEco);
-    // console.log("vesting Period:", vestingPeriod)
-    // console.log("split Window:", splitWindow)
+
+    useEffect(() => {
+        onResetToInitialState()
+    }, [onResetToInitialState])
     
     return (
         <MainContent whiteList={whiteListed.result && whiteListed.result[0]} >
@@ -763,6 +731,7 @@ export default function BuildFarm() {
                             otherCurrency={inputCurrency2}
                             id="swap-currency-input"
                             lpByof={true}
+                            disableCurrencySelect={false}
                         />
                         <span style={{margin: "auto 10px"}}><Plus size={"15"}/></span>
                         <RewardsCurrencyInputPanel
@@ -776,6 +745,7 @@ export default function BuildFarm() {
                             otherCurrency={inputCurrency1}
                             id="swap-currency-input"
                             lpByof={true}
+                            disableCurrencySelect={false}
                         /> 
                     </InputField>
                     {existAddress.length !== 0 ?
@@ -837,6 +807,7 @@ export default function BuildFarm() {
                                                 onCurrencySelect={(e) => handleOutputSelect(e, i)}
                                                 otherCurrency={fetchAllSelectedCurrencies()}
                                                 id="swap-currency-input"
+                                                disableCurrencySelect={false}
                                             />
                                             { account &&
                                                 parsedAmountArr[i]  ?

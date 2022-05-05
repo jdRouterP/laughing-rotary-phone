@@ -2,6 +2,7 @@
 // import { useDfynByofContract } from 'hooks/useContract'
 import { useActiveWeb3React } from 'hooks'
 import { useDfynByofContract } from 'hooks/useContract'
+import ByofMenu from 'pages/MyFarms'
 import React, {useMemo} from 'react'
 import { useSingleCallResult } from 'state/multicall/hooks'
 // import { useSingleCallResult } from 'state/multicall/hooks'
@@ -34,6 +35,13 @@ const Footer = styled.div`
     margin-bottom: 20px;
 `
 
+const Menu = styled.div`
+  margin: auto 0;
+  margin-bottom: 10px;
+  width: 100%;
+  max-width: 720px;
+`
+
 function BuildFarm1() {
     const byofFactoryContract = useDfynByofContract()
     const { account } = useActiveWeb3React()
@@ -41,6 +49,11 @@ function BuildFarm1() {
     const whiteListed = useSingleCallResult(byofFactoryContract, 'isWhitelisted', accountArg)
     return (
         <>
+            {whiteListed.result && whiteListed.result[0] &&
+                <Menu>
+                    <ByofMenu />
+                </Menu>
+            }
             <MainContent>
                 <LeftContent>
                     {whiteListed.result && !whiteListed.result[0] &&
