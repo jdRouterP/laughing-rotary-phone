@@ -23,6 +23,13 @@ export const STAKING_REWARDS_INFO: {
 } = {
   [ChainId.MATIC]: [
     {
+      vaultName: 'DFYN 6-month vault',
+      vaultAddress: '0x384249f6b345b5feab453558b1ca1713f953bf8e',
+      vaultToken: DFYN,
+      multiplier: 2,
+      startedOn: 1651758517
+    },
+    {
       vaultName: 'CNW 6-month vault',
       vaultAddress: '0x356fE56801Fdb5bb44f63023F4Ac3e26588A3723',
       vaultToken: CNW,
