@@ -98,16 +98,6 @@ export default function Vault() {
           onChange={(e)=>{
           setSearchItem(e.target.value)
         }}/>
-        <PoolSection>
-          {multiStakingInfos?.filter(stakingInfos => {
-              if(searchItem === '') return stakingInfos
-              //for symbol
-              else if(stakingInfos?.vaultName?.toLowerCase().includes(searchItem.toLowerCase()) 
-              ) return stakingInfos
-              //Other case
-              else return ""
-            })?.map((multiStakingInfo) => <MultiTokenPoolCard key={multiStakingInfo.vaultAddress} multiStakingInfo={multiStakingInfo} />)}
-        </PoolSection>
 
         <PoolSection>
           {stakingRewardsExist && stakingInfos?.length === 0 ? (
@@ -129,6 +119,17 @@ export default function Vault() {
               return <PoolCard key={stakingInfo.vaultAddress} stakingInfo={stakingInfo} />
             })
           )}
+        </PoolSection>
+        
+        <PoolSection>
+          {multiStakingInfos?.filter(stakingInfos => {
+              if(searchItem === '') return stakingInfos
+              //for symbol
+              else if(stakingInfos?.vaultName?.toLowerCase().includes(searchItem.toLowerCase()) 
+              ) return stakingInfos
+              //Other case
+              else return ""
+            })?.map((multiStakingInfo) => <MultiTokenPoolCard key={multiStakingInfo.vaultAddress} multiStakingInfo={multiStakingInfo} />)}
         </PoolSection>
       </AutoColumn>
     </PageWrapper>

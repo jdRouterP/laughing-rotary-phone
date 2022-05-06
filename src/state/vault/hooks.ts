@@ -126,14 +126,7 @@ export const STAKING_REWARDS_INFO: {
       vaultToken: DFYN,
       multiplier: 3,
       startedOn: 1621941297
-    },
-    {
-      vaultName: 'CNW 6-month vault',
-      vaultAddress: '0x356fE56801Fdb5bb44f63023F4Ac3e26588A3723',
-      vaultToken: CNW,
-      multiplier: 2,
-      startedOn: 1651510936
-    },
+    }
   ]
 }
 
