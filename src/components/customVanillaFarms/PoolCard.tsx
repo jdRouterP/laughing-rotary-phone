@@ -150,9 +150,7 @@ export default function PoolCardCustomVanilla({ stakingInfo, isInactive }: { sta
           <TYPE.white>
             {stakingInfo
               ? stakingInfo.active
-                ? `${Number(stakingInfo.totalRewardRate.toExact()) === 0 
-                  ? Math.round((Number(stakingInfo.rewardAmount)/Math.pow(10, stakingInfo.rewardToken.decimals))/Number(stakingInfo.duration))
-                  : stakingInfo.totalRewardRate
+                ? `${stakingInfo.totalRewardRate
                   ?.multiply(BIG_INT_SECONDS_IN_DAY)
                   ?.toFixed(0, { groupSeparator: ',' })} ${stakingInfo?.rewardToken?.symbol ?? 'DFYN'} / day`
                 : '0 DFYN / day'

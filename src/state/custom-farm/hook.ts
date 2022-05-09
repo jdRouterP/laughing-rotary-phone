@@ -1,10 +1,12 @@
 import { Token } from '@dfyn/sdk'
 import { useDfynByofContract } from 'hooks/useContract'
-import { useSingleCallResult } from 'state/multicall/hooks'
+import { NEVER_RELOAD, useMultipleContractSingleData, useSingleCallResult } from 'state/multicall/hooks'
 import { ethers } from 'ethers'
 import { toV2LiquidityToken, useTrackedTokenPairs } from 'state/user/hooks'
 import { useAllTokens } from 'hooks/Tokens'
 import { useMemo } from 'react'
+import { BYOF_DUAL_FARM_INTERFACE } from 'constants/abis/dual-farm-byof'
+import { isEmpty } from 'lodash'
 
 enum FarmStrategy {
     ECF = '1',
@@ -117,6 +119,40 @@ export default function useCustomFarmInfo(
 
     //getting all the tokens info on the basis of address
     const allTokens = useAllTokens()
+    const allEcoDualFarms = useMemo(() => {
+        if(value.result){
+            const farmsValue = value.result.map(i => i)
+            const farmsArray = farmsValue[0]
+            return farmsArray.filter((i: any) => (i[2] === FarmStrategy.ECF || i[2] === FarmStrategy.DF)).map((j: any) => j[0])
+        }
+        return []
+    }, [value.result])
+    const periodFinishes = useMultipleContractSingleData(
+        allEcoDualFarms,
+        BYOF_DUAL_FARM_INTERFACE,
+        'periodFinish',
+        undefined,
+        NEVER_RELOAD
+    )
+    const farmsAddressEndTime:{
+        address:string
+        periodFinish: number
+    }[] = useMemo(() => {
+        if(!isEmpty(allEcoDualFarms) && !isEmpty(periodFinishes)){
+            return allEcoDualFarms.map((i: any, j: any) => {
+                const newMap: {
+                    address: string 
+                    periodFinish: number
+                } = {
+                    address: i,
+                    periodFinish: periodFinishes[j].result?.[0]?.toNumber()
+                }
+                return newMap;
+            });
+        }
+        return {}
+    }, [allEcoDualFarms, periodFinishes])
+
     if(value.result){
         const farmsValue = value.result.map(i => i)
         const farmsArray = farmsValue[0]
@@ -235,179 +271,13 @@ export default function useCustomFarmInfo(
             splits: number
             claim: number
         }[] = []
-        // const allEcoFarms = decodedEcoFarms.map((i: any, j: any) => {
-        //     const endDateValue = new Date(decodedEcoFarms[j][2].toNumber())
-        //     const  currenctEpoch = new Date()
-        //     if(endDateValue > currenctEpoch){
-        //         const farms: {
-        //             stakingRewardAddress: string
-        //             tokens: [Token, Token]
-        //             baseToken: Token
-        //             startDate: number
-        //             endDate: number
-        //             rewardToken: Token
-        //             rewardAmount: number
-        //             version: string
-        //         } = {
-        //             stakingRewardAddress: i[0],
-        //             tokens: tokenPairsWithLiquidityTokens.filter(i => i.liquidityToken.address === decodedEcoFarms[j][0]).map(j => j.tokens)[0],
-        //             baseToken: tokenPairsWithLiquidityTokens.filter(i => i.liquidityToken.address === decodedEcoFarms[j][0]).map(j => j.tokens)[0][0],
-        //             startDate: decodedEcoFarms[j][1].toString(),
-        //             endDate: decodedEcoFarms[j][2].toString(),
-        //             rewardToken: allTokens[decodedEcoFarms[j][3][0]],
-        //             rewardAmount: decodedEcoFarms[j][4][0].toString(),
-        //             version: 'v4'
-        //         }
-        //         ecoSystemFarms.push(farms)
-        //         return farms
-        //     }
-        //     else{
-        //         const farms: {
-        //             stakingRewardAddress: string
-        //             tokens: [Token, Token]
-        //             baseToken: Token
-        //             startDate: number
-        //             endDate: number
-        //             rewardToken: Token
-        //             rewardAmount: number
-        //             version: string
-        //         } = {
-        //             stakingRewardAddress: i[0],
-        //             tokens: tokenPairsWithLiquidityTokens.filter(i => i.liquidityToken.address === decodedEcoFarms[j][0]).map(j => j.tokens)[0],
-        //             baseToken: tokenPairsWithLiquidityTokens.filter(i => i.liquidityToken.address === decodedEcoFarms[j][0]).map(j => j.tokens)[0][0],
-        //             startDate: decodedEcoFarms[j][1].toString(),
-        //             endDate: decodedEcoFarms[j][2].toString(),
-        //             rewardToken: allTokens[decodedEcoFarms[j][3][0]],
-        //             rewardAmount: decodedEcoFarms[j][4][0].toString(),
-        //             version: 'v4'
-        //         }
-        //         inactiveEcoSystemFarms.push(farms)
-        //         return farms
-        //     }
-        // })
-        // const allDualFarms = decodedDualFarms.map((i: any, j: any) => {
-        //     const endDateValue = new Date(decodedDualFarms[j][2].toNumber())
-        //     const  currenctEpoch = new Date()
-        //     if(endDateValue.getTime() > currenctEpoch.getTime()){
-        //         const farms: {
-        //             stakingRewardAddress: string
-        //             tokens: [Token, Token]
-        //             baseToken: Token
-        //             startDate: number
-        //             endDate: number
-        //             rewardTokens: [Token, Token]
-        //             rewardAmount: [number, number]
-        //             version: string
-        //         } = {
-        //             stakingRewardAddress: i[0],
-        //             tokens: tokenPairsWithLiquidityTokens.filter(i => i.liquidityToken.address === decodedDualFarms[j][0]).map(j => j.tokens)[0],
-        //             baseToken: tokenPairsWithLiquidityTokens.filter(i => i.liquidityToken.address === decodedDualFarms[j][0]).map(j => j.tokens)[0][0],
-        //             startDate: decodedDualFarms[j][1].toString(),
-        //             endDate: decodedDualFarms[j][2].toString(),
-        //             rewardTokens: [allTokens[decodedDualFarms[j][3][0]], allTokens[decodedDualFarms[j][3][1]]],
-        //             rewardAmount: decodedDualFarms[j][4].map((i: any) => i.toString()),
-        //             version: 'v4'
-        //         }
-        //         dualFarms.push(farms)
-        //         return farms
-        //     }
-        //     else{
-        //         const farms: {
-        //             stakingRewardAddress: string
-        //             tokens: [Token, Token]
-        //             baseToken: Token
-        //             startDate: number
-        //             endDate: number
-        //             rewardTokens: [Token, Token]
-        //             rewardAmount: [number, number]
-        //             version: string
-        //         } = {
-        //             stakingRewardAddress: i[0],
-        //             tokens: tokenPairsWithLiquidityTokens.filter(i => i.liquidityToken.address === decodedDualFarms[j][0]).map(j => j.tokens)[0],
-        //             baseToken: tokenPairsWithLiquidityTokens.filter(i => i.liquidityToken.address === decodedDualFarms[j][0]).map(j => j.tokens)[0][0],
-        //             startDate: decodedDualFarms[j][1].toString(),
-        //             endDate: decodedDualFarms[j][2].toString(),
-        //             rewardTokens: [allTokens[decodedDualFarms[j][3][0]], allTokens[decodedDualFarms[j][3][1]]],
-        //             rewardAmount: decodedDualFarms[j][4].map((i: any) => i.toString()),
-        //             version: 'v4'
-        //         }
-        //         inactiveDualFarms.push(farms)
-        //         return farms
-        //     }
-        // })
-
-        // const allPopularFarms = decodedPopularFarms.map((i: any, j: any) => {
-        //     const endDateValue = new Date(decodedPopularFarms[j][2].toNumber())
-        //     const  currenctEpoch = new Date()
-        //     if(endDateValue > currenctEpoch){
-        //         const farms: {
-        //             stakingRewardAddress: string
-        //             tokens: [Token, Token]
-        //             baseToken: Token
-        //             startDate: number
-        //             endDate: number
-        //             rewardToken: Token
-        //             rewardAmount: number
-        //             burnRate: number
-        //             vestingPeriod: number
-        //             splits: number
-        //             claim: number
-        //             version: string
-        //         } = {
-        //             stakingRewardAddress: i[0],
-        //             tokens: tokenPairsWithLiquidityTokens.filter(i => i.liquidityToken.address === decodedPopularFarms[j][0]).map(j => j.tokens)[0],
-        //             baseToken: tokenPairsWithLiquidityTokens.filter(i => i.liquidityToken.address === decodedPopularFarms[j][0]).map(j => j.tokens)[0][0],
-        //             startDate: decodedPopularFarms[j][1].toString(),
-        //             endDate: decodedPopularFarms[j][2].toString(),
-        //             rewardToken: allTokens[decodedPopularFarms[j][3][0]],
-        //             rewardAmount: decodedPopularFarms[j][4][0].toString(),
-        //             burnRate: decodedPopularFarmsBytes[0][1].toNumber(),
-        //             vestingPeriod: decodedPopularFarmsBytes[0][1].toNumber(),
-        //             splits: decodedPopularFarmsBytes[0][2].toNumber(),
-        //             claim: decodedPopularFarmsBytes[0][3].toNumber(),
-        //             version: 'v4'
-        //         }
-        //         floraFarms.push(farms)
-        //         return farms
-        //     }
-        //     else{
-        //         const farms: {
-        //             stakingRewardAddress: string
-        //             tokens: [Token, Token]
-        //             baseToken: Token
-        //             startDate: number
-        //             endDate: number
-        //             rewardToken: Token
-        //             rewardAmount: number
-        //             burnRate: number
-        //             vestingPeriod: number
-        //             splits: number
-        //             claim: number
-        //             version: string
-        //         } = {
-        //             stakingRewardAddress: i[0],
-        //             tokens: tokenPairsWithLiquidityTokens.filter(i => i.liquidityToken.address === decodedPopularFarms[j][0]).map(j => j.tokens)[0],
-        //             baseToken: tokenPairsWithLiquidityTokens.filter(i => i.liquidityToken.address === decodedPopularFarms[j][0]).map(j => j.tokens)[0][0],
-        //             startDate: decodedPopularFarms[j][1].toString(),
-        //             endDate: decodedPopularFarms[j][2].toString(),
-        //             rewardToken: allTokens[decodedPopularFarms[j][3][0]],
-        //             rewardAmount: decodedPopularFarms[j][4][0].toString(),
-        //             burnRate: decodedPopularFarmsBytes[0][1].toNumber(),
-        //             vestingPeriod: decodedPopularFarmsBytes[0][1].toNumber(),
-        //             splits: decodedPopularFarmsBytes[0][2].toNumber(),
-        //             claim: decodedPopularFarmsBytes[0][3].toNumber(),
-        //             version: 'v4'
-        //         }    
-        //         inactiveFloraFarms.push(farms)
-        //         return farms
-        //     }
-        // })
+        
         var flagPF = 0
         var flagLF = 0
         const allFarms = farmsArray.map((i: any, j: any) => {
             const addressExist = tokenPairsWithLiquidityTokens.filter(i => i.liquidityToken.address === decodeValues[j][0])
             if(i[2] === FarmStrategy.ECF && addressExist[0]){
-                const endDateValue = decodeValues[j][2].toNumber()
+                const endDateValue = farmsAddressEndTime.filter((j: any) => j.address === i[0])[0].periodFinish
                 const  currenctEpoch = Math.floor(new Date().getTime()/1000)
                 if(endDateValue > currenctEpoch){
                     const farms: {
@@ -453,7 +323,7 @@ export default function useCustomFarmInfo(
                 }
             } 
             else if(i[2] === FarmStrategy.DF && addressExist[0]){
-                const endDateValue = decodeValues[j][2].toNumber()
+                const endDateValue = farmsAddressEndTime.filter((j: any) => j.address === i[0])[0].periodFinish
                 const  currenctEpoch = Math.floor(new Date().getTime()/1000)
                 if(endDateValue > currenctEpoch){
                     const farms: {

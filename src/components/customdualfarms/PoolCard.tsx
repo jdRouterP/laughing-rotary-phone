@@ -159,9 +159,7 @@ export default function PoolCardDualFarm({ stakingInfo, isInactive }: { stakingI
           <TYPE.white>
             {stakingInfo
               ? stakingInfo.active
-                ? `${Number(stakingInfo.rewardRate.toExact()) === 0 
-                  ? Math.round((Number(stakingInfo.rewardAmount[0])/Math.pow(10, stakingInfo.rewardAddresses[0].decimals))/Number(stakingInfo.duration))
-                  : stakingInfo.totalRewardRate
+                ? `${stakingInfo.totalRewardRate
                   ?.multiply(BIG_INT_SECONDS_IN_DAY)
                   ?.toFixed(0, { groupSeparator: ',' })} ${reward0?.symbol} / day`
                 : `{0 ${reward0?.symbol} / day}`
@@ -173,9 +171,7 @@ export default function PoolCardDualFarm({ stakingInfo, isInactive }: { stakingI
           <TYPE.white>
             {stakingInfo
               ? stakingInfo.active
-                ? `${Number(stakingInfo.rewardRateTwo.toExact()) === 0 
-                  ? Math.round((Number(stakingInfo.rewardAmount[1])/Math.pow(10, stakingInfo.rewardAddresses[1].decimals))/Number(stakingInfo.duration))
-                  : stakingInfo.totalRewardRateTwo
+                ? `${stakingInfo.totalRewardRateTwo
                   ?.multiply(BIG_INT_SECONDS_IN_DAY)
                   ?.toFixed(0, { groupSeparator: ',' })} ${reward1?.symbol} / day`
                 : `{0 ${reward1?.symbol} / day}`
