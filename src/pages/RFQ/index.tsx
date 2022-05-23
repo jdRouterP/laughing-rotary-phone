@@ -50,7 +50,8 @@ export default function Swap({ history }: RouteComponentProps) {
   const { account, chainId } = useActiveWeb3React()
   const [currencies, setCurrencies] = useState<{ [field in Field]?: Currency }>()
   const token = currencies && currencies[Field.OUTPUT] && wrappedCurrency(currencies[Field.OUTPUT], chainId)
-  const tokenAmount = token && new TokenAmount(token, amount1)
+  const typedValueParsed =token&& ethers.utils.parseUnits(amount1===""?"0":amount1, token.decimals).toString()
+  const tokenAmount = (token)&& new TokenAmount(token, typedValueParsed??"0")
   const [approvalRFQ, approveCallback] = useApproveCallback(tokenAmount, RFQ_ADDRESS)
 
   const getQuote = useCallback(() => {
@@ -134,6 +135,8 @@ export default function Swap({ history }: RouteComponentProps) {
               id="swap-currency-output"
             />
           </AutoColumn>
+          <AutoColumn style={{marginTop:"8px"}}>
+
           {approvalRFQ === ApprovalState.NOT_APPROVED && (
             <ButtonPrimary onClick={approveCallback}>
               <TYPE.main mb="4px">Approve</TYPE.main>
@@ -144,6 +147,7 @@ export default function Swap({ history }: RouteComponentProps) {
               <TYPE.main mb="4px">Approving</TYPE.main>
             </ButtonPrimary>
           )}
+          </AutoColumn>
         </Wrapper>
       </AppBody>
     </>
