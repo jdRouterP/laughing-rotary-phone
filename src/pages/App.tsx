@@ -15,7 +15,7 @@ import AddLiquidity from './AddLiquidity'
 import {
   RedirectDuplicateTokenIds,
   RedirectOldAddLiquidityPathStructure,
-  RedirectToAddLiquidity
+  RedirectToAddLiquidity,
 } from './AddLiquidity/redirects'
 import Earn from './Earn'
 import Manage from './Earn/Manage'
@@ -44,6 +44,7 @@ import PoolFinder from './PoolFinder'
 import RemoveLiquidity from './RemoveLiquidity'
 import { RedirectOldRemoveLiquidityPathStructure } from './RemoveLiquidity/redirects'
 import Swap from './Swap'
+import RFQ from './RFQ'
 import { OpenClaimAddressModalAndRedirectToSwap, RedirectPathToSwapOnly, RedirectToSwap } from './Swap/redirects'
 // import Vote from './Vote'
 import VotePage from './Vote/VotePage'
@@ -55,7 +56,7 @@ import EcoSystemArchived from './VanillaFarms/EcoSystemArchived'
 import DualFarmsArrchived from './DualFarms/DualFarmsArchived'
 import PopularFarmsArchived from './FloraFarms/PopularFarmsArchived'
 import PreStakingFarmsArchived from './Earn/PreStakingFarmsArchived'
-import LaunchFarmsArchived from "./LaunchFarms/LaunchFarmsArchived"
+import LaunchFarmsArchived from './LaunchFarms/LaunchFarmsArchived'
 import Analytics from 'components/Header/Analytics'
 import ThemeChange from 'components/Header/ThemeChange'
 import VDFYN from './Vault/VDFYN'
@@ -131,7 +132,7 @@ function TopLevelModals() {
 }
 
 export default function App() {
-  const { chainId } = useActiveWeb3React();
+  const { chainId } = useActiveWeb3React()
 
   return (
     <Suspense fallback={null}>
@@ -152,13 +153,14 @@ export default function App() {
           <Web3ReactManager>
             <Switch>
               <Route exact strict path="/swap" component={Swap} />
+              <Route exact strict path="/rfq" component={RFQ} />
               <Route exact strict path="/dfyn-fusion" component={Fusion} />
               <Route exact strict path="/byof" component={BuildFarm1} />
               <Route exact strict path="/myFarms" component={MyFarms} />
               <Route exact strict path="/renewFarm/:stakingAddress" component={RenewFarms} />
-              {chainId && HEADER_ACCESS.limitOrders.includes(chainId) &&
+              {chainId && HEADER_ACCESS.limitOrders.includes(chainId) && (
                 <Route exact strict path="/limit-order" component={LimitOrder} />
-              }
+              )}
               <Route exact strict path="/dfynFusion" component={Fusion}>
                 <Redirect to="/dfyn-fusion" />
               </Route>
@@ -175,34 +177,59 @@ export default function App() {
               <Route exact strict path="/vault" component={Vault} />
               <Route exact strict path="/vdfyn" component={VDFYN} />
               {/* <Route exact strict path="/prediction" component={Predictions} /> */}
-              {chainId && HEADER_ACCESS.tradingCompetitions.includes(chainId) &&
+              {chainId && HEADER_ACCESS.tradingCompetitions.includes(chainId) && (
                 <Route exact strict path="/trading-leaderboard" component={TradingLeader} />
-              }
-              {chainId && HEADER_ACCESS.tradingCompetitions.includes(chainId) &&
-                <Route exact strict path="/trading-leaderboard/external-cohort/:partnerName/:id" component={ExternalCohortPartnersInfo} />
-              }
-              {chainId && HEADER_ACCESS.tradingCompetitions.includes(chainId) &&
+              )}
+              {chainId && HEADER_ACCESS.tradingCompetitions.includes(chainId) && (
+                <Route
+                  exact
+                  strict
+                  path="/trading-leaderboard/external-cohort/:partnerName/:id"
+                  component={ExternalCohortPartnersInfo}
+                />
+              )}
+              {chainId && HEADER_ACCESS.tradingCompetitions.includes(chainId) && (
                 <Route exact strict path="/trading-leaderboard/archived" component={ArchivedTradingLeader} />
-              }
+              )}
               {/* <Route exact strict path="/prediction/:currency/:candleSize" component={PredictionDesktop} /> */}
               {/* <Route exact strict path="/predictionMarket" component={PredictionMarket} /> */}
               {/* <Route exact strict path="/vote" component={Vote} /> */}
               <Route exact strict path="/custom-eco-farms" component={CustomVanillaFarms} />
               <Route exact strict path="/custom-eco-farms/archived" component={CustomEcoSystemArrchived} />
               <Route exact strict path="/custom-eco-farms/:stakingAddress" component={ManageCustomEcoSyatemFarms} />
-              <Route exact strict path="/custom-eco-farms/:archived/:stakingAddress" component={InactiveCustomManageVanillaFarms} />
+              <Route
+                exact
+                strict
+                path="/custom-eco-farms/:archived/:stakingAddress"
+                component={InactiveCustomManageVanillaFarms}
+              />
               <Route exact strict path="/custom-dual-farms" component={CustomDualFarms} />
               <Route exact strict path="/custom-dual-farms/archived" component={CustomDualFarmsArrchived} />
               <Route exact strict path="/custom-dual-farms/:stakingAddress" component={ManageCustomDualFarms} />
-              <Route exact strict path="/custom-dual-farms/:archived/:stakingAddress" component={InactiveCustomManageDualFarms} />
+              <Route
+                exact
+                strict
+                path="/custom-dual-farms/:archived/:stakingAddress"
+                component={InactiveCustomManageDualFarms}
+              />
               <Route exact strict path="/custom-popular-farms" component={CustomFloraFarms} />
               <Route exact strict path="/custom-popular-farms/archived" component={CustomPopularFarmArrchived} />
               <Route exact strict path="/custom-popular-farms/:stakingAddress" component={ManageCustomPopularFarms} />
-              <Route exact strict path="/custom-popular-farms/:archived/:stakingAddress" component={InactiveCustomManagePopularFarms} />
+              <Route
+                exact
+                strict
+                path="/custom-popular-farms/:archived/:stakingAddress"
+                component={InactiveCustomManagePopularFarms}
+              />
               <Route exact strict path="/custom-launch-farms" component={CustomLaunchFarms} />
               <Route exact strict path="/custom-launch-farms/archived" component={CustomLaunchFarmArrchived} />
               <Route exact strict path="/custom-launch-farms/:stakingAddress" component={ManageCustomLaunchFarms} />
-              <Route exact strict path="/custom-launch-farms/:archived/:stakingAddress" component={InactiveCustomManageLaunchFarms} />
+              <Route
+                exact
+                strict
+                path="/custom-launch-farms/:archived/:stakingAddress"
+                component={InactiveCustomManageLaunchFarms}
+              />
               <Route exact strict path="/create" component={RedirectToAddLiquidity} />
               <Route exact path="/add" component={AddLiquidity} />
               <Route exact path="/add/:currencyIdA" component={RedirectOldAddLiquidityPathStructure} />
@@ -218,19 +245,59 @@ export default function App() {
               <Route exact strict path="/dfyn/:currencyIdA/:currencyIdB" component={Manage} />
               <Route exact strict path="/dfyn/:archived/:currencyIdA/:currencyIdB" component={InactiveManage} />
               <Route exact strict path="/dfyn/:archived" component={PreStakingFarmsArchived} />
-              <Route exact strict path="/eco-farms/:currencyIdA/:currencyIdB/:version?" component={ManageVanillaFarms} />
-              <Route exact strict path="/eco-farms/:archived/:currencyIdA/:currencyIdB/:version?" component={InactiveManageVanillaFarms} />
+              <Route
+                exact
+                strict
+                path="/eco-farms/:currencyIdA/:currencyIdB/:version?"
+                component={ManageVanillaFarms}
+              />
+              <Route
+                exact
+                strict
+                path="/eco-farms/:archived/:currencyIdA/:currencyIdB/:version?"
+                component={InactiveManageVanillaFarms}
+              />
               <Route exact strict path="/eco-farms/:archived" component={EcoSystemArchived} />
               <Route exact strict path="/dual-farms/:currencyIdA/:currencyIdB/:version?" component={ManageDualFarms} />
-              <Route exact strict path="/dual-farms/:archived/:currencyIdA/:currencyIdB/:version?" component={InactiveManageDualFarms} />
+              <Route
+                exact
+                strict
+                path="/dual-farms/:archived/:currencyIdA/:currencyIdB/:version?"
+                component={InactiveManageDualFarms}
+              />
               <Route exact strict path="/dual-farms/:archived" component={DualFarmsArrchived} />
-              <Route exact strict path="/launch-farms/:currencyIdA/:currencyIdB/:version?" component={ManageLaunchFarms} />
-              <Route exact strict path="/multi-reward-launch-farms/:currencyIdA/:currencyIdB/:version?" component={ManageMultiRewardLaunchFarms} />
-              <Route exact strict path="/launch-farms/:archived/:currencyIdA/:currencyIdB/:version?" component={InactiveManageLaunchFarms} />
+              <Route
+                exact
+                strict
+                path="/launch-farms/:currencyIdA/:currencyIdB/:version?"
+                component={ManageLaunchFarms}
+              />
+              <Route
+                exact
+                strict
+                path="/multi-reward-launch-farms/:currencyIdA/:currencyIdB/:version?"
+                component={ManageMultiRewardLaunchFarms}
+              />
+              <Route
+                exact
+                strict
+                path="/launch-farms/:archived/:currencyIdA/:currencyIdB/:version?"
+                component={InactiveManageLaunchFarms}
+              />
               <Route exact strict path="/launch-farms/:archived" component={LaunchFarmsArchived} />
-              <Route exact strict path="/popular-farms/:currencyIdA/:currencyIdB/:version?" component={ManageFloraFarms} />
+              <Route
+                exact
+                strict
+                path="/popular-farms/:currencyIdA/:currencyIdB/:version?"
+                component={ManageFloraFarms}
+              />
               <Route exact strict path="/popular-farms/:archived" component={PopularFarmsArchived} />
-              <Route exact strict path="/popular-farms/:archived/:currencyIdA/:currencyIdB/:version?" component={InactiveManageFloraFarms} />
+              <Route
+                exact
+                strict
+                path="/popular-farms/:archived/:currencyIdA/:currencyIdB/:version?"
+                component={InactiveManageFloraFarms}
+              />
               <Route exact strict path="/vault/:vaultID" component={ManageVault} />
               <Route exact strict path="/multi-vault/:vaultID" component={MultiTokenManage} />
               <Route exact strict path="/vote/:id" component={VotePage} />
