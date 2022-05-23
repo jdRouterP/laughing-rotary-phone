@@ -1,11 +1,10 @@
-import React, { useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { AutoColumn } from '../../components/Column'
 import CurrencyInputPanel from '../../components/CurrencyInputPanel'
 import { SwapPoolTabs } from '../../components/NavigationTabs'
 import { AutoRow } from '../../components/Row'
-import { ArrowWrapper,  Wrapper } from '../../components/swap/styleds'
+import { ArrowWrapper, Wrapper } from '../../components/swap/styleds'
 import SwapHeader from '../../components/swap/SwapHeader'
-
 import { Field } from '../../state/swap/actions'
 import AppBody from '../AppBody'
 import { RouteComponentProps } from 'react-router-dom'
@@ -13,6 +12,9 @@ import { SwapVert } from '@material-ui/icons'
 import useTheme from 'hooks/useTheme'
 // import { useActiveWeb3React } from 'hooks'
 import { Currency } from '@dfyn/sdk'
+import axios from 'axios'
+import { useActiveWeb3React } from 'hooks'
+import { wrappedCurrency } from 'utils/wrappedCurrency'
 
 // const HighlightBanner = styled.div`
 //   cursor: pointer;
@@ -38,11 +40,39 @@ import { Currency } from '@dfyn/sdk'
 // `
 
 export default function Swap({ history }: RouteComponentProps) {
-const [amount0,setAmount0]=useState("")
-const [amount1,setAmount1]=useState("")
-const theme=useTheme()
-// const { account, chainId } = useActiveWeb3React();
-const [currencies,setCurrencies]=useState<{ [field in Field]?: Currency }>()
+  const [amount0, setAmount0] = useState('')
+  const [amount1, setAmount1] = useState('')
+  const theme = useTheme()
+  const { account, chainId } = useActiveWeb3React()
+  const [currencies, setCurrencies] = useState<{ [field in Field]?: Currency }>()
+
+  const getQuote = useCallback(() => {
+    const token0 = currencies && wrappedCurrency(currencies[Field.INPUT], chainId)
+    const token1 = currencies && wrappedCurrency(currencies[Field.OUTPUT], chainId)
+    const options = {
+      method: 'GET',
+      url: 'http://localhost:6673/api/getQuote',
+      params: {
+        user: account,
+        token0: token0?.address,
+        token1: token1?.address,
+        chainId: chainId,
+        amount0: amount0,
+      },
+    }
+    axios
+      .request(options)
+      .then(function (response) {
+        console.log(response.data)
+      })
+      .catch(function (error) {
+        console.error(error)
+      })
+  }, [account, chainId, amount0, currencies])
+
+  useEffect(() => {
+    getQuote()
+  }, [getQuote])
 
   return (
     <>
@@ -58,17 +88,17 @@ const [currencies,setCurrencies]=useState<{ [field in Field]?: Currency }>()
         <Wrapper id="swap-page">
           <AutoColumn gap={'md'}>
             <CurrencyInputPanel
-              label={ 'From'}
+              label={'From'}
               value={amount0}
               showMaxButton={false}
-              currency={currencies&&currencies[Field.INPUT]}
-              onUserInput={(value)=>setAmount0(value)}
-              onCurrencySelect={(currency: Currency) => setCurrencies({...currencies,[Field.INPUT]:currency})}
-              otherCurrency={currencies&&currencies[Field.OUTPUT]}
+              currency={currencies && currencies[Field.INPUT]}
+              onUserInput={(value) => setAmount0(value)}
+              onCurrencySelect={(currency: Currency) => setCurrencies({ ...currencies, [Field.INPUT]: currency })}
+              otherCurrency={currencies && currencies[Field.OUTPUT]}
               id="swap-currency-input"
             />
             <AutoColumn justify="space-between">
-              <AutoRow justify={ 'center'} style={{ padding: '0 1rem' }}>
+              <AutoRow justify={'center'} style={{ padding: '0 1rem' }}>
                 <ArrowWrapper clickable>
                   <SwapVert
                     onClick={() => {
@@ -77,7 +107,10 @@ const [currencies,setCurrencies]=useState<{ [field in Field]?: Currency }>()
                       // onSwitchTokens()
                     }}
                     style={{
-                      color: currencies&&currencies[Field.INPUT] && currencies[Field.OUTPUT] ? theme.primary1 : theme.text2,
+                      color:
+                        currencies && currencies[Field.INPUT] && currencies[Field.OUTPUT]
+                          ? theme.primary1
+                          : theme.text2,
                     }}
                   />
                 </ArrowWrapper>
@@ -85,12 +118,12 @@ const [currencies,setCurrencies]=useState<{ [field in Field]?: Currency }>()
             </AutoColumn>
             <CurrencyInputPanel
               value={amount1}
-              onUserInput={(value)=>setAmount1(value)}
+              onUserInput={(value) => setAmount1(value)}
               label={'To'}
               showMaxButton={false}
-              currency={currencies&&currencies[Field.OUTPUT]}
-              onCurrencySelect={(currency: Currency) => setCurrencies({...currencies,[Field.OUTPUT]:currency})}
-              otherCurrency={currencies&&currencies[Field.INPUT]}
+              currency={currencies && currencies[Field.OUTPUT]}
+              onCurrencySelect={(currency: Currency) => setCurrencies({ ...currencies, [Field.OUTPUT]: currency })}
+              otherCurrency={currencies && currencies[Field.INPUT]}
               id="swap-currency-output"
             />
 
