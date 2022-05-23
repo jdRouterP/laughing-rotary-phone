@@ -22,6 +22,9 @@ export const BLEND_ADDRESS = '0xc3328070df8233affafbf04b973b4165cca35f99'
 //router-mainnet-metadata
 export const WALLCHAIN_ADDRESS = '0xC123F196aaD0a34e27075f5b491C69908C386A13'
 
+export const RFQ_ADDRESS = '0x35A19aD94f02da6Fe6ebCa1AEf90a48f489fA5Dd'
+
+
 export { PRELOADED_PROPOSALS } from './proposals'
 
 // a list of tokens by chain

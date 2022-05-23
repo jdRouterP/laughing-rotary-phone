@@ -11,11 +11,13 @@ import { RouteComponentProps } from 'react-router-dom'
 import { SwapVert } from '@material-ui/icons'
 import useTheme from 'hooks/useTheme'
 // import { useActiveWeb3React } from 'hooks'
-import { Currency } from '@dfyn/sdk'
+import { Currency, TokenAmount } from '@dfyn/sdk'
 import axios from 'axios'
 import { useActiveWeb3React } from 'hooks'
 import { wrappedCurrency } from 'utils/wrappedCurrency'
 import { ethers } from 'ethers'
+import { useApproveCallback } from 'hooks/useApproveCallback'
+import { RFQ_ADDRESS } from 'constants'
 
 // const HighlightBanner = styled.div`
 //   cursor: pointer;
@@ -46,14 +48,21 @@ export default function Swap({ history }: RouteComponentProps) {
   const theme = useTheme()
   const { account, chainId } = useActiveWeb3React()
   const [currencies, setCurrencies] = useState<{ [field in Field]?: Currency }>()
+  const tokenAmount =
+    currencies &&
+    currencies[Field.OUTPUT] &&
+    new TokenAmount(wrappedCurrency(currencies[Field.OUTPUT], chainId), amount1)
+  const [approvalRFQ, approveCallback] = useApproveCallback(
+    new TokenAmount(currencies && wrappedCurrency(currencies[Field.OUTPUT], chainId), amount1),
+    RFQ_ADDRESS
+  )
 
   const getQuote = useCallback(() => {
     const token0 = currencies && wrappedCurrency(currencies[Field.INPUT], chainId)
     const token1 = currencies && wrappedCurrency(currencies[Field.OUTPUT], chainId)
-    if(!token0||!token1||!account||!chainId||amount0==="")
-    return;
-    
-    const options:any = {
+    if (!token0 || !token1 || !account || !chainId || amount0 === '') return
+
+    const options: any = {
       method: 'GET',
       url: 'http://localhost:6673/api/getQuote',
       params: {
@@ -61,14 +70,14 @@ export default function Swap({ history }: RouteComponentProps) {
         token0: token0?.address,
         token1: token1?.address,
         chainId: chainId,
-        amount0: ethers.utils.parseUnits(amount0,token0.decimals).toString(),
+        amount0: ethers.utils.parseUnits(amount0, token0.decimals).toString(),
       },
     }
     axios
       .request(options)
       .then(function (response) {
         console.log(response.data)
-        setAmount1(ethers.utils.formatUnits(response.data.data.messageObject.amount1,token0?.decimals))
+        setAmount1(ethers.utils.formatUnits(response.data.data.messageObject.amount1, token0?.decimals))
       })
       .catch(function (error) {
         console.error(error)
@@ -79,7 +88,7 @@ export default function Swap({ history }: RouteComponentProps) {
     const timer = setTimeout(() => {
       getQuote()
     }, 1000)
-    return () => clearTimeout(timer);
+    return () => clearTimeout(timer)
   }, [getQuote])
 
   return (
