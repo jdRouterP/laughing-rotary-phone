@@ -17,7 +17,7 @@ import { useActiveWeb3React } from 'hooks'
 import { wrappedCurrency } from 'utils/wrappedCurrency'
 import { ethers } from 'ethers'
 import { useApproveCallback } from 'hooks/useApproveCallback'
-import { RFQ_ADDRESS } from 'constants'
+import { RFQ_ADDRESS } from '../../constants'
 
 // const HighlightBanner = styled.div`
 //   cursor: pointer;
@@ -48,12 +48,11 @@ export default function Swap({ history }: RouteComponentProps) {
   const theme = useTheme()
   const { account, chainId } = useActiveWeb3React()
   const [currencies, setCurrencies] = useState<{ [field in Field]?: Currency }>()
-  const tokenAmount =
-    currencies &&
-    currencies[Field.OUTPUT] &&
-    new TokenAmount(wrappedCurrency(currencies[Field.OUTPUT], chainId), amount1)
+  const token=currencies &&
+  currencies[Field.OUTPUT] &&wrappedCurrency(currencies[Field.OUTPUT], chainId)
+  const tokenAmount =token&&new TokenAmount(token, amount1)
   const [approvalRFQ, approveCallback] = useApproveCallback(
-    new TokenAmount(currencies && wrappedCurrency(currencies[Field.OUTPUT], chainId), amount1),
+    tokenAmount,
     RFQ_ADDRESS
   )
 
